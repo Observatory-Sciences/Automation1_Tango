@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ASCII"?>
+<pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:pogoDsl="http://www.esrf.fr/tango/pogo/PogoDsl">
+  <multiClasses pogoRevision="9.7" name="Automation1" sourcePath="/home/tango-cs/work/Automation1_Tango" description="Automation1 device server" filestogenerate="XMI   file,Code files,Makefile,Protected Regions">
+    <classes classname="A1Axis" sourcePath="./A1Axis">
+      <inheritances classname="Device_Impl" sourcePath=""/>
+    </classes>
+    <classes classname="A1Controller" sourcePath="./A1Controller">
+      <inheritances classname="Device_Impl" sourcePath=""/>
+    </classes>
+    <preferences makefileHome="$(TANGO_HOME)"/>
+  </multiClasses>
+</pogoDsl:PogoSystem>
