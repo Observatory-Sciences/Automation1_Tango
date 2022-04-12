@@ -14,7 +14,8 @@
 #
 # MAKE_ENV is the path to find the common environment to build the project
 #
-MAKE_ENV ?= $(TANGO_HOME)
+MAKE_ENV = /usr/local/share/pogo/preferences
+# MAKE_ENV ?= $(TANGO_HOME)
 
 #=============================================================================
 # PACKAGE_NAME is the name of the library/device/exe you want to build
@@ -55,11 +56,15 @@ OBJ_DIR = ./obj
 #=============================================================================
 # Tango Class list used by project
 #
+A1COMM_CLASS = A1Communication
+A1COMM_HOME  = ./A1Communication
+
 A1AXIS_CLASS = A1Axis
 A1AXIS_HOME  = ./A1Axis
 
 A1CONTROLLER_CLASS = A1Controller
 A1CONTROLLER_HOME  = ./A1Controller
+
 
 
 #=============================================================================
@@ -68,6 +73,7 @@ A1CONTROLLER_HOME  = ./A1Controller
 #   - '-I ../include' and '-I .' are automatically appended in all cases
 #
 INC_DIR_USER= -I . \
+              -I $(A1COMM_HOME)\
               -I $(A1AXIS_HOME)\
               -I $(A1CONTROLLER_HOME)\
               -I /usr/local/include \
@@ -131,8 +137,14 @@ include $(MAKE_ENV)/tango.opt
 #
 SVC_OBJS =  $(SVC_A1AXIS_OBJS) \
             $(SVC_A1CONTROLLER_OBJS) \
+			$(SVC_A1COMM_OBJS) \
             $(OBJDIR)/MultiClassesFactory.o \
-            $(OBJDIR)/main.o
+            $(OBJDIR)/main.o \
+			
+
+#------------  Object files for A1Communication class  ------------
+SVC_A1COMM_OBJS = \
+		$(OBJDIR)/A1Communication.o 
 
 #------------  Object files for A1Axis class  ------------
 SVC_A1AXIS_OBJS = \
@@ -156,10 +168,18 @@ include $(MAKE_ENV)/common_target.opt
 #=============================================================================
 # Following are dependancies of the classes used by project
 #
+#------------  Object files dependencies for A1Communication class  ------------
+A1COMM_INCLUDES = \
+		A1Communication/A1Communication.h
+
+$(OBJDIR)/A1Communication.o:  $(A1COMM_HOME)/A1Communication.cpp $(A1COMM_INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Communication.o
+
 #------------  Object files dependencies for A1Axis class  ------------
 A1AXIS_INCLUDES = \
 		$(A1AXIS_HOME)/A1Axis.h \
-		$(A1AXIS_HOME)/A1AxisClass.h
+		$(A1AXIS_HOME)/A1AxisClass.h \
+		A1Communication/A1Communication.h
 
 $(OBJDIR)/A1Axis.o:  $(A1AXIS_HOME)/A1Axis.cpp $(A1AXIS_INCLUDES)
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Axis.o
@@ -171,7 +191,8 @@ $(OBJDIR)/A1AxisStateMachine.o:  $(A1AXIS_HOME)/A1AxisStateMachine.cpp $(A1AXIS_
 #------------  Object files dependencies for A1Controller class  ------------
 A1CONTROLLER_INCLUDES = \
 		$(A1CONTROLLER_HOME)/A1Controller.h \
-		$(A1CONTROLLER_HOME)/A1ControllerClass.h
+		$(A1CONTROLLER_HOME)/A1ControllerClass.h \
+		A1Communication/A1Communication.h
 
 $(OBJDIR)/A1Controller.o:  $(A1CONTROLLER_HOME)/A1Controller.cpp $(A1CONTROLLER_INCLUDES)
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Controller.o
