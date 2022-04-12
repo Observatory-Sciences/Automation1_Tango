@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ASCII"?>
 <pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://www.esrf.fr/tango/pogo/PogoDsl">
   <classes name="A1Axis" pogoRevision="9.7">
-    <description description="Axis class for the Aerotech Automation 1 device server" title="" sourcePath="/home/tango-cs/work/Automation1_Tango/A1Axis" language="Cpp" filestogenerate="XMI   file,Code files,Makefile,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="true" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
+    <description description="Axis class for the Aerotech Automation 1 device server" title="" sourcePath="/home/tango-cs/work/Automation1_Tango/A1Axis" language="Cpp" filestogenerate="XMI   file,Code files,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="true" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at observatorysciences.co.uk - jsy" author="jsy" emailDomain="observatorysciences.co.uk" classFamily="Motion" siteSpecific="" platform="Unix Like" bus="Ethernet" manufacturer="Aerotech" reference=""/>
     </description>
-    <deviceProperties name="Axis" description="Axis number that this device will control">
+    <deviceProperties name="Axis" description="Axis index that this device will control">
       <type xsi:type="pogoDsl:UShortType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </deviceProperties>
@@ -31,7 +31,7 @@
       </argout>
       <status abstract="true" inherited="true" concrete="true"/>
     </commands>
-    <commands name="Abort" description="" execMethod="abort" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Abort" description="Aborts any motion on this axis." execMethod="abort" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -40,7 +40,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Home" description="" execMethod="home" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Home" description="Homes this axis according to the method selected in HomeType." execMethod="home" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -49,7 +49,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Move" description="" execMethod="move" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Move" description="Executes the specific move command specified by the MoveType attribute." execMethod="move" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -58,7 +58,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Enable" description="" execMethod="enable" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Enable" description="Enables the axis." execMethod="enable" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -67,7 +67,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Disable" description="" execMethod="disable" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Disable" description="Disables the axis." execMethod="disable" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -76,7 +76,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="BrakeOn" description="" execMethod="brake_on" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="BrakeOn" description="Engages the brake output and prevents the axis from moving freely." execMethod="brake_on" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -85,7 +85,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="BrakeOff" description="" execMethod="brake_off" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="BrakeOff" description="Disengages the brake output and allows the axis to move freely." execMethod="brake_off" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -94,7 +94,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="MoveFromLimit" description="" execMethod="move_from_limit" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="MoveFromLimit" description="Executes an asynchronous move on this axis to move it out of a limit condition." execMethod="move_from_limit" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -103,7 +103,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="FreeRun" description="" execMethod="free_run" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="FreeRun" description="Executes an asynchronous freerun move on this axis. The axis will move indefinitely at the specified velocity." execMethod="free_run" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -112,7 +112,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="FreeRunStop" description="" execMethod="free_run_stop" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="FreeRunStop" description="Stops an asynchronous freerun move on this axes. The axis velocity decelerates to zero." execMethod="free_run_stop" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -121,7 +121,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="ThrowAllFaults" description="" execMethod="throw_all_faults" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="ThrowAllFaults" description="Triggers some fault bits on this axis." execMethod="throw_all_faults" displayLevel="EXPERT" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -130,7 +130,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="AcknowledgeFaults" description="" execMethod="acknowledge_faults" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="AcknowledgeFaults" description="Acknowledges all faults on this axis." execMethod="acknowledge_faults" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -139,7 +139,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="DataCollectionStart" description="" execMethod="data_collection_start" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="DataCollectionStart" description="Begins data collection on this axis." execMethod="data_collection_start" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -148,7 +148,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="DataCollectionStop" description="" execMethod="data_collection_stop" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="DataCollectionStop" description="Stops data collection on this axis." execMethod="data_collection_stop" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -157,7 +157,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="DataCollectionRefresh" description="" execMethod="data_collection_refresh" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="DataCollectionRefresh" description="Re-initialises the data collection configuration with the selected data collection frequency and number of data points to collect." execMethod="data_collection_refresh" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -166,7 +166,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="DataCollectionGetResults" description="" execMethod="data_collection_get_results" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="DataCollectionGetResults" description="Gets results from data collection from the Automation1 controller. This function can return data from completed data collection or from data collection that is still occurring.&#xA;This function waits for data collection to collect the specified number of points, blocking until they are available, and then returns them.&#xA;&#xA;Data is written as a csv text file.&#xA;First line is metadata containing the number of rows and columns.&#xA;Second line contains the column headers.&#xA;Lines 3+ contain the data (of which there are numRows elements) for the column headers.&#xA;&#xA;e.g.&#xA;NumRows,5,NumCols,3&#xA;colName1,colName2,colName3&#xA;data11,data21,data31&#xA;data12,data22,data32&#xA;data13,data23,data33&#xA;data14,data24,data34&#xA;data15,data25,data35" execMethod="data_collection_get_results" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -175,21 +175,21 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <attributes name="PositionFeedback" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="PositionFeedback" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Position of this axis." label="Actual Position" unit="mm" standardUnit="" displayUnit="mm" format="%9.4f" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
-    <attributes name="VelocityFeedback" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="VelocityFeedback" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Velocity of the axis." label="Actual Velocity" unit="mm/s" standardUnit="" displayUnit="mm/s" format="%9.4f" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="AccelerationFeedback" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -197,7 +197,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Acceleration of the axis." label="Actual Acceleration" unit="mm/s/s" standardUnit="" displayUnit="mm/s/s" format="%9.4f" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="InPosition" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
@@ -237,7 +237,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Firmware version: Major.Minor.Patch.Build" label="Firmware Version" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="PositionError" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -245,7 +245,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Following error" label="PositionError" unit="mm" standardUnit="" displayUnit="mm" format="%9.4f" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="CurrentFeedback" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -253,7 +253,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Current supplied to this axis." label="Actual Current" unit="A" standardUnit="" displayUnit="A" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="MotorType" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:StringType"/>
@@ -261,23 +261,29 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="The type of drive connected." label="Motor Type" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
-    <attributes name="HomeType" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="HomeType" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:EnumType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Homes the axis using the specified homing function." label="Home Type" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <enumLabels>Asynchronous</enumLabels>
+      <enumLabels>Synchronous</enumLabels>
     </attributes>
-    <attributes name="MoveType" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="MoveType" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:EnumType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="The type of move to perform when executing the ``Move`` command." label="Move Type" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <enumLabels>AbsoluteMove</enumLabels>
+      <enumLabels>IncrementalMove</enumLabels>
+      <enumLabels>LinearMove</enumLabels>
+      <enumLabels>RapidMove</enumLabels>
     </attributes>
     <attributes name="LastMoveDuration" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -285,7 +291,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="The duration, in ms, of the last executed move command." label="Last Move Duration" unit="ms" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="PositionTarget" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -293,7 +299,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Position axis was commanded to move to." label="Commanded Position" unit="mm" standardUnit="" displayUnit="mm" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="VelocityTarget" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -301,7 +307,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Targeted velocity for this axis." label="Target Velocity" unit="m/s" standardUnit="" displayUnit="m/s" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="VelocityError" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -309,7 +315,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Error in the velocity of this axis." label="Velocity Error" unit="m/s" standardUnit="" displayUnit="m/s" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="AccelerationTarget" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -317,7 +323,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Target acceleration for this axis." label="Target Acceleration" unit="m/s/s" standardUnit="" displayUnit="m/s/s" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="AccelerationError" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -325,7 +331,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Error in the acceleration of this axis." label="Acceleration Error" unit="m/s/s" standardUnit="" displayUnit="m/s/s" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="CurrentTarget" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -333,7 +339,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Target current to supply to this axis." label="Target Current" unit="A" standardUnit="" displayUnit="A" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="CurrentError" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -341,7 +347,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Error in the current supplied to this axis." label="Current Error" unit="A" standardUnit="" displayUnit="A" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="ServoUpdateRate" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
@@ -349,55 +355,67 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Update rate of the axis servo." label="Servo Update Rate" unit="Hz" standardUnit="" displayUnit="Hz" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
-    <attributes name="DataCollectionNumPoints" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="DataCollectionNumPoints" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:UIntType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Number of data points to retrieve during data collection." label="Num Data Points" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
-    <attributes name="DataCollectionFrequency" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="DataCollectionFrequency" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:EnumType"/>
+      <changeEvent fire="false" libCheckCriteria="false"/>
+      <archiveEvent fire="false" libCheckCriteria="false"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Frequency of data collection." label="Data Collection Frequency" unit="Hz" standardUnit="" displayUnit="Hz" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <enumLabels>1 kHz</enumLabels>
+      <enumLabels>10 kHz</enumLabels>
+      <enumLabels>20 kHz</enumLabels>
+      <enumLabels>100 kHz</enumLabels>
+      <enumLabels>200 kHz</enumLabels>
+    </attributes>
+    <attributes name="DataCollectionMode" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:EnumType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <enumLabels>Snapshot</enumLabels>
+      <enumLabels>Continuous</enumLabels>
     </attributes>
-    <attributes name="DataCollectionMode" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="RampType" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+      <dataType xsi:type="pogoDsl:EnumType"/>
+      <changeEvent fire="false" libCheckCriteria="false"/>
+      <archiveEvent fire="false" libCheckCriteria="false"/>
+      <dataReadyEvent fire="false" libCheckCriteria="true"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <properties description="Type of ramping profile to use on this axis." label="Ramp Type" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <enumLabels>Linear</enumLabels>
+      <enumLabels>S Curve</enumLabels>
+      <enumLabels>Sine</enumLabels>
+    </attributes>
+    <attributes name="RampMode" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:EnumType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <enumLabels>Rate</enumLabels>
+      <enumLabels>Time</enumLabels>
     </attributes>
-    <attributes name="RampType" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
-      <dataType xsi:type="pogoDsl:EnumType"/>
-      <changeEvent fire="false" libCheckCriteria="false"/>
-      <archiveEvent fire="false" libCheckCriteria="false"/>
-      <dataReadyEvent fire="false" libCheckCriteria="true"/>
-      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
-    </attributes>
-    <attributes name="RampMode" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
-      <dataType xsi:type="pogoDsl:EnumType"/>
-      <changeEvent fire="false" libCheckCriteria="false"/>
-      <archiveEvent fire="false" libCheckCriteria="false"/>
-      <dataReadyEvent fire="false" libCheckCriteria="true"/>
-      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
-    </attributes>
-    <attributes name="RampValue" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="RampValue" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:DoubleType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="The ramping value used for acceleration and deceleration." label="Ramp Value" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="AxisStatus" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="24" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
@@ -405,7 +423,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Bitfield representing the status of this axis." label="Axis Status" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="AxisFault" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="25" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
@@ -413,7 +431,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Bitfield corresponding to specific faults" label="Axis Fault" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="DriveStatus" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="27" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
@@ -421,8 +439,26 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Bitfield representing the status of the connected drive." label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
+    <states name="STANDBY" description="Axis is enabled and ready to accept motion tasks.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="OFF" description="Axis is disabled.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="MOVING" description="Axis is performing a motion task.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="FAULT" description="At least one fault is present on this axis.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="INIT" description="Axis is initialising.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="UNKNOWN" description="No connection detected. Controller in unknown state.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
     <preferences docHome="./doc_html" makefileHome="$(TANGO_HOME)"/>
   </classes>
 </pogoDsl:PogoSystem>

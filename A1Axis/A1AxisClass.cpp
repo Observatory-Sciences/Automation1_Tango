@@ -506,7 +506,7 @@ void A1AxisClass::set_default_property()
 
 	//	Set Default device Properties
 	prop_name = "Axis";
-	prop_desc = "Axis number that this device will control";
+	prop_desc = "Axis index that this device will control";
 	prop_def  = "";
 	vect_data.clear();
 	if (prop_def.length()>0)
@@ -639,12 +639,12 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : PositionFeedback
 	PositionFeedbackAttrib	*positionfeedback = new PositionFeedbackAttrib();
 	Tango::UserDefaultAttrProp	positionfeedback_prop;
-	//	description	not set for PositionFeedback
-	//	label	not set for PositionFeedback
-	//	unit	not set for PositionFeedback
+	positionfeedback_prop.set_description("Position of this axis.");
+	positionfeedback_prop.set_label("Actual Position");
+	positionfeedback_prop.set_unit("mm");
 	//	standard_unit	not set for PositionFeedback
-	//	display_unit	not set for PositionFeedback
-	//	format	not set for PositionFeedback
+	positionfeedback_prop.set_display_unit("mm");
+	positionfeedback_prop.set_format("%9.4f");
 	//	max_value	not set for PositionFeedback
 	//	min_value	not set for PositionFeedback
 	//	max_alarm	not set for PositionFeedback
@@ -663,12 +663,12 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : VelocityFeedback
 	VelocityFeedbackAttrib	*velocityfeedback = new VelocityFeedbackAttrib();
 	Tango::UserDefaultAttrProp	velocityfeedback_prop;
-	//	description	not set for VelocityFeedback
-	//	label	not set for VelocityFeedback
-	//	unit	not set for VelocityFeedback
+	velocityfeedback_prop.set_description("Velocity of the axis.");
+	velocityfeedback_prop.set_label("Actual Velocity");
+	velocityfeedback_prop.set_unit("mm/s");
 	//	standard_unit	not set for VelocityFeedback
-	//	display_unit	not set for VelocityFeedback
-	//	format	not set for VelocityFeedback
+	velocityfeedback_prop.set_display_unit("mm/s");
+	velocityfeedback_prop.set_format("%9.4f");
 	//	max_value	not set for VelocityFeedback
 	//	min_value	not set for VelocityFeedback
 	//	max_alarm	not set for VelocityFeedback
@@ -687,12 +687,12 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AccelerationFeedback
 	AccelerationFeedbackAttrib	*accelerationfeedback = new AccelerationFeedbackAttrib();
 	Tango::UserDefaultAttrProp	accelerationfeedback_prop;
-	//	description	not set for AccelerationFeedback
-	//	label	not set for AccelerationFeedback
-	//	unit	not set for AccelerationFeedback
+	accelerationfeedback_prop.set_description("Acceleration of the axis.");
+	accelerationfeedback_prop.set_label("Actual Acceleration");
+	accelerationfeedback_prop.set_unit("mm/s/s");
 	//	standard_unit	not set for AccelerationFeedback
-	//	display_unit	not set for AccelerationFeedback
-	//	format	not set for AccelerationFeedback
+	accelerationfeedback_prop.set_display_unit("mm/s/s");
+	accelerationfeedback_prop.set_format("%9.4f");
 	//	max_value	not set for AccelerationFeedback
 	//	min_value	not set for AccelerationFeedback
 	//	max_alarm	not set for AccelerationFeedback
@@ -807,8 +807,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : FirmwareVersion
 	FirmwareVersionAttrib	*firmwareversion = new FirmwareVersionAttrib();
 	Tango::UserDefaultAttrProp	firmwareversion_prop;
-	//	description	not set for FirmwareVersion
-	//	label	not set for FirmwareVersion
+	firmwareversion_prop.set_description("Firmware version: Major.Minor.Patch.Build");
+	firmwareversion_prop.set_label("Firmware Version");
 	//	unit	not set for FirmwareVersion
 	//	standard_unit	not set for FirmwareVersion
 	//	display_unit	not set for FirmwareVersion
@@ -831,12 +831,12 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : PositionError
 	PositionErrorAttrib	*positionerror = new PositionErrorAttrib();
 	Tango::UserDefaultAttrProp	positionerror_prop;
-	//	description	not set for PositionError
-	//	label	not set for PositionError
-	//	unit	not set for PositionError
+	positionerror_prop.set_description("Following error");
+	positionerror_prop.set_label("PositionError");
+	positionerror_prop.set_unit("mm");
 	//	standard_unit	not set for PositionError
-	//	display_unit	not set for PositionError
-	//	format	not set for PositionError
+	positionerror_prop.set_display_unit("mm");
+	positionerror_prop.set_format("%9.4f");
 	//	max_value	not set for PositionError
 	//	min_value	not set for PositionError
 	//	max_alarm	not set for PositionError
@@ -855,11 +855,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : CurrentFeedback
 	CurrentFeedbackAttrib	*currentfeedback = new CurrentFeedbackAttrib();
 	Tango::UserDefaultAttrProp	currentfeedback_prop;
-	//	description	not set for CurrentFeedback
-	//	label	not set for CurrentFeedback
-	//	unit	not set for CurrentFeedback
+	currentfeedback_prop.set_description("Current supplied to this axis.");
+	currentfeedback_prop.set_label("Actual Current");
+	currentfeedback_prop.set_unit("A");
 	//	standard_unit	not set for CurrentFeedback
-	//	display_unit	not set for CurrentFeedback
+	currentfeedback_prop.set_display_unit("A");
 	//	format	not set for CurrentFeedback
 	//	max_value	not set for CurrentFeedback
 	//	min_value	not set for CurrentFeedback
@@ -879,8 +879,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : MotorType
 	MotorTypeAttrib	*motortype = new MotorTypeAttrib();
 	Tango::UserDefaultAttrProp	motortype_prop;
-	//	description	not set for MotorType
-	//	label	not set for MotorType
+	motortype_prop.set_description("The type of drive connected.");
+	motortype_prop.set_label("Motor Type");
 	//	unit	not set for MotorType
 	//	standard_unit	not set for MotorType
 	//	display_unit	not set for MotorType
@@ -903,8 +903,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : HomeType
 	HomeTypeAttrib	*hometype = new HomeTypeAttrib();
 	Tango::UserDefaultAttrProp	hometype_prop;
-	//	description	not set for HomeType
-	//	label	not set for HomeType
+	hometype_prop.set_description("Homes the axis using the specified homing function.");
+	hometype_prop.set_label("Home Type");
 	//	unit	not set for HomeType
 	//	standard_unit	not set for HomeType
 	//	display_unit	not set for HomeType
@@ -918,6 +918,12 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_t	not set for HomeType
 	//	delta_val	not set for HomeType
 	
+	{
+		vector<std::string> labels;
+		labels.push_back("Asynchronous");
+		labels.push_back("Synchronous");
+		hometype_prop.set_enum_labels(labels);
+	}
 	hometype->set_default_properties(hometype_prop);
 	//	Not Polled
 	hometype->set_disp_level(Tango::OPERATOR);
@@ -927,8 +933,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : MoveType
 	MoveTypeAttrib	*movetype = new MoveTypeAttrib();
 	Tango::UserDefaultAttrProp	movetype_prop;
-	//	description	not set for MoveType
-	//	label	not set for MoveType
+	movetype_prop.set_description("The type of move to perform when executing the ``Move`` command.");
+	movetype_prop.set_label("Move Type");
 	//	unit	not set for MoveType
 	//	standard_unit	not set for MoveType
 	//	display_unit	not set for MoveType
@@ -942,6 +948,14 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_t	not set for MoveType
 	//	delta_val	not set for MoveType
 	
+	{
+		vector<std::string> labels;
+		labels.push_back("AbsoluteMove");
+		labels.push_back("IncrementalMove");
+		labels.push_back("LinearMove");
+		labels.push_back("RapidMove");
+		movetype_prop.set_enum_labels(labels);
+	}
 	movetype->set_default_properties(movetype_prop);
 	//	Not Polled
 	movetype->set_disp_level(Tango::OPERATOR);
@@ -951,9 +965,9 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : LastMoveDuration
 	LastMoveDurationAttrib	*lastmoveduration = new LastMoveDurationAttrib();
 	Tango::UserDefaultAttrProp	lastmoveduration_prop;
-	//	description	not set for LastMoveDuration
-	//	label	not set for LastMoveDuration
-	//	unit	not set for LastMoveDuration
+	lastmoveduration_prop.set_description("The duration, in ms, of the last executed move command.");
+	lastmoveduration_prop.set_label("Last Move Duration");
+	lastmoveduration_prop.set_unit("ms");
 	//	standard_unit	not set for LastMoveDuration
 	//	display_unit	not set for LastMoveDuration
 	//	format	not set for LastMoveDuration
@@ -975,11 +989,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : PositionTarget
 	PositionTargetAttrib	*positiontarget = new PositionTargetAttrib();
 	Tango::UserDefaultAttrProp	positiontarget_prop;
-	//	description	not set for PositionTarget
-	//	label	not set for PositionTarget
-	//	unit	not set for PositionTarget
+	positiontarget_prop.set_description("Position axis was commanded to move to.");
+	positiontarget_prop.set_label("Commanded Position");
+	positiontarget_prop.set_unit("mm");
 	//	standard_unit	not set for PositionTarget
-	//	display_unit	not set for PositionTarget
+	positiontarget_prop.set_display_unit("mm");
 	//	format	not set for PositionTarget
 	//	max_value	not set for PositionTarget
 	//	min_value	not set for PositionTarget
@@ -999,11 +1013,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : VelocityTarget
 	VelocityTargetAttrib	*velocitytarget = new VelocityTargetAttrib();
 	Tango::UserDefaultAttrProp	velocitytarget_prop;
-	//	description	not set for VelocityTarget
-	//	label	not set for VelocityTarget
-	//	unit	not set for VelocityTarget
+	velocitytarget_prop.set_description("Targeted velocity for this axis.");
+	velocitytarget_prop.set_label("Target Velocity");
+	velocitytarget_prop.set_unit("m/s");
 	//	standard_unit	not set for VelocityTarget
-	//	display_unit	not set for VelocityTarget
+	velocitytarget_prop.set_display_unit("m/s");
 	//	format	not set for VelocityTarget
 	//	max_value	not set for VelocityTarget
 	//	min_value	not set for VelocityTarget
@@ -1023,11 +1037,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : VelocityError
 	VelocityErrorAttrib	*velocityerror = new VelocityErrorAttrib();
 	Tango::UserDefaultAttrProp	velocityerror_prop;
-	//	description	not set for VelocityError
-	//	label	not set for VelocityError
-	//	unit	not set for VelocityError
+	velocityerror_prop.set_description("Error in the velocity of this axis.");
+	velocityerror_prop.set_label("Velocity Error");
+	velocityerror_prop.set_unit("m/s");
 	//	standard_unit	not set for VelocityError
-	//	display_unit	not set for VelocityError
+	velocityerror_prop.set_display_unit("m/s");
 	//	format	not set for VelocityError
 	//	max_value	not set for VelocityError
 	//	min_value	not set for VelocityError
@@ -1047,11 +1061,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AccelerationTarget
 	AccelerationTargetAttrib	*accelerationtarget = new AccelerationTargetAttrib();
 	Tango::UserDefaultAttrProp	accelerationtarget_prop;
-	//	description	not set for AccelerationTarget
-	//	label	not set for AccelerationTarget
-	//	unit	not set for AccelerationTarget
+	accelerationtarget_prop.set_description("Target acceleration for this axis.");
+	accelerationtarget_prop.set_label("Target Acceleration");
+	accelerationtarget_prop.set_unit("m/s/s");
 	//	standard_unit	not set for AccelerationTarget
-	//	display_unit	not set for AccelerationTarget
+	accelerationtarget_prop.set_display_unit("m/s/s");
 	//	format	not set for AccelerationTarget
 	//	max_value	not set for AccelerationTarget
 	//	min_value	not set for AccelerationTarget
@@ -1071,11 +1085,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AccelerationError
 	AccelerationErrorAttrib	*accelerationerror = new AccelerationErrorAttrib();
 	Tango::UserDefaultAttrProp	accelerationerror_prop;
-	//	description	not set for AccelerationError
-	//	label	not set for AccelerationError
-	//	unit	not set for AccelerationError
+	accelerationerror_prop.set_description("Error in the acceleration of this axis.");
+	accelerationerror_prop.set_label("Acceleration Error");
+	accelerationerror_prop.set_unit("m/s/s");
 	//	standard_unit	not set for AccelerationError
-	//	display_unit	not set for AccelerationError
+	accelerationerror_prop.set_display_unit("m/s/s");
 	//	format	not set for AccelerationError
 	//	max_value	not set for AccelerationError
 	//	min_value	not set for AccelerationError
@@ -1095,11 +1109,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : CurrentTarget
 	CurrentTargetAttrib	*currenttarget = new CurrentTargetAttrib();
 	Tango::UserDefaultAttrProp	currenttarget_prop;
-	//	description	not set for CurrentTarget
-	//	label	not set for CurrentTarget
-	//	unit	not set for CurrentTarget
+	currenttarget_prop.set_description("Target current to supply to this axis.");
+	currenttarget_prop.set_label("Target Current");
+	currenttarget_prop.set_unit("A");
 	//	standard_unit	not set for CurrentTarget
-	//	display_unit	not set for CurrentTarget
+	currenttarget_prop.set_display_unit("A");
 	//	format	not set for CurrentTarget
 	//	max_value	not set for CurrentTarget
 	//	min_value	not set for CurrentTarget
@@ -1119,11 +1133,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : CurrentError
 	CurrentErrorAttrib	*currenterror = new CurrentErrorAttrib();
 	Tango::UserDefaultAttrProp	currenterror_prop;
-	//	description	not set for CurrentError
-	//	label	not set for CurrentError
-	//	unit	not set for CurrentError
+	currenterror_prop.set_description("Error in the current supplied to this axis.");
+	currenterror_prop.set_label("Current Error");
+	currenterror_prop.set_unit("A");
 	//	standard_unit	not set for CurrentError
-	//	display_unit	not set for CurrentError
+	currenterror_prop.set_display_unit("A");
 	//	format	not set for CurrentError
 	//	max_value	not set for CurrentError
 	//	min_value	not set for CurrentError
@@ -1143,11 +1157,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : ServoUpdateRate
 	ServoUpdateRateAttrib	*servoupdaterate = new ServoUpdateRateAttrib();
 	Tango::UserDefaultAttrProp	servoupdaterate_prop;
-	//	description	not set for ServoUpdateRate
-	//	label	not set for ServoUpdateRate
-	//	unit	not set for ServoUpdateRate
+	servoupdaterate_prop.set_description("Update rate of the axis servo.");
+	servoupdaterate_prop.set_label("Servo Update Rate");
+	servoupdaterate_prop.set_unit("Hz");
 	//	standard_unit	not set for ServoUpdateRate
-	//	display_unit	not set for ServoUpdateRate
+	servoupdaterate_prop.set_display_unit("Hz");
 	//	format	not set for ServoUpdateRate
 	//	max_value	not set for ServoUpdateRate
 	//	min_value	not set for ServoUpdateRate
@@ -1167,8 +1181,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : DataCollectionNumPoints
 	DataCollectionNumPointsAttrib	*datacollectionnumpoints = new DataCollectionNumPointsAttrib();
 	Tango::UserDefaultAttrProp	datacollectionnumpoints_prop;
-	//	description	not set for DataCollectionNumPoints
-	//	label	not set for DataCollectionNumPoints
+	datacollectionnumpoints_prop.set_description("Number of data points to retrieve during data collection.");
+	datacollectionnumpoints_prop.set_label("Num Data Points");
 	//	unit	not set for DataCollectionNumPoints
 	//	standard_unit	not set for DataCollectionNumPoints
 	//	display_unit	not set for DataCollectionNumPoints
@@ -1191,11 +1205,11 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : DataCollectionFrequency
 	DataCollectionFrequencyAttrib	*datacollectionfrequency = new DataCollectionFrequencyAttrib();
 	Tango::UserDefaultAttrProp	datacollectionfrequency_prop;
-	//	description	not set for DataCollectionFrequency
-	//	label	not set for DataCollectionFrequency
-	//	unit	not set for DataCollectionFrequency
+	datacollectionfrequency_prop.set_description("Frequency of data collection.");
+	datacollectionfrequency_prop.set_label("Data Collection Frequency");
+	datacollectionfrequency_prop.set_unit("Hz");
 	//	standard_unit	not set for DataCollectionFrequency
-	//	display_unit	not set for DataCollectionFrequency
+	datacollectionfrequency_prop.set_display_unit("Hz");
 	//	format	not set for DataCollectionFrequency
 	//	max_value	not set for DataCollectionFrequency
 	//	min_value	not set for DataCollectionFrequency
@@ -1206,6 +1220,15 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_t	not set for DataCollectionFrequency
 	//	delta_val	not set for DataCollectionFrequency
 	
+	{
+		vector<std::string> labels;
+		labels.push_back("1 kHz");
+		labels.push_back("10 kHz");
+		labels.push_back("20 kHz");
+		labels.push_back("100 kHz");
+		labels.push_back("200 kHz");
+		datacollectionfrequency_prop.set_enum_labels(labels);
+	}
 	datacollectionfrequency->set_default_properties(datacollectionfrequency_prop);
 	//	Not Polled
 	datacollectionfrequency->set_disp_level(Tango::OPERATOR);
@@ -1230,6 +1253,12 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_t	not set for DataCollectionMode
 	//	delta_val	not set for DataCollectionMode
 	
+	{
+		vector<std::string> labels;
+		labels.push_back("Snapshot");
+		labels.push_back("Continuous");
+		datacollectionmode_prop.set_enum_labels(labels);
+	}
 	datacollectionmode->set_default_properties(datacollectionmode_prop);
 	//	Not Polled
 	datacollectionmode->set_disp_level(Tango::OPERATOR);
@@ -1239,8 +1268,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : RampType
 	RampTypeAttrib	*ramptype = new RampTypeAttrib();
 	Tango::UserDefaultAttrProp	ramptype_prop;
-	//	description	not set for RampType
-	//	label	not set for RampType
+	ramptype_prop.set_description("Type of ramping profile to use on this axis.");
+	ramptype_prop.set_label("Ramp Type");
 	//	unit	not set for RampType
 	//	standard_unit	not set for RampType
 	//	display_unit	not set for RampType
@@ -1254,6 +1283,13 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_t	not set for RampType
 	//	delta_val	not set for RampType
 	
+	{
+		vector<std::string> labels;
+		labels.push_back("Linear");
+		labels.push_back("S Curve");
+		labels.push_back("Sine");
+		ramptype_prop.set_enum_labels(labels);
+	}
 	ramptype->set_default_properties(ramptype_prop);
 	//	Not Polled
 	ramptype->set_disp_level(Tango::OPERATOR);
@@ -1278,6 +1314,12 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_t	not set for RampMode
 	//	delta_val	not set for RampMode
 	
+	{
+		vector<std::string> labels;
+		labels.push_back("Rate");
+		labels.push_back("Time");
+		rampmode_prop.set_enum_labels(labels);
+	}
 	rampmode->set_default_properties(rampmode_prop);
 	//	Not Polled
 	rampmode->set_disp_level(Tango::OPERATOR);
@@ -1287,8 +1329,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : RampValue
 	RampValueAttrib	*rampvalue = new RampValueAttrib();
 	Tango::UserDefaultAttrProp	rampvalue_prop;
-	//	description	not set for RampValue
-	//	label	not set for RampValue
+	rampvalue_prop.set_description("The ramping value used for acceleration and deceleration.");
+	rampvalue_prop.set_label("Ramp Value");
 	//	unit	not set for RampValue
 	//	standard_unit	not set for RampValue
 	//	display_unit	not set for RampValue
@@ -1311,8 +1353,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AxisStatus
 	AxisStatusAttrib	*axisstatus = new AxisStatusAttrib();
 	Tango::UserDefaultAttrProp	axisstatus_prop;
-	//	description	not set for AxisStatus
-	//	label	not set for AxisStatus
+	axisstatus_prop.set_description("Bitfield representing the status of this axis.");
+	axisstatus_prop.set_label("Axis Status");
 	//	unit	not set for AxisStatus
 	//	standard_unit	not set for AxisStatus
 	//	display_unit	not set for AxisStatus
@@ -1335,8 +1377,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AxisFault
 	AxisFaultAttrib	*axisfault = new AxisFaultAttrib();
 	Tango::UserDefaultAttrProp	axisfault_prop;
-	//	description	not set for AxisFault
-	//	label	not set for AxisFault
+	axisfault_prop.set_description("Bitfield corresponding to specific faults");
+	axisfault_prop.set_label("Axis Fault");
 	//	unit	not set for AxisFault
 	//	standard_unit	not set for AxisFault
 	//	display_unit	not set for AxisFault
@@ -1359,7 +1401,7 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : DriveStatus
 	DriveStatusAttrib	*drivestatus = new DriveStatusAttrib();
 	Tango::UserDefaultAttrProp	drivestatus_prop;
-	//	description	not set for DriveStatus
+	drivestatus_prop.set_description("Bitfield representing the status of the connected drive.");
 	//	label	not set for DriveStatus
 	//	unit	not set for DriveStatus
 	//	standard_unit	not set for DriveStatus
@@ -1521,7 +1563,7 @@ void A1AxisClass::command_factory()
 			Tango::DEV_VOID, Tango::DEV_VOID,
 			"",
 			"",
-			Tango::OPERATOR);
+			Tango::EXPERT);
 	command_list.push_back(pThrowAllFaultsCmd);
 
 	//	Command AcknowledgeFaults

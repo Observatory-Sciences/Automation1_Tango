@@ -387,11 +387,26 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_attr_hardware
 }
+//--------------------------------------------------------
+/**
+ *	Method      : A1Axis::write_attr_hardware()
+ *	Description : Hardware writing for attributes
+ */
+//--------------------------------------------------------
+void A1Axis::write_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
+{
+	DEBUG_STREAM << "A1Axis::write_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Axis::write_attr_hardware) ENABLED START -----*/
+	
+	//	Add your own code
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_attr_hardware
+}
 
 //--------------------------------------------------------
 /**
  *	Read attribute PositionFeedback related method
- *	Description: 
+ *	Description: Position of this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -408,8 +423,28 @@ void A1Axis::read_PositionFeedback(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Write attribute PositionFeedback related method
+ *	Description: Position of this axis.
+ *
+ *	Data type:	Tango::DevDouble
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_PositionFeedback(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_PositionFeedback(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	Tango::DevDouble	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_PositionFeedback) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_PositionFeedback
+}
+//--------------------------------------------------------
+/**
  *	Read attribute VelocityFeedback related method
- *	Description: 
+ *	Description: Velocity of the axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -426,8 +461,28 @@ void A1Axis::read_VelocityFeedback(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Write attribute VelocityFeedback related method
+ *	Description: Velocity of the axis.
+ *
+ *	Data type:	Tango::DevDouble
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_VelocityFeedback(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_VelocityFeedback(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	Tango::DevDouble	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_VelocityFeedback) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_VelocityFeedback
+}
+//--------------------------------------------------------
+/**
  *	Read attribute AccelerationFeedback related method
- *	Description: 
+ *	Description: Acceleration of the axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -517,7 +572,7 @@ void A1Axis::read_Error(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute FirmwareVersion related method
- *	Description: 
+ *	Description: Firmware version: Major.Minor.Patch.Build
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -535,7 +590,7 @@ void A1Axis::read_FirmwareVersion(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute PositionError related method
- *	Description: 
+ *	Description: Following error
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -553,7 +608,7 @@ void A1Axis::read_PositionError(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute CurrentFeedback related method
- *	Description: 
+ *	Description: Current supplied to this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -571,7 +626,7 @@ void A1Axis::read_CurrentFeedback(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute MotorType related method
- *	Description: 
+ *	Description: The type of drive connected.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -589,7 +644,7 @@ void A1Axis::read_MotorType(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute HomeType related method
- *	Description: 
+ *	Description: Homes the axis using the specified homing function.
  *
  *	Data type:	Tango::DevEnum (HomeTypeEnum)
  *	Attr type:	Scalar
@@ -606,8 +661,28 @@ void A1Axis::read_HomeType(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Write attribute HomeType related method
+ *	Description: Homes the axis using the specified homing function.
+ *
+ *	Data type:	Tango::DevEnum (HomeTypeEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_HomeType(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_HomeType(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	HomeTypeEnum	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_HomeType) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_HomeType
+}
+//--------------------------------------------------------
+/**
  *	Read attribute MoveType related method
- *	Description: 
+ *	Description: The type of move to perform when executing the ``Move`` command.
  *
  *	Data type:	Tango::DevEnum (MoveTypeEnum)
  *	Attr type:	Scalar
@@ -624,8 +699,28 @@ void A1Axis::read_MoveType(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Write attribute MoveType related method
+ *	Description: The type of move to perform when executing the ``Move`` command.
+ *
+ *	Data type:	Tango::DevEnum (MoveTypeEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_MoveType(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_MoveType(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	MoveTypeEnum	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_MoveType) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_MoveType
+}
+//--------------------------------------------------------
+/**
  *	Read attribute LastMoveDuration related method
- *	Description: 
+ *	Description: The duration, in ms, of the last executed move command.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -643,7 +738,7 @@ void A1Axis::read_LastMoveDuration(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute PositionTarget related method
- *	Description: 
+ *	Description: Position axis was commanded to move to.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -661,7 +756,7 @@ void A1Axis::read_PositionTarget(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute VelocityTarget related method
- *	Description: 
+ *	Description: Targeted velocity for this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -679,7 +774,7 @@ void A1Axis::read_VelocityTarget(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute VelocityError related method
- *	Description: 
+ *	Description: Error in the velocity of this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -697,7 +792,7 @@ void A1Axis::read_VelocityError(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AccelerationTarget related method
- *	Description: 
+ *	Description: Target acceleration for this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -715,7 +810,7 @@ void A1Axis::read_AccelerationTarget(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AccelerationError related method
- *	Description: 
+ *	Description: Error in the acceleration of this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -733,7 +828,7 @@ void A1Axis::read_AccelerationError(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute CurrentTarget related method
- *	Description: 
+ *	Description: Target current to supply to this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -751,7 +846,7 @@ void A1Axis::read_CurrentTarget(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute CurrentError related method
- *	Description: 
+ *	Description: Error in the current supplied to this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -769,7 +864,7 @@ void A1Axis::read_CurrentError(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute ServoUpdateRate related method
- *	Description: 
+ *	Description: Update rate of the axis servo.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -787,7 +882,7 @@ void A1Axis::read_ServoUpdateRate(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute DataCollectionNumPoints related method
- *	Description: 
+ *	Description: Number of data points to retrieve during data collection.
  *
  *	Data type:	Tango::DevULong
  *	Attr type:	Scalar
@@ -804,8 +899,28 @@ void A1Axis::read_DataCollectionNumPoints(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Write attribute DataCollectionNumPoints related method
+ *	Description: Number of data points to retrieve during data collection.
+ *
+ *	Data type:	Tango::DevULong
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_DataCollectionNumPoints(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_DataCollectionNumPoints(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	Tango::DevULong	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_DataCollectionNumPoints) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_DataCollectionNumPoints
+}
+//--------------------------------------------------------
+/**
  *	Read attribute DataCollectionFrequency related method
- *	Description: 
+ *	Description: Frequency of data collection.
  *
  *	Data type:	Tango::DevEnum (DataCollectionFrequencyEnum)
  *	Attr type:	Scalar
@@ -819,6 +934,26 @@ void A1Axis::read_DataCollectionFrequency(Tango::Attribute &attr)
 	attr.set_value(attr_DataCollectionFrequency_read);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_DataCollectionFrequency
+}
+//--------------------------------------------------------
+/**
+ *	Write attribute DataCollectionFrequency related method
+ *	Description: Frequency of data collection.
+ *
+ *	Data type:	Tango::DevEnum (DataCollectionFrequencyEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_DataCollectionFrequency(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_DataCollectionFrequency(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	DataCollectionFrequencyEnum	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_DataCollectionFrequency) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_DataCollectionFrequency
 }
 //--------------------------------------------------------
 /**
@@ -840,8 +975,28 @@ void A1Axis::read_DataCollectionMode(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
- *	Read attribute RampType related method
+ *	Write attribute DataCollectionMode related method
  *	Description: 
+ *
+ *	Data type:	Tango::DevEnum (DataCollectionModeEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_DataCollectionMode(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_DataCollectionMode(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	DataCollectionModeEnum	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_DataCollectionMode) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_DataCollectionMode
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute RampType related method
+ *	Description: Type of ramping profile to use on this axis.
  *
  *	Data type:	Tango::DevEnum (RampTypeEnum)
  *	Attr type:	Scalar
@@ -855,6 +1010,26 @@ void A1Axis::read_RampType(Tango::Attribute &attr)
 	attr.set_value(attr_RampType_read);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_RampType
+}
+//--------------------------------------------------------
+/**
+ *	Write attribute RampType related method
+ *	Description: Type of ramping profile to use on this axis.
+ *
+ *	Data type:	Tango::DevEnum (RampTypeEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_RampType(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_RampType(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	RampTypeEnum	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_RampType) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampType
 }
 //--------------------------------------------------------
 /**
@@ -876,8 +1051,28 @@ void A1Axis::read_RampMode(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
- *	Read attribute RampValue related method
+ *	Write attribute RampMode related method
  *	Description: 
+ *
+ *	Data type:	Tango::DevEnum (RampModeEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_RampMode(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_RampMode(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	RampModeEnum	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_RampMode) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampMode
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute RampValue related method
+ *	Description: The ramping value used for acceleration and deceleration.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -894,8 +1089,28 @@ void A1Axis::read_RampValue(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Write attribute RampValue related method
+ *	Description: The ramping value used for acceleration and deceleration.
+ *
+ *	Data type:	Tango::DevDouble
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_RampValue(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_RampValue(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	Tango::DevDouble	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_RampValue) ENABLED START -----*/
+	
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampValue
+}
+//--------------------------------------------------------
+/**
  *	Read attribute AxisStatus related method
- *	Description: 
+ *	Description: Bitfield representing the status of this axis.
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 24
@@ -913,7 +1128,7 @@ void A1Axis::read_AxisStatus(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AxisFault related method
- *	Description: 
+ *	Description: Bitfield corresponding to specific faults
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 25
@@ -931,7 +1146,7 @@ void A1Axis::read_AxisFault(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute DriveStatus related method
- *	Description: 
+ *	Description: Bitfield representing the status of the connected drive.
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 27
@@ -966,7 +1181,7 @@ void A1Axis::add_dynamic_attributes()
 //--------------------------------------------------------
 /**
  *	Command Abort related method
- *	Description: 
+ *	Description: Aborts any motion on this axis.
  *
  */
 //--------------------------------------------------------
@@ -982,7 +1197,7 @@ void A1Axis::abort()
 //--------------------------------------------------------
 /**
  *	Command Home related method
- *	Description: 
+ *	Description: Homes this axis according to the method selected in HomeType.
  *
  */
 //--------------------------------------------------------
@@ -998,7 +1213,7 @@ void A1Axis::home()
 //--------------------------------------------------------
 /**
  *	Command Move related method
- *	Description: 
+ *	Description: Executes the specific move command specified by the MoveType attribute.
  *
  */
 //--------------------------------------------------------
@@ -1014,7 +1229,7 @@ void A1Axis::move()
 //--------------------------------------------------------
 /**
  *	Command Enable related method
- *	Description: 
+ *	Description: Enables the axis.
  *
  */
 //--------------------------------------------------------
@@ -1030,7 +1245,7 @@ void A1Axis::enable()
 //--------------------------------------------------------
 /**
  *	Command Disable related method
- *	Description: 
+ *	Description: Disables the axis.
  *
  */
 //--------------------------------------------------------
@@ -1046,7 +1261,7 @@ void A1Axis::disable()
 //--------------------------------------------------------
 /**
  *	Command BrakeOn related method
- *	Description: 
+ *	Description: Engages the brake output and prevents the axis from moving freely.
  *
  */
 //--------------------------------------------------------
@@ -1062,7 +1277,7 @@ void A1Axis::brake_on()
 //--------------------------------------------------------
 /**
  *	Command BrakeOff related method
- *	Description: 
+ *	Description: Disengages the brake output and allows the axis to move freely.
  *
  */
 //--------------------------------------------------------
@@ -1078,7 +1293,7 @@ void A1Axis::brake_off()
 //--------------------------------------------------------
 /**
  *	Command MoveFromLimit related method
- *	Description: 
+ *	Description: Executes an asynchronous move on this axis to move it out of a limit condition.
  *
  */
 //--------------------------------------------------------
@@ -1094,7 +1309,7 @@ void A1Axis::move_from_limit()
 //--------------------------------------------------------
 /**
  *	Command FreeRun related method
- *	Description: 
+ *	Description: Executes an asynchronous freerun move on this axis. The axis will move indefinitely at the specified velocity.
  *
  */
 //--------------------------------------------------------
@@ -1110,7 +1325,7 @@ void A1Axis::free_run()
 //--------------------------------------------------------
 /**
  *	Command FreeRunStop related method
- *	Description: 
+ *	Description: Stops an asynchronous freerun move on this axes. The axis velocity decelerates to zero.
  *
  */
 //--------------------------------------------------------
@@ -1126,7 +1341,7 @@ void A1Axis::free_run_stop()
 //--------------------------------------------------------
 /**
  *	Command ThrowAllFaults related method
- *	Description: 
+ *	Description: Triggers some fault bits on this axis.
  *
  */
 //--------------------------------------------------------
@@ -1142,7 +1357,7 @@ void A1Axis::throw_all_faults()
 //--------------------------------------------------------
 /**
  *	Command AcknowledgeFaults related method
- *	Description: 
+ *	Description: Acknowledges all faults on this axis.
  *
  */
 //--------------------------------------------------------
@@ -1158,7 +1373,7 @@ void A1Axis::acknowledge_faults()
 //--------------------------------------------------------
 /**
  *	Command DataCollectionStart related method
- *	Description: 
+ *	Description: Begins data collection on this axis.
  *
  */
 //--------------------------------------------------------
@@ -1174,7 +1389,7 @@ void A1Axis::data_collection_start()
 //--------------------------------------------------------
 /**
  *	Command DataCollectionStop related method
- *	Description: 
+ *	Description: Stops data collection on this axis.
  *
  */
 //--------------------------------------------------------
@@ -1190,7 +1405,7 @@ void A1Axis::data_collection_stop()
 //--------------------------------------------------------
 /**
  *	Command DataCollectionRefresh related method
- *	Description: 
+ *	Description: Re-initialises the data collection configuration with the selected data collection frequency and number of data points to collect.
  *
  */
 //--------------------------------------------------------
@@ -1206,7 +1421,22 @@ void A1Axis::data_collection_refresh()
 //--------------------------------------------------------
 /**
  *	Command DataCollectionGetResults related method
- *	Description: 
+ *	Description: Gets results from data collection from the Automation1 controller. This function can return data from completed data collection or from data collection that is still occurring.
+ *               This function waits for data collection to collect the specified number of points, blocking until they are available, and then returns them.
+ *               
+ *               Data is written as a csv text file.
+ *               First line is metadata containing the number of rows and columns.
+ *               Second line contains the column headers.
+ *               Lines 3+ contain the data (of which there are numRows elements) for the column headers.
+ *               
+ *               e.g.
+ *               NumRows,5,NumCols,3
+ *               colName1,colName2,colName3
+ *               data11,data21,data31
+ *               data12,data22,data32
+ *               data13,data23,data33
+ *               data14,data24,data34
+ *               data15,data25,data35
  *
  */
 //--------------------------------------------------------

@@ -207,6 +207,7 @@ void A1Controller::get_device_property()
 	//	Read device properties from database.
 	Tango::DbData	dev_prop;
 	dev_prop.push_back(Tango::DbDatum("IpAddress"));
+	dev_prop.push_back(Tango::DbDatum("Simulate"));
 
 	//	is there at least one property to be read ?
 	if (dev_prop.size()>0)
@@ -233,6 +234,17 @@ void A1Controller::get_device_property()
 		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  ipAddress;
 		//	Property StartDsPath is mandatory, check if has been defined in database.
 		check_mandatory_property(cl_prop, dev_prop[i]);
+
+		//	Try to initialize Simulate from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  simulate;
+		else {
+			//	Try to initialize Simulate from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  simulate;
+		}
+		//	And try to extract Simulate value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  simulate;
 
 	}
 
@@ -326,7 +338,7 @@ void A1Controller::write_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list
 //--------------------------------------------------------
 /**
  *	Read attribute ControllerRunning related method
- *	Description: 
+ *	Description: True if the controller has been started otherwise false.
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -344,7 +356,7 @@ void A1Controller::read_ControllerRunning(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AxisCount related method
- *	Description: 
+ *	Description: The maximum number of axis slots available on this controller, not the number of drives connected.
  *
  *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
@@ -362,7 +374,7 @@ void A1Controller::read_AxisCount(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute TaskCount related method
- *	Description: 
+ *	Description: The maximum number of task slots available on this controller.
  *
  *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
@@ -380,7 +392,7 @@ void A1Controller::read_TaskCount(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute APIVersion related method
- *	Description: 
+ *	Description: The version of the C API in use.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -398,7 +410,7 @@ void A1Controller::read_APIVersion(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AeroScriptFilePath related method
- *	Description: 
+ *	Description: Full file path of the AeroScript file on the controller to target.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -416,7 +428,7 @@ void A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Write attribute AeroScriptFilePath related method
- *	Description: 
+ *	Description: Full file path of the AeroScript file on the controller to target.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -436,7 +448,7 @@ void A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AxisHealth related method
- *	Description: 
+ *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 32
@@ -508,7 +520,7 @@ void A1Controller::read_TaskStatus2(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AeroScriptFiles related method
- *	Description: 
+ *	Description: A list of the files present on the Automation1 controller.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Spectrum max = 32
@@ -543,7 +555,7 @@ void A1Controller::add_dynamic_attributes()
 //--------------------------------------------------------
 /**
  *	Command Reset related method
- *	Description: 
+ *	Description: Reboots the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
@@ -559,7 +571,7 @@ void A1Controller::reset()
 //--------------------------------------------------------
 /**
  *	Command Start related method
- *	Description: 
+ *	Description: Starts the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
@@ -575,7 +587,7 @@ void A1Controller::start()
 //--------------------------------------------------------
 /**
  *	Command Stop related method
- *	Description: 
+ *	Description: Stops the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
@@ -591,7 +603,7 @@ void A1Controller::stop()
 //--------------------------------------------------------
 /**
  *	Command Enable related method
- *	Description: 
+ *	Description: Enables all active axes connected to the controller.
  *
  */
 //--------------------------------------------------------
@@ -607,7 +619,7 @@ void A1Controller::enable()
 //--------------------------------------------------------
 /**
  *	Command Disable related method
- *	Description: 
+ *	Description: Disables all active axes connected to the controller.
  *
  */
 //--------------------------------------------------------
@@ -623,7 +635,7 @@ void A1Controller::disable()
 //--------------------------------------------------------
 /**
  *	Command ClearErrors related method
- *	Description: 
+ *	Description: Acknowledges all axis faults and clears all task errors.
  *
  */
 //--------------------------------------------------------
@@ -639,7 +651,10 @@ void A1Controller::clear_errors()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramRun related method
- *	Description: 
+ *	Description: Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.
+ *               Running a program will automatically load the program and begin program execution. This function waits for the program to load and start but it does not wait for the program to complete.
+ *               The AeroScript program must exist as a controller file on the Automation1 controller.
+ *               AeroScript libraries cannot be run, the controller file must be an AeroScript program (either a source program file or a compiled program file).
  *
  */
 //--------------------------------------------------------
@@ -655,7 +670,10 @@ void A1Controller::aero_script_program_run()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramLoad related method
- *	Description: 
+ *	Description: Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.
+ *               Loading does not start the program, you must call AeroScriptProgramStart to begin program execution.
+ *               The AeroScript program must exist as a controller file on the Automation1 controller.
+ *               AeroScript libraries cannot be loaded on a task, the controller file must be an AeroScript program (either a source program file or a compiled program file).
  *
  */
 //--------------------------------------------------------
@@ -671,7 +689,9 @@ void A1Controller::aero_script_program_load()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramStart related method
- *	Description: 
+ *	Description: Starts or resumes the currently loaded AeroScript program, beginning program execution.
+ *               A program must be loaded to be able to start or resume it. To load a program, call AeroScriptProgramLoad.
+ *               This function waits for the loaded program to start but it does not wait for the program to complete.
  *
  */
 //--------------------------------------------------------
@@ -687,7 +707,9 @@ void A1Controller::aero_script_program_start()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramStop related method
- *	Description: 
+ *	Description: Stops the currently running AeroScript program, terminating program execution.
+ *               This function will wait for the specified amount of time for the loaded program to stop. If the timeout is set to -1, this function will wait indefinitely.
+ *               This function will also stop queue mode and buffered run mode. After a program is stopped it is unloaded.
  *
  */
 //--------------------------------------------------------
@@ -703,7 +725,9 @@ void A1Controller::aero_script_program_stop()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramPause related method
- *	Description: 
+ *	Description: Pauses the currently running AeroScript program, suspending program execution.
+ *               This function will wait for the specified amount of time for the loaded program to pause. If the timeout is set to -1, this function will wait indefinitely.
+ *               To resume program execution, call AeroScriptProgramStart.
  *
  */
 //--------------------------------------------------------

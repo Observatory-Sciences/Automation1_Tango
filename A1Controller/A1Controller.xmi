@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="ASCII"?>
 <pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://www.esrf.fr/tango/pogo/PogoDsl">
   <classes name="A1Controller" pogoRevision="9.7">
-    <description description="Controller class for the Aerotech Automation 1 device server" title="" sourcePath="/home/tango-cs/work/Automation1_Tango/A1Controller" language="Cpp" filestogenerate="XMI   file,Code files,Makefile,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="true" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
+    <description description="Controller class for the Aerotech Automation 1 device server" title="" sourcePath="/home/tango-cs/work/Automation1_Tango/A1Controller" language="Cpp" filestogenerate="XMI   file,Code files,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="true" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at observatorysciences.co.uk - jsy" author="jsy" emailDomain="observatorysciences.co.uk" classFamily="Motion" siteSpecific="" platform="All Platforms" bus="Ethernet" manufacturer="none" reference=""/>
     </description>
     <deviceProperties name="IpAddress" mandatory="true" description="IP address of the motion controller">
       <type xsi:type="pogoDsl:StringType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </deviceProperties>
+    <deviceProperties name="Simulate" description="Use simulation mode">
+      <type xsi:type="pogoDsl:BooleanType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>0</DefaultPropValue>
     </deviceProperties>
     <commands name="State" description="This command gets the device state (stored in its device_state data member) and returns it to the caller." execMethod="dev_state" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="none">
@@ -27,7 +32,7 @@
       </argout>
       <status abstract="true" inherited="true" concrete="true"/>
     </commands>
-    <commands name="Reset" description="" execMethod="reset" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Reset" description="Reboots the Automation1 motion controller." execMethod="reset" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -36,7 +41,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Start" description="" execMethod="start" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Start" description="Starts the Automation1 motion controller." execMethod="start" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -45,7 +50,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Stop" description="" execMethod="stop" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Stop" description="Stops the Automation1 motion controller." execMethod="stop" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -54,7 +59,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Enable" description="" execMethod="enable" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Enable" description="Enables all active axes connected to the controller." execMethod="enable" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -63,7 +68,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Disable" description="" execMethod="disable" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Disable" description="Disables all active axes connected to the controller." execMethod="disable" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -72,7 +77,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="ClearErrors" description="" execMethod="clear_errors" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="ClearErrors" description="Acknowledges all axis faults and clears all task errors." execMethod="clear_errors" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -81,7 +86,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="AeroScriptProgramRun" description="" execMethod="aero_script_program_run" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="AeroScriptProgramRun" description="Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.&#xA;Running a program will automatically load the program and begin program execution. This function waits for the program to load and start but it does not wait for the program to complete.&#xA;The AeroScript program must exist as a controller file on the Automation1 controller.&#xA;AeroScript libraries cannot be run, the controller file must be an AeroScript program (either a source program file or a compiled program file)." execMethod="aero_script_program_run" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -90,7 +95,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="AeroScriptProgramLoad" description="" execMethod="aero_script_program_load" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="AeroScriptProgramLoad" description="Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.&#xA;Loading does not start the program, you must call AeroScriptProgramStart to begin program execution.&#xA;The AeroScript program must exist as a controller file on the Automation1 controller.&#xA;AeroScript libraries cannot be loaded on a task, the controller file must be an AeroScript program (either a source program file or a compiled program file)." execMethod="aero_script_program_load" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -99,7 +104,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="AeroScriptProgramStart" description="" execMethod="aero_script_program_start" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="AeroScriptProgramStart" description="Starts or resumes the currently loaded AeroScript program, beginning program execution.&#xA;A program must be loaded to be able to start or resume it. To load a program, call AeroScriptProgramLoad.&#xA;This function waits for the loaded program to start but it does not wait for the program to complete." execMethod="aero_script_program_start" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -108,7 +113,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="AeroScriptProgramStop" description="" execMethod="aero_script_program_stop" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="AeroScriptProgramStop" description="Stops the currently running AeroScript program, terminating program execution.&#xA;This function will wait for the specified amount of time for the loaded program to stop. If the timeout is set to -1, this function will wait indefinitely.&#xA;This function will also stop queue mode and buffered run mode. After a program is stopped it is unloaded." execMethod="aero_script_program_stop" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -117,7 +122,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="AeroScriptProgramPause" description="" execMethod="aero_script_program_pause" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="AeroScriptProgramPause" description="Pauses the currently running AeroScript program, suspending program execution.&#xA;This function will wait for the specified amount of time for the loaded program to pause. If the timeout is set to -1, this function will wait indefinitely.&#xA;To resume program execution, call AeroScriptProgramStart." execMethod="aero_script_program_pause" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -132,7 +137,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="True if the controller has been started otherwise false." label="Controller Running" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="AxisCount" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:UShortType"/>
@@ -140,7 +145,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="The maximum number of axis slots available on this controller, not the number of drives connected." label="Available Axis Count" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="TaskCount" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:UShortType"/>
@@ -148,7 +153,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="The maximum number of task slots available on this controller." label="Task Count" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="APIVersion" attType="Scalar" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:StringType"/>
@@ -156,7 +161,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="The version of the C API in use." label="API Version" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="AeroScriptFilePath" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:StringType"/>
@@ -164,7 +169,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Full file path of the AeroScript file on the controller to target." label="AeroScript File" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="AxisHealth" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="32" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
@@ -172,7 +177,7 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true)." label="Axis" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
     <attributes name="TaskStatus0" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="16" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
@@ -204,8 +209,26 @@
       <archiveEvent fire="false" libCheckCriteria="false"/>
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
+      <properties description="A list of the files present on the Automation1 controller." label="Controller Files" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
+    <states name="STANDBY" description="Controller is powered but has not been started.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="FAULT" description="There is at least one fault present on the controller.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="INIT" description="Controller is initialising.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="RUNNING" description="Controller is powered, has been started and is ready to accept commands.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="OFF" description="Controller is off.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
+    <states name="UNKNOWN" description="No connection to a controller has been made.">
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </states>
     <preferences docHome="./doc_html" makefileHome="$(TANGO_HOME)"/>
   </classes>
 </pogoDsl:PogoSystem>

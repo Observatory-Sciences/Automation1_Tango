@@ -34,8 +34,9 @@
 /*----- PROTECTED REGION END -----*/	//	A1Axis::A1AxisStateMachine.cpp
 
 //================================================================
-//  States  |  Description
+//  States   |  Description
 //================================================================
+//  STANDBY  |  
 
 
 namespace A1Axis_ns
@@ -52,6 +53,10 @@ namespace A1Axis_ns
 //--------------------------------------------------------
 bool A1Axis::is_PositionFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for PositionFeedback attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::PositionFeedbackStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::PositionFeedbackStateAllowed_WRITE
 
 	//	Not any excluded states for PositionFeedback attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::PositionFeedbackStateAllowed_READ) ENABLED START -----*/
@@ -68,6 +73,10 @@ bool A1Axis::is_PositionFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 bool A1Axis::is_VelocityFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for VelocityFeedback attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::VelocityFeedbackStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::VelocityFeedbackStateAllowed_WRITE
 
 	//	Not any excluded states for VelocityFeedback attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::VelocityFeedbackStateAllowed_READ) ENABLED START -----*/
@@ -228,6 +237,10 @@ bool A1Axis::is_MotorType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 bool A1Axis::is_HomeType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for HomeType attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::HomeTypeStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::HomeTypeStateAllowed_WRITE
 
 	//	Not any excluded states for HomeType attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::HomeTypeStateAllowed_READ) ENABLED START -----*/
@@ -244,6 +257,10 @@ bool A1Axis::is_HomeType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 bool A1Axis::is_MoveType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for MoveType attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::MoveTypeStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::MoveTypeStateAllowed_WRITE
 
 	//	Not any excluded states for MoveType attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::MoveTypeStateAllowed_READ) ENABLED START -----*/
@@ -404,6 +421,10 @@ bool A1Axis::is_ServoUpdateRate_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 bool A1Axis::is_DataCollectionNumPoints_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for DataCollectionNumPoints attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::DataCollectionNumPointsStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionNumPointsStateAllowed_WRITE
 
 	//	Not any excluded states for DataCollectionNumPoints attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::DataCollectionNumPointsStateAllowed_READ) ENABLED START -----*/
@@ -420,6 +441,10 @@ bool A1Axis::is_DataCollectionNumPoints_allowed(TANGO_UNUSED(Tango::AttReqType t
 //--------------------------------------------------------
 bool A1Axis::is_DataCollectionFrequency_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for DataCollectionFrequency attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::DataCollectionFrequencyStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionFrequencyStateAllowed_WRITE
 
 	//	Not any excluded states for DataCollectionFrequency attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::DataCollectionFrequencyStateAllowed_READ) ENABLED START -----*/
@@ -436,6 +461,10 @@ bool A1Axis::is_DataCollectionFrequency_allowed(TANGO_UNUSED(Tango::AttReqType t
 //--------------------------------------------------------
 bool A1Axis::is_DataCollectionMode_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for DataCollectionMode attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::DataCollectionModeStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionModeStateAllowed_WRITE
 
 	//	Not any excluded states for DataCollectionMode attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::DataCollectionModeStateAllowed_READ) ENABLED START -----*/
@@ -452,6 +481,10 @@ bool A1Axis::is_DataCollectionMode_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 bool A1Axis::is_RampType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for RampType attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::RampTypeStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::RampTypeStateAllowed_WRITE
 
 	//	Not any excluded states for RampType attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::RampTypeStateAllowed_READ) ENABLED START -----*/
@@ -468,6 +501,10 @@ bool A1Axis::is_RampType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 bool A1Axis::is_RampMode_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for RampMode attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::RampModeStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::RampModeStateAllowed_WRITE
 
 	//	Not any excluded states for RampMode attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::RampModeStateAllowed_READ) ENABLED START -----*/
@@ -484,6 +521,10 @@ bool A1Axis::is_RampMode_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 bool A1Axis::is_RampValue_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for RampValue attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::RampValueStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::RampValueStateAllowed_WRITE
 
 	//	Not any excluded states for RampValue attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::RampValueStateAllowed_READ) ENABLED START -----*/

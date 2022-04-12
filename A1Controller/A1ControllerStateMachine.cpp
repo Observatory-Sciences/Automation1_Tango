@@ -34,8 +34,14 @@
 /*----- PROTECTED REGION END -----*/	//	A1Controller::A1ControllerStateMachine.cpp
 
 //================================================================
-//  States  |  Description
+//  States   |  Description
 //================================================================
+//  STANDBY  |  Controller is powered but has not been started.
+//  FAULT    |  There is at least one fault present on the controller.
+//  INIT     |  Controller is initialising.
+//  RUNNING  |  Controller is powered, has been started and is ready to accept commands.
+//  OFF      |  Controller is off.
+//  UNKNOWN  |  No connection to a controller has been made.
 
 
 namespace A1Controller_ns

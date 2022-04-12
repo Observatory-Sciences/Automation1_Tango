@@ -64,6 +64,8 @@ class A1Controller : public TANGO_BASE_CLASS
 public:
 	//	IpAddress:	IP address of the motion controller
 	std::string	ipAddress;
+	//	Simulate:	Use simulation mode
+	Tango::DevBoolean	simulate;
 
 	bool	mandatoryNotDefined;
 
@@ -153,7 +155,7 @@ public:
 
 /**
  *	Attribute ControllerRunning related methods
- *	Description: 
+ *	Description: True if the controller has been started otherwise false.
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -162,7 +164,7 @@ public:
 	virtual bool is_ControllerRunning_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisCount related methods
- *	Description: 
+ *	Description: The maximum number of axis slots available on this controller, not the number of drives connected.
  *
  *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
@@ -171,7 +173,7 @@ public:
 	virtual bool is_AxisCount_allowed(Tango::AttReqType type);
 /**
  *	Attribute TaskCount related methods
- *	Description: 
+ *	Description: The maximum number of task slots available on this controller.
  *
  *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
@@ -180,7 +182,7 @@ public:
 	virtual bool is_TaskCount_allowed(Tango::AttReqType type);
 /**
  *	Attribute APIVersion related methods
- *	Description: 
+ *	Description: The version of the C API in use.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -189,7 +191,7 @@ public:
 	virtual bool is_APIVersion_allowed(Tango::AttReqType type);
 /**
  *	Attribute AeroScriptFilePath related methods
- *	Description: 
+ *	Description: Full file path of the AeroScript file on the controller to target.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -199,7 +201,7 @@ public:
 	virtual bool is_AeroScriptFilePath_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisHealth related methods
- *	Description: 
+ *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 32
@@ -235,7 +237,7 @@ public:
 	virtual bool is_TaskStatus2_allowed(Tango::AttReqType type);
 /**
  *	Attribute AeroScriptFiles related methods
- *	Description: 
+ *	Description: A list of the files present on the Automation1 controller.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Spectrum max = 32
@@ -259,77 +261,89 @@ public:
 public:
 	/**
 	 *	Command Reset related method
-	 *	Description: 
+	 *	Description: Reboots the Automation1 motion controller.
 	 *
 	 */
 	virtual void reset();
 	virtual bool is_Reset_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Start related method
-	 *	Description: 
+	 *	Description: Starts the Automation1 motion controller.
 	 *
 	 */
 	virtual void start();
 	virtual bool is_Start_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Stop related method
-	 *	Description: 
+	 *	Description: Stops the Automation1 motion controller.
 	 *
 	 */
 	virtual void stop();
 	virtual bool is_Stop_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Enable related method
-	 *	Description: 
+	 *	Description: Enables all active axes connected to the controller.
 	 *
 	 */
 	virtual void enable();
 	virtual bool is_Enable_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Disable related method
-	 *	Description: 
+	 *	Description: Disables all active axes connected to the controller.
 	 *
 	 */
 	virtual void disable();
 	virtual bool is_Disable_allowed(const CORBA::Any &any);
 	/**
 	 *	Command ClearErrors related method
-	 *	Description: 
+	 *	Description: Acknowledges all axis faults and clears all task errors.
 	 *
 	 */
 	virtual void clear_errors();
 	virtual bool is_ClearErrors_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramRun related method
-	 *	Description: 
+	 *	Description: Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.
+	 *               Running a program will automatically load the program and begin program execution. This function waits for the program to load and start but it does not wait for the program to complete.
+	 *               The AeroScript program must exist as a controller file on the Automation1 controller.
+	 *               AeroScript libraries cannot be run, the controller file must be an AeroScript program (either a source program file or a compiled program file).
 	 *
 	 */
 	virtual void aero_script_program_run();
 	virtual bool is_AeroScriptProgramRun_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramLoad related method
-	 *	Description: 
+	 *	Description: Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.
+	 *               Loading does not start the program, you must call AeroScriptProgramStart to begin program execution.
+	 *               The AeroScript program must exist as a controller file on the Automation1 controller.
+	 *               AeroScript libraries cannot be loaded on a task, the controller file must be an AeroScript program (either a source program file or a compiled program file).
 	 *
 	 */
 	virtual void aero_script_program_load();
 	virtual bool is_AeroScriptProgramLoad_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramStart related method
-	 *	Description: 
+	 *	Description: Starts or resumes the currently loaded AeroScript program, beginning program execution.
+	 *               A program must be loaded to be able to start or resume it. To load a program, call AeroScriptProgramLoad.
+	 *               This function waits for the loaded program to start but it does not wait for the program to complete.
 	 *
 	 */
 	virtual void aero_script_program_start();
 	virtual bool is_AeroScriptProgramStart_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramStop related method
-	 *	Description: 
+	 *	Description: Stops the currently running AeroScript program, terminating program execution.
+	 *               This function will wait for the specified amount of time for the loaded program to stop. If the timeout is set to -1, this function will wait indefinitely.
+	 *               This function will also stop queue mode and buffered run mode. After a program is stopped it is unloaded.
 	 *
 	 */
 	virtual void aero_script_program_stop();
 	virtual bool is_AeroScriptProgramStop_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramPause related method
-	 *	Description: 
+	 *	Description: Pauses the currently running AeroScript program, suspending program execution.
+	 *               This function will wait for the specified amount of time for the loaded program to pause. If the timeout is set to -1, this function will wait indefinitely.
+	 *               To resume program execution, call AeroScriptProgramStart.
 	 *
 	 */
 	virtual void aero_script_program_pause();

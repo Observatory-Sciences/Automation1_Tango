@@ -46,26 +46,44 @@
 namespace A1Axis_ns
 {
 enum _HomeTypeEnum {
+	_ASYNCHRONOUS,
+	_SYNCHRONOUS,
 } ;
 typedef _HomeTypeEnum HomeTypeEnum;
 
 enum _MoveTypeEnum {
+	_ABSOLUTEMOVE,
+	_INCREMENTALMOVE,
+	_LINEARMOVE,
+	_RAPIDMOVE,
 } ;
 typedef _MoveTypeEnum MoveTypeEnum;
 
 enum _DataCollectionFrequencyEnum {
+	_1_KHZ,
+	_10_KHZ,
+	_20_KHZ,
+	_100_KHZ,
+	_200_KHZ,
 } ;
 typedef _DataCollectionFrequencyEnum DataCollectionFrequencyEnum;
 
 enum _DataCollectionModeEnum {
+	_SNAPSHOT,
+	_CONTINUOUS,
 } ;
 typedef _DataCollectionModeEnum DataCollectionModeEnum;
 
 enum _RampTypeEnum {
+	_LINEAR,
+	_S_CURVE,
+	_SINE,
 } ;
 typedef _RampTypeEnum RampTypeEnum;
 
 enum _RampModeEnum {
+	_RATE,
+	_TIME,
 } ;
 typedef _RampModeEnum RampModeEnum;
 
@@ -86,7 +104,7 @@ class A1Axis : public TANGO_BASE_CLASS
 
 //	Device property data members
 public:
-	//	Axis:	Axis number that this device will control
+	//	Axis:	Axis index that this device will control
 	Tango::DevUShort	axis;
 	//	MainDeviceName:	Name of the TANGO A1Controller class for this axis
 	std::string	mainDeviceName;
@@ -190,28 +208,37 @@ public:
 	 */
 	//--------------------------------------------------------
 	virtual void read_attr_hardware(std::vector<long> &attr_list);
+	//--------------------------------------------------------
+	/*
+	 *	Method      : A1Axis::write_attr_hardware()
+	 *	Description : Hardware writing for attributes.
+	 */
+	//--------------------------------------------------------
+	virtual void write_attr_hardware(std::vector<long> &attr_list);
 
 /**
  *	Attribute PositionFeedback related methods
- *	Description: 
+ *	Description: Position of this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
  */
 	virtual void read_PositionFeedback(Tango::Attribute &attr);
+	virtual void write_PositionFeedback(Tango::WAttribute &attr);
 	virtual bool is_PositionFeedback_allowed(Tango::AttReqType type);
 /**
  *	Attribute VelocityFeedback related methods
- *	Description: 
+ *	Description: Velocity of the axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
  */
 	virtual void read_VelocityFeedback(Tango::Attribute &attr);
+	virtual void write_VelocityFeedback(Tango::WAttribute &attr);
 	virtual bool is_VelocityFeedback_allowed(Tango::AttReqType type);
 /**
  *	Attribute AccelerationFeedback related methods
- *	Description: 
+ *	Description: Acceleration of the axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -256,7 +283,7 @@ public:
 	virtual bool is_Error_allowed(Tango::AttReqType type);
 /**
  *	Attribute FirmwareVersion related methods
- *	Description: 
+ *	Description: Firmware version: Major.Minor.Patch.Build
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -265,7 +292,7 @@ public:
 	virtual bool is_FirmwareVersion_allowed(Tango::AttReqType type);
 /**
  *	Attribute PositionError related methods
- *	Description: 
+ *	Description: Following error
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -274,7 +301,7 @@ public:
 	virtual bool is_PositionError_allowed(Tango::AttReqType type);
 /**
  *	Attribute CurrentFeedback related methods
- *	Description: 
+ *	Description: Current supplied to this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -283,7 +310,7 @@ public:
 	virtual bool is_CurrentFeedback_allowed(Tango::AttReqType type);
 /**
  *	Attribute MotorType related methods
- *	Description: 
+ *	Description: The type of drive connected.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -292,25 +319,27 @@ public:
 	virtual bool is_MotorType_allowed(Tango::AttReqType type);
 /**
  *	Attribute HomeType related methods
- *	Description: 
+ *	Description: Homes the axis using the specified homing function.
  *
  *	Data type:	Tango::DevEnum
  *	Attr type:	Scalar
  */
 	virtual void read_HomeType(Tango::Attribute &attr);
+	virtual void write_HomeType(Tango::WAttribute &attr);
 	virtual bool is_HomeType_allowed(Tango::AttReqType type);
 /**
  *	Attribute MoveType related methods
- *	Description: 
+ *	Description: The type of move to perform when executing the ``Move`` command.
  *
  *	Data type:	Tango::DevEnum
  *	Attr type:	Scalar
  */
 	virtual void read_MoveType(Tango::Attribute &attr);
+	virtual void write_MoveType(Tango::WAttribute &attr);
 	virtual bool is_MoveType_allowed(Tango::AttReqType type);
 /**
  *	Attribute LastMoveDuration related methods
- *	Description: 
+ *	Description: The duration, in ms, of the last executed move command.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -319,7 +348,7 @@ public:
 	virtual bool is_LastMoveDuration_allowed(Tango::AttReqType type);
 /**
  *	Attribute PositionTarget related methods
- *	Description: 
+ *	Description: Position axis was commanded to move to.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -328,7 +357,7 @@ public:
 	virtual bool is_PositionTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute VelocityTarget related methods
- *	Description: 
+ *	Description: Targeted velocity for this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -337,7 +366,7 @@ public:
 	virtual bool is_VelocityTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute VelocityError related methods
- *	Description: 
+ *	Description: Error in the velocity of this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -346,7 +375,7 @@ public:
 	virtual bool is_VelocityError_allowed(Tango::AttReqType type);
 /**
  *	Attribute AccelerationTarget related methods
- *	Description: 
+ *	Description: Target acceleration for this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -355,7 +384,7 @@ public:
 	virtual bool is_AccelerationTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute AccelerationError related methods
- *	Description: 
+ *	Description: Error in the acceleration of this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -364,7 +393,7 @@ public:
 	virtual bool is_AccelerationError_allowed(Tango::AttReqType type);
 /**
  *	Attribute CurrentTarget related methods
- *	Description: 
+ *	Description: Target current to supply to this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -373,7 +402,7 @@ public:
 	virtual bool is_CurrentTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute CurrentError related methods
- *	Description: 
+ *	Description: Error in the current supplied to this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -382,7 +411,7 @@ public:
 	virtual bool is_CurrentError_allowed(Tango::AttReqType type);
 /**
  *	Attribute ServoUpdateRate related methods
- *	Description: 
+ *	Description: Update rate of the axis servo.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
@@ -391,21 +420,23 @@ public:
 	virtual bool is_ServoUpdateRate_allowed(Tango::AttReqType type);
 /**
  *	Attribute DataCollectionNumPoints related methods
- *	Description: 
+ *	Description: Number of data points to retrieve during data collection.
  *
  *	Data type:	Tango::DevULong
  *	Attr type:	Scalar
  */
 	virtual void read_DataCollectionNumPoints(Tango::Attribute &attr);
+	virtual void write_DataCollectionNumPoints(Tango::WAttribute &attr);
 	virtual bool is_DataCollectionNumPoints_allowed(Tango::AttReqType type);
 /**
  *	Attribute DataCollectionFrequency related methods
- *	Description: 
+ *	Description: Frequency of data collection.
  *
  *	Data type:	Tango::DevEnum
  *	Attr type:	Scalar
  */
 	virtual void read_DataCollectionFrequency(Tango::Attribute &attr);
+	virtual void write_DataCollectionFrequency(Tango::WAttribute &attr);
 	virtual bool is_DataCollectionFrequency_allowed(Tango::AttReqType type);
 /**
  *	Attribute DataCollectionMode related methods
@@ -415,15 +446,17 @@ public:
  *	Attr type:	Scalar
  */
 	virtual void read_DataCollectionMode(Tango::Attribute &attr);
+	virtual void write_DataCollectionMode(Tango::WAttribute &attr);
 	virtual bool is_DataCollectionMode_allowed(Tango::AttReqType type);
 /**
  *	Attribute RampType related methods
- *	Description: 
+ *	Description: Type of ramping profile to use on this axis.
  *
  *	Data type:	Tango::DevEnum
  *	Attr type:	Scalar
  */
 	virtual void read_RampType(Tango::Attribute &attr);
+	virtual void write_RampType(Tango::WAttribute &attr);
 	virtual bool is_RampType_allowed(Tango::AttReqType type);
 /**
  *	Attribute RampMode related methods
@@ -433,19 +466,21 @@ public:
  *	Attr type:	Scalar
  */
 	virtual void read_RampMode(Tango::Attribute &attr);
+	virtual void write_RampMode(Tango::WAttribute &attr);
 	virtual bool is_RampMode_allowed(Tango::AttReqType type);
 /**
  *	Attribute RampValue related methods
- *	Description: 
+ *	Description: The ramping value used for acceleration and deceleration.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
  */
 	virtual void read_RampValue(Tango::Attribute &attr);
+	virtual void write_RampValue(Tango::WAttribute &attr);
 	virtual bool is_RampValue_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisStatus related methods
- *	Description: 
+ *	Description: Bitfield representing the status of this axis.
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 24
@@ -454,7 +489,7 @@ public:
 	virtual bool is_AxisStatus_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisFault related methods
- *	Description: 
+ *	Description: Bitfield corresponding to specific faults
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 25
@@ -463,7 +498,7 @@ public:
 	virtual bool is_AxisFault_allowed(Tango::AttReqType type);
 /**
  *	Attribute DriveStatus related methods
- *	Description: 
+ *	Description: Bitfield representing the status of the connected drive.
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 27
@@ -487,112 +522,127 @@ public:
 public:
 	/**
 	 *	Command Abort related method
-	 *	Description: 
+	 *	Description: Aborts any motion on this axis.
 	 *
 	 */
 	virtual void abort();
 	virtual bool is_Abort_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Home related method
-	 *	Description: 
+	 *	Description: Homes this axis according to the method selected in HomeType.
 	 *
 	 */
 	virtual void home();
 	virtual bool is_Home_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Move related method
-	 *	Description: 
+	 *	Description: Executes the specific move command specified by the MoveType attribute.
 	 *
 	 */
 	virtual void move();
 	virtual bool is_Move_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Enable related method
-	 *	Description: 
+	 *	Description: Enables the axis.
 	 *
 	 */
 	virtual void enable();
 	virtual bool is_Enable_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Disable related method
-	 *	Description: 
+	 *	Description: Disables the axis.
 	 *
 	 */
 	virtual void disable();
 	virtual bool is_Disable_allowed(const CORBA::Any &any);
 	/**
 	 *	Command BrakeOn related method
-	 *	Description: 
+	 *	Description: Engages the brake output and prevents the axis from moving freely.
 	 *
 	 */
 	virtual void brake_on();
 	virtual bool is_BrakeOn_allowed(const CORBA::Any &any);
 	/**
 	 *	Command BrakeOff related method
-	 *	Description: 
+	 *	Description: Disengages the brake output and allows the axis to move freely.
 	 *
 	 */
 	virtual void brake_off();
 	virtual bool is_BrakeOff_allowed(const CORBA::Any &any);
 	/**
 	 *	Command MoveFromLimit related method
-	 *	Description: 
+	 *	Description: Executes an asynchronous move on this axis to move it out of a limit condition.
 	 *
 	 */
 	virtual void move_from_limit();
 	virtual bool is_MoveFromLimit_allowed(const CORBA::Any &any);
 	/**
 	 *	Command FreeRun related method
-	 *	Description: 
+	 *	Description: Executes an asynchronous freerun move on this axis. The axis will move indefinitely at the specified velocity.
 	 *
 	 */
 	virtual void free_run();
 	virtual bool is_FreeRun_allowed(const CORBA::Any &any);
 	/**
 	 *	Command FreeRunStop related method
-	 *	Description: 
+	 *	Description: Stops an asynchronous freerun move on this axes. The axis velocity decelerates to zero.
 	 *
 	 */
 	virtual void free_run_stop();
 	virtual bool is_FreeRunStop_allowed(const CORBA::Any &any);
 	/**
 	 *	Command ThrowAllFaults related method
-	 *	Description: 
+	 *	Description: Triggers some fault bits on this axis.
 	 *
 	 */
 	virtual void throw_all_faults();
 	virtual bool is_ThrowAllFaults_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AcknowledgeFaults related method
-	 *	Description: 
+	 *	Description: Acknowledges all faults on this axis.
 	 *
 	 */
 	virtual void acknowledge_faults();
 	virtual bool is_AcknowledgeFaults_allowed(const CORBA::Any &any);
 	/**
 	 *	Command DataCollectionStart related method
-	 *	Description: 
+	 *	Description: Begins data collection on this axis.
 	 *
 	 */
 	virtual void data_collection_start();
 	virtual bool is_DataCollectionStart_allowed(const CORBA::Any &any);
 	/**
 	 *	Command DataCollectionStop related method
-	 *	Description: 
+	 *	Description: Stops data collection on this axis.
 	 *
 	 */
 	virtual void data_collection_stop();
 	virtual bool is_DataCollectionStop_allowed(const CORBA::Any &any);
 	/**
 	 *	Command DataCollectionRefresh related method
-	 *	Description: 
+	 *	Description: Re-initialises the data collection configuration with the selected data collection frequency and number of data points to collect.
 	 *
 	 */
 	virtual void data_collection_refresh();
 	virtual bool is_DataCollectionRefresh_allowed(const CORBA::Any &any);
 	/**
 	 *	Command DataCollectionGetResults related method
-	 *	Description: 
+	 *	Description: Gets results from data collection from the Automation1 controller. This function can return data from completed data collection or from data collection that is still occurring.
+	 *               This function waits for data collection to collect the specified number of points, blocking until they are available, and then returns them.
+	 *               
+	 *               Data is written as a csv text file.
+	 *               First line is metadata containing the number of rows and columns.
+	 *               Second line contains the column headers.
+	 *               Lines 3+ contain the data (of which there are numRows elements) for the column headers.
+	 *               
+	 *               e.g.
+	 *               NumRows,5,NumCols,3
+	 *               colName1,colName2,colName3
+	 *               data11,data21,data31
+	 *               data12,data22,data32
+	 *               data13,data23,data33
+	 *               data14,data24,data34
+	 *               data15,data25,data35
 	 *
 	 */
 	virtual void data_collection_get_results();

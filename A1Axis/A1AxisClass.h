@@ -59,10 +59,12 @@ class PositionFeedbackAttrib: public Tango::Attr
 {
 public:
 	PositionFeedbackAttrib():Attr("PositionFeedback",
-			Tango::DEV_DOUBLE, Tango::READ) {};
+			Tango::DEV_DOUBLE, Tango::READ_WRITE) {};
 	~PositionFeedbackAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_PositionFeedback(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_PositionFeedback(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_PositionFeedback_allowed(ty);}
 };
@@ -72,10 +74,12 @@ class VelocityFeedbackAttrib: public Tango::Attr
 {
 public:
 	VelocityFeedbackAttrib():Attr("VelocityFeedback",
-			Tango::DEV_DOUBLE, Tango::READ) {};
+			Tango::DEV_DOUBLE, Tango::READ_WRITE) {};
 	~VelocityFeedbackAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_VelocityFeedback(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_VelocityFeedback(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_VelocityFeedback_allowed(ty);}
 };
@@ -202,10 +206,12 @@ class HomeTypeAttrib: public Tango::Attr
 {
 public:
 	HomeTypeAttrib():Attr("HomeType",
-			Tango::DEV_ENUM, Tango::READ) {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {};
 	~HomeTypeAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_HomeType(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_HomeType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_HomeType_allowed(ty);}
 	virtual bool same_type(const type_info &in_type) {return typeid(HomeTypeEnum) == in_type;}
@@ -217,10 +223,12 @@ class MoveTypeAttrib: public Tango::Attr
 {
 public:
 	MoveTypeAttrib():Attr("MoveType",
-			Tango::DEV_ENUM, Tango::READ) {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {};
 	~MoveTypeAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_MoveType(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_MoveType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_MoveType_allowed(ty);}
 	virtual bool same_type(const type_info &in_type) {return typeid(MoveTypeEnum) == in_type;}
@@ -349,10 +357,12 @@ class DataCollectionNumPointsAttrib: public Tango::Attr
 {
 public:
 	DataCollectionNumPointsAttrib():Attr("DataCollectionNumPoints",
-			Tango::DEV_ULONG, Tango::READ) {};
+			Tango::DEV_ULONG, Tango::READ_WRITE) {};
 	~DataCollectionNumPointsAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_DataCollectionNumPoints(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_DataCollectionNumPoints(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_DataCollectionNumPoints_allowed(ty);}
 };
@@ -362,10 +372,12 @@ class DataCollectionFrequencyAttrib: public Tango::Attr
 {
 public:
 	DataCollectionFrequencyAttrib():Attr("DataCollectionFrequency",
-			Tango::DEV_ENUM, Tango::READ) {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {};
 	~DataCollectionFrequencyAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_DataCollectionFrequency(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_DataCollectionFrequency(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_DataCollectionFrequency_allowed(ty);}
 	virtual bool same_type(const type_info &in_type) {return typeid(DataCollectionFrequencyEnum) == in_type;}
@@ -377,10 +389,12 @@ class DataCollectionModeAttrib: public Tango::Attr
 {
 public:
 	DataCollectionModeAttrib():Attr("DataCollectionMode",
-			Tango::DEV_ENUM, Tango::READ) {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {};
 	~DataCollectionModeAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_DataCollectionMode(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_DataCollectionMode(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_DataCollectionMode_allowed(ty);}
 	virtual bool same_type(const type_info &in_type) {return typeid(DataCollectionModeEnum) == in_type;}
@@ -392,10 +406,12 @@ class RampTypeAttrib: public Tango::Attr
 {
 public:
 	RampTypeAttrib():Attr("RampType",
-			Tango::DEV_ENUM, Tango::READ) {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {};
 	~RampTypeAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_RampType(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_RampType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_RampType_allowed(ty);}
 	virtual bool same_type(const type_info &in_type) {return typeid(RampTypeEnum) == in_type;}
@@ -407,10 +423,12 @@ class RampModeAttrib: public Tango::Attr
 {
 public:
 	RampModeAttrib():Attr("RampMode",
-			Tango::DEV_ENUM, Tango::READ) {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {};
 	~RampModeAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_RampMode(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_RampMode(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_RampMode_allowed(ty);}
 	virtual bool same_type(const type_info &in_type) {return typeid(RampModeEnum) == in_type;}
@@ -422,10 +440,12 @@ class RampValueAttrib: public Tango::Attr
 {
 public:
 	RampValueAttrib():Attr("RampValue",
-			Tango::DEV_DOUBLE, Tango::READ) {};
+			Tango::DEV_DOUBLE, Tango::READ_WRITE) {};
 	~RampValueAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_RampValue(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_RampValue(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_RampValue_allowed(ty);}
 };

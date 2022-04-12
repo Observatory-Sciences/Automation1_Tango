@@ -428,6 +428,20 @@ void A1ControllerClass::set_default_property()
 	}
 	else
 		add_wiz_dev_prop(prop_name, prop_desc);
+	prop_name = "Simulate";
+	prop_desc = "Use simulation mode";
+	prop_def  = "0";
+	vect_data.clear();
+	vect_data.push_back("0");
+	if (prop_def.length()>0)
+	{
+		Tango::DbDatum	data(prop_name);
+		data << vect_data ;
+		dev_def_prop.push_back(data);
+		add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
+	}
+	else
+		add_wiz_dev_prop(prop_name, prop_desc);
 }
 
 //--------------------------------------------------------
@@ -536,8 +550,8 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : ControllerRunning
 	ControllerRunningAttrib	*controllerrunning = new ControllerRunningAttrib();
 	Tango::UserDefaultAttrProp	controllerrunning_prop;
-	//	description	not set for ControllerRunning
-	//	label	not set for ControllerRunning
+	controllerrunning_prop.set_description("True if the controller has been started otherwise false.");
+	controllerrunning_prop.set_label("Controller Running");
 	//	unit	not set for ControllerRunning
 	//	standard_unit	not set for ControllerRunning
 	//	display_unit	not set for ControllerRunning
@@ -560,8 +574,8 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AxisCount
 	AxisCountAttrib	*axiscount = new AxisCountAttrib();
 	Tango::UserDefaultAttrProp	axiscount_prop;
-	//	description	not set for AxisCount
-	//	label	not set for AxisCount
+	axiscount_prop.set_description("The maximum number of axis slots available on this controller, not the number of drives connected.");
+	axiscount_prop.set_label("Available Axis Count");
 	//	unit	not set for AxisCount
 	//	standard_unit	not set for AxisCount
 	//	display_unit	not set for AxisCount
@@ -584,8 +598,8 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : TaskCount
 	TaskCountAttrib	*taskcount = new TaskCountAttrib();
 	Tango::UserDefaultAttrProp	taskcount_prop;
-	//	description	not set for TaskCount
-	//	label	not set for TaskCount
+	taskcount_prop.set_description("The maximum number of task slots available on this controller.");
+	taskcount_prop.set_label("Task Count");
 	//	unit	not set for TaskCount
 	//	standard_unit	not set for TaskCount
 	//	display_unit	not set for TaskCount
@@ -608,8 +622,8 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : APIVersion
 	APIVersionAttrib	*apiversion = new APIVersionAttrib();
 	Tango::UserDefaultAttrProp	apiversion_prop;
-	//	description	not set for APIVersion
-	//	label	not set for APIVersion
+	apiversion_prop.set_description("The version of the C API in use.");
+	apiversion_prop.set_label("API Version");
 	//	unit	not set for APIVersion
 	//	standard_unit	not set for APIVersion
 	//	display_unit	not set for APIVersion
@@ -632,8 +646,8 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AeroScriptFilePath
 	AeroScriptFilePathAttrib	*aeroscriptfilepath = new AeroScriptFilePathAttrib();
 	Tango::UserDefaultAttrProp	aeroscriptfilepath_prop;
-	//	description	not set for AeroScriptFilePath
-	//	label	not set for AeroScriptFilePath
+	aeroscriptfilepath_prop.set_description("Full file path of the AeroScript file on the controller to target.");
+	aeroscriptfilepath_prop.set_label("AeroScript File");
 	//	unit	not set for AeroScriptFilePath
 	//	standard_unit	not set for AeroScriptFilePath
 	//	display_unit	not set for AeroScriptFilePath
@@ -656,8 +670,8 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AxisHealth
 	AxisHealthAttrib	*axishealth = new AxisHealthAttrib();
 	Tango::UserDefaultAttrProp	axishealth_prop;
-	//	description	not set for AxisHealth
-	//	label	not set for AxisHealth
+	axishealth_prop.set_description("Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).");
+	axishealth_prop.set_label("Axis");
 	//	unit	not set for AxisHealth
 	//	standard_unit	not set for AxisHealth
 	//	display_unit	not set for AxisHealth
@@ -752,8 +766,8 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AeroScriptFiles
 	AeroScriptFilesAttrib	*aeroscriptfiles = new AeroScriptFilesAttrib();
 	Tango::UserDefaultAttrProp	aeroscriptfiles_prop;
-	//	description	not set for AeroScriptFiles
-	//	label	not set for AeroScriptFiles
+	aeroscriptfiles_prop.set_description("A list of the files present on the Automation1 controller.");
+	aeroscriptfiles_prop.set_label("Controller Files");
 	//	unit	not set for AeroScriptFiles
 	//	standard_unit	not set for AeroScriptFiles
 	//	display_unit	not set for AeroScriptFiles
