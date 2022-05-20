@@ -133,7 +133,7 @@ void A1Controller::delete_device()
 	DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
 	
-	//	Delete device allocated objects
+	delete m_A1Bridge; 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::delete_device
 	delete[] attr_ControllerRunning_read;
@@ -183,8 +183,41 @@ void A1Controller::init_device()
 
 	/*----- PROTECTED REGION ID(A1Controller::init_device) ENABLED START -----*/
 	
-	//	Initialize device
-	
+
+	attr_ControllerRunning_read[0] = true;
+	attr_AxisCount_read[0] = 1;
+	attr_TaskCount_read[0] = 1;
+	attr_APIVersion_read[0] = Tango::string_dup("");
+	attr_AeroScriptFilePath_read[0] = Tango::string_dup("");
+	for (int i = 0; i < 32; i++) 
+	{
+		attr_AxisHealth_read[i] = true;
+	}
+	for (int i = 0; i < 16; i++) 
+	{
+		attr_TaskStatus0_read[i] = true;
+	}
+	for (int i = 0; i < 17; i++) 
+	{
+		attr_TaskStatus1_read[i] = true;
+	}
+	for (int i = 0; i < 24; i++) 
+	{
+		attr_TaskStatus2_read[i] = true;
+	}
+	for (int i = 0; i < 32; i++) 
+	{
+		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
+	}
+
+    m_A1Bridge = new A1BridgeNS::A1Bridge();
+    std::cout << "IpAddress: " << ipAddress << std::endl; 
+    std::cout << "Simulate:  " << simulate << std::endl; 
+    std::cout << "Username:  " << username << std::endl; 
+    std::cout << "Password:  " << password << std::endl; 
+    m_A1Comm = m_A1Bridge->getInstance(simulate);
+    gotostate_standby();
+
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
 }
 
@@ -208,6 +241,8 @@ void A1Controller::get_device_property()
 	Tango::DbData	dev_prop;
 	dev_prop.push_back(Tango::DbDatum("IpAddress"));
 	dev_prop.push_back(Tango::DbDatum("Simulate"));
+	dev_prop.push_back(Tango::DbDatum("Username"));
+	dev_prop.push_back(Tango::DbDatum("Password"));
 
 	//	is there at least one property to be read ?
 	if (dev_prop.size()>0)
@@ -245,6 +280,32 @@ void A1Controller::get_device_property()
 		}
 		//	And try to extract Simulate value from database
 		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  simulate;
+
+		//	Try to initialize Username from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  username;
+		else {
+			//	Try to initialize Username from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  username;
+		}
+		//	And try to extract Username value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  username;
+		//	Property StartDsPath is mandatory, check if has been defined in database.
+		check_mandatory_property(cl_prop, dev_prop[i]);
+
+		//	Try to initialize Password from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  password;
+		else {
+			//	Try to initialize Password from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  password;
+		}
+		//	And try to extract Password value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  password;
+		//	Property StartDsPath is mandatory, check if has been defined in database.
+		check_mandatory_property(cl_prop, dev_prop[i]);
 
 	}
 
@@ -349,6 +410,7 @@ void A1Controller::read_ControllerRunning(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Controller::read_ControllerRunning(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_ControllerRunning) ENABLED START -----*/
 	//	Set the attribute value
+	attr_ControllerRunning_read = 0; 
 	attr.set_value(attr_ControllerRunning_read);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_ControllerRunning

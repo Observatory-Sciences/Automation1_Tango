@@ -49,15 +49,17 @@ OUTPUT_TYPE = DEVICE
 #	- ./lib   if OUTPUT_TYPE is SHARED_LIB or STATIC_LIB
 #	- ./bin for others
 #
-OUTPUT_DIR = /usr/local/bin
+
+# OUTPUT_DIR = /usr/local/bin
+OUTPUT_DIR = ./bin
 
 OBJ_DIR = ./obj
 
 #=============================================================================
 # Tango Class list used by project
 #
-A1COMM_CLASS = A1Communication
-A1COMM_HOME  = ./A1Communication
+# A1BRIDGE_CLASS = A1Bridge
+A1BRIDGE_HOME  = ./A1Bridge
 
 A1AXIS_CLASS = A1Axis
 A1AXIS_HOME  = ./A1Axis
@@ -73,19 +75,20 @@ A1CONTROLLER_HOME  = ./A1Controller
 #   - '-I ../include' and '-I .' are automatically appended in all cases
 #
 INC_DIR_USER= -I . \
-              -I $(A1COMM_HOME)\
-              -I $(A1AXIS_HOME)\
-              -I $(A1CONTROLLER_HOME)\
-              -I /usr/local/include \
-              -I /usr/local/include/tango
-
+              -I $(A1BRIDGE_HOME) \
+              -I $(A1BRIDGE_HOME)/Automation1/Include \
+              -I $(A1AXIS_HOME) \
+              -I $(A1CONTROLLER_HOME) \
+              -I /usr/local/include  \
+              -I /usr/local/include/tango 
 
 #=============================================================================
 # LIB_DIR_USER is the list of user library directories
 #   - for a device server, tango libraries directories are automatically appended
 #   - '-L ../lib' is automatically appended in all cases
 #
-LIB_DIR_USER= -L /usr/local/lib
+LIB_DIR_USER= -L $(A1BRIDGE_HOME)/Automation1/Lib \
+			  -L /usr/local/lib 
 
 #=============================================================================
 # LFLAGS_USR is the list of user link flags
@@ -98,7 +101,7 @@ LIB_DIR_USER= -L /usr/local/lib
 # you must use '-lA -lB' in this order as link flags, otherwise you will get
 # 'undefined reference' errors
 #
-#LFLAGS_USR+=
+LFLAGS_USR+= -lautomation1c -lautomation1compiler
 
 
 #=============================================================================
@@ -137,14 +140,17 @@ include $(MAKE_ENV)/tango.opt
 #
 SVC_OBJS =  $(SVC_A1AXIS_OBJS) \
             $(SVC_A1CONTROLLER_OBJS) \
-			$(SVC_A1COMM_OBJS) \
+			$(SVC_A1BRIDGE_OBJS) \
             $(OBJDIR)/MultiClassesFactory.o \
             $(OBJDIR)/main.o \
 			
 
 #------------  Object files for A1Communication class  ------------
-SVC_A1COMM_OBJS = \
-		$(OBJDIR)/A1Communication.o 
+SVC_A1BRIDGE_OBJS = \
+		$(OBJDIR)/A1CommBase.o \
+		$(OBJDIR)/A1Bridge.o \
+		$(OBJDIR)/A1Communication.o \
+		$(OBJDIR)/A1Simulation.o
 
 #------------  Object files for A1Axis class  ------------
 SVC_A1AXIS_OBJS = \
@@ -169,17 +175,31 @@ include $(MAKE_ENV)/common_target.opt
 # Following are dependancies of the classes used by project
 #
 #------------  Object files dependencies for A1Communication class  ------------
-A1COMM_INCLUDES = \
-		A1Communication/A1Communication.h
+A1BRIDGE_INCLUDES = \
+		A1Bridge/A1Bridge.h \
+		A1Bridge/A1CommBase.h \
+		A1Bridge/A1Communication.h \
+		A1Bridge/A1Simulation.h
 
-$(OBJDIR)/A1Communication.o:  $(A1COMM_HOME)/A1Communication.cpp $(A1COMM_INCLUDES)
+# libautomation1c.so:
+# 	cp $(A1BRIDGE_HOME)/Automation1/Lib/libautomation1c.so /usr/local/lib 
+# libautomation1compiler.so:
+# 	cp $(A1BRIDGE_HOME)/Automation1/Lib/libautomation1compiler.so /usr/local/lib 
+
+$(OBJDIR)/A1Bridge.o:  $(A1BRIDGE_HOME)/A1Bridge.cpp $(A1BRIDGE_INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Bridge.o
+$(OBJDIR)/A1CommBase.o:  $(A1BRIDGE_HOME)/A1CommBase.cpp $(A1BRIDGE_INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1CommBase.o
+$(OBJDIR)/A1Communication.o:  $(A1BRIDGE_HOME)/A1Communication.cpp $(A1BRIDGE_INCLUDES) # libautomation1c.so libautomation1compiler.so
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Communication.o
+$(OBJDIR)/A1Simulation.o:  $(A1BRIDGE_HOME)/A1Simulation.cpp $(A1BRIDGE_INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Simulation.o
 
 #------------  Object files dependencies for A1Axis class  ------------
 A1AXIS_INCLUDES = \
 		$(A1AXIS_HOME)/A1Axis.h \
 		$(A1AXIS_HOME)/A1AxisClass.h \
-		A1Communication/A1Communication.h
+		A1Bridge/A1Bridge.h
 
 $(OBJDIR)/A1Axis.o:  $(A1AXIS_HOME)/A1Axis.cpp $(A1AXIS_INCLUDES)
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Axis.o
@@ -192,7 +212,7 @@ $(OBJDIR)/A1AxisStateMachine.o:  $(A1AXIS_HOME)/A1AxisStateMachine.cpp $(A1AXIS_
 A1CONTROLLER_INCLUDES = \
 		$(A1CONTROLLER_HOME)/A1Controller.h \
 		$(A1CONTROLLER_HOME)/A1ControllerClass.h \
-		A1Communication/A1Communication.h
+		A1Bridge/A1Bridge.h
 
 $(OBJDIR)/A1Controller.o:  $(A1CONTROLLER_HOME)/A1Controller.cpp $(A1CONTROLLER_INCLUDES)
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Controller.o

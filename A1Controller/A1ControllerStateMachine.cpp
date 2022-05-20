@@ -387,7 +387,31 @@ bool A1Controller::is_AeroScriptProgramPause_allowed(TANGO_UNUSED(const CORBA::A
 
 /*----- PROTECTED REGION ID(A1Controller::A1ControllerStateAllowed.AdditionalMethods) ENABLED START -----*/
 
-//	Additional Methods
+void A1Controller::gotostate_fault()
+{
+    set_state(Tango::FAULT);
+}
+
+void A1Controller::gotostate_off()
+{
+    m_A1Comm->disconnect(); 
+    set_state(Tango::OFF); 
+
+}
+
+void A1Controller::gotostate_standby()
+{
+    try
+    {
+        m_A1Comm->connect(username, password, ipAddress); 
+        set_state(Tango::STANDBY); 
+    }
+    catch (Tango::DevFailed)
+    {
+        gotostate_fault(); 
+    }
+
+}
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::A1ControllerStateAllowed.AdditionalMethods
 

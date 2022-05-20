@@ -34,7 +34,7 @@
 #define A1Controller_H
 
 #include <tango.h>
-
+#include "A1Bridge.h"
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller.h
 
@@ -56,7 +56,12 @@ class A1Controller : public TANGO_BASE_CLASS
 
 /*----- PROTECTED REGION ID(A1Controller::Data Members) ENABLED START -----*/
 
-//	Add your own data members
+private:
+    A1BridgeNS::A1Bridge* m_A1Bridge; 
+    A1BridgeNS::A1CommBase* m_A1Comm; 
+    void gotostate_fault();
+    void gotostate_off();
+    void gotostate_standby();
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Data Members
 
@@ -66,6 +71,10 @@ public:
 	std::string	ipAddress;
 	//	Simulate:	Use simulation mode
 	Tango::DevBoolean	simulate;
+	//	Username:	Username used to connect to Automation1 controller
+	std::string	username;
+	//	Password:	Password used to connect to Automation1 controller
+	std::string	password;
 
 	bool	mandatoryNotDefined;
 

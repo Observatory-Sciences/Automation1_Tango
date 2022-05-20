@@ -251,7 +251,46 @@ void A1Axis::init_device()
 
 	/*----- PROTECTED REGION ID(A1Axis::init_device) ENABLED START -----*/
 	
-	//	Initialize device
+	attr_PositionFeedback_read[0] = 0;
+	attr_VelocityFeedback_read[0] = 0;
+	attr_AccelerationFeedback_read[0] = 0;
+	attr_InPosition_read[0] = 0;
+	attr_Enabled_read[0] = 0;
+	attr_Homed_read[0] = 0;
+	attr_Error_read[0] = 0;
+	attr_FirmwareVersion_read[0] = Tango::string_dup("");
+	attr_PositionError_read[0] = 0;
+	attr_CurrentFeedback_read[0] = 0;
+	attr_MotorType_read[0] = Tango::string_dup("");
+	attr_HomeType_read[0] = _ASYNCHRONOUS;
+	attr_MoveType_read[0] = _ABSOLUTEMOVE;
+	attr_LastMoveDuration_read[0] = 0;
+	attr_PositionTarget_read[0] = 0;
+	attr_VelocityTarget_read[0] = 0;
+	attr_VelocityError_read[0] = 0;
+	attr_AccelerationTarget_read[0] = 0;
+	attr_AccelerationError_read[0] = 0;
+	attr_CurrentTarget_read[0] = 0;
+	attr_CurrentError_read[0] = 0;
+	attr_ServoUpdateRate_read[0] = 0;
+	attr_DataCollectionNumPoints_read[0] = 0;
+	attr_DataCollectionFrequency_read[0] = _1_KHZ;
+	attr_DataCollectionMode_read[0] = _SNAPSHOT;
+	attr_RampType_read[0] = _LINEAR;
+	attr_RampMode_read[0] = _RATE;
+	attr_RampValue_read[0] = 0;
+	for (int i = 0; i < 24; i++) 
+	{
+		attr_AxisStatus_read[i] = true;
+	}
+	for (int i = 0; i < 25; i++) 
+	{
+		attr_AxisFault_read[i] = true;
+	}
+	for (int i = 0; i < 27; i++) 
+	{
+		attr_DriveStatus_read[i] = true;
+	}
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::init_device
 }
