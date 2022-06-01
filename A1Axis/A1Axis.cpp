@@ -291,6 +291,10 @@ void A1Axis::init_device()
 	{
 		attr_DriveStatus_read[i] = true;
 	}
+
+	// TODO: big problem here: Static Init Order Fiasco
+    m_A1Bridge = new A1BridgeNS::A1Bridge();
+	m_A1Comm = m_A1Bridge->getInstance();
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::init_device
 }
@@ -1229,7 +1233,7 @@ void A1Axis::abort()
 	DEBUG_STREAM << "A1Axis::Abort()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::abort) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Comm->axis_Abort(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::abort
 }
@@ -1245,7 +1249,7 @@ void A1Axis::home()
 	DEBUG_STREAM << "A1Axis::Home()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::home) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Comm->axis_Home(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::home
 }
@@ -1261,7 +1265,7 @@ void A1Axis::move()
 	DEBUG_STREAM << "A1Axis::Move()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::move) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Comm->axis_Move(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::move
 }
@@ -1277,7 +1281,7 @@ void A1Axis::enable()
 	DEBUG_STREAM << "A1Axis::Enable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::enable) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Comm->axis_Enable(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::enable
 }
@@ -1293,7 +1297,7 @@ void A1Axis::disable()
 	DEBUG_STREAM << "A1Axis::Disable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::disable) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Comm->axis_Disable(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::disable
 }

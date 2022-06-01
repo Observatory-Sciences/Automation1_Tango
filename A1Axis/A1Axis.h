@@ -34,7 +34,7 @@
 #define A1Axis_H
 
 #include <tango.h>
-
+#include "A1Bridge.h"
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis.h
 
@@ -98,7 +98,9 @@ class A1Axis : public TANGO_BASE_CLASS
 
 /*----- PROTECTED REGION ID(A1Axis::Data Members) ENABLED START -----*/
 
-//	Add your own data members
+private:
+    A1BridgeNS::A1Bridge* m_A1Bridge; 
+    A1BridgeNS::A1CommBase* m_A1Comm; 
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis::Data Members
 

@@ -20,6 +20,7 @@ class A1Communication: public A1CommBase
   public:
     ~A1Communication(); 
     A1Communication(); 
+    void readHardware(); 
     void controller_Reset();
     void controller_Start();
     void controller_Stop();
