@@ -14,7 +14,96 @@ A1Communication::A1Communication()
 A1Communication::~A1Communication()
 {
     delete m_controller; 
+    try
+    {
+        deleteStatusPollConfig();
+    }
+    catch Tango::DevFailed &e
+    {
+        std::cout << "ERROR: Failed to delete Automation1 status config" << std::endl; 
+    }
 }
+
+
+void A1Communication::throwWithLastA1Error(std::string reason, std::string origin)
+{
+    char errorMessage[ERR_MSG_SZ];
+    Automation1_GetLastErrorMessage(errorMessage, ERR_MSG_SZ);
+    Tango::Except::throw_exception(
+        "DRIVER_FAILURE", 
+        reason + ": " + errorMessage,
+        origin
+    );
+}
+
+
+void A1Communication::createStatusPollConfig()
+{
+    try
+    {
+        deleteStatusPollConfig();
+    }
+    catch (Tango::DevFailed &e)
+    {
+        Tango::Except::re_throw_exception(e,
+            "DRIVER_FAILURE",
+            "Failed to create Automation1 status config",
+            "A1Communication::createStatusPollConfig"
+        );
+    }
+    if (!Automation1_StatusConfig_Create(&m_statusPollOnceConfig) ||
+        !Automation1_StatusConfig_Create(&m_statusPollConfig))
+    {
+        try
+        {
+            deleteStatusPollConfig();
+        }
+        catch (Tango::DevFailed &e)
+        {
+            Tango::Except::re_throw_exception(e,
+                "DRIVER_FAILURE",
+                "Failed to create Automation1 status config",
+                "A1Communication::createStatusPollConfig"
+            );
+        }
+
+        Tango::Except::throw_exception(
+            "DRIVER_FAILURE",
+            "Failed to create Automation1 status config",
+            "A1Communication::createStatusPollConfig"
+        );
+    }
+}
+
+
+void A1Communication::deleteStatusPollConfig()
+{
+    // TODO: Should we throw exception if these fail? 
+    if (m_statusPollOnceConfig != NULL)
+    {
+        if (Automation1_StatusConfig_Destroy(m_statusPollOnceConfig))
+        {
+            m_statusPollOnceConfig = NULL; 
+        }
+    }
+    if (m_statusPollConfig != NULL)
+    {
+        if (Automation1_StatusConfig_Destroy(m_statusPollConfig))
+        {
+            m_statusPollConfig = NULL;
+        }
+    }
+    if (m_statusPollOnceConfig != NULL || m_statusPollOnceConfig != NULL)
+    {
+        Tango::Except::throw_exception(
+            "DRIVER_FAILURE", 
+            "Failed to destroy Automation1 status config",
+            "A1Communication::deleteStatusPollConfig"
+        );
+    }
+}
+
+
 
 
 void A1Communication::connect_impl(std::string username, std::string password, std::string ip)
@@ -31,6 +120,46 @@ void A1Communication::connect_impl(std::string username, std::string password, s
                                        "A1Communication::connect_impl");
     }
     m_connected = true; 
+    std::cout << "Connected to A1 controller" << std::endl;
+
+    createStatusPollConfig(); 
+
+    if (!Automation1_Controller_IsRunning(*controller, attr_ControllerRunning_read))
+    {
+        throwWithLastA1Error(
+            "Failed to determine if controller is running",
+            "A1Communication::connect_impl"
+        );
+    }
+
+    if (!*attr_ControllerRunning_read)
+    {
+        std::cout << "Controller is not running; starting..." << endl;
+        if (!Automation1_Controller_Start(*controller))
+        {
+            throwWithLastA1Error(
+                "Failed to start controller",
+                "A1Communication::connect_impl"
+            );
+        }
+        if (!Automation1_Controller_IsRunning(*controller, attr_ControllerRunning_read))
+        {
+            throwWithLastA1Error(
+                "Failed to determine if controller is running",
+                "A1Communication::connect_impl"
+            );
+        }
+        if (!attr_ControllerRunning_read)
+        {
+            Automation1_GetLastErrorMessage(errorMessage, ERR_MSG_SZ);
+            throwWithLastA1Error(
+                "Controller not running after start request",
+                "A1Communication::connect_impl"
+            );
+        }
+    }
+
+    std::cout << "Controller is running" << std::endl; 
 }
 
 

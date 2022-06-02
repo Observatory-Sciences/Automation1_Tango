@@ -10,9 +10,8 @@ void NotImplemented(std::string feature)
 {
     Tango::Except::throw_exception("DRIVER_FAILURE",
                                    feature + " not implemented",
-                                   feature + " not implemented");
+                                   feature);
 };
-
 
 
 A1Bridge* A1Bridge::m_instance = NULL;
@@ -32,6 +31,7 @@ A1Bridge::~A1Bridge()
     if (m_instance != NULL)
     {
         delete m_instance;
+        m_instance = NULL; 
     }
 }
 

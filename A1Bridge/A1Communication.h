@@ -17,6 +17,11 @@ class A1Communication: public A1Bridge
     void disconnect_impl(); 
     void readHardware_impl(); 
     Automation1Controller *m_controller;
+	Automation1StatusConfig_T *m_statusPollOnceConfig; 
+    Automation1StatusConfig_T *m_statusPollConfig;
+    void createStatusPollConfig(); 
+    void deleteStatusPollConfig(); 
+    void throwWithLastA1Error(std::string reason, std::string origin);
 
   public:
     ~A1Communication(); 

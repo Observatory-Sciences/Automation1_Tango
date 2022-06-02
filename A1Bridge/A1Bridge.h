@@ -13,10 +13,17 @@ namespace A1Bridge_ns {
 void NotImplemented(std::string feature);
 
 
+// TODO: who calls the A1Bridge destructor? If both Axis and Controller we
+// have double delete problem. If neither we don't have a clean exit.
+
+// TODO: ensure Axis calls getInstance after Controller
+
 class A1Bridge
 {
   protected: 
-    static A1Bridge* m_instance; 
+    A1Bridge();
+    virtual ~A1Bridge();
+    static A1Bridge *m_instance; 
     bool m_connected; 
     bool m_simulation; 
     bool m_verbose; 
@@ -30,10 +37,7 @@ class A1Bridge
     virtual void disconnect_impl() {NotImplemented("disconnect_impl");}; 
     virtual void readHardware_impl() {NotImplemented("readHardware_impl");}; 
 
-
   public: 
-    A1Bridge();
-    virtual ~A1Bridge();
     static A1Bridge* getInstance();
     static A1Bridge* getInstance(bool simulation);
     static A1Bridge* setSimulation(bool simulation); 
@@ -127,5 +131,6 @@ class A1Bridge
 	Tango::DevBoolean	*attr_AxisFault_read;
 	Tango::DevBoolean	*attr_DriveStatus_read;
 };
+
 
 } // namespace A1Bridge_ns

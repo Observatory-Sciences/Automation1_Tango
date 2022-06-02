@@ -132,9 +132,7 @@ void A1Controller::delete_device()
 {
 	DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
-	
-	delete m_A1Bridge; 
-	
+		
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::delete_device
 	delete[] attr_ControllerRunning_read;
 	delete[] attr_AxisCount_read;
