@@ -1,7 +1,7 @@
 #include "A1Simulation.h"
 
 
-namespace A1BridgeNS {
+namespace A1Bridge_ns {
 
 
 A1Simulation::A1Simulation()
@@ -26,4 +26,4 @@ void A1Simulation::disconnect_impl()
 }
 
 
-} // namespace A1BridgeNS
+} // namespace A1Bridge_ns

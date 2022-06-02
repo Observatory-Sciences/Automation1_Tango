@@ -8,7 +8,7 @@
 
 #include "Automation1.h"
 
-namespace A1BridgeNS {
+namespace A1Bridge_ns {
 
 class A1Communication: public A1Bridge
 {
@@ -51,4 +51,4 @@ class A1Communication: public A1Bridge
 
 };
 
-} // namespace A1BridgeNS
+} // namespace A1Bridge_ns

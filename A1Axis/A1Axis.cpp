@@ -295,7 +295,6 @@ void A1Axis::init_device()
 	// TODO: problem here -- Static Init Order Fiasco:
     // The Controller defines simulation mode, but the Axis could instantiate the bridge
     // before the Controller without knowing whether it should be in simulation or not.
-    m_A1Bridge = new A1BridgeNS::A1Bridge();
 	m_A1Bridge = m_A1Bridge->getInstance();
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::init_device

@@ -34,6 +34,7 @@
 #define A1Controller_H
 
 #include <tango.h>
+
 #include "A1Bridge.h"
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller.h
@@ -57,7 +58,7 @@ class A1Controller : public TANGO_BASE_CLASS
 /*----- PROTECTED REGION ID(A1Controller::Data Members) ENABLED START -----*/
 
 private:
-    A1BridgeNS::A1Bridge* m_A1Bridge; 
+    A1Bridge_ns::A1Bridge* m_A1Bridge; 
     void gotostate_fault();
     void gotostate_off();
     void gotostate_standby();

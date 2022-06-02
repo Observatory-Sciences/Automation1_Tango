@@ -3,7 +3,10 @@
 #include "A1Communication.h"
 
 
-namespace A1BridgeNS {
+namespace A1Bridge_ns {
+
+
+A1Bridge* A1Bridge::m_instance = NULL;
 
 
 A1Bridge::A1Bridge()
@@ -19,9 +22,6 @@ A1Bridge::~A1Bridge()
         delete m_instance;
     }
 }
-
-
-A1Bridge* A1Bridge::m_instance = NULL;
 
 
 A1Bridge* A1Bridge::getInstance() 
@@ -47,7 +47,7 @@ A1Bridge* A1Bridge::getInstance(bool simulation)
     }
 
     return m_instance;
-};
+}
 
 
 A1Bridge* A1Bridge::setSimulation(bool simulation) 
@@ -59,7 +59,7 @@ A1Bridge* A1Bridge::setSimulation(bool simulation)
     }
 
     return getInstance(simulation);
-};
+}
 
 
 bool A1Bridge::isSimulation()
@@ -98,4 +98,4 @@ void A1Bridge::reconnect()
 }
 
 
-} // namespace A1BridgeNS
+} // namespace A1Bridge_ns

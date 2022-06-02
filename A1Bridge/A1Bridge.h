@@ -6,7 +6,7 @@
 
 #define DEFAULT_TO_SIMULATION false
 
-namespace A1BridgeNS {
+namespace A1Bridge_ns {
 
 
 class NotImplemented: public std::logic_error
@@ -73,4 +73,4 @@ class A1Bridge
     virtual void axis_DataCollectionGetResults(int32_t axis) {throw NotImplemented();}; 
 };
 
-} // namespace A1BridgeNS
+} // namespace A1Bridge_ns

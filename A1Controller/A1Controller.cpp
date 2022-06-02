@@ -210,7 +210,7 @@ void A1Controller::init_device()
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
 	}
 
-    m_A1Bridge = A1BridgeNS::A1Bridge::getInstance(simulate);
+    m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(simulate);
     std::cout << "IpAddress: " << ipAddress << std::endl; 
     std::cout << "Simulate:  " << simulate << std::endl; 
     std::cout << "Username:  " << username << std::endl; 

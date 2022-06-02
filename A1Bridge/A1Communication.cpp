@@ -1,7 +1,7 @@
 #include "A1Communication.h"
 
 
-namespace A1BridgeNS {
+namespace A1Bridge_ns {
 
 
 A1Communication::A1Communication()
@@ -256,4 +256,4 @@ void A1Communication::axis_DataCollectionGetResults(int32_t axis)
                                    "axis_DataCollectionGetResults not implemented");
 } 
 
-}
+} // A1Bridge_ns

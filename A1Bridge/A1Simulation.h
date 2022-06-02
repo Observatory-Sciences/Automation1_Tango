@@ -6,7 +6,7 @@
 
 #include "A1Bridge.h"
 
-namespace A1BridgeNS {
+namespace A1Bridge_ns {
 
 class A1Simulation: public A1Bridge
 {
@@ -18,4 +18,4 @@ class A1Simulation: public A1Bridge
     ~A1Simulation(); 
 };
 
-} // namespace A1BridgeNS
+} // namespace A1Bridge_ns
