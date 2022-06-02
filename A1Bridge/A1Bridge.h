@@ -1,8 +1,9 @@
 #pragma once 
 
 #include <iostream>
-#include <string> 
-#include <tango.h> 
+#include <string>  
+#include <chrono> 
+#include <tango.h>
 
 #define DEFAULT_TO_SIMULATION false
 
@@ -22,6 +23,9 @@ class A1Bridge
     std::string m_username; 
     std::string m_password; 
     std::string m_ip; 
+    std::chrono::milliseconds m_pollInterval_ms; 
+    std::chrono::time_point<std::chrono::steady_clock> m_lastPoll; 
+
     virtual void connect_impl(std::string username, std::string password, std::string ip) {NotImplemented("connect_impl");}; 
     virtual void disconnect_impl() {NotImplemented("disconnect_impl");}; 
     virtual void readHardware_impl() {NotImplemented("readHardware_impl");}; 
@@ -38,10 +42,17 @@ class A1Bridge
     void connect(std::string username, std::string password, std::string ip); 
     void disconnect(); 
     void reconnect(); 
-
+    template<class T = int> 
+        void setPollingInterval(T interval) 
+        {
+            m_pollInterval_ms = std::chrono::milliseconds(interval);
+        }; 
+    void readHardware(); 
 
     // Interface between Tango <-> Automation1 API is left up to the children
     // We just call the Tango command or retrieve the attributes 
+
+    // Commands
     virtual void controller_Reset() {NotImplemented("controller_Reset");}; 
     virtual void controller_Start() {NotImplemented("controller_Start");}; 
     virtual void controller_Stop() {NotImplemented("controller_Stop");}; 
@@ -69,6 +80,52 @@ class A1Bridge
     virtual void axis_DataCollectionStop(int32_t axis) {NotImplemented("axis_DataCollectionStop");}; 
     virtual void axis_DataCollectionRefresh(int32_t axis) {NotImplemented("axis_DataCollectionRefresh");}; 
     virtual void axis_DataCollectionGetResults(int32_t axis) {NotImplemented("axis_DataCollectionGetResults");}; 
+
+    // Attributes
+	Tango::DevBoolean	*attr_ControllerRunning_read;
+	Tango::DevUShort	*attr_AxisCount_read;
+	Tango::DevUShort	*attr_TaskCount_read;
+	Tango::DevString	*attr_APIVersion_read;
+	Tango::DevString	*attr_AeroScriptFilePath_read;
+	Tango::DevBoolean	*attr_AxisHealth_read;
+	Tango::DevBoolean	*attr_TaskStatus0_read;
+	Tango::DevBoolean	*attr_TaskStatus1_read;
+	Tango::DevBoolean	*attr_TaskStatus2_read;
+	Tango::DevString	*attr_AeroScriptFiles_read;
+
+// TODO: Axis number
+// TODO: Move enum definitions
+	Tango::DevDouble	*attr_PositionFeedback_read;
+	Tango::DevDouble	*attr_VelocityFeedback_read;
+	Tango::DevDouble	*attr_AccelerationFeedback_read;
+	Tango::DevBoolean	*attr_InPosition_read;
+	Tango::DevBoolean	*attr_Enabled_read;
+	Tango::DevBoolean	*attr_Homed_read;
+	Tango::DevBoolean	*attr_Error_read;
+	Tango::DevString	*attr_FirmwareVersion_read;
+	Tango::DevDouble	*attr_PositionError_read;
+	Tango::DevDouble	*attr_CurrentFeedback_read;
+	Tango::DevString	*attr_MotorType_read;
+    Tango::DevUShort	*attr_HomeType_read;
+	Tango::DevUShort	*attr_MoveType_read;
+	Tango::DevDouble	*attr_LastMoveDuration_read;
+	Tango::DevDouble	*attr_PositionTarget_read;
+	Tango::DevDouble	*attr_VelocityTarget_read;
+	Tango::DevDouble	*attr_VelocityError_read;
+	Tango::DevDouble	*attr_AccelerationTarget_read;
+	Tango::DevDouble	*attr_AccelerationError_read;
+	Tango::DevDouble	*attr_CurrentTarget_read;
+	Tango::DevDouble	*attr_CurrentError_read;
+	Tango::DevDouble	*attr_ServoUpdateRate_read;
+	Tango::DevULong	*attr_DataCollectionNumPoints_read;
+	Tango::DevUShort	*attr_DataCollectionFrequency_read;
+	Tango::DevUShort	*attr_DataCollectionMode_read;
+	Tango::DevUShort	*attr_RampType_read;
+	Tango::DevUShort	*attr_RampMode_read;
+	Tango::DevDouble	*attr_RampValue_read;
+	Tango::DevBoolean	*attr_AxisStatus_read;
+	Tango::DevBoolean	*attr_AxisFault_read;
+	Tango::DevBoolean	*attr_DriveStatus_read;
 };
 
 } // namespace A1Bridge_ns

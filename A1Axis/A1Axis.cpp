@@ -427,7 +427,7 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	DEBUG_STREAM << "A1Axis::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_attr_hardware) ENABLED START -----*/
 	
-	//	Add your own code
+    m_A1Bridge->readHardware(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_attr_hardware
 }

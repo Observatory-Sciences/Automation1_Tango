@@ -21,6 +21,9 @@ A1Bridge* A1Bridge::m_instance = NULL;
 A1Bridge::A1Bridge()
 {
     m_connected = false; 
+    // TODO: 1000 hours is stupid
+    m_lastPoll = std::chrono::steady_clock::now() - std::chrono::hours(1000); 
+    m_pollInterval_ms = std::chrono::milliseconds(-1); 
 }
 
 
@@ -104,6 +107,23 @@ void A1Bridge::reconnect()
 {
     this->disconnect();
     this->connect(m_username, m_password, m_ip);
+}
+
+
+void A1Bridge::readHardware()
+{
+    if (m_lastPoll < std::chrono::steady_clock::now() - m_pollInterval_ms)
+    {
+        std::cout << "Last poll " << m_lastPoll.time_since_epoch().count() << std::endl; 
+        std::cout << "Interval  " << m_pollInterval_ms.count() << std::endl; 
+        std::cout << "Now       " << std::chrono::steady_clock::now().time_since_epoch().count() << std::endl; 
+        this->readHardware_impl(); 
+        m_lastPoll = std::chrono::steady_clock::now(); 
+    }
+    else
+    {
+        std::cout << "Not polling" << std::endl; 
+    }
 }
 
 

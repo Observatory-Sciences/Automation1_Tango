@@ -215,6 +215,7 @@ void A1Controller::init_device()
     std::cout << "Simulate:  " << simulate << std::endl; 
     std::cout << "Username:  " << username << std::endl; 
     std::cout << "Password:  " << password << std::endl; 
+    m_A1Bridge->setPollingInterval(100); 
     gotostate_standby();
 
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
@@ -375,8 +376,9 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 	DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
 	
-	//	Add your own code
-	
+    DEBUG_STREAM << "read hardware" << std::endl; 
+    m_A1Bridge->readHardware(); 
+
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_attr_hardware
 }
 //--------------------------------------------------------

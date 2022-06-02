@@ -37,6 +37,7 @@ void A1Communication::connect_impl(std::string username, std::string password, s
 void A1Communication::disconnect_impl()
 {
     bool stat = Automation1_Disconnect(*m_controller);
+    m_connected = false; 
     if (!stat)
     {
         std::cout << "ERROR: Disconnect from A1 controller failed" << std::endl; 
@@ -44,13 +45,12 @@ void A1Communication::disconnect_impl()
                                        "Disconnect from A1 controller failed",
                                        "A1Communication::disconnect_impl");
     }
-    m_connected = false; 
-
 }
 
 
-void A1Communication::readHardware()
+void A1Communication::readHardware_impl()
 {
+    std::cout << "readHardware_impl" << std::endl; 
     NotImplemented("read_hardware");
 }
 

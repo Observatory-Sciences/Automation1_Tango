@@ -15,12 +15,12 @@ class A1Communication: public A1Bridge
   protected:
     void connect_impl(std::string username, std::string password, std::string ip); 
     void disconnect_impl(); 
+    void readHardware_impl(); 
     Automation1Controller *m_controller;
 
   public:
     ~A1Communication(); 
     A1Communication(); 
-    void readHardware(); 
     void controller_Reset();
     void controller_Start();
     void controller_Stop();
