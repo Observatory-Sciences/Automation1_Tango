@@ -51,77 +51,52 @@ void A1Communication::disconnect_impl()
 
 void A1Communication::readHardware()
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "read_hardware not implemented",
-                                   "read_hardware not implemented");
+    NotImplemented("read_hardware");
 }
-
 
 void A1Communication::controller_Reset() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_Reset not implemented",
-                                   "controller_Reset not implemented");
+    NotImplemented("controller_Reset");
 } 
 void A1Communication::controller_Start() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_Start not implemented",
-                                   "controller_Start not implemented");
+    NotImplemented("controller_Start");
 } 
 void A1Communication::controller_Stop() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_Stop not implemented",
-                                   "controller_Stop not implemented");
+    NotImplemented("controller_Stop");
 } 
 void A1Communication::controller_Enable() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_Enable not implemented",
-                                   "controller_Enable not implemented");
+    NotImplemented("controller_Enable");
 } 
 void A1Communication::controller_Disable() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_Disable not implemented",
-                                   "controller_Disable not implemented");
+    NotImplemented("controller_Disable");
 } 
 void A1Communication::controller_ClearErrors() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_ClearErrors not implemented",
-                                   "controller_ClearErrors not implemented");
+    NotImplemented("controller_ClearErrors");
 } 
 void A1Communication::controller_AeroScriptProgramRun() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_AeroScriptProgramRun not implemented",
-                                   "controller_AeroScriptProgramRun not implemented");
+    NotImplemented("controller_AeroScriptProgramRun");
 } 
 void A1Communication::controller_AeroScriptProgramLoad() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_AeroScriptProgramLoad not implemented",
-                                   "controller_AeroScriptProgramLoad not implemented");
+    NotImplemented("controller_AeroScriptProgramLoad");
 } 
 void A1Communication::controller_AeroScriptProgramStart() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_AeroScriptProgramStart not implemented",
-                                   "controller_AeroScriptProgramStart not implemented");
+    NotImplemented("controller_AeroScriptProgramStart");
 } 
 void A1Communication::controller_AeroScriptProgramStop() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_AeroScriptProgramStop not implemented",
-                                   "controller_AeroScriptProgramStop not implemented");
+    NotImplemented("controller_AeroScriptProgramStop");
 } 
 void A1Communication::controller_AeroScriptProgramPause() 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "controller_AeroScriptProgramPause not implemented",
-                                   "controller_AeroScriptProgramPause not implemented");
+    NotImplemented("controller_AeroScriptProgramPause");
 } 
 
 
@@ -147,9 +122,7 @@ void A1Communication::axis_Home(int32_t axis)
 
 void A1Communication::axis_Move(int32_t axis) 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "axis_Move not implemented",
-                                   "axis_Move not implemented");
+    NotImplemented("axis_Move");
 } 
 
 void A1Communication::axis_Enable(int32_t axis) 
@@ -204,9 +177,7 @@ void A1Communication::axis_MoveFromLimit(int32_t axis)
 
 void A1Communication::axis_FreeRun(int32_t axis) 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "axis_FreeRun not implemented",
-                                   "axis_FreeRun not implemented");
+    NotImplemented("axis_FreeRun");
 } 
 
 void A1Communication::axis_FreeRunStop(int32_t axis) 
@@ -221,39 +192,27 @@ void A1Communication::axis_FreeRunStop(int32_t axis)
 
 void A1Communication::axis_ThrowAllFaults(int32_t axis) 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "axis_ThrowAllFaults not implemented",
-                                   "axis_ThrowAllFaults not implemented");
+    NotImplemented("axis_ThrowAllFaults");
 } 
 void A1Communication::axis_AcknowledgeFaults(int32_t axis) 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "axis_AcknowledgeFaults not implemented",
-                                   "axis_AcknowledgeFaults not implemented");
+    NotImplemented("axis_AcknowledgeFaults");
 } 
 void A1Communication::axis_DataCollectionStart(int32_t axis) 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "axis_DataCollectionStart not implemented",
-                                   "axis_DataCollectionStart not implemented");
+    NotImplemented("axis_DataCollectionStart");
 } 
 void A1Communication::axis_DataCollectionStop(int32_t axis) 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "axis_DataCollectionStop not implemented",
-                                   "axis_DataCollectionStop not implemented");
+    NotImplemented("axis_DataCollectionStop");
 } 
 void A1Communication::axis_DataCollectionRefresh(int32_t axis) 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "axis_DataCollectionRefresh not implemented",
-                                   "axis_DataCollectionRefresh not implemented");
+    NotImplemented("axis_DataCollectionRefresh");
 } 
 void A1Communication::axis_DataCollectionGetResults(int32_t axis) 
 {
-    Tango::Except::throw_exception("DRIVER_FAILURE",
-                                   "axis_DataCollectionGetResults not implemented",
-                                   "axis_DataCollectionGetResults not implemented");
+    NotImplemented("axis_DataCollectionGetResults");
 } 
 
 } // A1Bridge_ns

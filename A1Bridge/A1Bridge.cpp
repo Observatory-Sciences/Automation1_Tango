@@ -6,6 +6,15 @@
 namespace A1Bridge_ns {
 
 
+void NotImplemented(std::string feature)
+{
+    Tango::Except::throw_exception("DRIVER_FAILURE",
+                                   feature + " not implemented",
+                                   feature + " not implemented");
+};
+
+
+
 A1Bridge* A1Bridge::m_instance = NULL;
 
 
