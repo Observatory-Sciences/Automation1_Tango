@@ -58,7 +58,6 @@ class A1Controller : public TANGO_BASE_CLASS
 
 private:
     A1BridgeNS::A1Bridge* m_A1Bridge; 
-    A1BridgeNS::A1CommBase* m_A1Comm; 
     void gotostate_fault();
     void gotostate_off();
     void gotostate_standby();

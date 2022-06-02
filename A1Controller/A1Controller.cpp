@@ -210,12 +210,11 @@ void A1Controller::init_device()
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
 	}
 
-    m_A1Bridge = new A1BridgeNS::A1Bridge();
+    m_A1Bridge = A1BridgeNS::A1Bridge::getInstance(simulate);
     std::cout << "IpAddress: " << ipAddress << std::endl; 
     std::cout << "Simulate:  " << simulate << std::endl; 
     std::cout << "Username:  " << username << std::endl; 
     std::cout << "Password:  " << password << std::endl; 
-    m_A1Comm = m_A1Bridge->getInstance(simulate);
     gotostate_standby();
 
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::init_device

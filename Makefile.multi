@@ -147,7 +147,6 @@ SVC_OBJS =  $(SVC_A1AXIS_OBJS) \
 
 #------------  Object files for A1Communication class  ------------
 SVC_A1BRIDGE_OBJS = \
-		$(OBJDIR)/A1CommBase.o \
 		$(OBJDIR)/A1Bridge.o \
 		$(OBJDIR)/A1Communication.o \
 		$(OBJDIR)/A1Simulation.o
@@ -177,7 +176,6 @@ include $(MAKE_ENV)/common_target.opt
 #------------  Object files dependencies for A1Communication class  ------------
 A1BRIDGE_INCLUDES = \
 		A1Bridge/A1Bridge.h \
-		A1Bridge/A1CommBase.h \
 		A1Bridge/A1Communication.h \
 		A1Bridge/A1Simulation.h
 
@@ -188,8 +186,6 @@ A1BRIDGE_INCLUDES = \
 
 $(OBJDIR)/A1Bridge.o:  $(A1BRIDGE_HOME)/A1Bridge.cpp $(A1BRIDGE_INCLUDES)
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Bridge.o
-$(OBJDIR)/A1CommBase.o:  $(A1BRIDGE_HOME)/A1CommBase.cpp $(A1BRIDGE_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1CommBase.o
 $(OBJDIR)/A1Communication.o:  $(A1BRIDGE_HOME)/A1Communication.cpp $(A1BRIDGE_INCLUDES) # libautomation1c.so libautomation1compiler.so
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Communication.o
 $(OBJDIR)/A1Simulation.o:  $(A1BRIDGE_HOME)/A1Simulation.cpp $(A1BRIDGE_INCLUDES)

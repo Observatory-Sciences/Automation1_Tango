@@ -394,7 +394,7 @@ void A1Controller::gotostate_fault()
 
 void A1Controller::gotostate_off()
 {
-    m_A1Comm->disconnect(); 
+    m_A1Bridge->disconnect(); 
     set_state(Tango::OFF); 
 
 }
@@ -403,7 +403,7 @@ void A1Controller::gotostate_standby()
 {
     try
     {
-        m_A1Comm->connect(username, password, ipAddress); 
+        m_A1Bridge->connect(username, password, ipAddress); 
         set_state(Tango::STANDBY); 
     }
     catch (Tango::DevFailed)

@@ -100,7 +100,6 @@ class A1Axis : public TANGO_BASE_CLASS
 
 private:
     A1BridgeNS::A1Bridge* m_A1Bridge; 
-    A1BridgeNS::A1CommBase* m_A1Comm; 
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis::Data Members
 

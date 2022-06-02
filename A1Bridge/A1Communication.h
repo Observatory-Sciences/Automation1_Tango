@@ -4,13 +4,13 @@
 #include <string> 
 #include <tango.h> 
 
-#include "A1CommBase.h"
+#include "A1Bridge.h"
 
 #include "Automation1.h"
 
 namespace A1BridgeNS {
 
-class A1Communication: public A1CommBase
+class A1Communication: public A1Bridge
 {
   protected:
     void connect_impl(std::string username, std::string password, std::string ip); 

@@ -4,11 +4,11 @@
 #include <string> 
 #include <tango.h> 
 
-#include "A1CommBase.h"
+#include "A1Bridge.h"
 
 namespace A1BridgeNS {
 
-class A1Simulation: public A1CommBase
+class A1Simulation: public A1Bridge
 {
   protected:
     void connect_impl(std::string username, std::string password, std::string ip); 
