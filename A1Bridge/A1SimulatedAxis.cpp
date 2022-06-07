@@ -1,7 +1,7 @@
 #include "A1SimulatedAxis.h"
 
 
-namespace A1BridgeNS {
+namespace A1Bridge_ns {
 
 
 A1SimulatedAxis::A1SimulatedAxis():
@@ -24,4 +24,4 @@ A1SimulatedAxis::~A1SimulatedAxis()
 
 
 
-} // namespace A1BridgeNS
+} // namespace A1Bridge_ns

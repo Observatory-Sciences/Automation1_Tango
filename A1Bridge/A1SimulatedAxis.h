@@ -5,7 +5,7 @@
 #include <tango.h> 
 
 
-namespace A1BridgeNS {
+namespace A1Bridge_ns {
 
 #define SIM_V_MAX_DEFAULT 2.0
 #define SIM_ACCEL_DEFAULT 1.0
@@ -30,4 +30,4 @@ class A1SimulatedAxis
 };
 
 
-} // namespace A1BridgeNS
+} // namespace A1Bridge_ns

@@ -179,7 +179,7 @@ A1BRIDGE_INCLUDES = \
 		A1Defines.h \
 		A1Bridge/A1Bridge.h \
 		A1Bridge/A1Communication.h \
-		A1Birdge/A1SimulatedAxis.h \
+		A1Bridge/A1SimulatedAxis.h \
 		A1Bridge/A1Simulation.h
 
 # libautomation1c.so:
