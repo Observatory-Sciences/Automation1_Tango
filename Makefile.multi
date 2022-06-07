@@ -149,7 +149,8 @@ SVC_OBJS =  $(SVC_A1AXIS_OBJS) \
 SVC_A1BRIDGE_OBJS = \
 		$(OBJDIR)/A1Bridge.o \
 		$(OBJDIR)/A1Communication.o \
-		$(OBJDIR)/A1Simulation.o
+		$(OBJDIR)/A1Simulation.o \
+		$(OBJDIR)/A1SimulatedAxis.o
 
 #------------  Object files for A1Axis class  ------------
 SVC_A1AXIS_OBJS = \
@@ -177,6 +178,7 @@ include $(MAKE_ENV)/common_target.opt
 A1BRIDGE_INCLUDES = \
 		A1Bridge/A1Bridge.h \
 		A1Bridge/A1Communication.h \
+		A1Birdge/A1SimulatedAxis.h \
 		A1Bridge/A1Simulation.h
 
 # libautomation1c.so:
@@ -190,6 +192,8 @@ $(OBJDIR)/A1Communication.o:  $(A1BRIDGE_HOME)/A1Communication.cpp $(A1BRIDGE_IN
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Communication.o
 $(OBJDIR)/A1Simulation.o:  $(A1BRIDGE_HOME)/A1Simulation.cpp $(A1BRIDGE_INCLUDES)
 	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Simulation.o
+$(OBJDIR)/A1SimulatedAxis.o:  $(A1BRIDGE_HOME)/A1SimulatedAxis.cpp $(A1BRIDGE_INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1SimulatedAxis.o
 
 #------------  Object files dependencies for A1Axis class  ------------
 A1AXIS_INCLUDES = \
