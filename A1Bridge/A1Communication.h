@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string> 
+#include <map> 
 #include <tango.h> 
 
 #include "A1Bridge.h"
@@ -13,12 +14,18 @@ namespace A1Bridge_ns {
 class A1Communication: public A1Bridge
 {
   protected:
+    unsigned errMessageLength=2048; 
     void connect_impl(std::string username, std::string password, std::string ip); 
     void disconnect_impl(); 
     void readHardware_impl(); 
     Automation1Controller *m_controller;
 	Automation1StatusConfig_T *m_statusPollOnceConfig; 
     Automation1StatusConfig_T *m_statusPollConfig;
+    Automation1StatusConfig_T *m_statusAxPollConfig;
+    unsigned statusAxPollLength, statusPollLength; 
+    unsigned ax = 0;
+    void return_checker(bool ret, std::string strTrue="", std::string strFalse="");
+
     void createStatusPollConfig(); 
     void deleteStatusPollConfig(); 
     void throwWithLastA1Error(std::string reason, std::string origin);
@@ -53,6 +60,13 @@ class A1Communication: public A1Bridge
     void axis_DataCollectionStop(int32_t axis);
     void axis_DataCollectionRefresh(int32_t axis);
     void axis_DataCollectionGetResults(int32_t axis);
+
+protected:
+    map<std::string, Tango::DevBoolean*> attributes =
+        {{std::string("AxisHomed"), attr_Homed_read}}; 
+    // map<std::string, Tango::Attribute*, Automation1AxisStatus> attributes =
+        // {{"AxisHomed", &attr_Homed_read, Automation1AxisStatus::Automation1AxisStatus_Homed}}; 
+
 
 };
 

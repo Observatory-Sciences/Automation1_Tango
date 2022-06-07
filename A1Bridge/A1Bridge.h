@@ -46,12 +46,11 @@ class A1Bridge
     void connect(std::string username, std::string password, std::string ip); 
     void disconnect(); 
     void reconnect(); 
-    template<class T = int> 
-        void setPollingInterval(T interval) 
-        {
-            m_pollInterval_ms = std::chrono::milliseconds(interval);
-        }; 
-    void readHardware(); 
+    void readHardware();
+    template<class T = int> void setPollingInterval(T interval) 
+    {
+        m_pollInterval_ms = std::chrono::milliseconds(interval);
+    };  
 
     // Interface between Tango <-> Automation1 API is left up to the children
     // We just call the Tango command or retrieve the attributes 

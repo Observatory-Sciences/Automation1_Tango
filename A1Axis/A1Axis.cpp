@@ -428,6 +428,18 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	/*----- PROTECTED REGION ID(A1Axis::read_attr_hardware) ENABLED START -----*/
 	
     m_A1Bridge->readHardware(); 
+    attr_PositionFeedback_read = m_A1Bridge->attr_PositionFeedback_read; 
+	attr_PositionError_read = m_A1Bridge->attr_PositionError_read; 
+	attr_PositionTarget_read = m_A1Bridge->attr_PositionTarget_read; 
+	attr_VelocityFeedback_read = m_A1Bridge->attr_VelocityFeedback_read; 
+	attr_VelocityError_read = m_A1Bridge->attr_VelocityError_read; 
+	attr_VelocityTarget_read = m_A1Bridge->attr_VelocityTarget_read; 
+	attr_AccelerationFeedback_read = m_A1Bridge->attr_AccelerationFeedback_read; 
+	attr_AccelerationError_read = m_A1Bridge->attr_AccelerationError_read; 
+	attr_AccelerationTarget_read = m_A1Bridge->attr_AccelerationTarget_read; 
+	attr_CurrentFeedback_read = m_A1Bridge->attr_CurrentFeedback_read; 
+	attr_CurrentError_read = m_A1Bridge->attr_CurrentError_read; 
+	attr_CurrentTarget_read = m_A1Bridge->attr_CurrentTarget_read;
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_attr_hardware
 }
