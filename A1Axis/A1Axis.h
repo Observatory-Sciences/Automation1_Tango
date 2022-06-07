@@ -35,6 +35,7 @@
 
 #include <tango.h>
 
+#include "A1Defines.h"
 #include "A1Bridge.h"
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis.h

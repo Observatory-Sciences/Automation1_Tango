@@ -6,6 +6,7 @@
 #include <tango.h> 
 
 #include "A1Bridge.h"
+#include "A1Defines.h"
 
 #include "Automation1.h"
 

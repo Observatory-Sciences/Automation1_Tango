@@ -316,7 +316,7 @@ void A1Communication::disconnect_impl()
 void A1Communication::readHardware_impl()
 {
     std::cout << "readHardware_impl" << std::endl; 
-    NotImplemented("read_hardware");
+    // NotImplemented("read_hardware");
 
     // if(*m_controller == nullptr)
     // {
@@ -328,6 +328,7 @@ void A1Communication::readHardware_impl()
 
 
 	bool isRunning;
+    bool ret; 
     ret = Automation1_Controller_IsRunning(*m_controller, &isRunning);
 	return_checker(ret, std::string(""),std::string("ERROR: Unable to determine if controller is running."));
 	if (!isRunning)
@@ -339,62 +340,62 @@ void A1Communication::readHardware_impl()
         ); 
 	}
 
-    double *axisResults = new double[pollStatusLength];
-	ret = Automation1_Status_GetResults(*controller, pollStatusConfig, axisResults, pollStatusLength);
+    double *axisResults = new double[statusAxPollLength];
+	ret = Automation1_Status_GetResults(*m_controller, m_statusAxPollConfig, axisResults, statusAxPollLength);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to get axis status results from controller."));
 
 	//Setup vars to store the data in.
 	double axStatus;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback, 0, attr_PositionFeedback_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback, 0, attr_PositionFeedback_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError, 0, attr_PositionError_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError, 0, attr_PositionError_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand, 0, attr_PositionTarget_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand, 0, attr_PositionTarget_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback, 0, attr_VelocityFeedback_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback, 0, attr_VelocityFeedback_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError, 0, attr_VelocityError_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError, 0, attr_VelocityError_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand, 0, attr_VelocityTarget_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand, 0, attr_VelocityTarget_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityTarget"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback, 0, attr_AccelerationFeedback_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback, 0, attr_AccelerationFeedback_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError, 0, attr_AccelerationError_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError, 0, attr_AccelerationError_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand, 0, attr_AccelerationTarget_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand, 0, attr_AccelerationTarget_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationTarget"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback, 0, attr_CurrentFeedback_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback, 0, attr_CurrentFeedback_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError, 0, attr_CurrentError_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError, 0, attr_CurrentError_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand, 0, attr_CurrentTarget_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand, 0, attr_CurrentTarget_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentTarget"));
 	if(!ret) return;
 	
-	ret = Automation1_Status_GetAxisResult(pollStatusConfig, axisResults, pollStatusLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus, 0, &axStatus);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus, 0, &axStatus);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus"));
 	if(!ret) return;
 

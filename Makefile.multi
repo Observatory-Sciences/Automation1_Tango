@@ -175,6 +175,7 @@ include $(MAKE_ENV)/common_target.opt
 #
 #------------  Object files dependencies for A1Communication class  ------------
 A1BRIDGE_INCLUDES = \
+		A1Defines.h \
 		A1Bridge/A1Bridge.h \
 		A1Bridge/A1Communication.h \
 		A1Bridge/A1Simulation.h
@@ -193,6 +194,7 @@ $(OBJDIR)/A1Simulation.o:  $(A1BRIDGE_HOME)/A1Simulation.cpp $(A1BRIDGE_INCLUDES
 
 #------------  Object files dependencies for A1Axis class  ------------
 A1AXIS_INCLUDES = \
+		A1Defines.h \
 		$(A1AXIS_HOME)/A1Axis.h \
 		$(A1AXIS_HOME)/A1AxisClass.h \
 		A1Bridge/A1Bridge.h
@@ -206,6 +208,7 @@ $(OBJDIR)/A1AxisStateMachine.o:  $(A1AXIS_HOME)/A1AxisStateMachine.cpp $(A1AXIS_
 
 #------------  Object files dependencies for A1Controller class  ------------
 A1CONTROLLER_INCLUDES = \
+		A1Defines.h \
 		$(A1CONTROLLER_HOME)/A1Controller.h \
 		$(A1CONTROLLER_HOME)/A1ControllerClass.h \
 		A1Bridge/A1Bridge.h
