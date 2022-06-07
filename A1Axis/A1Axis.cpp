@@ -281,15 +281,15 @@ void A1Axis::init_device()
 	attr_RampValue_read[0] = 0;
 	for (int i = 0; i < 24; i++) 
 	{
-		attr_AxisStatus_read[i] = true;
+		attr_AxisStatus_read[i] = false;
 	}
 	for (int i = 0; i < 25; i++) 
 	{
-		attr_AxisFault_read[i] = true;
+		attr_AxisFault_read[i] = false;
 	}
 	for (int i = 0; i < 27; i++) 
 	{
-		attr_DriveStatus_read[i] = true;
+		attr_DriveStatus_read[i] = false;
 	}
 
 	// TODO: problem here -- Static Init Order Fiasco:
@@ -428,19 +428,37 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	/*----- PROTECTED REGION ID(A1Axis::read_attr_hardware) ENABLED START -----*/
 	
     m_A1Bridge->readHardware(); 
-    attr_PositionFeedback_read = m_A1Bridge->attr_PositionFeedback_read; 
-	attr_PositionError_read = m_A1Bridge->attr_PositionError_read; 
-	attr_PositionTarget_read = m_A1Bridge->attr_PositionTarget_read; 
-	attr_VelocityFeedback_read = m_A1Bridge->attr_VelocityFeedback_read; 
-	attr_VelocityError_read = m_A1Bridge->attr_VelocityError_read; 
-	attr_VelocityTarget_read = m_A1Bridge->attr_VelocityTarget_read; 
-	attr_AccelerationFeedback_read = m_A1Bridge->attr_AccelerationFeedback_read; 
-	attr_AccelerationError_read = m_A1Bridge->attr_AccelerationError_read; 
-	attr_AccelerationTarget_read = m_A1Bridge->attr_AccelerationTarget_read; 
-	attr_CurrentFeedback_read = m_A1Bridge->attr_CurrentFeedback_read; 
-	attr_CurrentError_read = m_A1Bridge->attr_CurrentError_read; 
-	attr_CurrentTarget_read = m_A1Bridge->attr_CurrentTarget_read;
+    *attr_PositionFeedback_read = m_A1Bridge->attr_PositionFeedback_read; 
+	*attr_PositionError_read = m_A1Bridge->attr_PositionError_read; 
+	*attr_PositionTarget_read = m_A1Bridge->attr_PositionTarget_read; 
+	*attr_VelocityFeedback_read = m_A1Bridge->attr_VelocityFeedback_read; 
+	*attr_VelocityError_read = m_A1Bridge->attr_VelocityError_read; 
+	*attr_VelocityTarget_read = m_A1Bridge->attr_VelocityTarget_read; 
+	*attr_AccelerationFeedback_read = m_A1Bridge->attr_AccelerationFeedback_read; 
+	*attr_AccelerationError_read = m_A1Bridge->attr_AccelerationError_read; 
+	*attr_AccelerationTarget_read = m_A1Bridge->attr_AccelerationTarget_read; 
+	*attr_CurrentFeedback_read = m_A1Bridge->attr_CurrentFeedback_read; 
+	*attr_CurrentError_read = m_A1Bridge->attr_CurrentError_read; 
+	*attr_CurrentTarget_read = m_A1Bridge->attr_CurrentTarget_read;
 	
+	for (int i=0; i < 24; i++)
+	{
+		attr_AxisStatus_read[i] = m_A1Bridge->attr_AxisStatus_read[i]; 
+	}
+
+	*attr_Enabled_read = m_A1Bridge->attr_Enabled_read;
+	*attr_InPosition_read = m_A1Bridge->attr_InPosition_read;
+	*attr_Homed_read = m_A1Bridge->attr_Homed_read;
+	
+    if (*attr_Enabled_read) 
+    {
+		set_state(Tango::ON);
+    }
+	else
+	{
+		set_state(Tango::OFF);
+	}
+
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_attr_hardware
 }
 //--------------------------------------------------------
@@ -1374,7 +1392,7 @@ void A1Axis::free_run()
 	DEBUG_STREAM << "A1Axis::FreeRun()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::free_run) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_FreeRun(this->axis, 10.0); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::free_run
 }
@@ -1390,7 +1408,7 @@ void A1Axis::free_run_stop()
 	DEBUG_STREAM << "A1Axis::FreeRunStop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::free_run_stop) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_FreeRunStop(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::free_run_stop
 }

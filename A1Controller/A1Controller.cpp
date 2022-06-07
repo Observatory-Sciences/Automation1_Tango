@@ -705,7 +705,7 @@ void A1Controller::clear_errors()
 	DEBUG_STREAM << "A1Controller::ClearErrors()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::clear_errors) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_ClearErrors(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::clear_errors
 }

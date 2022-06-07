@@ -53,7 +53,7 @@ class A1Communication: public A1Bridge
     void axis_BrakeOn(int32_t axis);
     void axis_BrakeOff(int32_t axis);
     void axis_MoveFromLimit(int32_t axis);
-    void axis_FreeRun(int32_t axis);
+    void axis_FreeRun(int32_t axis, double vel);
     void axis_FreeRunStop(int32_t axis);
     void axis_ThrowAllFaults(int32_t axis);
     void axis_AcknowledgeFaults(int32_t axis);
@@ -63,7 +63,7 @@ class A1Communication: public A1Bridge
     void axis_DataCollectionGetResults(int32_t axis);
 
 protected:
-    map<std::string, Tango::DevBoolean*> attributes =
+    map<std::string, Tango::DevBoolean> attributes =
         {{std::string("AxisHomed"), attr_Homed_read}}; 
     // map<std::string, Tango::Attribute*, Automation1AxisStatus> attributes =
         // {{"AxisHomed", &attr_Homed_read, Automation1AxisStatus::Automation1AxisStatus_Homed}}; 

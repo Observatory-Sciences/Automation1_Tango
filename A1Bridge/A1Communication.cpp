@@ -8,6 +8,9 @@ A1Communication::A1Communication()
 {
     m_simulation = false;
     m_controller = new Automation1Controller();
+    m_statusPollOnceConfig = NULL;
+    m_statusPollConfig = NULL;
+    m_statusAxPollConfig = NULL;
 }
 
 
@@ -144,7 +147,7 @@ void A1Communication::connect_impl(std::string username, std::string password, s
 
     createStatusPollConfig(); 
 
-    if (!Automation1_Controller_IsRunning(*m_controller, attr_ControllerRunning_read))
+    if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
     {
         throwWithLastA1Error(
             "Failed to determine if controller is running",
@@ -152,7 +155,7 @@ void A1Communication::connect_impl(std::string username, std::string password, s
         );
     }
 
-    if (!*attr_ControllerRunning_read)
+    if (!attr_ControllerRunning_read)
     {
         std::cout << "Controller is not running; starting..." << endl;
         if (!Automation1_Controller_Start(*m_controller))
@@ -162,7 +165,7 @@ void A1Communication::connect_impl(std::string username, std::string password, s
                 "A1Communication::connect_impl"
             );
         }
-        if (!Automation1_Controller_IsRunning(*m_controller, attr_ControllerRunning_read))
+        if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
         {
             throwWithLastA1Error(
                 "Failed to determine if controller is running",
@@ -201,13 +204,13 @@ void A1Communication::connect_impl(std::string username, std::string password, s
     Automation1_StatusConfig_ClearAllStatusItems(m_statusPollOnceConfig);
 
         //Get number of axis and task slots.
-    *attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
-    *attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller);
+    attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
+    attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller);
 
     int32_t apiVersion[3];
     Automation1_GetApiVersion(&apiVersion[0], &apiVersion[1], &apiVersion[2]);
     std::string str = std::to_string(apiVersion[0]) + "." + std::to_string(apiVersion[1]) + "." + std::to_string(apiVersion[2]);
-    *attr_APIVersion_read = Tango::string_dup(str.c_str()); 
+    attr_APIVersion_read = Tango::string_dup(str.c_str()); 
     // char *cstr = new char[str.length() +1];
     // strcpy(cstr,str.c_str());
     // *attr_APIVersion_read = cstr;
@@ -345,53 +348,53 @@ void A1Communication::readHardware_impl()
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to get axis status results from controller."));
 
 	//Setup vars to store the data in.
-	double axStatus;
+	double axStatus, drvStatus;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback, 0, attr_PositionFeedback_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback, 0, &attr_PositionFeedback_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError, 0, attr_PositionError_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError, 0, &attr_PositionError_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand, 0, attr_PositionTarget_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand, 0, &attr_PositionTarget_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback, 0, attr_VelocityFeedback_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback, 0, &attr_VelocityFeedback_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError, 0, attr_VelocityError_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError, 0, &attr_VelocityError_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand, 0, attr_VelocityTarget_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand, 0, &attr_VelocityTarget_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityTarget"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback, 0, attr_AccelerationFeedback_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback, 0, &attr_AccelerationFeedback_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError, 0, attr_AccelerationError_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError, 0, &attr_AccelerationError_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand, 0, attr_AccelerationTarget_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand, 0, &attr_AccelerationTarget_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationTarget"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback, 0, attr_CurrentFeedback_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback, 0, &attr_CurrentFeedback_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError, 0, attr_CurrentError_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError, 0, &attr_CurrentError_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError"));
 	if(!ret) return;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand, 0, attr_CurrentTarget_read);
+	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand, 0, &attr_CurrentTarget_read);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentTarget"));
 	if(!ret) return;
 	
@@ -424,7 +427,40 @@ void A1Communication::readHardware_impl()
 	attr_AxisStatus_read[AX_GANTRY_DRIVE_CONTROL_REALIGNING] 	= (int(axStatus) >> 25) & 1U;		//GantryDriveControlRealigning
 	attr_AxisStatus_read[AX_THERMO_COMP_ENABLED] 				= (int(axStatus) >> 27) & 1U;		//ThermoCompEnabled
 
-	*attr_Homed_read = attr_AxisStatus_read[AX_HOMED];
+	attr_Homed_read = attr_AxisStatus_read[AX_HOMED];
+
+    ret = Automation1_Status_GetAxisResult(m_statusPollConfig, axisResults, statusPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus, 0, &drvStatus);
+
+	attr_DriveStatus_read[DRV_ENABLED]					= (int(drvStatus) >> 0 ) & 1U;
+	attr_DriveStatus_read[DRV_CW_EOT_LIMIT]				= (int(drvStatus) >> 1 ) & 1U;
+	attr_DriveStatus_read[DRV_CCW_EOT_LIMIT]			= (int(drvStatus) >> 2 ) & 1U;
+	attr_DriveStatus_read[DRV_HOME_LIMIT]				= (int(drvStatus) >> 3 ) & 1U;
+	attr_DriveStatus_read[DRV_MARKER_INPUT]				= (int(drvStatus) >> 4 ) & 1U;
+	attr_DriveStatus_read[DRV_HALL_A_INPUT]				= (int(drvStatus) >> 5 ) & 1U;
+	attr_DriveStatus_read[DRV_HALL_B_INPUT]				= (int(drvStatus) >> 6 ) & 1U;
+	attr_DriveStatus_read[DRV_HALL_C_INPUT]				= (int(drvStatus) >> 7 ) & 1U;
+	attr_DriveStatus_read[DRV_SINE_ENCODER_ERROR]		= (int(drvStatus) >> 8 ) & 1U;
+	attr_DriveStatus_read[DRV_COSINE_ENCODER_ERROR]		= (int(drvStatus) >> 9 ) & 1U;
+	attr_DriveStatus_read[DRV_E_STOP_INPUT]				= (int(drvStatus) >> 10) & 1U;
+	attr_DriveStatus_read[DRV_BRAKE_OUTPUT]				= (int(drvStatus) >> 11) & 1U;
+	attr_DriveStatus_read[DRV_GALVO_POWER_CORRECTION]	= (int(drvStatus) >> 12) & 1U;
+	attr_DriveStatus_read[DRV_NO_MOTOR_SUPPLY]			= (int(drvStatus) >> 14) & 1U;
+	attr_DriveStatus_read[DRV_CURRENT_CLAMP]			= (int(drvStatus) >> 15) & 1U;
+	attr_DriveStatus_read[DRV_MARKER_LATCH]				= (int(drvStatus) >> 16) & 1U;
+	attr_DriveStatus_read[DRV_POWER_LIMITING]			= (int(drvStatus) >> 17) & 1U;
+	attr_DriveStatus_read[DRV_GALVO_CAL_ENABLED]		= (int(drvStatus) >> 20) & 1U;
+	attr_DriveStatus_read[DRV_AUTOFOCUS_ACTIVE]			= (int(drvStatus) >> 21) & 1U;
+	attr_DriveStatus_read[DRV_PROGRAM_FLASH]			= (int(drvStatus) >> 22) & 1U;
+	attr_DriveStatus_read[DRV_SERVO_CONTROL]			= (int(drvStatus) >> 24) & 1U;
+	attr_DriveStatus_read[DRV_IN_POSITION]				= (int(drvStatus) >> 25) & 1U;
+	attr_DriveStatus_read[DRV_MOVE_ACTIVE]				= (int(drvStatus) >> 26) & 1U;
+	attr_DriveStatus_read[DRV_ACCEL_PHASE]				= (int(drvStatus) >> 27) & 1U;
+	attr_DriveStatus_read[DRV_DECEL_PHASE]				= (int(drvStatus) >> 28) & 1U;
+	attr_DriveStatus_read[DRV_ENCODER_CLIPPING]			= (int(drvStatus) >> 29) & 1U;
+	attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]			= (int(drvStatus) >> 30) & 1U;
+
+	attr_Enabled_read = attr_DriveStatus_read[DRV_ENABLED];
+	attr_InPosition_read = attr_DriveStatus_read[DRV_IN_POSITION];
 
 	delete[] axisResults;
 }
@@ -451,7 +487,13 @@ void A1Communication::controller_Disable()
 } 
 void A1Communication::controller_ClearErrors() 
 {
-    NotImplemented("controller_ClearErrors");
+    if (!Automation1_Command_AcknowledgeAll(*m_controller, 1))
+    {
+        throwWithLastA1Error( 
+            "Automation1_Command_AcknowledgeAll failed", 
+            "A1Communication::controller_ClearErrors"
+        );
+    }
 } 
 void A1Communication::controller_AeroScriptProgramRun() 
 {
@@ -479,9 +521,10 @@ void A1Communication::axis_Abort(int32_t axis)
 {
     if (!Automation1_Command_Abort(*m_controller, &axis, 1))
     {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Abort failed", 
-                                       "A1Communication::axis_Abort");
+        throwWithLastA1Error( 
+            "Automation1_Command_Abort failed", 
+            "A1Communication::axis_Abort"
+        );
     }
 }
 
@@ -489,9 +532,10 @@ void A1Communication::axis_Home(int32_t axis)
 {
     if (!Automation1_Command_Home(*m_controller, 1, &axis, 1))
     {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Home failed", 
-                                       "A1Communication::axis_Home");
+        throwWithLastA1Error(
+            "Automation1_Command_Home failed", 
+            "A1Communication::axis_Home"
+        );
     }
 } 
 
@@ -504,9 +548,10 @@ void A1Communication::axis_Enable(int32_t axis)
 {
     if (!Automation1_Command_Enable(*m_controller, 1, &axis, 1))
     {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Enable failed", 
-                                       "A1Communication::axis_Enable");
+        throwWithLastA1Error(
+            "Automation1_Command_Enable failed", 
+            "A1Communication::axis_Enable"
+        );
     }
 } 
 
@@ -514,9 +559,10 @@ void A1Communication::axis_Disable(int32_t axis)
 {
     if (!Automation1_Command_Disable(*m_controller, &axis, 1))
     {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Disable failed", 
-                                       "A1Communication::axis_Disable");
+        throwWithLastA1Error(
+            "Automation1_Command_Disable failed", 
+            "A1Communication::axis_Disable"
+        );
     }
 } 
 
@@ -524,9 +570,10 @@ void A1Communication::axis_BrakeOn(int32_t axis)
 {
     if (!Automation1_Command_DriveBrakeOn(*m_controller, 1, axis))
     {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_DriveBrakeOn failed", 
-                                       "A1Communication::axis_BrakeOn");
+        throwWithLastA1Error(
+            "Automation1_Command_DriveBrakeOn failed", 
+            "A1Communication::axis_BrakeOn"
+        );
     }
 } 
 
@@ -534,9 +581,10 @@ void A1Communication::axis_BrakeOff(int32_t axis)
 {
     if (!Automation1_Command_DriveBrakeOff(*m_controller, 1, axis))
     {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_DriveBrakeOff failed", 
-                                       "A1Communication::axis_BrakeOff");
+        throwWithLastA1Error(
+            "Automation1_Command_DriveBrakeOff failed", 
+            "A1Communication::axis_BrakeOff"
+        );
     }
 } 
 
@@ -544,24 +592,32 @@ void A1Communication::axis_MoveFromLimit(int32_t axis)
 {
     if (!Automation1_Command_MoveOutOfLimit(*m_controller, 1, axis))
     {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_MoveOutOfLimit failed", 
-                                       "A1Communication::axis_MoveFromLimit");
+        throwWithLastA1Error(
+            "Automation1_Command_MoveOutOfLimit failed", 
+            "A1Communication::axis_MoveFromLimit"
+        );
     }
 } 
 
-void A1Communication::axis_FreeRun(int32_t axis) 
+void A1Communication::axis_FreeRun(int32_t axis, double vel) 
 {
-    NotImplemented("axis_FreeRun");
+    if (!Automation1_Command_MoveFreerun(*m_controller, 1, &axis, 1, &vel, 1))
+    {
+        throwWithLastA1Error(
+            "Automation1_Command_MoveFreerunStop failed", 
+            "A1Communication::axis_FreeRunStop"
+        );
+    }
 } 
 
 void A1Communication::axis_FreeRunStop(int32_t axis) 
 {
     if (!Automation1_Command_MoveFreerunStop(*m_controller, 1, &axis, 1))
     {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_MoveFreerunStop failed", 
-                                       "A1Communication::axis_FreeRunStop");
+        throwWithLastA1Error(
+            "Automation1_Command_MoveFreerunStop failed", 
+            "A1Communication::axis_FreeRunStop"
+        );
     }
 } 
 
