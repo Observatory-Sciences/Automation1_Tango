@@ -5,12 +5,51 @@
 #include <chrono> 
 #include <tango.h>
 
+
 #define DEFAULT_TO_SIMULATION false
+#define MAX_AXES 32
+
 
 namespace A1Bridge_ns {
 
 
 void NotImplemented(std::string feature);
+
+
+typedef struct A1AxisAttributes
+{
+    Tango::DevDouble	attr_PositionFeedback_read;
+	Tango::DevDouble	attr_VelocityFeedback_read;
+	Tango::DevDouble	attr_AccelerationFeedback_read;
+	Tango::DevBoolean	attr_InPosition_read;
+	Tango::DevBoolean	attr_Enabled_read;
+	Tango::DevBoolean	attr_Homed_read;
+	Tango::DevBoolean	attr_Error_read;
+	Tango::DevString	attr_FirmwareVersion_read;
+	Tango::DevDouble	attr_PositionError_read;
+	Tango::DevDouble	attr_CurrentFeedback_read;
+	Tango::DevString	attr_MotorType_read;
+    Tango::DevUShort	attr_HomeType_read;
+	Tango::DevUShort	attr_MoveType_read;
+	Tango::DevDouble	attr_LastMoveDuration_read;
+	Tango::DevDouble	attr_PositionTarget_read;
+	Tango::DevDouble	attr_VelocityTarget_read;
+	Tango::DevDouble	attr_VelocityError_read;
+	Tango::DevDouble	attr_AccelerationTarget_read;
+	Tango::DevDouble	attr_AccelerationError_read;
+	Tango::DevDouble	attr_CurrentTarget_read;
+	Tango::DevDouble	attr_CurrentError_read;
+	Tango::DevDouble	attr_ServoUpdateRate_read;
+	Tango::DevULong 	attr_DataCollectionNumPoints_read;
+	Tango::DevUShort	attr_DataCollectionFrequency_read;
+	Tango::DevUShort	attr_DataCollectionMode_read;
+	Tango::DevUShort	attr_RampType_read;
+	Tango::DevUShort	attr_RampMode_read;
+	Tango::DevDouble	attr_RampValue_read;
+	Tango::DevBoolean	attr_AxisStatus_read[24];
+	Tango::DevBoolean	attr_AxisFault_read[25];
+	Tango::DevBoolean	attr_DriveStatus_read[27];
+} A1AxisAttributes; 
 
 
 // TODO: who calls the A1Bridge destructor? If both Axis and Controller we
@@ -32,10 +71,12 @@ class A1Bridge
     std::string m_ip; 
     std::chrono::milliseconds m_pollInterval_ms; 
     std::chrono::time_point<std::chrono::steady_clock> m_lastPoll; 
+    std::chrono::time_point<std::chrono::steady_clock> m_lastAxisPoll[MAX_AXES]; 
 
     virtual void connect_impl(std::string username, std::string password, std::string ip) {NotImplemented("connect_impl");}; 
     virtual void disconnect_impl() {NotImplemented("disconnect_impl");}; 
     virtual void readHardware_impl() {NotImplemented("readHardware_impl");}; 
+    virtual void readAxis_impl(unsigned axis) {NotImplemented("readAxis_impl");}; 
 
   public: 
     static A1Bridge* getInstance();
@@ -47,10 +88,12 @@ class A1Bridge
     void disconnect(); 
     void reconnect(); 
     void readHardware();
+    void readAxis(unsigned axis);
     template<class T = int> void setPollingInterval(T interval) 
     {
         m_pollInterval_ms = std::chrono::milliseconds(interval);
     };  
+
 
     // Interface between Tango <-> Automation1 API is left up to the children
     // We just call the Tango command or retrieve the attributes 
@@ -96,39 +139,8 @@ class A1Bridge
 	Tango::DevBoolean	attr_TaskStatus2_read[24];
 	Tango::DevString	attr_AeroScriptFiles_read[32];
 
-// TODO: Axis number
 // TODO: Move enum definitions
-	Tango::DevDouble	attr_PositionFeedback_read;
-	Tango::DevDouble	attr_VelocityFeedback_read;
-	Tango::DevDouble	attr_AccelerationFeedback_read;
-	Tango::DevBoolean	attr_InPosition_read;
-	Tango::DevBoolean	attr_Enabled_read;
-	Tango::DevBoolean	attr_Homed_read;
-	Tango::DevBoolean	attr_Error_read;
-	Tango::DevString	attr_FirmwareVersion_read;
-	Tango::DevDouble	attr_PositionError_read;
-	Tango::DevDouble	attr_CurrentFeedback_read;
-	Tango::DevString	attr_MotorType_read;
-    Tango::DevUShort	attr_HomeType_read;
-	Tango::DevUShort	attr_MoveType_read;
-	Tango::DevDouble	attr_LastMoveDuration_read;
-	Tango::DevDouble	attr_PositionTarget_read;
-	Tango::DevDouble	attr_VelocityTarget_read;
-	Tango::DevDouble	attr_VelocityError_read;
-	Tango::DevDouble	attr_AccelerationTarget_read;
-	Tango::DevDouble	attr_AccelerationError_read;
-	Tango::DevDouble	attr_CurrentTarget_read;
-	Tango::DevDouble	attr_CurrentError_read;
-	Tango::DevDouble	attr_ServoUpdateRate_read;
-	Tango::DevULong	attr_DataCollectionNumPoints_read;
-	Tango::DevUShort	attr_DataCollectionFrequency_read;
-	Tango::DevUShort	attr_DataCollectionMode_read;
-	Tango::DevUShort	attr_RampType_read;
-	Tango::DevUShort	attr_RampMode_read;
-	Tango::DevDouble	attr_RampValue_read;
-	Tango::DevBoolean	attr_AxisStatus_read[24];
-	Tango::DevBoolean	attr_AxisFault_read[25];
-	Tango::DevBoolean	attr_DriveStatus_read[27];
+    A1AxisAttributes attr_axes[MAX_AXES]; 
 };
 
 

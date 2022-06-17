@@ -343,6 +343,24 @@ void A1Communication::readHardware_impl()
         ); 
 	}
 
+
+}
+
+
+void A1Communication::getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, std::string origin)
+{
+    double d; 
+    if (!Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, axis, 
+                                          attr.second.A1Enum.get<Automation1AxisStatusItem>(), 0, attr.second.attr))
+    {
+        throwWithLastA1Error(std::string("ERROR: Failed to extract axis info: ") + attr.first, origin);
+    }
+    return;
+}
+
+void A1Communication::readAxis_impl(unsigned axis)
+{
+    
     double *axisResults = new double[statusAxPollLength];
 	ret = Automation1_Status_GetResults(*m_controller, m_statusAxPollConfig, axisResults, statusAxPollLength);
 	return_checker(ret, std::string(""),std::string("ERROR: Failed to get axis status results from controller."));
@@ -350,120 +368,91 @@ void A1Communication::readHardware_impl()
 	//Setup vars to store the data in.
 	double axStatus, drvStatus;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback, 0, &attr_PositionFeedback_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback"));
-	if(!ret) return;
+    attr_axisContainer = 
+    {
+        {"PositionFeedback",     {attr_axes[axis].attr_PositionFeedback_read,     Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback}},
+        {"PositionError",        {attr_axes[axis].attr_PositionError_read,        Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError}},
+        {"PositionTarget",       {attr_axes[axis].attr_PositionTarget_read,       Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand}},
+        {"VelocityFeedback",     {attr_axes[axis].attr_VelocityFeedback_read,     Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback}},
+        {"VelocityError",        {attr_axes[axis].attr_VelocityError_read,        Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError}},
+        {"VelocityTarget",       {attr_axes[axis].attr_VelocityTarget_read,       Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand}},
+        {"AccelerationFeedback", {attr_axes[axis].attr_AccelerationFeedback_read, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback}},
+        {"AccelerationError",    {attr_axes[axis].attr_AccelerationError_read,    Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError}},
+        {"AccelerationTarget",   {attr_axes[axis].attr_AccelerationTarget_read,   Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand}},
+        {"CurrentFeedback",      {attr_axes[axis].attr_CurrentFeedback_read,      Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback}},
+        {"CurrentError",         {attr_axes[axis].attr_CurrentError_read,         Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError}},
+        {"CurrentTarget",        {attr_axes[axis].attr_CurrentTarget_read,        Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand}},
+        {"AxisStatus",           {attr_axes[axis].attr_AxisStatus_read,           Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus}}
+    };
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError, 0, &attr_PositionError_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError"));
-	if(!ret) return;
+    for (auto attr : attr_axisContainer)
+    {
+        getAxisResult(axis, axisResults, attr, "readAxis_impl");
+    }
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand, 0, &attr_PositionTarget_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info:  Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand"));
-	if(!ret) return;
+	// attr_AxisStatus_read[AX_HOMED] 								= (int(axStatus) >> 0 ) & 1U;		//Homed
+	// attr_AxisStatus_read[AX_PROFILING] 							= (int(axStatus) >> 1 ) & 1U;		//Profiling
+	// attr_AxisStatus_read[AX_WAIT_DONE] 							= (int(axStatus) >> 2 ) & 1U;		//WaitDone
+	// attr_AxisStatus_read[AX_COMMAND_VALID] 						= (int(axStatus) >> 3 ) & 1U;		//CommandValid
+	// attr_AxisStatus_read[AX_HOMING] 							= (int(axStatus) >> 4 ) & 1U;		//Homing
+	// attr_AxisStatus_read[AX_ENABLING] 							= (int(axStatus) >> 5 ) & 1U;		//Enabling
+	// attr_AxisStatus_read[AX_JOG_GENERATING] 					= (int(axStatus) >> 7 ) & 1U;		//JogGenerating
+	// attr_AxisStatus_read[AX_JOGGING] 							= (int(axStatus) >> 8 ) & 1U;		//Jogging
+	// attr_AxisStatus_read[AX_DRIVE_PENDING] 						= (int(axStatus) >> 9 ) & 1U;		//DrivePending
+	// attr_AxisStatus_read[AX_DRIVE_ABORT_PENDING] 				= (int(axStatus) >> 10) & 1U;		//DriveAbortPending
+	// attr_AxisStatus_read[AX_TRAJECTORY_FILTERING] 				= (int(axStatus) >> 11) & 1U;		//TrajectoryFiltering
+	// attr_AxisStatus_read[AX_IFOV_ENABLED] 						= (int(axStatus) >> 12) & 1U;		//IfovEnabled
+	// attr_AxisStatus_read[AX_NOT_VIRTUAL] 						= (int(axStatus) >> 13) & 1U;		//NotVirtual
+	// attr_AxisStatus_read[AX_CAL_ENABLED1D] 						= (int(axStatus) >> 14) & 1U;		//CalEnabled1D
+	// attr_AxisStatus_read[AX_CAL_ENABLED2D] 						= (int(axStatus) >> 15) & 1U;		//CalEnabled2D
+	// attr_AxisStatus_read[AX_CAMMING_GEARING_CONTROL] 			= (int(axStatus) >> 16) & 1U;		//CammingGearingControl
+	// attr_AxisStatus_read[AX_JOYSTICK_CONTROL] 					= (int(axStatus) >> 17) & 1U;		//JoystickControl
+	// attr_AxisStatus_read[AX_BACKLASH_ACTIVE] 					= (int(axStatus) >> 18) & 1U;		//BacklashActive
+	// attr_AxisStatus_read[AX_GAIN_MAPPING_ENABLED] 				= (int(axStatus) >> 19) & 1U;		//GainMappingEnabled
+	// attr_AxisStatus_read[AX_MOTION_DONE] 						= (int(axStatus) >> 22) & 1U;		//MotionDone
+	// attr_AxisStatus_read[AX_MOTION_CLAMPED] 					= (int(axStatus) >> 23) & 1U;		//MotionClamped
+	// attr_AxisStatus_read[AX_GANTRY_ALIGNED] 					= (int(axStatus) >> 24) & 1U;		//GantryAligned
+	// attr_AxisStatus_read[AX_GANTRY_DRIVE_CONTROL_REALIGNING] 	= (int(axStatus) >> 25) & 1U;		//GantryDriveControlRealigning
+	// attr_AxisStatus_read[AX_THERMO_COMP_ENABLED] 				= (int(axStatus) >> 27) & 1U;		//ThermoCompEnabled
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback, 0, &attr_VelocityFeedback_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback"));
-	if(!ret) return;
+	attr_Homed_read = attr_axes[axis].attr_AxisStatus_read[AX_HOMED];
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError, 0, &attr_VelocityError_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError"));
-	if(!ret) return;
+    // ret = Automation1_Status_GetAxisResult(m_statusPollConfig, axisResults, statusPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus, 0, &drvStatus);
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand, 0, &attr_VelocityTarget_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityTarget"));
-	if(!ret) return;
+	// attr_DriveStatus_read[DRV_ENABLED]					= (int(drvStatus) >> 0 ) & 1U;
+	// attr_DriveStatus_read[DRV_CW_EOT_LIMIT]				= (int(drvStatus) >> 1 ) & 1U;
+	// attr_DriveStatus_read[DRV_CCW_EOT_LIMIT]			= (int(drvStatus) >> 2 ) & 1U;
+	// attr_DriveStatus_read[DRV_HOME_LIMIT]				= (int(drvStatus) >> 3 ) & 1U;
+	// attr_DriveStatus_read[DRV_MARKER_INPUT]				= (int(drvStatus) >> 4 ) & 1U;
+	// attr_DriveStatus_read[DRV_HALL_A_INPUT]				= (int(drvStatus) >> 5 ) & 1U;
+	// attr_DriveStatus_read[DRV_HALL_B_INPUT]				= (int(drvStatus) >> 6 ) & 1U;
+	// attr_DriveStatus_read[DRV_HALL_C_INPUT]				= (int(drvStatus) >> 7 ) & 1U;
+	// attr_DriveStatus_read[DRV_SINE_ENCODER_ERROR]		= (int(drvStatus) >> 8 ) & 1U;
+	// attr_DriveStatus_read[DRV_COSINE_ENCODER_ERROR]		= (int(drvStatus) >> 9 ) & 1U;
+	// attr_DriveStatus_read[DRV_E_STOP_INPUT]				= (int(drvStatus) >> 10) & 1U;
+	// attr_DriveStatus_read[DRV_BRAKE_OUTPUT]				= (int(drvStatus) >> 11) & 1U;
+	// attr_DriveStatus_read[DRV_GALVO_POWER_CORRECTION]	= (int(drvStatus) >> 12) & 1U;
+	// attr_DriveStatus_read[DRV_NO_MOTOR_SUPPLY]			= (int(drvStatus) >> 14) & 1U;
+	// attr_DriveStatus_read[DRV_CURRENT_CLAMP]			= (int(drvStatus) >> 15) & 1U;
+	// attr_DriveStatus_read[DRV_MARKER_LATCH]				= (int(drvStatus) >> 16) & 1U;
+	// attr_DriveStatus_read[DRV_POWER_LIMITING]			= (int(drvStatus) >> 17) & 1U;
+	// attr_DriveStatus_read[DRV_GALVO_CAL_ENABLED]		= (int(drvStatus) >> 20) & 1U;
+	// attr_DriveStatus_read[DRV_AUTOFOCUS_ACTIVE]			= (int(drvStatus) >> 21) & 1U;
+	// attr_DriveStatus_read[DRV_PROGRAM_FLASH]			= (int(drvStatus) >> 22) & 1U;
+	// attr_DriveStatus_read[DRV_SERVO_CONTROL]			= (int(drvStatus) >> 24) & 1U;
+	// attr_DriveStatus_read[DRV_IN_POSITION]				= (int(drvStatus) >> 25) & 1U;
+	// attr_DriveStatus_read[DRV_MOVE_ACTIVE]				= (int(drvStatus) >> 26) & 1U;
+	// attr_DriveStatus_read[DRV_ACCEL_PHASE]				= (int(drvStatus) >> 27) & 1U;
+	// attr_DriveStatus_read[DRV_DECEL_PHASE]				= (int(drvStatus) >> 28) & 1U;
+	// attr_DriveStatus_read[DRV_ENCODER_CLIPPING]			= (int(drvStatus) >> 29) & 1U;
+	// attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]			= (int(drvStatus) >> 30) & 1U;
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback, 0, &attr_AccelerationFeedback_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback"));
-	if(!ret) return;
+	// attr_Enabled_read = attr_DriveStatus_read[DRV_ENABLED];
+	// attr_InPosition_read = attr_DriveStatus_read[DRV_IN_POSITION];
 
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError, 0, &attr_AccelerationError_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError"));
-	if(!ret) return;
-
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand, 0, &attr_AccelerationTarget_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationTarget"));
-	if(!ret) return;
-
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback, 0, &attr_CurrentFeedback_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback"));
-	if(!ret) return;
-
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError, 0, &attr_CurrentError_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError"));
-	if(!ret) return;
-
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand, 0, &attr_CurrentTarget_read);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentTarget"));
-	if(!ret) return;
-	
-	ret = Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus, 0, &axStatus);
-	return_checker(ret, std::string(""),std::string("ERROR: Failed to extract axis info: Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus"));
-	if(!ret) return;
-
-	attr_AxisStatus_read[AX_HOMED] 								= (int(axStatus) >> 0 ) & 1U;		//Homed
-	attr_AxisStatus_read[AX_PROFILING] 							= (int(axStatus) >> 1 ) & 1U;		//Profiling
-	attr_AxisStatus_read[AX_WAIT_DONE] 							= (int(axStatus) >> 2 ) & 1U;		//WaitDone
-	attr_AxisStatus_read[AX_COMMAND_VALID] 						= (int(axStatus) >> 3 ) & 1U;		//CommandValid
-	attr_AxisStatus_read[AX_HOMING] 							= (int(axStatus) >> 4 ) & 1U;		//Homing
-	attr_AxisStatus_read[AX_ENABLING] 							= (int(axStatus) >> 5 ) & 1U;		//Enabling
-	attr_AxisStatus_read[AX_JOG_GENERATING] 					= (int(axStatus) >> 7 ) & 1U;		//JogGenerating
-	attr_AxisStatus_read[AX_JOGGING] 							= (int(axStatus) >> 8 ) & 1U;		//Jogging
-	attr_AxisStatus_read[AX_DRIVE_PENDING] 						= (int(axStatus) >> 9 ) & 1U;		//DrivePending
-	attr_AxisStatus_read[AX_DRIVE_ABORT_PENDING] 				= (int(axStatus) >> 10) & 1U;		//DriveAbortPending
-	attr_AxisStatus_read[AX_TRAJECTORY_FILTERING] 				= (int(axStatus) >> 11) & 1U;		//TrajectoryFiltering
-	attr_AxisStatus_read[AX_IFOV_ENABLED] 						= (int(axStatus) >> 12) & 1U;		//IfovEnabled
-	attr_AxisStatus_read[AX_NOT_VIRTUAL] 						= (int(axStatus) >> 13) & 1U;		//NotVirtual
-	attr_AxisStatus_read[AX_CAL_ENABLED1D] 						= (int(axStatus) >> 14) & 1U;		//CalEnabled1D
-	attr_AxisStatus_read[AX_CAL_ENABLED2D] 						= (int(axStatus) >> 15) & 1U;		//CalEnabled2D
-	attr_AxisStatus_read[AX_CAMMING_GEARING_CONTROL] 			= (int(axStatus) >> 16) & 1U;		//CammingGearingControl
-	attr_AxisStatus_read[AX_JOYSTICK_CONTROL] 					= (int(axStatus) >> 17) & 1U;		//JoystickControl
-	attr_AxisStatus_read[AX_BACKLASH_ACTIVE] 					= (int(axStatus) >> 18) & 1U;		//BacklashActive
-	attr_AxisStatus_read[AX_GAIN_MAPPING_ENABLED] 				= (int(axStatus) >> 19) & 1U;		//GainMappingEnabled
-	attr_AxisStatus_read[AX_MOTION_DONE] 						= (int(axStatus) >> 22) & 1U;		//MotionDone
-	attr_AxisStatus_read[AX_MOTION_CLAMPED] 					= (int(axStatus) >> 23) & 1U;		//MotionClamped
-	attr_AxisStatus_read[AX_GANTRY_ALIGNED] 					= (int(axStatus) >> 24) & 1U;		//GantryAligned
-	attr_AxisStatus_read[AX_GANTRY_DRIVE_CONTROL_REALIGNING] 	= (int(axStatus) >> 25) & 1U;		//GantryDriveControlRealigning
-	attr_AxisStatus_read[AX_THERMO_COMP_ENABLED] 				= (int(axStatus) >> 27) & 1U;		//ThermoCompEnabled
-
-	attr_Homed_read = attr_AxisStatus_read[AX_HOMED];
-
-    ret = Automation1_Status_GetAxisResult(m_statusPollConfig, axisResults, statusPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus, 0, &drvStatus);
-
-	attr_DriveStatus_read[DRV_ENABLED]					= (int(drvStatus) >> 0 ) & 1U;
-	attr_DriveStatus_read[DRV_CW_EOT_LIMIT]				= (int(drvStatus) >> 1 ) & 1U;
-	attr_DriveStatus_read[DRV_CCW_EOT_LIMIT]			= (int(drvStatus) >> 2 ) & 1U;
-	attr_DriveStatus_read[DRV_HOME_LIMIT]				= (int(drvStatus) >> 3 ) & 1U;
-	attr_DriveStatus_read[DRV_MARKER_INPUT]				= (int(drvStatus) >> 4 ) & 1U;
-	attr_DriveStatus_read[DRV_HALL_A_INPUT]				= (int(drvStatus) >> 5 ) & 1U;
-	attr_DriveStatus_read[DRV_HALL_B_INPUT]				= (int(drvStatus) >> 6 ) & 1U;
-	attr_DriveStatus_read[DRV_HALL_C_INPUT]				= (int(drvStatus) >> 7 ) & 1U;
-	attr_DriveStatus_read[DRV_SINE_ENCODER_ERROR]		= (int(drvStatus) >> 8 ) & 1U;
-	attr_DriveStatus_read[DRV_COSINE_ENCODER_ERROR]		= (int(drvStatus) >> 9 ) & 1U;
-	attr_DriveStatus_read[DRV_E_STOP_INPUT]				= (int(drvStatus) >> 10) & 1U;
-	attr_DriveStatus_read[DRV_BRAKE_OUTPUT]				= (int(drvStatus) >> 11) & 1U;
-	attr_DriveStatus_read[DRV_GALVO_POWER_CORRECTION]	= (int(drvStatus) >> 12) & 1U;
-	attr_DriveStatus_read[DRV_NO_MOTOR_SUPPLY]			= (int(drvStatus) >> 14) & 1U;
-	attr_DriveStatus_read[DRV_CURRENT_CLAMP]			= (int(drvStatus) >> 15) & 1U;
-	attr_DriveStatus_read[DRV_MARKER_LATCH]				= (int(drvStatus) >> 16) & 1U;
-	attr_DriveStatus_read[DRV_POWER_LIMITING]			= (int(drvStatus) >> 17) & 1U;
-	attr_DriveStatus_read[DRV_GALVO_CAL_ENABLED]		= (int(drvStatus) >> 20) & 1U;
-	attr_DriveStatus_read[DRV_AUTOFOCUS_ACTIVE]			= (int(drvStatus) >> 21) & 1U;
-	attr_DriveStatus_read[DRV_PROGRAM_FLASH]			= (int(drvStatus) >> 22) & 1U;
-	attr_DriveStatus_read[DRV_SERVO_CONTROL]			= (int(drvStatus) >> 24) & 1U;
-	attr_DriveStatus_read[DRV_IN_POSITION]				= (int(drvStatus) >> 25) & 1U;
-	attr_DriveStatus_read[DRV_MOVE_ACTIVE]				= (int(drvStatus) >> 26) & 1U;
-	attr_DriveStatus_read[DRV_ACCEL_PHASE]				= (int(drvStatus) >> 27) & 1U;
-	attr_DriveStatus_read[DRV_DECEL_PHASE]				= (int(drvStatus) >> 28) & 1U;
-	attr_DriveStatus_read[DRV_ENCODER_CLIPPING]			= (int(drvStatus) >> 29) & 1U;
-	attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]			= (int(drvStatus) >> 30) & 1U;
-
-	attr_Enabled_read = attr_DriveStatus_read[DRV_ENABLED];
-	attr_InPosition_read = attr_DriveStatus_read[DRV_IN_POSITION];
-
-	delete[] axisResults;
+	// delete[] axisResults;
 }
+
 
 void A1Communication::controller_Reset() 
 {

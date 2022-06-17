@@ -22,6 +22,12 @@ A1Bridge::A1Bridge()
     m_connected = false; 
     // TODO: 1000 hours is stupid
     m_lastPoll = std::chrono::steady_clock::now() - std::chrono::hours(1000); 
+    
+    for (unsigned idx = 0; idx < MAX_AXES; idx++)
+    {
+        m_lastAxisPoll[idx] = m_lastPoll; 
+    }
+
     m_pollInterval_ms = std::chrono::milliseconds(-1); 
 }
 
@@ -120,9 +126,18 @@ void A1Bridge::readHardware()
         this->readHardware_impl(); 
         m_lastPoll = std::chrono::steady_clock::now(); 
     }
-    else
+}
+
+
+void A1Bridge::readAxis(unsigned axis)
+{
+    if (m_lastAxisPoll[axis] < std::chrono::steady_clock::now() - m_pollInterval_ms)
     {
-        std::cout << "Not polling" << std::endl; 
+        std::cout << "Last poll " << m_lastAxisPoll[axis].time_since_epoch().count() << std::endl; 
+        std::cout << "Interval  " << m_pollInterval_ms.count() << std::endl; 
+        std::cout << "Now       " << std::chrono::steady_clock::now().time_since_epoch().count() << std::endl; 
+        this->readAxis_impl(axis); 
+        m_lastAxisPoll[axis] = std::chrono::steady_clock::now(); 
     }
 }
 
