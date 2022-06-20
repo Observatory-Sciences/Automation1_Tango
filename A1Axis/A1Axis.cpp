@@ -427,7 +427,7 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	DEBUG_STREAM << "A1Axis::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_attr_hardware) ENABLED START -----*/
 	
-    m_A1Bridge->readHardware(); 
+    m_A1Bridge->readAxis(axis); 
     *attr_PositionFeedback_read     = m_A1Bridge->attr_axes[axis].attr_PositionFeedback_read; 
 	*attr_PositionError_read        = m_A1Bridge->attr_axes[axis].attr_PositionError_read; 
 	*attr_PositionTarget_read       = m_A1Bridge->attr_axes[axis].attr_PositionTarget_read; 

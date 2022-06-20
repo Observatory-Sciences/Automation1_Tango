@@ -51,20 +51,29 @@ typedef struct A1AttrVariant
     A1AttrVariant(Tango::DevULong *arg):   m_DevULong(arg) 
         {m_type = A1AttrVariantDevULong;};
 
-    template<class T> void set(T value) 
+    template<typename T> void set(T value) 
     {
         switch (m_type)
         {
             case A1AttrVariantDevBoolean:
-                m_DevBoolean = static_cast<Tango::DevBoolean*>(value); 
+                *m_DevBoolean = static_cast<Tango::DevBoolean>(value); 
+                break; 
             case A1AttrVariantDevDouble:
-                m_DevDouble  = static_cast<Tango::DevDouble*>(value); 
+                *m_DevDouble  = static_cast<Tango::DevDouble>(value); 
+                break; 
             case A1AttrVariantDevUShort:
-                m_DevUShort  = static_cast<Tango::DevUShort*>(value); 
-            case A1AttrVariantDevString:
-                m_DevString  = static_cast<Tango::DevString*>(value); 
+                *m_DevUShort  = static_cast<Tango::DevUShort>(value); 
+                break; 
+            // case A1AttrVariantDevString:
+            //     *m_DevString  = static_cast<Tango::DevString>(value); 
+                break; 
             case A1AttrVariantDevULong:
-                m_DevULong   = static_cast<Tango::DevULong*>(value); 
+                *m_DevULong   = static_cast<Tango::DevULong>(value); 
+                break; 
+            default:
+                Tango::Except::throw_exception("DRIVER_FAILURE",
+                                                "A1AttrVariant::set() fall through",
+                                                "A1AttrVariant::set()");
         }
     };
 } A1AttrVariant;
@@ -143,6 +152,7 @@ typedef struct A1Attribute
     A1EnumVariant A1Enum; 
 } A1Attribute; 
 typedef std::pair<std::string, A1Attribute> A1AttributeContainer;
+typedef std::vector<A1AttributeContainer> A1AttributeVector;
 
 
 class A1Communication: public A1Bridge
@@ -152,7 +162,7 @@ class A1Communication: public A1Bridge
     void connect_impl(std::string username, std::string password, std::string ip); 
     void disconnect_impl(); 
     void readHardware_impl(); 
-    void readAxis_impl(); 
+    void readAxis_impl(unsigned axis); 
     Automation1Controller *m_controller;
 	Automation1StatusConfig_T *m_statusPollOnceConfig; 
     Automation1StatusConfig_T *m_statusPollConfig;
@@ -200,8 +210,8 @@ class A1Communication: public A1Bridge
     void axis_DataCollectionGetResults(int32_t axis);
 
 protected:
-    A1AttributeContainer attr_controllerContainer;
-    A1AttributeContainer attr_axisContainer;
+    A1AttributeVector attr_controllerContainer;
+    A1AttributeVector attr_axisContainer;
         
     // map<std::string, Tango::Attribute*, Automation1AxisStatus> attributes =
         // {{"AxisHomed", &attr_Homed_read, Automation1AxisStatus::Automation1AxisStatus_Homed}}; 
