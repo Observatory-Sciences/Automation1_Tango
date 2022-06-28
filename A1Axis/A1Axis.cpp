@@ -159,7 +159,7 @@ void A1Axis::delete_device()
 	DEBUG_STREAM << "A1Axis::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::delete_device) ENABLED START -----*/
 	
-	//	Delete device allocated objects
+	m_A1Bridge->deleteAxis(axis);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::delete_device
 	delete[] attr_PositionFeedback_read;
@@ -296,6 +296,8 @@ void A1Axis::init_device()
     // The Controller defines simulation mode, but the Axis could instantiate the bridge
     // before the Controller without knowing whether it should be in simulation or not.
 	m_A1Bridge = m_A1Bridge->getInstance();
+
+    m_A1Bridge->initialiseAxis(axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::init_device
 }
@@ -457,6 +459,16 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	else
 	{
 		set_state(Tango::OFF);
+	}
+    
+	for (int i=0; i < 27; i++)
+	{
+		attr_AxisFault_read[i] = m_A1Bridge->attr_axes[axis].attr_AxisFault_read[i]; 
+	}
+
+	for (int i=0; i < 30; i++)
+	{
+		attr_DriveStatus_read[i] = m_A1Bridge->attr_axes[axis].attr_DriveStatus_read[i]; 
 	}
 
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_attr_hardware

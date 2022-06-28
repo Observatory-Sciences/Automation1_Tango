@@ -20,15 +20,15 @@ namespace A1Bridge_ns {
 class A1Simulation: public A1Bridge
 {
   protected:
-    void connect_impl(std::string username, std::string password, std::string ip); 
-    void disconnect_impl(); 
+    virtual void connect_impl(std::string username, std::string password, std::string ip); 
+    virtual void disconnect_impl(); 
   public:
     A1Simulation(); 
-    ~A1Simulation();
-    void axis_Home(int32_t axis);
-    void axis_Move(int32_t axis);
-    void axis_Enable(int32_t axis);
-    void axis_Disable(int32_t axis);
+    virtual ~A1Simulation();
+    virtual void axis_Home(int32_t axis);
+    virtual void axis_Move(int32_t axis);
+    virtual void axis_Enable(int32_t axis);
+    virtual void axis_Disable(int32_t axis);
 
   private:
     std::vector<A1SimulatedAxis> m_axes;

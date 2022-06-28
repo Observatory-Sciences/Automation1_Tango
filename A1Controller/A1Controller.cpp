@@ -133,6 +133,8 @@ void A1Controller::delete_device()
 	DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
 		
+    m_A1Bridge->deleteController(); 
+
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::delete_device
 	delete[] attr_ControllerRunning_read;
 	delete[] attr_AxisCount_read;
@@ -215,6 +217,8 @@ void A1Controller::init_device()
     std::cout << "Password:  " << password << std::endl; 
     m_A1Bridge->setPollingInterval(100); 
     gotostate_standby();
+
+    m_A1Bridge->initialiseController(); 
 
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
 }
@@ -375,7 +379,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 	/*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
 	
     DEBUG_STREAM << "read hardware" << std::endl; 
-    m_A1Bridge->readHardware(); 
+    m_A1Bridge->readController(); 
 
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_attr_hardware
 }

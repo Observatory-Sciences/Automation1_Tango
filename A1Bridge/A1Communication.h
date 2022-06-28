@@ -158,65 +158,72 @@ typedef std::vector<A1AttributeContainer> A1AttributeVector;
 class A1Communication: public A1Bridge
 {
   protected:
-    unsigned errMessageLength=2048; 
-    void connect_impl(std::string username, std::string password, std::string ip); 
-    void disconnect_impl(); 
-    void readHardware_impl(); 
-    void readAxis_impl(unsigned axis); 
-    Automation1Controller *m_controller;
-	Automation1StatusConfig_T *m_statusPollOnceConfig; 
-    Automation1StatusConfig_T *m_statusPollConfig;
-    Automation1StatusConfig_T *m_statusAxPollConfig;
-    unsigned statusAxPollLength, statusPollLength; 
-    unsigned ax = 0;
-    void return_checker(bool ret, std::string strTrue="", std::string strFalse="");
+    unsigned                    errMessageLength=2048; 
+    Automation1Controller      *m_controller;
+	Automation1StatusConfig_T  *m_statusControllerPollConfigOnce; 
+    Automation1StatusConfig_T  *m_statusControllerPollConfig;
+    Automation1StatusConfig_T  *m_statusAxisPollConfig[MAX_AXES];
+    unsigned                    m_statusContollerPollLength; 
+    unsigned                    m_statusAxisPollLength; 
 
-    void createStatusPollConfig(); 
-    void deleteStatusPollConfig(); 
-    void throwWithLastA1Error(std::string reason, std::string origin);
+    virtual void connect_impl(std::string username, std::string password, std::string ip); 
+    virtual void disconnect_impl(); 
+
+    virtual void readController_impl(); 
+    virtual void readAxis_impl(unsigned axis); 
+    
+    virtual void deleteController_impl(); 
+    virtual void deleteAxis_impl(unsigned axis); 
+
+    virtual void initialiseController_impl(); 
+    virtual void initialiseAxis_impl(unsigned axis); 
+
+    void createPollConfig(Automation1StatusConfig_T **config); 
+    void deletePollConfig(Automation1StatusConfig_T **config); 
+
+    void createControllerPollConfig(); 
+    void createAxisPollConfig(unsigned axis); 
+    void deleteControllerPollConfig(); 
+    void deleteAxisPollConfig(unsigned axis); 
 
     void getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, std::string origin);
-    
 
-  public:
-    ~A1Communication(); 
-    A1Communication(); 
-    void controller_Reset();
-    void controller_Start();
-    void controller_Stop();
-    void controller_Enable();
-    void controller_Disable();
-    void controller_ClearErrors();
-    void controller_AeroScriptProgramRun();
-    void controller_AeroScriptProgramLoad();
-    void controller_AeroScriptProgramStart();
-    void controller_AeroScriptProgramStop();
-    void controller_AeroScriptProgramPause();
-    void axis_Abort(int32_t axis);
-    void axis_Home(int32_t axis);
-    void axis_Move(int32_t axis);
-    void axis_Enable(int32_t axis);
-    void axis_Disable(int32_t axis);
-    void axis_BrakeOn(int32_t axis);
-    void axis_BrakeOff(int32_t axis);
-    void axis_MoveFromLimit(int32_t axis);
-    void axis_FreeRun(int32_t axis, double vel);
-    void axis_FreeRunStop(int32_t axis);
-    void axis_ThrowAllFaults(int32_t axis);
-    void axis_AcknowledgeFaults(int32_t axis);
-    void axis_DataCollectionStart(int32_t axis);
-    void axis_DataCollectionStop(int32_t axis);
-    void axis_DataCollectionRefresh(int32_t axis);
-    void axis_DataCollectionGetResults(int32_t axis);
+    void throwWithLastA1Error(std::string reason, std::string origin);
+    void return_checker(bool ret, std::string strTrue="", std::string strFalse="");
 
-protected:
     A1AttributeVector attr_controllerContainer;
-    A1AttributeVector attr_axisContainer;
-        
-    // map<std::string, Tango::Attribute*, Automation1AxisStatus> attributes =
-        // {{"AxisHomed", &attr_Homed_read, Automation1AxisStatus::Automation1AxisStatus_Homed}}; 
+    A1AttributeVector attr_axisContainer[MAX_AXES];
 
-
+  public: 
+    A1Communication(); 
+    virtual ~A1Communication();
+    virtual void controller_Reset();
+    virtual void controller_Start();
+    virtual void controller_Stop();
+    virtual void controller_Enable();
+    virtual void controller_Disable();
+    virtual void controller_ClearErrors();
+    virtual void controller_AeroScriptProgramRun();
+    virtual void controller_AeroScriptProgramLoad();
+    virtual void controller_AeroScriptProgramStart();
+    virtual void controller_AeroScriptProgramStop();
+    virtual void controller_AeroScriptProgramPause();
+    virtual void axis_Abort(int32_t axis);
+    virtual void axis_Home(int32_t axis);
+    virtual void axis_Move(int32_t axis);
+    virtual void axis_Enable(int32_t axis);
+    virtual void axis_Disable(int32_t axis);
+    virtual void axis_BrakeOn(int32_t axis);
+    virtual void axis_BrakeOff(int32_t axis);
+    virtual void axis_MoveFromLimit(int32_t axis);
+    virtual void axis_FreeRun(int32_t axis, double vel);
+    virtual void axis_FreeRunStop(int32_t axis);
+    virtual void axis_ThrowAllFaults(int32_t axis);
+    virtual void axis_AcknowledgeFaults(int32_t axis);
+    virtual void axis_DataCollectionStart(int32_t axis);
+    virtual void axis_DataCollectionStop(int32_t axis);
+    virtual void axis_DataCollectionRefresh(int32_t axis);
+    virtual void axis_DataCollectionGetResults(int32_t axis);
 };
 
 } // namespace A1Bridge_ns

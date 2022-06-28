@@ -20,7 +20,7 @@ A1Bridge* A1Bridge::m_instance = NULL;
 A1Bridge::A1Bridge()
 {
     m_connected = false; 
-    // TODO: 1000 hours is stupid
+    // TODO: 1000 hours is stupid here
     m_lastPoll = std::chrono::steady_clock::now() - std::chrono::hours(1000); 
     
     for (unsigned idx = 0; idx < MAX_AXES; idx++)
@@ -116,14 +116,38 @@ void A1Bridge::reconnect()
 }
 
 
-void A1Bridge::readHardware()
+void A1Bridge::initialiseController()
+{
+    this->initialiseController_impl(); 
+}
+
+
+void A1Bridge::initialiseAxis(unsigned axis)
+{
+    this->initialiseAxis_impl(axis); 
+}
+
+
+void A1Bridge::deleteController()
+{
+    this->deleteController_impl(); 
+}
+
+
+void A1Bridge::deleteAxis(unsigned axis)
+{
+    this->deleteAxis_impl(axis); 
+}
+
+
+void A1Bridge::readController()
 {
     if (m_lastPoll < std::chrono::steady_clock::now() - m_pollInterval_ms)
     {
         std::cout << "Last poll " << m_lastPoll.time_since_epoch().count() << std::endl; 
         std::cout << "Interval  " << m_pollInterval_ms.count() << std::endl; 
         std::cout << "Now       " << std::chrono::steady_clock::now().time_since_epoch().count() << std::endl; 
-        this->readHardware_impl(); 
+        this->readController_impl(); 
         m_lastPoll = std::chrono::steady_clock::now(); 
     }
 }

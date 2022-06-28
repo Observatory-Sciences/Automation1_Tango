@@ -8,9 +8,12 @@ A1Communication::A1Communication()
 {
     m_simulation = false;
     m_controller = new Automation1Controller();
-    m_statusPollOnceConfig = NULL;
-    m_statusPollConfig = NULL;
-    m_statusAxPollConfig = NULL;
+    m_statusControllerPollConfigOnce = NULL;
+    m_statusControllerPollConfig = NULL;
+    for (int axis = 0; axis < MAX_AXES; axis++)
+    {
+        m_statusAxisPollConfig[axis] = NULL; 
+    }
 }
 
 
@@ -19,7 +22,11 @@ A1Communication::~A1Communication()
     delete m_controller; 
     try
     {
-        deleteStatusPollConfig();
+        deleteControllerPollConfig();
+        for (int axis = 0; axis < MAX_AXES; axis++)
+        {
+            deleteAxisPollConfig(axis); 
+        }
     }
     catch (Tango::DevFailed &e)
     {
@@ -54,78 +61,194 @@ void A1Communication::throwWithLastA1Error(std::string reason, std::string origi
 }
 
 
-void A1Communication::createStatusPollConfig()
+void A1Communication::createPollConfig(Automation1StatusConfig_T **config)
 {
     try
     {
-        deleteStatusPollConfig();
+        deletePollConfig(config);
     }
     catch (Tango::DevFailed &e)
     {
         Tango::Except::re_throw_exception(e,
             "DRIVER_FAILURE",
-            "Failed to create Automation1 status config",
-            "A1Communication::createStatusPollConfig"
+            "Failed to delete Automation1 status config before create",
+            "A1Communication::createPollConfig"
         );
     }
-    if (!Automation1_StatusConfig_Create(&m_statusPollOnceConfig) ||
-        !Automation1_StatusConfig_Create(&m_statusPollConfig) ||
-        !Automation1_StatusConfig_Create(&m_statusAxPollConfig))
+    if (!Automation1_StatusConfig_Create(config))
     {
         try
         {
-            deleteStatusPollConfig();
+            deletePollConfig(config);
         }
         catch (Tango::DevFailed &e)
         {
             Tango::Except::re_throw_exception(e,
                 "DRIVER_FAILURE",
-                "Failed to create Automation1 status config",
-                "A1Communication::createStatusPollConfig"
+                "Failed to delete Automation1 status config after failure to create",
+                "A1Communication::createPollConfig"
             );
         }
 
         Tango::Except::throw_exception(
             "DRIVER_FAILURE",
             "Failed to create Automation1 status config",
-            "A1Communication::createStatusPollConfig"
+            "A1Communication::createPollConfig"
         );
     }
 }
 
 
-void A1Communication::deleteStatusPollConfig()
+void A1Communication::deletePollConfig(Automation1StatusConfig_T **config)
 {
     // TODO: Should we throw exception if these fail? 
-    if (m_statusPollOnceConfig != NULL)
+    // Want to catch errors, however
+    // not allowed to throw during Tango device init
+    if (*config != NULL)
     {
-        if (Automation1_StatusConfig_Destroy(m_statusPollOnceConfig))
+        if (Automation1_StatusConfig_Destroy(*config))
         {
-            m_statusPollOnceConfig = NULL; 
+            *config = NULL; 
+            return; 
+        }
+        else 
+        {
+            Tango::Except::throw_exception(
+                "DRIVER_FAILURE", 
+                "Failed to destroy Automation1 status config",
+                "A1Communication::deletePollConfig"
+            );
         }
     }
-    if (m_statusPollConfig != NULL)
+}
+
+
+void A1Communication::createControllerPollConfig()
+{
+    try
     {
-        if (Automation1_StatusConfig_Destroy(m_statusPollConfig))
-        {
-            m_statusPollConfig = NULL;
-        }
+        createPollConfig(&(m_statusControllerPollConfigOnce));
+        createPollConfig(&(m_statusControllerPollConfig));
     }
-    if (m_statusAxPollConfig != NULL)
+    catch (Tango::DevFailed &e)
     {
-        if (Automation1_StatusConfig_Destroy(m_statusAxPollConfig))
-        {
-            m_statusAxPollConfig = NULL;
-        }
-    }
-    if (m_statusPollOnceConfig != NULL || m_statusPollOnceConfig != NULL || m_statusAxPollConfig != NULL)
-    {
-        Tango::Except::throw_exception(
-            "DRIVER_FAILURE", 
-            "Failed to destroy Automation1 status config",
-            "A1Communication::deleteStatusPollConfig"
+        Tango::Except::re_throw_exception(e,
+            "DRIVER_FAILURE",
+            "Failed to create Automation1 controller status config",
+            "A1Communication::createControllerPollConfig"
         );
     }
+}
+
+
+void A1Communication::createAxisPollConfig(unsigned axis)
+{
+    try
+    {
+        createPollConfig(&(m_statusAxisPollConfig[axis]));
+    }
+    catch (Tango::DevFailed &e)
+    {
+        Tango::Except::re_throw_exception(e,
+            "DRIVER_FAILURE",
+            "Failed to create Automation1 axis status config",
+            "A1Communication::createAxisPollConfig"
+        );
+    }
+}
+
+
+void A1Communication::deleteControllerPollConfig()
+{
+    try
+    {
+        deletePollConfig(&(m_statusControllerPollConfigOnce));
+        deletePollConfig(&(m_statusControllerPollConfig));
+    }
+    catch (Tango::DevFailed &e)
+    {
+        Tango::Except::re_throw_exception(e,
+            "DRIVER_FAILURE",
+            "Failed to delete Automation1 controller status config",
+            "A1Communication::deleteControllerPollConfig"
+        );
+    }
+}
+
+
+void A1Communication::deleteAxisPollConfig(unsigned axis)
+{
+    try
+    {
+        deletePollConfig(&(m_statusAxisPollConfig[axis]));
+    }
+    catch (Tango::DevFailed &e)
+    {
+        Tango::Except::re_throw_exception(e,
+            "DRIVER_FAILURE",
+            "Failed to delete Automation1 axis status config",
+            "A1Communication::deleteAxisPollConfig"
+        );
+    }
+}
+
+
+void A1Communication::initialiseController_impl()
+{
+    // createControllerPollConfig(); 
+}
+
+
+void A1Communication::initialiseAxis_impl(unsigned axis)
+{
+    createAxisPollConfig(axis); 
+    
+    // TODO: tidy up
+    attr_axisContainer[axis] = A1AttributeVector 
+    {
+        A1AttributeContainer {"PositionFeedback",     (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionFeedback_read),     Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback}},
+        A1AttributeContainer {"PositionError",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionError_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError}},
+        A1AttributeContainer {"PositionTarget",       (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionTarget_read),       Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand}},
+        A1AttributeContainer {"VelocityFeedback",     (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityFeedback_read),     Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback}},
+        A1AttributeContainer {"VelocityError",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityError_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError}},
+        A1AttributeContainer {"VelocityTarget",       (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityTarget_read),       Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand}},
+        A1AttributeContainer {"AccelerationFeedback", (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationFeedback_read), Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback}},
+        A1AttributeContainer {"AccelerationError",    (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationError_read),    Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError}},
+        A1AttributeContainer {"AccelerationTarget",   (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationTarget_read),   Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand}},
+        A1AttributeContainer {"CurrentFeedback",      (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentFeedback_read),      Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback}},
+        A1AttributeContainer {"CurrentError",         (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentError_read),         Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError}},
+        A1AttributeContainer {"CurrentTarget",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentTarget_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand}},
+        A1AttributeContainer {"AxisStatus",           (A1Attribute) {A1AttrVariant(&attr_axes[axis].axisStatus),                     Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus}},
+        A1AttributeContainer {"AxisFault",            (A1Attribute) {A1AttrVariant(&attr_axes[axis].axisFault),                      Automation1AxisStatusItem::Automation1AxisStatusItem_AxisFault}},
+        A1AttributeContainer {"DriveStatus",          (A1Attribute) {A1AttrVariant(&attr_axes[axis].driveStatus),                    Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus}}
+    };
+
+    m_statusAxisPollLength = attr_axisContainer[axis].size(); 
+
+    for (auto attr : attr_axisContainer[axis])
+    {
+        std::cout << attr.second.A1Enum.get<Automation1AxisStatusItem>() << std::endl; 
+        if (!Automation1_StatusConfig_AddAxisStatusItem(m_statusAxisPollConfig[axis], axis, attr.second.A1Enum.get<Automation1AxisStatusItem>(), 0))
+        {
+            Tango::Except::throw_exception(
+                "DRIVER_FAILURE",
+                "Failed to add axis status item: " + attr.first,
+                "A1Communication::initialiseAxis_impl"
+            );
+        }
+    }
+}
+
+
+void A1Communication::deleteController_impl()
+{
+    deleteControllerPollConfig();
+}
+
+
+void A1Communication::deleteAxis_impl(unsigned axis)
+{
+    deleteAxisPollConfig(axis);
 }
 
 
@@ -145,7 +268,7 @@ void A1Communication::connect_impl(std::string username, std::string password, s
     m_connected = true; 
     std::cout << "Connected to A1 controller" << std::endl;
 
-    createStatusPollConfig(); 
+    createControllerPollConfig(); 
 
     if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
     {
@@ -188,20 +311,20 @@ void A1Communication::connect_impl(std::string username, std::string password, s
     double aliveAxesMask, allResultsOut; 
     int allResultsLen = 0; 
 
-    ret = Automation1_StatusConfig_AddSystemStatusItem(m_statusPollOnceConfig, Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0);
+    ret = Automation1_StatusConfig_AddSystemStatusItem(m_statusControllerPollConfigOnce, Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0);
     return_checker(ret, std::string(""),std::string("Unable to add status item: Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask"));
     if(!ret) return;
     allResultsLen++;
 
-    ret = Automation1_Status_GetResults(*m_controller, m_statusPollOnceConfig, &allResultsOut, allResultsLen);
+    ret = Automation1_Status_GetResults(*m_controller, m_statusControllerPollConfigOnce, &allResultsOut, allResultsLen);
     return_checker(ret, std::string(""),std::string("Unable to get status results from controller."));
     if(!ret) return;
 
-    ret = Automation1_Status_GetSystemResult(m_statusPollOnceConfig, &allResultsOut, allResultsLen, Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0, &aliveAxesMask);
+    ret = Automation1_Status_GetSystemResult(m_statusControllerPollConfigOnce, &allResultsOut, allResultsLen, Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0, &aliveAxesMask);
     return_checker(ret, std::string(""),std::string("Failed to extract system status item from all results."));
     if(!ret) return;
 
-    Automation1_StatusConfig_ClearAllStatusItems(m_statusPollOnceConfig);
+    Automation1_StatusConfig_ClearAllStatusItems(m_statusControllerPollConfigOnce);
 
         //Get number of axis and task slots.
     attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
@@ -216,89 +339,19 @@ void A1Communication::connect_impl(std::string username, std::string password, s
     // *attr_APIVersion_read = cstr;
     //delete[] cstr; causes the output to be garbæge
 
-    ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0, 0);
+    ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0, 0);
     return_checker(ret, std::string(""),std::string("ERROR: Failed to add status item: Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0"));
-    if(ret) statusPollLength++;
+    if(ret) m_statusAxisPollLength++;
 
-    ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1, 0);
+    ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1, 0);
     return_checker(ret, std::string(""),std::string("ERROR: Failed to add status item: Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1"));
-    if(ret) statusPollLength++;
+    if(ret) m_statusAxisPollLength++;
 
-    ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2, 0);
+    ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2, 0);
     return_checker(ret, std::string(""),std::string("ERROR: Failed to add status item: Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2"));
-    if(ret) statusPollLength++;
+    if(ret) m_statusAxisPollLength++;
 
-    statusAxPollLength = 0;        //Should be 0 anyway.
 
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisParameter, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_AxisParameter"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisFault, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_AxisFault"));
-    if(ret) statusAxPollLength++;
-
-    ret = Automation1_StatusConfig_AddAxisStatusItem(m_statusAxPollConfig, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_TotalMoveTime, 0);
-    return_checker(ret, std::string(""),std::string("ERROR: Failed to add axis status item: Automation1AxisStatusItem::Automation1AxisStatusItem_TotalMoveTime!"));
-    if(ret) statusAxPollLength++;
-
-    
 }
 
 
@@ -316,19 +369,15 @@ void A1Communication::disconnect_impl()
 }
 
 
-void A1Communication::readHardware_impl()
+void A1Communication::readController_impl()
 {
-    std::cout << "readHardware_impl" << std::endl; 
-    // NotImplemented("read_hardware");
-
-    // if(*m_controller == nullptr)
-    // {
-    //     Tango::Except::throw_exception(
-    //     "DRIVER_FAILURE", 
-    //     "No ",
-    //     "A1Communication::readHardware_impl"); 
-    // }
-
+    if(*m_controller == nullptr)
+    {
+        Tango::Except::throw_exception(
+        "DRIVER_FAILURE", 
+        "No controller",
+        "A1Communication::readHardware_impl"); 
+    }
 
     bool isRunning;
     bool ret; 
@@ -344,14 +393,14 @@ void A1Communication::readHardware_impl()
                                        "A1Communication::readHardware_impl"); 
     }
 
-
+    // TODO: controller implementation
 }
 
 
 void A1Communication::getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, std::string origin)
 {
     double d; 
-    if (!Automation1_Status_GetAxisResult(m_statusAxPollConfig, axisResults, statusAxPollLength, axis, 
+    if (!Automation1_Status_GetAxisResult(m_statusAxisPollConfig[axis], axisResults, m_statusAxisPollLength, axis, 
                                           attr.second.A1Enum.get<Automation1AxisStatusItem>(), 0, &d))
     {
         throwWithLastA1Error(std::string("ERROR: Failed to extract axis info: ") + attr.first, origin);
@@ -363,8 +412,9 @@ void A1Communication::getAxisResult(unsigned axis, double *axisResults, A1Attrib
 
 void A1Communication::readAxis_impl(unsigned axis)
 {
-    double *axisResults = new double[statusAxPollLength];
-    if (!Automation1_Status_GetResults(*m_controller, m_statusAxPollConfig, axisResults, statusAxPollLength))
+    double axisResults[m_statusAxisPollLength];
+
+    if (!Automation1_Status_GetResults(*m_controller, m_statusAxisPollConfig[axis], axisResults, m_statusAxisPollLength))
     {
         throwWithLastA1Error(std::string("ERROR: Failed to get axis status results from controller."), "readAxis_impl");
     }
@@ -372,89 +422,103 @@ void A1Communication::readAxis_impl(unsigned axis)
     //Setup vars to store the data in.
     double axStatus, drvStatus;
 
-    attr_axisContainer = A1AttributeVector 
-    {
-        A1AttributeContainer {"PositionFeedback",     (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionFeedback_read),     Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback}},
-        A1AttributeContainer {"PositionError",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionError_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError}},
-        A1AttributeContainer {"PositionTarget",       (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionTarget_read),       Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand}},
-        A1AttributeContainer {"VelocityFeedback",     (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityFeedback_read),     Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback}},
-        A1AttributeContainer {"VelocityError",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityError_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError}},
-        A1AttributeContainer {"VelocityTarget",       (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityTarget_read),       Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand}},
-        A1AttributeContainer {"AccelerationFeedback", (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationFeedback_read), Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback}},
-        A1AttributeContainer {"AccelerationError",    (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationError_read),    Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError}},
-        A1AttributeContainer {"AccelerationTarget",   (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationTarget_read),   Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand}},
-        A1AttributeContainer {"CurrentFeedback",      (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentFeedback_read),      Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback}},
-        A1AttributeContainer {"CurrentError",         (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentError_read),         Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError}},
-        A1AttributeContainer {"CurrentTarget",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentTarget_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand}},
-        A1AttributeContainer {"AxisStatus",           (A1Attribute) {A1AttrVariant(&axStatus),           Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus}}
-    };
-
-    for (auto attr : attr_axisContainer)
+    for (auto attr : attr_axisContainer[axis])
     {
         getAxisResult(axis, axisResults, attr, std::string("readAxis_impl"));
     }
 
-    attr_axes[axis].attr_AxisStatus_read[AX_HOMED]                           = (int(axStatus) >> 0 ) & 1U; //Homed
-    attr_axes[axis].attr_AxisStatus_read[AX_PROFILING]                       = (int(axStatus) >> 1 ) & 1U; //Profiling
-    attr_axes[axis].attr_AxisStatus_read[AX_WAIT_DONE]                       = (int(axStatus) >> 2 ) & 1U; //WaitDone
-    attr_axes[axis].attr_AxisStatus_read[AX_COMMAND_VALID]                   = (int(axStatus) >> 3 ) & 1U; //CommandValid
-    attr_axes[axis].attr_AxisStatus_read[AX_HOMING]                          = (int(axStatus) >> 4 ) & 1U; //Homing
-    attr_axes[axis].attr_AxisStatus_read[AX_ENABLING]                        = (int(axStatus) >> 5 ) & 1U; //Enabling
-    attr_axes[axis].attr_AxisStatus_read[AX_JOG_GENERATING]                  = (int(axStatus) >> 7 ) & 1U; //JogGenerating
-    attr_axes[axis].attr_AxisStatus_read[AX_JOGGING]                         = (int(axStatus) >> 8 ) & 1U; //Jogging
-    attr_axes[axis].attr_AxisStatus_read[AX_DRIVE_PENDING]                   = (int(axStatus) >> 9 ) & 1U; //DrivePending
-    attr_axes[axis].attr_AxisStatus_read[AX_DRIVE_ABORT_PENDING]             = (int(axStatus) >> 10) & 1U; //DriveAbortPending
-    attr_axes[axis].attr_AxisStatus_read[AX_TRAJECTORY_FILTERING]            = (int(axStatus) >> 11) & 1U; //TrajectoryFiltering
-    attr_axes[axis].attr_AxisStatus_read[AX_IFOV_ENABLED]                    = (int(axStatus) >> 12) & 1U; //IfovEnabled
-    attr_axes[axis].attr_AxisStatus_read[AX_NOT_VIRTUAL]                     = (int(axStatus) >> 13) & 1U; //NotVirtual
-    attr_axes[axis].attr_AxisStatus_read[AX_CAL_ENABLED1D]                   = (int(axStatus) >> 14) & 1U; //CalEnabled1D
-    attr_axes[axis].attr_AxisStatus_read[AX_CAL_ENABLED2D]                   = (int(axStatus) >> 15) & 1U; //CalEnabled2D
-    attr_axes[axis].attr_AxisStatus_read[AX_CAMMING_GEARING_CONTROL]         = (int(axStatus) >> 16) & 1U; //CammingGearingControl
-    attr_axes[axis].attr_AxisStatus_read[AX_JOYSTICK_CONTROL]                = (int(axStatus) >> 17) & 1U; //JoystickControl
-    attr_axes[axis].attr_AxisStatus_read[AX_BACKLASH_ACTIVE]                 = (int(axStatus) >> 18) & 1U; //BacklashActive
-    attr_axes[axis].attr_AxisStatus_read[AX_GAIN_MAPPING_ENABLED]            = (int(axStatus) >> 19) & 1U; //GainMappingEnabled
-    attr_axes[axis].attr_AxisStatus_read[AX_MOTION_DONE]                     = (int(axStatus) >> 22) & 1U; //MotionDone
-    attr_axes[axis].attr_AxisStatus_read[AX_MOTION_CLAMPED]                  = (int(axStatus) >> 23) & 1U; //MotionClamped
-    attr_axes[axis].attr_AxisStatus_read[AX_GANTRY_ALIGNED]                  = (int(axStatus) >> 24) & 1U; //GantryAligned
-    attr_axes[axis].attr_AxisStatus_read[AX_GANTRY_DRIVE_CONTROL_REALIGNING] = (int(axStatus) >> 25) & 1U; //GantryDriveControlRealigning
-    attr_axes[axis].attr_AxisStatus_read[AX_THERMO_COMP_ENABLED]             = (int(axStatus) >> 27) & 1U; //ThermoCompEnabled
+    // Axis status
+
+    attr_axes[axis].attr_AxisStatus_read[AX_HOMED]                           = (int(attr_axes[axis].axisStatus) >> 0 ) & 1U; //Homed
+    attr_axes[axis].attr_AxisStatus_read[AX_PROFILING]                       = (int(attr_axes[axis].axisStatus) >> 1 ) & 1U; //Profiling
+    attr_axes[axis].attr_AxisStatus_read[AX_WAIT_DONE]                       = (int(attr_axes[axis].axisStatus) >> 2 ) & 1U; //WaitDone
+    attr_axes[axis].attr_AxisStatus_read[AX_COMMAND_VALID]                   = (int(attr_axes[axis].axisStatus) >> 3 ) & 1U; //CommandValid
+    attr_axes[axis].attr_AxisStatus_read[AX_HOMING]                          = (int(attr_axes[axis].axisStatus) >> 4 ) & 1U; //Homing
+    attr_axes[axis].attr_AxisStatus_read[AX_ENABLING]                        = (int(attr_axes[axis].axisStatus) >> 5 ) & 1U; //Enabling
+    attr_axes[axis].attr_AxisStatus_read[AX_JOG_GENERATING]                  = (int(attr_axes[axis].axisStatus) >> 7 ) & 1U; //JogGenerating
+    attr_axes[axis].attr_AxisStatus_read[AX_JOGGING]                         = (int(attr_axes[axis].axisStatus) >> 8 ) & 1U; //Jogging
+    attr_axes[axis].attr_AxisStatus_read[AX_DRIVE_PENDING]                   = (int(attr_axes[axis].axisStatus) >> 9 ) & 1U; //DrivePending
+    attr_axes[axis].attr_AxisStatus_read[AX_DRIVE_ABORT_PENDING]             = (int(attr_axes[axis].axisStatus) >> 10) & 1U; //DriveAbortPending
+    attr_axes[axis].attr_AxisStatus_read[AX_TRAJECTORY_FILTERING]            = (int(attr_axes[axis].axisStatus) >> 11) & 1U; //TrajectoryFiltering
+    attr_axes[axis].attr_AxisStatus_read[AX_IFOV_ENABLED]                    = (int(attr_axes[axis].axisStatus) >> 12) & 1U; //IfovEnabled
+    attr_axes[axis].attr_AxisStatus_read[AX_NOT_VIRTUAL]                     = (int(attr_axes[axis].axisStatus) >> 13) & 1U; //NotVirtual
+    attr_axes[axis].attr_AxisStatus_read[AX_CAL_ENABLED1D]                   = (int(attr_axes[axis].axisStatus) >> 14) & 1U; //CalEnabled1D
+    attr_axes[axis].attr_AxisStatus_read[AX_CAL_ENABLED2D]                   = (int(attr_axes[axis].axisStatus) >> 15) & 1U; //CalEnabled2D
+    attr_axes[axis].attr_AxisStatus_read[AX_CAMMING_GEARING_CONTROL]         = (int(attr_axes[axis].axisStatus) >> 16) & 1U; //CammingGearingControl
+    attr_axes[axis].attr_AxisStatus_read[AX_JOYSTICK_CONTROL]                = (int(attr_axes[axis].axisStatus) >> 17) & 1U; //JoystickControl
+    attr_axes[axis].attr_AxisStatus_read[AX_BACKLASH_ACTIVE]                 = (int(attr_axes[axis].axisStatus) >> 18) & 1U; //BacklashActive
+    attr_axes[axis].attr_AxisStatus_read[AX_GAIN_MAPPING_ENABLED]            = (int(attr_axes[axis].axisStatus) >> 19) & 1U; //GainMappingEnabled
+    attr_axes[axis].attr_AxisStatus_read[AX_MOTION_DONE]                     = (int(attr_axes[axis].axisStatus) >> 22) & 1U; //MotionDone
+    attr_axes[axis].attr_AxisStatus_read[AX_MOTION_CLAMPED]                  = (int(attr_axes[axis].axisStatus) >> 23) & 1U; //MotionClamped
+    attr_axes[axis].attr_AxisStatus_read[AX_GANTRY_ALIGNED]                  = (int(attr_axes[axis].axisStatus) >> 24) & 1U; //GantryAligned
+    attr_axes[axis].attr_AxisStatus_read[AX_GANTRY_DRIVE_CONTROL_REALIGNING] = (int(attr_axes[axis].axisStatus) >> 25) & 1U; //GantryDriveControlRealigning
+    attr_axes[axis].attr_AxisStatus_read[AX_THERMO_COMP_ENABLED]             = (int(attr_axes[axis].axisStatus) >> 27) & 1U; //ThermoCompEnabled
 
     attr_axes[axis].attr_Homed_read = attr_axes[axis].attr_AxisStatus_read[AX_HOMED];
 
-    // ret = Automation1_Status_GetAxisResult(m_statusPollConfig, axisResults, statusPollLength, ax, Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus, 0, &drvStatus);
+    // Drive status 
 
-    // attr_DriveStatus_read[DRV_ENABLED]                    = (int(drvStatus) >> 0 ) & 1U;
-    // attr_DriveStatus_read[DRV_CW_EOT_LIMIT]                = (int(drvStatus) >> 1 ) & 1U;
-    // attr_DriveStatus_read[DRV_CCW_EOT_LIMIT]            = (int(drvStatus) >> 2 ) & 1U;
-    // attr_DriveStatus_read[DRV_HOME_LIMIT]                = (int(drvStatus) >> 3 ) & 1U;
-    // attr_DriveStatus_read[DRV_MARKER_INPUT]                = (int(drvStatus) >> 4 ) & 1U;
-    // attr_DriveStatus_read[DRV_HALL_A_INPUT]                = (int(drvStatus) >> 5 ) & 1U;
-    // attr_DriveStatus_read[DRV_HALL_B_INPUT]                = (int(drvStatus) >> 6 ) & 1U;
-    // attr_DriveStatus_read[DRV_HALL_C_INPUT]                = (int(drvStatus) >> 7 ) & 1U;
-    // attr_DriveStatus_read[DRV_SINE_ENCODER_ERROR]        = (int(drvStatus) >> 8 ) & 1U;
-    // attr_DriveStatus_read[DRV_COSINE_ENCODER_ERROR]        = (int(drvStatus) >> 9 ) & 1U;
-    // attr_DriveStatus_read[DRV_E_STOP_INPUT]                = (int(drvStatus) >> 10) & 1U;
-    // attr_DriveStatus_read[DRV_BRAKE_OUTPUT]                = (int(drvStatus) >> 11) & 1U;
-    // attr_DriveStatus_read[DRV_GALVO_POWER_CORRECTION]    = (int(drvStatus) >> 12) & 1U;
-    // attr_DriveStatus_read[DRV_NO_MOTOR_SUPPLY]            = (int(drvStatus) >> 14) & 1U;
-    // attr_DriveStatus_read[DRV_CURRENT_CLAMP]            = (int(drvStatus) >> 15) & 1U;
-    // attr_DriveStatus_read[DRV_MARKER_LATCH]                = (int(drvStatus) >> 16) & 1U;
-    // attr_DriveStatus_read[DRV_POWER_LIMITING]            = (int(drvStatus) >> 17) & 1U;
-    // attr_DriveStatus_read[DRV_GALVO_CAL_ENABLED]        = (int(drvStatus) >> 20) & 1U;
-    // attr_DriveStatus_read[DRV_AUTOFOCUS_ACTIVE]            = (int(drvStatus) >> 21) & 1U;
-    // attr_DriveStatus_read[DRV_PROGRAM_FLASH]            = (int(drvStatus) >> 22) & 1U;
-    // attr_DriveStatus_read[DRV_SERVO_CONTROL]            = (int(drvStatus) >> 24) & 1U;
-    // attr_DriveStatus_read[DRV_IN_POSITION]                = (int(drvStatus) >> 25) & 1U;
-    // attr_DriveStatus_read[DRV_MOVE_ACTIVE]                = (int(drvStatus) >> 26) & 1U;
-    // attr_DriveStatus_read[DRV_ACCEL_PHASE]                = (int(drvStatus) >> 27) & 1U;
-    // attr_DriveStatus_read[DRV_DECEL_PHASE]                = (int(drvStatus) >> 28) & 1U;
-    // attr_DriveStatus_read[DRV_ENCODER_CLIPPING]            = (int(drvStatus) >> 29) & 1U;
-    // attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]            = (int(drvStatus) >> 30) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_ENABLED]                      = (int(attr_axes[axis].driveStatus) >> 0 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_CW_EOT_LIMIT]                 = (int(attr_axes[axis].driveStatus) >> 1 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_CCW_EOT_LIMIT]                = (int(attr_axes[axis].driveStatus) >> 2 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_HOME_LIMIT]                   = (int(attr_axes[axis].driveStatus) >> 3 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_MARKER_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 4 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_HALL_A_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 5 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_HALL_B_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 6 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_HALL_C_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 7 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_SINE_ENCODER_ERROR]           = (int(attr_axes[axis].driveStatus) >> 8 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_COSINE_ENCODER_ERROR]         = (int(attr_axes[axis].driveStatus) >> 9 ) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_E_STOP_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 10) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_BRAKE_OUTPUT]                 = (int(attr_axes[axis].driveStatus) >> 11) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_GALVO_POWER_CORRECTION]       = (int(attr_axes[axis].driveStatus) >> 12) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_NO_MOTOR_SUPPLY]              = (int(attr_axes[axis].driveStatus) >> 14) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_CURRENT_CLAMP]                = (int(attr_axes[axis].driveStatus) >> 15) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_MARKER_LATCH]                 = (int(attr_axes[axis].driveStatus) >> 16) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_POWER_LIMITING]               = (int(attr_axes[axis].driveStatus) >> 17) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_GALVO_CAL_ENABLED]            = (int(attr_axes[axis].driveStatus) >> 20) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_AUTOFOCUS_ACTIVE]             = (int(attr_axes[axis].driveStatus) >> 21) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_PROGRAM_FLASH]                = (int(attr_axes[axis].driveStatus) >> 22) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_SERVO_CONTROL]                = (int(attr_axes[axis].driveStatus) >> 24) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_IN_POSITION]                  = (int(attr_axes[axis].driveStatus) >> 25) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_MOVE_ACTIVE]                  = (int(attr_axes[axis].driveStatus) >> 26) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_ACCEL_PHASE]                  = (int(attr_axes[axis].driveStatus) >> 27) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_DECEL_PHASE]                  = (int(attr_axes[axis].driveStatus) >> 28) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_ENCODER_CLIPPING]             = (int(attr_axes[axis].driveStatus) >> 29) & 1U;
+    attr_axes[axis].attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]             = (int(attr_axes[axis].driveStatus) >> 30) & 1U;
 
-    // attr_Enabled_read = attr_DriveStatus_read[DRV_ENABLED];
-    // attr_InPosition_read = attr_DriveStatus_read[DRV_IN_POSITION];
+    attr_axes[axis].attr_Enabled_read =     attr_axes[axis].attr_DriveStatus_read[DRV_ENABLED];
+    attr_axes[axis].attr_InPosition_read =  attr_axes[axis].attr_DriveStatus_read[DRV_IN_POSITION];
 
-    // delete[] axisResults;
+    // Axis fault
+
+    attr_axes[axis].attr_AxisFault_read[0]    = (int(attr_axes[axis].axisFault) >> 0 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[1]    = (int(attr_axes[axis].axisFault) >> 1 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[2]    = (int(attr_axes[axis].axisFault) >> 2 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[3]    = (int(attr_axes[axis].axisFault) >> 3 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[4]    = (int(attr_axes[axis].axisFault) >> 4 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[5]    = (int(attr_axes[axis].axisFault) >> 5 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[6]    = (int(attr_axes[axis].axisFault) >> 6 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[7]    = (int(attr_axes[axis].axisFault) >> 7 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[8]    = (int(attr_axes[axis].axisFault) >> 8 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[9]    = (int(attr_axes[axis].axisFault) >> 9 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[10]   = (int(attr_axes[axis].axisFault) >> 10 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[11]   = (int(attr_axes[axis].axisFault) >> 11 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[12]   = (int(attr_axes[axis].axisFault) >> 12 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[13]   = (int(attr_axes[axis].axisFault) >> 13 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[14]   = (int(attr_axes[axis].axisFault) >> 14 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[15]   = (int(attr_axes[axis].axisFault) >> 15 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[16]   = (int(attr_axes[axis].axisFault) >> 16 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[17]   = (int(attr_axes[axis].axisFault) >> 17 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[18]   = (int(attr_axes[axis].axisFault) >> 18 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[19]   = (int(attr_axes[axis].axisFault) >> 19 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[20]   = (int(attr_axes[axis].axisFault) >> 20 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[21]   = (int(attr_axes[axis].axisFault) >> 21 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[22]   = (int(attr_axes[axis].axisFault) >> 22 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[23]   = (int(attr_axes[axis].axisFault) >> 23 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[24]   = (int(attr_axes[axis].axisFault) >> 24 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[25]   = (int(attr_axes[axis].axisFault) >> 25 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[26]   = (int(attr_axes[axis].axisFault) >> 26 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[27]   = (int(attr_axes[axis].axisFault) >> 27 ) & 1U;
 }
 
 
@@ -597,8 +661,8 @@ void A1Communication::axis_FreeRun(int32_t axis, double vel)
     if (!Automation1_Command_MoveFreerun(*m_controller, 1, &axis, 1, &vel, 1))
     {
         throwWithLastA1Error(
-            "Automation1_Command_MoveFreerunStop failed", 
-            "A1Communication::axis_FreeRunStop"
+            "Automation1_Command_MoveFreerun failed", 
+            "A1Communication::axis_FreeRun"
         );
     }
 } 
@@ -616,11 +680,25 @@ void A1Communication::axis_FreeRunStop(int32_t axis)
 
 void A1Communication::axis_ThrowAllFaults(int32_t axis) 
 {
-    NotImplemented("axis_ThrowAllFaults");
+    int64_t faultMask = ~0x0; 
+    if (!Automation1_Command_FaultThrow(*m_controller, 1, axis, faultMask))
+    {
+        throwWithLastA1Error(
+            "Automation1_Command_FaultThrow failed", 
+            "A1Communication::axis_ThrowAllFaults"
+        );
+    }
 } 
+
 void A1Communication::axis_AcknowledgeFaults(int32_t axis) 
 {
-    NotImplemented("axis_AcknowledgeFaults");
+    if (!Automation1_Command_FaultAcknowledge(*m_controller, 1, &axis, 1))
+    {
+        throwWithLastA1Error(
+            "Automation1_Command_FaultAcknowledge failed", 
+            "A1Communication::axis_AcknowledgeFaults"
+        );
+    }
 } 
 void A1Communication::axis_DataCollectionStart(int32_t axis) 
 {

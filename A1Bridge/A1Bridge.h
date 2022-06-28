@@ -46,8 +46,11 @@ typedef struct A1AxisAttributes
 	Tango::DevUShort	attr_RampType_read;
 	Tango::DevUShort	attr_RampMode_read;
 	Tango::DevDouble	attr_RampValue_read;
+    Tango::DevDouble    axisStatus; 
 	Tango::DevBoolean	attr_AxisStatus_read[24];
+    Tango::DevDouble    axisFault; 
 	Tango::DevBoolean	attr_AxisFault_read[25];
+    Tango::DevDouble    driveStatus; 
 	Tango::DevBoolean	attr_DriveStatus_read[27];
 } A1AxisAttributes; 
 
@@ -75,7 +78,14 @@ class A1Bridge
 
     virtual void connect_impl(std::string username, std::string password, std::string ip) {NotImplemented("connect_impl");}; 
     virtual void disconnect_impl() {NotImplemented("disconnect_impl");}; 
-    virtual void readHardware_impl() {NotImplemented("readHardware_impl");}; 
+
+    virtual void initialiseController_impl() {};
+    virtual void initialiseAxis_impl(unsigned axis) {};
+
+    virtual void deleteController_impl() {}; 
+    virtual void deleteAxis_impl(unsigned axis) {}; 
+
+    virtual void readController_impl() {NotImplemented("readController_impl");}; 
     virtual void readAxis_impl(unsigned axis) {NotImplemented("readAxis_impl");}; 
 
   public: 
@@ -87,8 +97,16 @@ class A1Bridge
     void connect(std::string username, std::string password, std::string ip); 
     void disconnect(); 
     void reconnect(); 
-    void readHardware();
+
+    void initialiseController(); 
+    void initialiseAxis(unsigned axis); 
+
+    void deleteController(); 
+    void deleteAxis(unsigned axis); 
+
+    void readController();
     void readAxis(unsigned axis);
+    
     template<class T = int> void setPollingInterval(T interval) 
     {
         m_pollInterval_ms = std::chrono::milliseconds(interval);
