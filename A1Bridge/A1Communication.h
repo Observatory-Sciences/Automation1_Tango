@@ -82,11 +82,7 @@ typedef struct A1AttrVariant
 enum A1EnumVariantType 
 {
     A1EnumVariantAutomation1AxisStatusItem, 
-    A1EnumVariantAutomation1DriveStatus,
-    A1EnumVariantAutomation1TaskState,
-    A1EnumVariantAutomation1TaskStatus0,
-    A1EnumVariantAutomation1TaskStatus1,
-    A1EnumVariantAutomation1TaskStatus2
+    A1EnumVariantAutomation1TaskStatusItem
 };
 
 // Type *should be* inferred when called with Automation1 API. 
@@ -97,26 +93,29 @@ class A1EnumVariant
     union
     {
         Automation1AxisStatusItem  m_Automation1AxisStatusItem;
-        Automation1DriveStatus m_Automation1DriveStatus;
-        Automation1TaskState   m_Automation1TaskState;
-        Automation1TaskStatus0 m_Automation1TaskStatus0;
-        Automation1TaskStatus1 m_Automation1TaskStatus1;
-        Automation1TaskStatus2 m_Automation1TaskStatus2;
+        Automation1TaskStatusItem  m_Automation1TaskStatusItem;
+        // Automation1DriveStatus m_Automation1DriveStatus;
+        // Automation1TaskState   m_Automation1TaskState;
+        // Automation1TaskStatus0 m_Automation1TaskStatus0;
+        // Automation1TaskStatus1 m_Automation1TaskStatus1;
+        // Automation1TaskStatus2 m_Automation1TaskStatus2;
     };
 
   public:
     A1EnumVariant(Automation1AxisStatusItem  a): m_Automation1AxisStatusItem(a)  
         {m_type = A1EnumVariantAutomation1AxisStatusItem;};
-    A1EnumVariant(Automation1DriveStatus a): m_Automation1DriveStatus(a) 
-        {m_type = A1EnumVariantAutomation1DriveStatus;};
-    A1EnumVariant(Automation1TaskState   a): m_Automation1TaskState(a)   
-        {m_type = A1EnumVariantAutomation1TaskState;};
-    A1EnumVariant(Automation1TaskStatus0 a): m_Automation1TaskStatus0(a) 
-        {m_type = A1EnumVariantAutomation1TaskStatus0;};
-    A1EnumVariant(Automation1TaskStatus1 a): m_Automation1TaskStatus1(a) 
-        {m_type = A1EnumVariantAutomation1TaskStatus1;};
-    A1EnumVariant(Automation1TaskStatus2 a): m_Automation1TaskStatus2(a) 
-        {m_type = A1EnumVariantAutomation1TaskStatus2;};
+    A1EnumVariant(Automation1TaskStatusItem  a): m_Automation1TaskStatusItem(a)   
+        {m_type = A1EnumVariantAutomation1TaskStatusItem;};
+    // A1EnumVariant(Automation1DriveStatus a): m_Automation1DriveStatus(a) 
+    //     {m_type = A1EnumVariantAutomation1DriveStatus;};
+    // A1EnumVariant(Automation1TaskState   a): m_Automation1TaskState(a)   
+    //     {m_type = A1EnumVariantAutomation1TaskState;};
+    // A1EnumVariant(Automation1TaskStatus0 a): m_Automation1TaskStatus0(a) 
+    //     {m_type = A1EnumVariantAutomation1TaskStatus0;};
+    // A1EnumVariant(Automation1TaskStatus1 a): m_Automation1TaskStatus1(a) 
+    //     {m_type = A1EnumVariantAutomation1TaskStatus1;};
+    // A1EnumVariant(Automation1TaskStatus2 a): m_Automation1TaskStatus2(a) 
+    //     {m_type = A1EnumVariantAutomation1TaskStatus2;};
 
     // Automation1AxisStatusItem  get() {return m_Automation1AxisStatusItem;};
     // Automation1DriveStatus get() {return m_Automation1DriveStatus;};
@@ -131,16 +130,19 @@ class A1EnumVariant
         {
                 case A1EnumVariantAutomation1AxisStatusItem: 
                     return static_cast<T>(m_Automation1AxisStatusItem);
-                case A1EnumVariantAutomation1DriveStatus: 
-                    return static_cast<T>(m_Automation1DriveStatus);
-                case A1EnumVariantAutomation1TaskState: 
-                    return static_cast<T>(m_Automation1TaskState);
-                case A1EnumVariantAutomation1TaskStatus0: 
-                    return static_cast<T>(m_Automation1TaskStatus0);
-                case A1EnumVariantAutomation1TaskStatus1: 
-                    return static_cast<T>(m_Automation1TaskStatus1);
-                case A1EnumVariantAutomation1TaskStatus2: 
-                    return static_cast<T>(m_Automation1TaskStatus2);
+                case A1EnumVariantAutomation1TaskStatusItem: 
+                    return static_cast<T>(m_Automation1TaskStatusItem);
+
+                // case A1EnumVariantAutomation1DriveStatus: 
+                //     return static_cast<T>(m_Automation1DriveStatus);
+                // case A1EnumVariantAutomation1TaskState: 
+                //     return static_cast<T>(m_Automation1TaskState);
+                // case A1EnumVariantAutomation1TaskStatus0: 
+                //     return static_cast<T>(m_Automation1TaskStatus0);
+                // case A1EnumVariantAutomation1TaskStatus1: 
+                //     return static_cast<T>(m_Automation1TaskStatus1);
+                // case A1EnumVariantAutomation1TaskStatus2: 
+                //     return static_cast<T>(m_Automation1TaskStatus2);
         }
     }
 };
@@ -187,6 +189,10 @@ class A1Communication: public A1Bridge
     void deleteAxisPollConfig(unsigned axis); 
 
     void getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, std::string origin);
+    void getTaskResult(unsigned task, double *controllerResults, A1AttributeContainer &attr, std::string origin);
+    void getSystemResult(double *controllerResults, A1AttributeContainer &attr, std::string origin);
+
+    void checkController();
 
     void throwWithLastA1Error(std::string reason, std::string origin);
     void return_checker(bool ret, std::string strTrue="", std::string strFalse="");

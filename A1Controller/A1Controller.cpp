@@ -216,11 +216,14 @@ void A1Controller::init_device()
     std::cout << "Username:  " << username << std::endl; 
     std::cout << "Password:  " << password << std::endl; 
     m_A1Bridge->setPollingInterval(100); 
-    gotostate_standby();
 
     m_A1Bridge->initialiseController(); 
 
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
+    gotostate_standby();
+
+    attr_APIVersion_read = &(m_A1Bridge->attr_APIVersion_read); 
+
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
 }
 
 //--------------------------------------------------------
@@ -381,6 +384,25 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     DEBUG_STREAM << "read hardware" << std::endl; 
     m_A1Bridge->readController(); 
 
+    *attr_ControllerRunning_read = m_A1Bridge->attr_ControllerRunning_read;
+    *attr_AxisCount_read         = m_A1Bridge->attr_AxisCount_read;
+    *attr_TaskCount_read         = m_A1Bridge->attr_TaskCount_read;
+
+	for (int i=0; i < 16; i++)
+	{
+		attr_TaskStatus0_read[i] = m_A1Bridge->attr_TaskStatus0_read[i]; 
+	}
+    
+    for (int i=0; i < 17; i++)
+	{
+		attr_TaskStatus1_read[i] = m_A1Bridge->attr_TaskStatus1_read[i]; 
+	}
+    
+    for (int i=0; i < 24; i++)
+	{
+		attr_TaskStatus2_read[i] = m_A1Bridge->attr_TaskStatus2_read[i]; 
+	}
+
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_attr_hardware
 }
 //--------------------------------------------------------
@@ -413,7 +435,6 @@ void A1Controller::read_ControllerRunning(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Controller::read_ControllerRunning(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_ControllerRunning) ENABLED START -----*/
 	//	Set the attribute value
-	attr_ControllerRunning_read = 0; 
 	attr.set_value(attr_ControllerRunning_read);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_ControllerRunning

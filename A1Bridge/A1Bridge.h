@@ -151,9 +151,14 @@ class A1Bridge
 	Tango::DevUShort	attr_TaskCount_read;
 	Tango::DevString	attr_APIVersion_read;
 	Tango::DevString	attr_AeroScriptFilePath_read;
+    
+    double              attr_axisHealth;
 	Tango::DevBoolean	attr_AxisHealth_read[32];
+    double              attr_taskStatus0;
 	Tango::DevBoolean	attr_TaskStatus0_read[16];
+    double              attr_taskStatus1;
 	Tango::DevBoolean	attr_TaskStatus1_read[17];
+    double              attr_taskStatus2;
 	Tango::DevBoolean	attr_TaskStatus2_read[24];
 	Tango::DevString	attr_AeroScriptFiles_read[32];
 
