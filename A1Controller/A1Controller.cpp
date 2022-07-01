@@ -629,7 +629,7 @@ void A1Controller::reset()
 	DEBUG_STREAM << "A1Controller::Reset()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::reset) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_Reset(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::reset
 }
@@ -645,7 +645,7 @@ void A1Controller::start()
 	DEBUG_STREAM << "A1Controller::Start()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::start) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_Start(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::start
 }
@@ -661,7 +661,7 @@ void A1Controller::stop()
 	DEBUG_STREAM << "A1Controller::Stop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::stop) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_Stop(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::stop
 }
@@ -677,7 +677,7 @@ void A1Controller::enable()
 	DEBUG_STREAM << "A1Controller::Enable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::enable) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_Enable(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::enable
 }
@@ -693,7 +693,7 @@ void A1Controller::disable()
 	DEBUG_STREAM << "A1Controller::Disable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::disable) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_Disable(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::disable
 }

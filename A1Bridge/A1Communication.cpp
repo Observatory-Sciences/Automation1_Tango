@@ -72,7 +72,7 @@ void A1Communication::createPollConfig(Automation1StatusConfig_T **config)
         Tango::Except::re_throw_exception(e,
             "DRIVER_FAILURE",
             "Failed to delete Automation1 status config before create",
-            "A1Communication::createPollConfig"
+            __func__
         );
     }
     if (!Automation1_StatusConfig_Create(config))
@@ -86,14 +86,14 @@ void A1Communication::createPollConfig(Automation1StatusConfig_T **config)
             Tango::Except::re_throw_exception(e,
                 "DRIVER_FAILURE",
                 "Failed to delete Automation1 status config after failure to create",
-                "A1Communication::createPollConfig"
+                __func__
             );
         }
 
         Tango::Except::throw_exception(
             "DRIVER_FAILURE",
             "Failed to create Automation1 status config",
-            "A1Communication::createPollConfig"
+            __func__
         );
     }
 }
@@ -116,7 +116,7 @@ void A1Communication::deletePollConfig(Automation1StatusConfig_T **config)
             Tango::Except::throw_exception(
                 "DRIVER_FAILURE", 
                 "Failed to destroy Automation1 status config",
-                "A1Communication::deletePollConfig"
+                __func__
             );
         }
     }
@@ -135,7 +135,7 @@ void A1Communication::createControllerPollConfig()
         Tango::Except::re_throw_exception(e,
             "DRIVER_FAILURE",
             "Failed to create Automation1 controller status config",
-            "A1Communication::createControllerPollConfig"
+            __func__
         );
     }
 }
@@ -152,7 +152,7 @@ void A1Communication::createAxisPollConfig(unsigned axis)
         Tango::Except::re_throw_exception(e,
             "DRIVER_FAILURE",
             "Failed to create Automation1 axis status config",
-            "A1Communication::createAxisPollConfig"
+            __func__
         );
     }
 }
@@ -170,7 +170,7 @@ void A1Communication::deleteControllerPollConfig()
         Tango::Except::re_throw_exception(e,
             "DRIVER_FAILURE",
             "Failed to delete Automation1 controller status config",
-            "A1Communication::deleteControllerPollConfig"
+            __func__
         );
     }
 }
@@ -187,7 +187,7 @@ void A1Communication::deleteAxisPollConfig(unsigned axis)
         Tango::Except::re_throw_exception(e,
             "DRIVER_FAILURE",
             "Failed to delete Automation1 axis status config",
-            "A1Communication::deleteAxisPollConfig"
+            __func__
         );
     }
 }
@@ -233,7 +233,7 @@ void A1Communication::initialiseAxis_impl(unsigned axis)
             Tango::Except::throw_exception(
                 "DRIVER_FAILURE",
                 "Failed to add axis status item: " + attr.first,
-                "A1Communication::initialiseAxis_impl"
+                __func__
             );
         }
     }
@@ -263,7 +263,7 @@ void A1Communication::connect_impl(std::string username, std::string password, s
         std::cout << "ERROR: Connect to A1 controller failed" << std::endl; 
         Tango::Except::throw_exception("COMMUNICATION_BROKEN", 
                                        "Connect to A1 controller failed",
-                                       "A1Communication::connect_impl");
+                                       __func__);
     }
     m_connected = true; 
     std::cout << "Connected to A1 controller" << std::endl;
@@ -274,7 +274,7 @@ void A1Communication::connect_impl(std::string username, std::string password, s
     {
         throwWithLastA1Error(
             "Failed to determine if controller is running",
-            "A1Communication::connect_impl"
+            __func__
         );
     }
 
@@ -285,21 +285,21 @@ void A1Communication::connect_impl(std::string username, std::string password, s
         {
             throwWithLastA1Error(
                 "Failed to start controller",
-                "A1Communication::connect_impl"
+                __func__
             );
         }
         if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
         {
             throwWithLastA1Error(
                 "Failed to determine if controller is running",
-                "A1Communication::connect_impl"
+                __func__
             );
         }
         if (!attr_ControllerRunning_read)
         {
             throwWithLastA1Error(
                 "Controller not running after start request",
-                "A1Communication::connect_impl"
+                __func__
             );
         }
     }
@@ -364,7 +364,7 @@ void A1Communication::disconnect_impl()
         std::cout << "ERROR: Disconnect from A1 controller failed" << std::endl; 
         Tango::Except::throw_exception("COMMUNICATION_BROKEN", 
                                        "Disconnect from A1 controller failed",
-                                       "A1Communication::disconnect_impl");
+                                       __func__);
     }
 }
 
@@ -376,7 +376,7 @@ void A1Communication::readController_impl()
         Tango::Except::throw_exception(
         "DRIVER_FAILURE", 
         "No controller",
-        "A1Communication::readHardware_impl"); 
+        __func__); 
     }
 
     bool isRunning;
@@ -390,7 +390,7 @@ void A1Communication::readController_impl()
     {
         Tango::Except::throw_exception("DRIVER_FAILURE", 
                                        "Controller not running",
-                                       "A1Communication::readHardware_impl"); 
+                                       __func__); 
     }
 
     // TODO: controller implementation
@@ -416,7 +416,7 @@ void A1Communication::readAxis_impl(unsigned axis)
 
     if (!Automation1_Status_GetResults(*m_controller, m_statusAxisPollConfig[axis], axisResults, m_statusAxisPollLength))
     {
-        throwWithLastA1Error(std::string("ERROR: Failed to get axis status results from controller."), "readAxis_impl");
+        throwWithLastA1Error(std::string("ERROR: Failed to get axis status results from controller."), __func__);
     }
 
     //Setup vars to store the data in.
@@ -424,7 +424,7 @@ void A1Communication::readAxis_impl(unsigned axis)
 
     for (auto attr : attr_axisContainer[axis])
     {
-        getAxisResult(axis, axisResults, attr, std::string("readAxis_impl"));
+        getAxisResult(axis, axisResults, attr, std::string(__func__));
     }
 
     // Axis status
@@ -524,23 +524,23 @@ void A1Communication::readAxis_impl(unsigned axis)
 
 void A1Communication::controller_Reset() 
 {
-    NotImplemented("controller_Reset");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_Start() 
 {
-    NotImplemented("controller_Start");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_Stop() 
 {
-    NotImplemented("controller_Stop");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_Enable() 
 {
-    NotImplemented("controller_Enable");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_Disable() 
 {
-    NotImplemented("controller_Disable");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_ClearErrors() 
 {
@@ -548,29 +548,29 @@ void A1Communication::controller_ClearErrors()
     {
         throwWithLastA1Error( 
             "Automation1_Command_AcknowledgeAll failed", 
-            "A1Communication::controller_ClearErrors"
+            __func__
         );
     }
 } 
 void A1Communication::controller_AeroScriptProgramRun() 
 {
-    NotImplemented("controller_AeroScriptProgramRun");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_AeroScriptProgramLoad() 
 {
-    NotImplemented("controller_AeroScriptProgramLoad");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_AeroScriptProgramStart() 
 {
-    NotImplemented("controller_AeroScriptProgramStart");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_AeroScriptProgramStop() 
 {
-    NotImplemented("controller_AeroScriptProgramStop");
+    NotImplemented(__func__);
 } 
 void A1Communication::controller_AeroScriptProgramPause() 
 {
-    NotImplemented("controller_AeroScriptProgramPause");
+    NotImplemented(__func__);
 } 
 
 
@@ -580,7 +580,7 @@ void A1Communication::axis_Abort(int32_t axis)
     {
         throwWithLastA1Error( 
             "Automation1_Command_Abort failed", 
-            "A1Communication::axis_Abort"
+            __func__
         );
     }
 }
@@ -591,14 +591,14 @@ void A1Communication::axis_Home(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_Home failed", 
-            "A1Communication::axis_Home"
+            __func__
         );
     }
 } 
 
 void A1Communication::axis_Move(int32_t axis) 
 {
-    NotImplemented("axis_Move");
+    NotImplemented(__func__);
 } 
 
 void A1Communication::axis_Enable(int32_t axis) 
@@ -607,7 +607,7 @@ void A1Communication::axis_Enable(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_Enable failed", 
-            "A1Communication::axis_Enable"
+            __func__
         );
     }
 } 
@@ -618,7 +618,7 @@ void A1Communication::axis_Disable(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_Disable failed", 
-            "A1Communication::axis_Disable"
+            __func__
         );
     }
 } 
@@ -629,7 +629,7 @@ void A1Communication::axis_BrakeOn(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_DriveBrakeOn failed", 
-            "A1Communication::axis_BrakeOn"
+            __func__
         );
     }
 } 
@@ -640,7 +640,7 @@ void A1Communication::axis_BrakeOff(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_DriveBrakeOff failed", 
-            "A1Communication::axis_BrakeOff"
+            __func__
         );
     }
 } 
@@ -651,7 +651,7 @@ void A1Communication::axis_MoveFromLimit(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_MoveOutOfLimit failed", 
-            "A1Communication::axis_MoveFromLimit"
+            __func__
         );
     }
 } 
@@ -662,7 +662,7 @@ void A1Communication::axis_FreeRun(int32_t axis, double vel)
     {
         throwWithLastA1Error(
             "Automation1_Command_MoveFreerun failed", 
-            "A1Communication::axis_FreeRun"
+            __func__
         );
     }
 } 
@@ -673,7 +673,7 @@ void A1Communication::axis_FreeRunStop(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_MoveFreerunStop failed", 
-            "A1Communication::axis_FreeRunStop"
+            __func__
         );
     }
 } 
@@ -685,7 +685,7 @@ void A1Communication::axis_ThrowAllFaults(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_FaultThrow failed", 
-            "A1Communication::axis_ThrowAllFaults"
+            __func__
         );
     }
 } 
@@ -696,25 +696,25 @@ void A1Communication::axis_AcknowledgeFaults(int32_t axis)
     {
         throwWithLastA1Error(
             "Automation1_Command_FaultAcknowledge failed", 
-            "A1Communication::axis_AcknowledgeFaults"
+            __func__
         );
     }
 } 
 void A1Communication::axis_DataCollectionStart(int32_t axis) 
 {
-    NotImplemented("axis_DataCollectionStart");
+    NotImplemented(__func__);
 } 
 void A1Communication::axis_DataCollectionStop(int32_t axis) 
 {
-    NotImplemented("axis_DataCollectionStop");
+    NotImplemented(__func__);
 } 
 void A1Communication::axis_DataCollectionRefresh(int32_t axis) 
 {
-    NotImplemented("axis_DataCollectionRefresh");
+    NotImplemented(__func__);
 } 
 void A1Communication::axis_DataCollectionGetResults(int32_t axis) 
 {
-    NotImplemented("axis_DataCollectionGetResults");
+    NotImplemented(__func__);
 } 
 
 } // A1Bridge_ns

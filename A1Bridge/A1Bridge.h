@@ -76,8 +76,8 @@ class A1Bridge
     std::chrono::time_point<std::chrono::steady_clock> m_lastPoll; 
     std::chrono::time_point<std::chrono::steady_clock> m_lastAxisPoll[MAX_AXES]; 
 
-    virtual void connect_impl(std::string username, std::string password, std::string ip) {NotImplemented("connect_impl");}; 
-    virtual void disconnect_impl() {NotImplemented("disconnect_impl");}; 
+    virtual void connect_impl(std::string username, std::string password, std::string ip) {NotImplemented(__func__);}; 
+    virtual void disconnect_impl() {NotImplemented(__func__);}; 
 
     virtual void initialiseController_impl() {};
     virtual void initialiseAxis_impl(unsigned axis) {};
@@ -85,8 +85,8 @@ class A1Bridge
     virtual void deleteController_impl() {}; 
     virtual void deleteAxis_impl(unsigned axis) {}; 
 
-    virtual void readController_impl() {NotImplemented("readController_impl");}; 
-    virtual void readAxis_impl(unsigned axis) {NotImplemented("readAxis_impl");}; 
+    virtual void readController_impl() {NotImplemented(__func__);}; 
+    virtual void readAxis_impl(unsigned axis) {NotImplemented(__func__);}; 
 
   public: 
     static A1Bridge* getInstance();
@@ -117,33 +117,33 @@ class A1Bridge
     // We just call the Tango command or retrieve the attributes 
 
     // Commands
-    virtual void controller_Reset() {NotImplemented("controller_Reset");}; 
-    virtual void controller_Start() {NotImplemented("controller_Start");}; 
-    virtual void controller_Stop() {NotImplemented("controller_Stop");}; 
-    virtual void controller_Enable() {NotImplemented("controller_Enable");}; 
-    virtual void controller_Disable() {NotImplemented("controller_Disable");}; 
-    virtual void controller_ClearErrors() {NotImplemented("controller_ClearErrors");}; 
-    virtual void controller_AeroScriptProgramRun() {NotImplemented("controller_AeroScriptProgramRun");}; 
-    virtual void controller_AeroScriptProgramLoad() {NotImplemented("controller_AeroScriptProgramLoad");}; 
-    virtual void controller_AeroScriptProgramStart() {NotImplemented("controller_AeroScriptProgramStart");}; 
-    virtual void controller_AeroScriptProgramStop() {NotImplemented("controller_AeroScriptProgramStop");}; 
-    virtual void controller_AeroScriptProgramPause() {NotImplemented("controller_AeroScriptProgramPause");}; 
-    virtual void axis_Abort(int32_t axis) {NotImplemented("axis_Abort");}; 
-    virtual void axis_Home(int32_t axis) {NotImplemented("axis_Home");}; 
-    virtual void axis_Move(int32_t axis) {NotImplemented("axis_Move");}; 
-    virtual void axis_Enable(int32_t axis) {NotImplemented("axis_Enable");}; 
-    virtual void axis_Disable(int32_t axis) {NotImplemented("axis_Disable");}; 
-    virtual void axis_BrakeOn(int32_t axis) {NotImplemented("axis_BrakeOn");}; 
-    virtual void axis_BrakeOff(int32_t axis) {NotImplemented("axis_BrakeOff");}; 
-    virtual void axis_MoveFromLimit(int32_t axis) {NotImplemented("axis_MoveFromLimit");}; 
-    virtual void axis_FreeRun(int32_t axis, double vel) {NotImplemented("axis_FreeRun");}; 
-    virtual void axis_FreeRunStop(int32_t axis) {NotImplemented("axis_FreeRunStop");}; 
-    virtual void axis_ThrowAllFaults(int32_t axis) {NotImplemented("axis_ThrowAllFaults");}; 
-    virtual void axis_AcknowledgeFaults(int32_t axis) {NotImplemented("axis_AcknowledgeFaults");}; 
-    virtual void axis_DataCollectionStart(int32_t axis) {NotImplemented("axis_DataCollectionStart");}; 
-    virtual void axis_DataCollectionStop(int32_t axis) {NotImplemented("axis_DataCollectionStop");}; 
-    virtual void axis_DataCollectionRefresh(int32_t axis) {NotImplemented("axis_DataCollectionRefresh");}; 
-    virtual void axis_DataCollectionGetResults(int32_t axis) {NotImplemented("axis_DataCollectionGetResults");}; 
+    virtual void controller_Reset() {NotImplemented(__func__);}; 
+    virtual void controller_Start() {NotImplemented(__func__);}; 
+    virtual void controller_Stop() {NotImplemented(__func__);}; 
+    virtual void controller_Enable() {NotImplemented(__func__);}; 
+    virtual void controller_Disable() {NotImplemented(__func__);}; 
+    virtual void controller_ClearErrors() {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramRun() {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramLoad() {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramStart() {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramStop() {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramPause() {NotImplemented(__func__);}; 
+    virtual void axis_Abort(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_Home(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_Move(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_Enable(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_Disable(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_BrakeOn(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_BrakeOff(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_MoveFromLimit(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_FreeRun(int32_t axis, double vel) {NotImplemented(__func__);}; 
+    virtual void axis_FreeRunStop(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_ThrowAllFaults(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_AcknowledgeFaults(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_DataCollectionStart(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_DataCollectionStop(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_DataCollectionRefresh(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_DataCollectionGetResults(int32_t axis) {NotImplemented(__func__);}; 
 
     // Attributes
 	Tango::DevBoolean	attr_ControllerRunning_read;

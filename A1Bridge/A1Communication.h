@@ -73,7 +73,7 @@ typedef struct A1AttrVariant
             default:
                 Tango::Except::throw_exception("DRIVER_FAILURE",
                                                 "A1AttrVariant::set() fall through",
-                                                "A1AttrVariant::set()");
+                                                __func__);
         }
     };
 } A1AttrVariant;
