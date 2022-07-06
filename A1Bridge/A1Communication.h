@@ -14,6 +14,20 @@
 namespace A1Bridge_ns {
 
 
+void throwWithLastA1Error(std::string reason, std::string origin);
+
+
+class A1PollConfig
+{
+public: 
+    A1PollConfig();
+    ~A1PollConfig(); 
+    Automation1StatusConfig_T *get(); 
+private: 
+    Automation1StatusConfig_T *m_ptr; 
+};
+
+
 enum A1AttrVariantType 
 {
     A1AttrVariantDevBoolean, 
@@ -160,13 +174,13 @@ typedef std::vector<A1AttributeContainer> A1AttributeVector;
 class A1Communication: public A1Bridge
 {
   protected:
-    unsigned                    errMessageLength=2048; 
-    Automation1Controller      *m_controller;
-	Automation1StatusConfig_T  *m_statusControllerPollConfigOnce; 
-    Automation1StatusConfig_T  *m_statusControllerPollConfig;
-    Automation1StatusConfig_T  *m_statusAxisPollConfig[MAX_AXES];
-    unsigned                    m_statusContollerPollLength; 
-    unsigned                    m_statusAxisPollLength; 
+    Automation1Controller  m_controller_s;
+    Automation1Controller  *m_controller = &m_controller_s; 
+	A1PollConfig           m_statusControllerPollConfigOnce; 
+    A1PollConfig           m_statusControllerPollConfig;
+    A1PollConfig           m_statusAxisPollConfig[MAX_AXES];
+    unsigned               m_statusContollerPollLength; 
+    unsigned               m_statusAxisPollLength; 
 
     virtual void connect_impl(std::string username, std::string password, std::string ip); 
     virtual void disconnect_impl(); 
@@ -180,22 +194,12 @@ class A1Communication: public A1Bridge
     virtual void initialiseController_impl(); 
     virtual void initialiseAxis_impl(unsigned axis); 
 
-    void createPollConfig(Automation1StatusConfig_T **config); 
-    void deletePollConfig(Automation1StatusConfig_T **config); 
-
-    void createControllerPollConfig(); 
-    void createAxisPollConfig(unsigned axis); 
-    void deleteControllerPollConfig(); 
-    void deleteAxisPollConfig(unsigned axis); 
 
     void getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, std::string origin);
     void getTaskResult(unsigned task, double *controllerResults, A1AttributeContainer &attr, std::string origin);
     void getSystemResult(double *controllerResults, A1AttributeContainer &attr, std::string origin);
 
     void checkController();
-
-    void throwWithLastA1Error(std::string reason, std::string origin);
-    void return_checker(bool ret, std::string strTrue="", std::string strFalse="");
 
     A1AttributeVector attr_controllerContainer;
     A1AttributeVector attr_axisContainer[MAX_AXES];

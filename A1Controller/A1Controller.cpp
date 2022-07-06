@@ -221,7 +221,7 @@ void A1Controller::init_device()
 
     gotostate_standby();
 
-    attr_APIVersion_read = &(m_A1Bridge->attr_APIVersion_read); 
+    *attr_APIVersion_read = Tango::string_dup(m_A1Bridge->attr_APIVersion_read); 
 
     /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
 }

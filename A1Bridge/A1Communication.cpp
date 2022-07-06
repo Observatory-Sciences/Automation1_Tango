@@ -4,55 +4,10 @@
 namespace A1Bridge_ns {
 
 
-A1Communication::A1Communication()
+void throwWithLastA1Error(std::string reason, std::string origin)
 {
-    m_simulation = false;
-    m_controller = new Automation1Controller();
-    m_statusControllerPollConfigOnce = NULL;
-    m_statusControllerPollConfig = NULL;
-    for (int axis = 0; axis < MAX_AXES; axis++)
-    {
-        m_statusAxisPollConfig[axis] = NULL; 
-    }
-}
-
-
-A1Communication::~A1Communication()
-{
-    delete m_controller; 
-    try
-    {
-        deleteControllerPollConfig();
-        for (int axis = 0; axis < MAX_AXES; axis++)
-        {
-            deleteAxisPollConfig(axis); 
-        }
-    }
-    catch (Tango::DevFailed &e)
-    {
-        std::cout << "ERROR: Failed to delete Automation1 status config" << std::endl; 
-    }
-}
-
-
-void A1Communication::return_checker(bool ret, std::string strTrue, std::string strFalse)
-{
-    if(!ret)
-    {
-        throwWithLastA1Error(strFalse, "");
-    }
-    else 
-    {
-        if(strTrue != "") std::cout << strTrue << std::endl;
-    }
-    return;
-}
-
-
-void A1Communication::throwWithLastA1Error(std::string reason, std::string origin)
-{
-    char errorMessage[errMessageLength];
-    Automation1_GetLastErrorMessage(errorMessage, errMessageLength);
+    char errorMessage[2048];
+    Automation1_GetLastErrorMessage(errorMessage, 2048);
     Tango::Except::throw_exception(
         "DRIVER_FAILURE", 
         reason + ": " + errorMessage,
@@ -61,142 +16,49 @@ void A1Communication::throwWithLastA1Error(std::string reason, std::string origi
 }
 
 
-void A1Communication::createPollConfig(Automation1StatusConfig_T **config)
+A1PollConfig::A1PollConfig()
 {
-    try
+    if (!Automation1_StatusConfig_Create(&m_ptr))
     {
-        deletePollConfig(config);
-    }
-    catch (Tango::DevFailed &e)
-    {
-        Tango::Except::re_throw_exception(e,
-            "DRIVER_FAILURE",
-            "Failed to delete Automation1 status config before create",
-            __func__
-        );
-    }
-    if (!Automation1_StatusConfig_Create(config))
-    {
-        try
-        {
-            deletePollConfig(config);
-        }
-        catch (Tango::DevFailed &e)
-        {
-            Tango::Except::re_throw_exception(e,
-                "DRIVER_FAILURE",
-                "Failed to delete Automation1 status config after failure to create",
-                __func__
-            );
-        }
-
-        Tango::Except::throw_exception(
-            "DRIVER_FAILURE",
-            "Failed to create Automation1 status config",
-            __func__
-        );
+        m_ptr = NULL; 
+        throwWithLastA1Error("Failed to create Automation1 status config", __func__);
     }
 }
 
 
-void A1Communication::deletePollConfig(Automation1StatusConfig_T **config)
+A1PollConfig::~A1PollConfig() 
 {
-    // TODO: Should we throw exception if these fail? 
-    // Want to catch errors, however
-    // not allowed to throw during Tango device init
-    if (*config != NULL)
+    if (Automation1_StatusConfig_Destroy(m_ptr))
     {
-        if (Automation1_StatusConfig_Destroy(*config))
-        {
-            *config = NULL; 
-            return; 
-        }
-        else 
-        {
-            Tango::Except::throw_exception(
-                "DRIVER_FAILURE", 
-                "Failed to destroy Automation1 status config",
-                __func__
-            );
-        }
+        m_ptr = NULL; 
+    }
+    else 
+    {
+        throwWithLastA1Error("Failed to destroy Automation1 status config", __func__);
     }
 }
 
 
-void A1Communication::createControllerPollConfig()
+Automation1StatusConfig_T* A1PollConfig::get()
 {
-    try
-    {
-        createPollConfig(&(m_statusControllerPollConfigOnce));
-        createPollConfig(&(m_statusControllerPollConfig));
-    }
-    catch (Tango::DevFailed &e)
-    {
-        Tango::Except::re_throw_exception(e,
-            "DRIVER_FAILURE",
-            "Failed to create Automation1 controller status config",
-            __func__
-        );
-    }
+    return m_ptr; 
 }
 
 
-void A1Communication::createAxisPollConfig(unsigned axis)
+A1Communication::A1Communication()
 {
-    try
-    {
-        createPollConfig(&(m_statusAxisPollConfig[axis]));
-    }
-    catch (Tango::DevFailed &e)
-    {
-        Tango::Except::re_throw_exception(e,
-            "DRIVER_FAILURE",
-            "Failed to create Automation1 axis status config",
-            __func__
-        );
-    }
+    m_simulation = false;
 }
 
 
-void A1Communication::deleteControllerPollConfig()
+A1Communication::~A1Communication()
 {
-    try
-    {
-        deletePollConfig(&(m_statusControllerPollConfigOnce));
-        deletePollConfig(&(m_statusControllerPollConfig));
-    }
-    catch (Tango::DevFailed &e)
-    {
-        Tango::Except::re_throw_exception(e,
-            "DRIVER_FAILURE",
-            "Failed to delete Automation1 controller status config",
-            __func__
-        );
-    }
-}
-
-
-void A1Communication::deleteAxisPollConfig(unsigned axis)
-{
-    try
-    {
-        deletePollConfig(&(m_statusAxisPollConfig[axis]));
-    }
-    catch (Tango::DevFailed &e)
-    {
-        Tango::Except::re_throw_exception(e,
-            "DRIVER_FAILURE",
-            "Failed to delete Automation1 axis status config",
-            __func__
-        );
-    }
 }
 
 
 void A1Communication::initialiseController_impl()
 {
-    createControllerPollConfig(); 
-
+    // TODO: vector lifetime
     attr_controllerContainer = A1AttributeVector
     {
         A1AttributeContainer {"TaskStatus0", (A1Attribute) {A1AttrVariant(&attr_taskStatus0), Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0}},
@@ -207,8 +69,7 @@ void A1Communication::initialiseController_impl()
 
     for (auto attr : attr_controllerContainer)
     {
-        std::cout << attr.second.A1Enum.get<Automation1TaskStatusItem>() << std::endl; 
-        if (!Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig, 1, attr.second.A1Enum.get<Automation1TaskStatusItem>(), 0))
+        if (!Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig.get(), 1, attr.second.A1Enum.get<Automation1TaskStatusItem>(), 0))
         {
             Tango::Except::throw_exception(
                 "DRIVER_FAILURE",
@@ -236,9 +97,7 @@ void A1Communication::initialiseController_impl()
 
 
 void A1Communication::initialiseAxis_impl(unsigned axis)
-{
-    createAxisPollConfig(axis); 
-    
+{    
     // TODO: tidy up
     attr_axisContainer[axis] = A1AttributeVector 
     {
@@ -263,8 +122,7 @@ void A1Communication::initialiseAxis_impl(unsigned axis)
 
     for (auto attr : attr_axisContainer[axis])
     {
-        std::cout << attr.second.A1Enum.get<Automation1AxisStatusItem>() << std::endl; 
-        if (!Automation1_StatusConfig_AddAxisStatusItem(m_statusAxisPollConfig[axis], axis, attr.second.A1Enum.get<Automation1AxisStatusItem>(), 0))
+        if (!Automation1_StatusConfig_AddAxisStatusItem(m_statusAxisPollConfig[axis].get(), axis, attr.second.A1Enum.get<Automation1AxisStatusItem>(), 0))
         {
             Tango::Except::throw_exception(
                 "DRIVER_FAILURE",
@@ -278,13 +136,11 @@ void A1Communication::initialiseAxis_impl(unsigned axis)
 
 void A1Communication::deleteController_impl()
 {
-    deleteControllerPollConfig();
 }
 
 
 void A1Communication::deleteAxis_impl(unsigned axis)
 {
-    deleteAxisPollConfig(axis);
 }
 
 
@@ -345,20 +201,20 @@ void A1Communication::connect_impl(std::string username, std::string password, s
     double aliveAxesMask, allResultsOut; 
     int allResultsLen = 0; 
 
-    ret = Automation1_StatusConfig_AddSystemStatusItem(m_statusControllerPollConfigOnce, Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0);
-    return_checker(ret, std::string(""),std::string("Unable to add status item: Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask"));
+    ret = Automation1_StatusConfig_AddSystemStatusItem(m_statusControllerPollConfigOnce.get(), Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0);
+    // return_checker(ret, std::string(""),std::string("Unable to add status item: Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask"));
     if(!ret) return;
     allResultsLen++;
 
-    ret = Automation1_Status_GetResults(*m_controller, m_statusControllerPollConfigOnce, &allResultsOut, allResultsLen);
-    return_checker(ret, std::string(""),std::string("Unable to get status results from controller."));
+    ret = Automation1_Status_GetResults(*m_controller, m_statusControllerPollConfigOnce.get(), &allResultsOut, allResultsLen);
+    // return_checker(ret, std::string(""),std::string("Unable to get status results from controller."));
     if(!ret) return;
 
-    ret = Automation1_Status_GetSystemResult(m_statusControllerPollConfigOnce, &allResultsOut, allResultsLen, Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0, &aliveAxesMask);
-    return_checker(ret, std::string(""),std::string("Failed to extract system status item from all results."));
+    ret = Automation1_Status_GetSystemResult(m_statusControllerPollConfigOnce.get(), &allResultsOut, allResultsLen, Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0, &aliveAxesMask);
+    // return_checker(ret, std::string(""),std::string("Failed to extract system status item from all results."));
     if(!ret) return;
 
-    Automation1_StatusConfig_ClearAllStatusItems(m_statusControllerPollConfigOnce);
+    Automation1_StatusConfig_ClearAllStatusItems(m_statusControllerPollConfigOnce.get());
 
     // Get number of axis and task slots.
     attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
@@ -392,10 +248,10 @@ void A1Communication::disconnect_impl()
 void A1Communication::getTaskResult(unsigned task, double *controllerResults, A1AttributeContainer &attr, std::string origin)
 {
     double d; 
-    if (!Automation1_Status_GetTaskResult(m_statusControllerPollConfig, controllerResults, m_statusContollerPollLength, task, 
+    if (!Automation1_Status_GetTaskResult(m_statusControllerPollConfig.get(), controllerResults, m_statusContollerPollLength, task, 
                                           attr.second.A1Enum.get<Automation1TaskStatusItem>(), 0, &d))
     {
-        throwWithLastA1Error(std::string("ERROR: Failed to extract task info: ") + attr.first, origin);
+        throwWithLastA1Error("ERROR: Failed to extract task info: "s + attr.first, origin);
     }
     attr.second.attr.set(d);
     std::cout << "Set " << attr.first << " to " << d << std::endl; 
@@ -406,10 +262,10 @@ void A1Communication::getTaskResult(unsigned task, double *controllerResults, A1
 void A1Communication::getSystemResult(double *controllerResults, A1AttributeContainer &attr, std::string origin)
 {
     double d; 
-    if (!Automation1_Status_GetSystemResult(m_statusControllerPollConfig, controllerResults, m_statusContollerPollLength, 
+    if (!Automation1_Status_GetSystemResult(m_statusControllerPollConfig.get(), controllerResults, m_statusContollerPollLength, 
                                           attr.second.A1Enum.get<Automation1SystemStatusItem>(), 0, &d))
     {
-        throwWithLastA1Error(std::string("ERROR: Failed to extract system info: ") + attr.first, origin);
+        throwWithLastA1Error("ERROR: Failed to extract system info: "s + attr.first, origin);
     }
     attr.second.attr.set(d);
     std::cout << "Set " << attr.first << " to " << d << std::endl; 
@@ -420,10 +276,10 @@ void A1Communication::getSystemResult(double *controllerResults, A1AttributeCont
 void A1Communication::getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, std::string origin)
 {
     double d; 
-    if (!Automation1_Status_GetAxisResult(m_statusAxisPollConfig[axis], axisResults, m_statusAxisPollLength, axis, 
+    if (!Automation1_Status_GetAxisResult(m_statusAxisPollConfig[axis].get(), axisResults, m_statusAxisPollLength, axis, 
                                           attr.second.A1Enum.get<Automation1AxisStatusItem>(), 0, &d))
     {
-        throwWithLastA1Error(std::string("ERROR: Failed to extract axis info: ") + attr.first, origin);
+        throwWithLastA1Error("ERROR: Failed to extract axis info: "s + attr.first, origin);
     }
     attr.second.attr.set(d);
     std::cout << "Set " << attr.first << " to " << d << std::endl; 
@@ -446,7 +302,7 @@ void A1Communication::checkController()
     if (!Automation1_Controller_IsRunning(*m_controller, &isRunning))
     {
         throwWithLastA1Error("ERROR: Unable to determine if controller is running.", 
-                             "A1Communication::readHardware_impl()");
+                             __func__);
     }
     if (!isRunning)
     {
@@ -464,9 +320,9 @@ void A1Communication::readController_impl()
     unsigned vectorLength = attr_controllerContainer.size();
     double controllerResults[vectorLength];
 
-    if (!Automation1_Status_GetResults(*m_controller, m_statusControllerPollConfig, controllerResults, vectorLength))
+    if (!Automation1_Status_GetResults(*m_controller, m_statusControllerPollConfig.get(), controllerResults, vectorLength))
     {
-        throwWithLastA1Error(std::string("ERROR: Failed to get controller status results from controller."), __func__);
+        throwWithLastA1Error("ERROR: Failed to get controller status results from controller."s, __func__);
     }
 
     for (auto attr : attr_controllerContainer)
@@ -486,9 +342,9 @@ void A1Communication::readAxis_impl(unsigned axis)
     unsigned vectorLength = attr_axisContainer[axis].size();
     double axisResults[vectorLength];
 
-    if (!Automation1_Status_GetResults(*m_controller, m_statusAxisPollConfig[axis], axisResults, vectorLength))
+    if (!Automation1_Status_GetResults(*m_controller, m_statusAxisPollConfig[axis].get(), axisResults, vectorLength))
     {
-        throwWithLastA1Error(std::string("ERROR: Failed to get axis status results from controller."), __func__);
+        throwWithLastA1Error("ERROR: Failed to get axis status results from controller."s, __func__);
     }
 
     for (auto attr : attr_axisContainer[axis])
