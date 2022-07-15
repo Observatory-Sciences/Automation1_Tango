@@ -4,7 +4,7 @@
 namespace A1Bridge_ns {
 
 
-void throwWithLastA1Error(std::string reason, std::string origin)
+void throwWithLastA1Error_origin(std::string reason, std::string origin)
 {
     char errorMessage[2048];
     Automation1_GetLastErrorMessage(errorMessage, 2048);
@@ -21,7 +21,7 @@ A1PollConfig::A1PollConfig()
     if (!Automation1_StatusConfig_Create(&m_ptr))
     {
         m_ptr = NULL; 
-        throwWithLastA1Error("Failed to create Automation1 status config", __func__);
+        throwWithLastA1Error("Failed to create Automation1 status config");
     }
 }
 
@@ -34,7 +34,7 @@ A1PollConfig::~A1PollConfig()
     }
     else 
     {
-        throwWithLastA1Error("Failed to destroy Automation1 status config", __func__);
+        throwWithLastA1Error("Failed to destroy Automation1 status config");
     }
 }
 
@@ -162,10 +162,7 @@ void A1Communication::connect_impl(std::string username, std::string password, s
 
     if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
     {
-        throwWithLastA1Error(
-            "Failed to determine if controller is running",
-            __func__
-        );
+        throwWithLastA1Error("Failed to determine if controller is running");
     }
 
     if (!attr_ControllerRunning_read)
@@ -173,24 +170,15 @@ void A1Communication::connect_impl(std::string username, std::string password, s
         std::cout << "Controller is not running; starting..." << endl;
         if (!Automation1_Controller_Start(*m_controller))
         {
-            throwWithLastA1Error(
-                "Failed to start controller",
-                __func__
-            );
+            throwWithLastA1Error("Failed to start controller");
         }
         if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
         {
-            throwWithLastA1Error(
-                "Failed to determine if controller is running",
-                __func__
-            );
+            throwWithLastA1Error("Failed to determine if controller is running");
         }
         if (!attr_ControllerRunning_read)
         {
-            throwWithLastA1Error(
-                "Controller not running after start request",
-                __func__
-            );
+            throwWithLastA1Error("Controller not running after start request");
         }
     }
 
@@ -251,10 +239,9 @@ void A1Communication::getTaskResult(unsigned task, double *controllerResults, A1
     if (!Automation1_Status_GetTaskResult(m_statusControllerPollConfig.get(), controllerResults, m_statusContollerPollLength, task, 
                                           attr.second.A1Enum.get<Automation1TaskStatusItem>(), 0, &d))
     {
-        throwWithLastA1Error("ERROR: Failed to extract task info: "s + attr.first, origin);
+        throwWithLastA1Error_origin("ERROR: Failed to extract task info: " + attr.first, origin);
     }
     attr.second.attr.set(d);
-    std::cout << "Set " << attr.first << " to " << d << std::endl; 
     return;
 }
 
@@ -265,10 +252,9 @@ void A1Communication::getSystemResult(double *controllerResults, A1AttributeCont
     if (!Automation1_Status_GetSystemResult(m_statusControllerPollConfig.get(), controllerResults, m_statusContollerPollLength, 
                                           attr.second.A1Enum.get<Automation1SystemStatusItem>(), 0, &d))
     {
-        throwWithLastA1Error("ERROR: Failed to extract system info: "s + attr.first, origin);
+        throwWithLastA1Error_origin("ERROR: Failed to extract system info: " + attr.first, origin);
     }
     attr.second.attr.set(d);
-    std::cout << "Set " << attr.first << " to " << d << std::endl; 
     return;
 }
 
@@ -279,10 +265,9 @@ void A1Communication::getAxisResult(unsigned axis, double *axisResults, A1Attrib
     if (!Automation1_Status_GetAxisResult(m_statusAxisPollConfig[axis].get(), axisResults, m_statusAxisPollLength, axis, 
                                           attr.second.A1Enum.get<Automation1AxisStatusItem>(), 0, &d))
     {
-        throwWithLastA1Error("ERROR: Failed to extract axis info: "s + attr.first, origin);
+        throwWithLastA1Error_origin("ERROR: Failed to extract axis info: " + attr.first, origin);
     }
     attr.second.attr.set(d);
-    std::cout << "Set " << attr.first << " to " << d << std::endl; 
     return;
 }
 
@@ -301,8 +286,7 @@ void A1Communication::checkController()
     bool ret; 
     if (!Automation1_Controller_IsRunning(*m_controller, &isRunning))
     {
-        throwWithLastA1Error("ERROR: Unable to determine if controller is running.", 
-                             __func__);
+        throwWithLastA1Error("ERROR: Unable to determine if controller is running.");
     }
     if (!isRunning)
     {
@@ -322,7 +306,7 @@ void A1Communication::readController_impl()
 
     if (!Automation1_Status_GetResults(*m_controller, m_statusControllerPollConfig.get(), controllerResults, vectorLength))
     {
-        throwWithLastA1Error("ERROR: Failed to get controller status results from controller."s, __func__);
+        throwWithLastA1Error("ERROR: Failed to get controller status results from controller.");
     }
 
     for (auto attr : attr_controllerContainer)
@@ -344,7 +328,7 @@ void A1Communication::readAxis_impl(unsigned axis)
 
     if (!Automation1_Status_GetResults(*m_controller, m_statusAxisPollConfig[axis].get(), axisResults, vectorLength))
     {
-        throwWithLastA1Error("ERROR: Failed to get axis status results from controller."s, __func__);
+        throwWithLastA1Error("ERROR: Failed to get axis status results from controller.");
     }
 
     for (auto attr : attr_axisContainer[axis])
@@ -471,10 +455,7 @@ void A1Communication::controller_ClearErrors()
 {
     if (!Automation1_Command_AcknowledgeAll(*m_controller, 1))
     {
-        throwWithLastA1Error( 
-            "Automation1_Command_AcknowledgeAll failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_AcknowledgeAll failed");
     }
 } 
 void A1Communication::controller_AeroScriptProgramRun() 
@@ -503,10 +484,7 @@ void A1Communication::axis_Abort(int32_t axis)
 {
     if (!Automation1_Command_Abort(*m_controller, &axis, 1))
     {
-        throwWithLastA1Error( 
-            "Automation1_Command_Abort failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_Abort failed");
     }
 }
 
@@ -514,10 +492,7 @@ void A1Communication::axis_Home(int32_t axis)
 {
     if (!Automation1_Command_Home(*m_controller, 1, &axis, 1))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_Home failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_Home failed");
     }
 } 
 
@@ -530,10 +505,7 @@ void A1Communication::axis_Enable(int32_t axis)
 {
     if (!Automation1_Command_Enable(*m_controller, 1, &axis, 1))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_Enable failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_Enable failed");
     }
 } 
 
@@ -541,10 +513,7 @@ void A1Communication::axis_Disable(int32_t axis)
 {
     if (!Automation1_Command_Disable(*m_controller, &axis, 1))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_Disable failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_Disable failed");
     }
 } 
 
@@ -552,10 +521,7 @@ void A1Communication::axis_BrakeOn(int32_t axis)
 {
     if (!Automation1_Command_DriveBrakeOn(*m_controller, 1, axis))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_DriveBrakeOn failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_DriveBrakeOn failed");
     }
 } 
 
@@ -563,10 +529,7 @@ void A1Communication::axis_BrakeOff(int32_t axis)
 {
     if (!Automation1_Command_DriveBrakeOff(*m_controller, 1, axis))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_DriveBrakeOff failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_DriveBrakeOff failed");
     }
 } 
 
@@ -574,10 +537,7 @@ void A1Communication::axis_MoveFromLimit(int32_t axis)
 {
     if (!Automation1_Command_MoveOutOfLimit(*m_controller, 1, axis))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_MoveOutOfLimit failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_MoveOutOfLimit failed");
     }
 } 
 
@@ -585,10 +545,7 @@ void A1Communication::axis_FreeRun(int32_t axis, double vel)
 {
     if (!Automation1_Command_MoveFreerun(*m_controller, 1, &axis, 1, &vel, 1))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_MoveFreerun failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_MoveFreerun failed");
     }
 } 
 
@@ -596,10 +553,7 @@ void A1Communication::axis_FreeRunStop(int32_t axis)
 {
     if (!Automation1_Command_MoveFreerunStop(*m_controller, 1, &axis, 1))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_MoveFreerunStop failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_MoveFreerunStop failed");
     }
 } 
 
@@ -608,10 +562,7 @@ void A1Communication::axis_ThrowAllFaults(int32_t axis)
     int64_t faultMask = ~0x0; 
     if (!Automation1_Command_FaultThrow(*m_controller, 1, axis, faultMask))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_FaultThrow failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_FaultThrow failed");
     }
 } 
 
@@ -619,10 +570,7 @@ void A1Communication::axis_AcknowledgeFaults(int32_t axis)
 {
     if (!Automation1_Command_FaultAcknowledge(*m_controller, 1, &axis, 1))
     {
-        throwWithLastA1Error(
-            "Automation1_Command_FaultAcknowledge failed", 
-            __func__
-        );
+        throwWithLastA1Error("Automation1_Command_FaultAcknowledge failed");
     }
 } 
 void A1Communication::axis_DataCollectionStart(int32_t axis) 

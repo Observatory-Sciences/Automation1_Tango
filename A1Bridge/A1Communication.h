@@ -14,7 +14,8 @@
 namespace A1Bridge_ns {
 
 
-void throwWithLastA1Error(std::string reason, std::string origin);
+void throwWithLastA1Error_origin(std::string reason, std::string origin);
+#define throwWithLastA1Error(reason) throwWithLastA1Error_origin(reason, __func__)
 
 
 class A1PollConfig
