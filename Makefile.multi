@@ -101,7 +101,7 @@ LIB_DIR_USER= -L $(A1BRIDGE_HOME)/Automation1/Lib \
 # you must use '-lA -lB' in this order as link flags, otherwise you will get
 # 'undefined reference' errors
 #
-LFLAGS_USR+= -lautomation1c -lautomation1compiler
+LFLAGS_USR+= -lautomation1c -lautomation1compiler -Wl,-rpath -Wl,$(A1BRIDGE_HOME)/Automation1/Lib 
 
 
 #=============================================================================
