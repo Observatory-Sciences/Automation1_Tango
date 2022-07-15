@@ -206,7 +206,7 @@ void A1Axis::init_device()
 	DEBUG_STREAM << "A1Axis::init_device() create device " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::init_device_before) ENABLED START -----*/
 	
-	//	Initialization before get_device_property() call
+	m_A1Bridge = nullptr; 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::init_device_before
 	
@@ -291,13 +291,6 @@ void A1Axis::init_device()
 	{
 		attr_DriveStatus_read[i] = false;
 	}
-
-	// TODO: problem here -- Static Init Order Fiasco:
-    // The Controller defines simulation mode, but the Axis could instantiate the bridge
-    // before the Controller without knowing whether it should be in simulation or not.
-	m_A1Bridge = m_A1Bridge->getInstance();
-
-    m_A1Bridge->initialiseAxis(axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::init_device
 }
@@ -429,6 +422,20 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	DEBUG_STREAM << "A1Axis::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_attr_hardware) ENABLED START -----*/
 	
+    if (m_A1Bridge == nullptr)
+    {  
+        if (A1Bridge_ns::A1Bridge::instanceReady()) 
+        {
+            m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(); 
+            m_A1Bridge->initialiseAxis(this->axis);
+        }
+        else
+        {
+            set_state(Tango::OFF); 
+            return; 
+        }
+    }
+
     m_A1Bridge->readAxis(axis); 
     *attr_PositionFeedback_read     = m_A1Bridge->attr_axes[axis].attr_PositionFeedback_read; 
 	*attr_PositionError_read        = m_A1Bridge->attr_axes[axis].attr_PositionError_read; 

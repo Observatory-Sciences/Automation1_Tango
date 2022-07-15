@@ -14,12 +14,12 @@ void NotImplemented(std::string feature)
 };
 
 
-A1Bridge* A1Bridge::m_instance = NULL;
+A1Bridge* A1Bridge::m_instance = nullptr;
 
 
-A1Bridge::A1Bridge()
+A1Bridge::A1Bridge():
+    m_connected(false)
 {
-    m_connected = false; 
     // TODO: 1000 hours is stupid here
     m_lastPoll = std::chrono::steady_clock::now() - std::chrono::hours(1000); 
     
@@ -34,10 +34,10 @@ A1Bridge::A1Bridge()
 
 A1Bridge::~A1Bridge()
 {
-    if (m_instance != NULL)
+    if (m_instance != nullptr)
     {
         delete m_instance;
-        m_instance = NULL; 
+        m_instance = nullptr; 
     }
 }
 
@@ -50,7 +50,7 @@ A1Bridge* A1Bridge::getInstance()
 
 A1Bridge* A1Bridge::getInstance(bool simulation) 
 {
-    if (m_instance == NULL)
+    if (m_instance == nullptr)
     {
         if (simulation)
         {
@@ -68,9 +68,15 @@ A1Bridge* A1Bridge::getInstance(bool simulation)
 }
 
 
+bool A1Bridge::instanceReady()
+{
+    return (m_instance != nullptr);
+}
+
+
 A1Bridge* A1Bridge::setSimulation(bool simulation) 
 {
-    if ((m_instance != NULL) && (m_instance->isSimulation() != simulation))
+    if ((m_instance != nullptr) && (m_instance->isSimulation() != simulation))
     {
         std::cout << "Halted bridge" << std::endl; 
         delete m_instance;
@@ -144,9 +150,6 @@ void A1Bridge::readController()
 {
     if (m_lastPoll < std::chrono::steady_clock::now() - m_pollInterval_ms)
     {
-        std::cout << "Last poll " << m_lastPoll.time_since_epoch().count() << std::endl; 
-        std::cout << "Interval  " << m_pollInterval_ms.count() << std::endl; 
-        std::cout << "Now       " << std::chrono::steady_clock::now().time_since_epoch().count() << std::endl; 
         this->readController_impl(); 
         m_lastPoll = std::chrono::steady_clock::now(); 
     }
@@ -157,9 +160,6 @@ void A1Bridge::readAxis(unsigned axis)
 {
     if (m_lastAxisPoll[axis] < std::chrono::steady_clock::now() - m_pollInterval_ms)
     {
-        std::cout << "Last poll " << m_lastAxisPoll[axis].time_since_epoch().count() << std::endl; 
-        std::cout << "Interval  " << m_pollInterval_ms.count() << std::endl; 
-        std::cout << "Now       " << std::chrono::steady_clock::now().time_since_epoch().count() << std::endl; 
         this->readAxis_impl(axis); 
         m_lastAxisPoll[axis] = std::chrono::steady_clock::now(); 
     }

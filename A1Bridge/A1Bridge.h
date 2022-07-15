@@ -54,10 +54,6 @@ typedef struct A1AxisAttributes
 	Tango::DevBoolean	attr_DriveStatus_read[27];
 } A1AxisAttributes; 
 
-
-// TODO: who calls the A1Bridge destructor? If both Axis and Controller we
-// have double delete problem. If neither we don't have a clean exit.
-
 // TODO: ensure Axis calls getInstance after Controller
 
 class A1Bridge
@@ -76,21 +72,26 @@ class A1Bridge
     std::chrono::time_point<std::chrono::steady_clock> m_lastPoll; 
     std::chrono::time_point<std::chrono::steady_clock> m_lastAxisPoll[MAX_AXES]; 
 
+    // implementation of connection
     virtual void connect_impl(std::string username, std::string password, std::string ip) {NotImplemented(__func__);}; 
     virtual void disconnect_impl() {NotImplemented(__func__);}; 
 
+    // initialise an axis or controller
     virtual void initialiseController_impl() {};
     virtual void initialiseAxis_impl(unsigned axis) {};
 
+    // clean up an axis or controller
     virtual void deleteController_impl() {}; 
     virtual void deleteAxis_impl(unsigned axis) {}; 
 
+    // read data from axis or controller
     virtual void readController_impl() {NotImplemented(__func__);}; 
     virtual void readAxis_impl(unsigned axis) {NotImplemented(__func__);}; 
 
   public: 
     static A1Bridge* getInstance();
     static A1Bridge* getInstance(bool simulation);
+    static bool      instanceReady(); 
     static A1Bridge* setSimulation(bool simulation); 
     bool isSimulation();
     bool isConnected();
@@ -113,7 +114,7 @@ class A1Bridge
     };  
 
 
-    // Interface between Tango <-> Automation1 API is left up to the children
+    // Interface between Tango <-> Automation1 API is left up to the derived class
     // We just call the Tango command or retrieve the attributes 
 
     // Commands

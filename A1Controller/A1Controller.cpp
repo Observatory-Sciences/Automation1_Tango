@@ -159,8 +159,8 @@ void A1Controller::init_device()
 	DEBUG_STREAM << "A1Controller::init_device() create device " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::init_device_before) ENABLED START -----*/
 	
-	//	Initialization before get_device_property() call
-	
+    m_A1Bridge = nullptr; 	
+
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::init_device_before
 	
 
@@ -208,20 +208,7 @@ void A1Controller::init_device()
 	for (int i = 0; i < 32; i++) 
 	{
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
-	}
-
-    m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(simulate);
-    std::cout << "IpAddress: " << ipAddress << std::endl; 
-    std::cout << "Simulate:  " << simulate << std::endl; 
-    std::cout << "Username:  " << username << std::endl; 
-    std::cout << "Password:  " << password << std::endl; 
-    m_A1Bridge->setPollingInterval(100); 
-
-    m_A1Bridge->initialiseController(); 
-
-    gotostate_standby();
-
-    *attr_APIVersion_read = Tango::string_dup(m_A1Bridge->attr_APIVersion_read); 
+	} 
 
     /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
 }
@@ -381,6 +368,22 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 	DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
 	
+    if (m_A1Bridge == nullptr)
+    {
+        m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(simulate);
+
+        std::cout << "IpAddress: " << ipAddress << std::endl; 
+        std::cout << "Simulate:  " << simulate << std::endl; 
+        std::cout << "Username:  " << username << std::endl; 
+        std::cout << "Password:  " << password << std::endl; 
+        m_A1Bridge->setPollingInterval(100); 
+        std::cout << "Bridge in simulation: " << m_A1Bridge->isSimulation() << std::endl; 
+
+        m_A1Bridge->initialiseController(); 
+
+        gotostate_standby();
+    } 
+
     DEBUG_STREAM << "read hardware" << std::endl; 
     m_A1Bridge->readController(); 
 
@@ -403,6 +406,8 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 		attr_TaskStatus2_read[i] = m_A1Bridge->attr_TaskStatus2_read[i]; 
 	}
 
+    *attr_APIVersion_read = Tango::string_dup(m_A1Bridge->attr_APIVersion_read); 
+    
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_attr_hardware
 }
 //--------------------------------------------------------

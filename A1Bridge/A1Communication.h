@@ -22,6 +22,7 @@ class A1PollConfig
 {
 public: 
     A1PollConfig();
+    A1PollConfig(const A1PollConfig&) = delete; 
     ~A1PollConfig(); 
     Automation1StatusConfig_T *get(); 
 private: 
