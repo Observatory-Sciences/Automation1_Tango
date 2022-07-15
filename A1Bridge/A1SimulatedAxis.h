@@ -19,6 +19,7 @@ class A1SimulatedAxis
     bool m_homed;
     bool m_enabled;
     bool m_moving;
+    bool m_in_position;
     double m_position;
     double m_demand_position;
     double m_max_velocity;
@@ -27,6 +28,8 @@ class A1SimulatedAxis
 
     A1SimulatedAxis();
     ~A1SimulatedAxis();
+    void update();
+    
 };
 
 
