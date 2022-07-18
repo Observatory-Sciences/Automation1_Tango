@@ -15,6 +15,7 @@ A1Simulation::A1Simulation()
 {
     m_simulation = true;
     m_axes.resize(MAX_NO_OF_AXES);
+    m_motor_type = "Simulation";
 
     // Create thread to perform the simulations
     t_ptr = new std::thread(sim_axes, this);
@@ -134,7 +135,12 @@ void A1Simulation::readAxis_impl(unsigned axis)
 
     // Read axis current position
     attr_axes[axis].attr_PositionFeedback_read = m_axes[axis].m_position;
-
+    // Read axis velocity
+    attr_axes[axis].attr_VelocityFeedback_read = m_axes[axis].m_current_velocity;
+    // Read axis acceleration
+    attr_axes[axis].attr_AccelerationFeedback_read = m_axes[axis].m_acceleration;
+    // Motor type set to simulation
+    attr_axes[axis].attr_MotorType_read = Tango::string_dup(m_motor_type.c_str());
 //    for (auto attr : attr_axisContainer[axis])
 //    {
 //        getAxisResult(axis, axisResults, attr, std::string(__func__));
@@ -199,9 +205,9 @@ void A1Simulation::readAxis_impl(unsigned axis)
     // attr_axes[axis].attr_DriveStatus_read[DRV_ENCODER_CLIPPING]             = (int(attr_axes[axis].driveStatus) >> 29) & 1U;
     // attr_axes[axis].attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]             = (int(attr_axes[axis].driveStatus) >> 30) & 1U;
 
-    attr_axes[axis].attr_Enabled_read =     attr_axes[axis].attr_DriveStatus_read[SIM_DRV_ENABLED];
-    attr_axes[axis].attr_InPosition_read =  attr_axes[axis].attr_DriveStatus_read[SIM_DRV_IN_POSITION];
-
+    attr_axes[axis].attr_Enabled_read        = attr_axes[axis].attr_DriveStatus_read[SIM_DRV_ENABLED];
+    attr_axes[axis].attr_InPosition_read     = attr_axes[axis].attr_DriveStatus_read[SIM_DRV_IN_POSITION];
+    attr_axes[axis].attr_PositionTarget_read = m_axes[axis].m_demand_position;
     // // Axis fault
 
     // attr_axes[axis].attr_AxisFault_read[0]    = (int(attr_axes[axis].axisFault) >> 0 ) & 1U;
@@ -255,7 +261,7 @@ void A1Simulation::axis_Home(int32_t axis)
     m_axes[axis].m_homed = true;
 } 
 
-void A1Simulation::axis_Move(int32_t axis)
+void A1Simulation::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity)
 {
     // Check the axis number is within index limits
     if (axis < 0 || axis > MAX_NO_OF_AXES)
@@ -272,6 +278,27 @@ void A1Simulation::axis_Move(int32_t axis)
                                        "A1Simulation::axis_Move");
     }
 
+    switch (moveType)
+    {
+        case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
+            // Set the demand position to the new demand
+            m_axes[axis].m_demand_position = position;
+            break;
+        case A1Axis_ns::_MoveTypeEnum::_INCREMENTALMOVE:
+            m_axes[axis].m_demand_position = m_axes[axis].m_position + position;
+            break;
+        case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
+            m_axes[axis].m_demand_position = position;
+            break;
+        case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
+            m_axes[axis].m_demand_position = position;
+            break;
+        default: 
+            Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown move type", __func__);
+    }
+
+    // Set the in position flag to false
+    m_axes[axis].m_in_position = false;
     // Set the internal moving flag true for the axis
     m_axes[axis].m_moving = true;
 }
