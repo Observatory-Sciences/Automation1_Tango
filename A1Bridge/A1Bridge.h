@@ -5,6 +5,8 @@
 #include <chrono> 
 #include <tango.h>
 
+#include "A1AxisEnum.h"
+
 
 #define DEFAULT_TO_SIMULATION false
 #define MAX_AXES 32
@@ -13,7 +15,7 @@
 namespace A1Bridge_ns {
 
 
-void NotImplemented(std::string feature);
+void NotImplemented(const std::string& feature);
 
 
 typedef struct A1AxisAttributes
@@ -29,8 +31,8 @@ typedef struct A1AxisAttributes
 	Tango::DevDouble	attr_PositionError_read;
 	Tango::DevDouble	attr_CurrentFeedback_read;
 	Tango::DevString	attr_MotorType_read;
-    Tango::DevUShort	attr_HomeType_read;
-	Tango::DevUShort	attr_MoveType_read;
+    A1Axis_ns::_HomeTypeEnum	attr_HomeType_read;
+    A1Axis_ns::_MoveTypeEnum	attr_MoveType_read;
 	Tango::DevDouble	attr_LastMoveDuration_read;
 	Tango::DevDouble	attr_PositionTarget_read;
 	Tango::DevDouble	attr_VelocityTarget_read;
@@ -41,10 +43,10 @@ typedef struct A1AxisAttributes
 	Tango::DevDouble	attr_CurrentError_read;
 	Tango::DevDouble	attr_ServoUpdateRate_read;
 	Tango::DevULong 	attr_DataCollectionNumPoints_read;
-	Tango::DevUShort	attr_DataCollectionFrequency_read;
-	Tango::DevUShort	attr_DataCollectionMode_read;
-	Tango::DevUShort	attr_RampType_read;
-	Tango::DevUShort	attr_RampMode_read;
+    A1Axis_ns::_DataCollectionFrequencyEnum	attr_DataCollectionFrequency_read;
+    A1Axis_ns::_DataCollectionModeEnum	attr_DataCollectionMode_read;
+    A1Axis_ns::_RampTypeEnum	attr_RampType_read;
+    A1Axis_ns::_RampModeEnum	attr_RampMode_read;
 	Tango::DevDouble	attr_RampValue_read;
     Tango::DevDouble    axisStatus; 
 	Tango::DevBoolean	attr_AxisStatus_read[24];
@@ -73,7 +75,7 @@ class A1Bridge
     std::chrono::time_point<std::chrono::steady_clock> m_lastAxisPoll[MAX_AXES]; 
 
     // implementation of connection
-    virtual void connect_impl(std::string username, std::string password, std::string ip) {NotImplemented(__func__);}; 
+    virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip) {NotImplemented(__func__);}; 
     virtual void disconnect_impl() {NotImplemented(__func__);}; 
 
     // initialise an axis or controller
@@ -95,7 +97,7 @@ class A1Bridge
     static A1Bridge* setSimulation(bool simulation); 
     bool isSimulation();
     bool isConnected();
-    void connect(std::string username, std::string password, std::string ip); 
+    void connect(const std::string& username, const std::string& password, const std::string& ip); 
     void disconnect(); 
     void reconnect(); 
 
@@ -130,14 +132,14 @@ class A1Bridge
     virtual void controller_AeroScriptProgramStop() {NotImplemented(__func__);}; 
     virtual void controller_AeroScriptProgramPause() {NotImplemented(__func__);}; 
     virtual void axis_Abort(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_Home(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_Move(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType) {NotImplemented(__func__);}; 
+    virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) {NotImplemented(__func__);}; 
     virtual void axis_Enable(int32_t axis) {NotImplemented(__func__);}; 
     virtual void axis_Disable(int32_t axis) {NotImplemented(__func__);}; 
     virtual void axis_BrakeOn(int32_t axis) {NotImplemented(__func__);}; 
     virtual void axis_BrakeOff(int32_t axis) {NotImplemented(__func__);}; 
     virtual void axis_MoveFromLimit(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_FreeRun(int32_t axis, double vel) {NotImplemented(__func__);}; 
+    virtual void axis_FreeRun(int32_t axis, Tango::DevDouble velocity) {NotImplemented(__func__);}; 
     virtual void axis_FreeRunStop(int32_t axis) {NotImplemented(__func__);}; 
     virtual void axis_ThrowAllFaults(int32_t axis) {NotImplemented(__func__);}; 
     virtual void axis_AcknowledgeFaults(int32_t axis) {NotImplemented(__func__);}; 

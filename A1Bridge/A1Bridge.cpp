@@ -1,12 +1,12 @@
 #include "A1Bridge.h"
-#include "A1Simulation.h"
 #include "A1Communication.h"
+#include "A1Simulation.h"
 
 
 namespace A1Bridge_ns {
 
 
-void NotImplemented(std::string feature)
+void NotImplemented(const std::string& feature)
 {
     Tango::Except::throw_exception("DRIVER_FAILURE",
                                    feature + " not implemented",
@@ -98,7 +98,7 @@ bool A1Bridge::isConnected()
 }
 
 
-void A1Bridge::connect(std::string username, std::string password, std::string ip)
+void A1Bridge::connect(const std::string& username, const std::string& password, const std::string& ip)
 {
     m_username = username; 
     m_password = password; 

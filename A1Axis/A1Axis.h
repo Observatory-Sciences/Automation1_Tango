@@ -37,6 +37,7 @@
 
 #include "A1Defines.h"
 #include "A1Bridge.h"
+#include "A1AxisEnum.h"
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis.h
 
@@ -47,47 +48,6 @@
 
 namespace A1Axis_ns
 {
-enum _HomeTypeEnum {
-	_ASYNCHRONOUS,
-	_SYNCHRONOUS,
-} ;
-typedef _HomeTypeEnum HomeTypeEnum;
-
-enum _MoveTypeEnum {
-	_ABSOLUTEMOVE,
-	_INCREMENTALMOVE,
-	_LINEARMOVE,
-	_RAPIDMOVE,
-} ;
-typedef _MoveTypeEnum MoveTypeEnum;
-
-enum _DataCollectionFrequencyEnum {
-	_1_KHZ,
-	_10_KHZ,
-	_20_KHZ,
-	_100_KHZ,
-	_200_KHZ,
-} ;
-typedef _DataCollectionFrequencyEnum DataCollectionFrequencyEnum;
-
-enum _DataCollectionModeEnum {
-	_SNAPSHOT,
-	_CONTINUOUS,
-} ;
-typedef _DataCollectionModeEnum DataCollectionModeEnum;
-
-enum _RampTypeEnum {
-	_LINEAR,
-	_S_CURVE,
-	_SINE,
-} ;
-typedef _RampTypeEnum RampTypeEnum;
-
-enum _RampModeEnum {
-	_RATE,
-	_TIME,
-} ;
-typedef _RampModeEnum RampModeEnum;
 
 /*----- PROTECTED REGION ID(A1Axis::Additional Class Declarations) ENABLED START -----*/
 
@@ -101,7 +61,12 @@ class A1Axis : public TANGO_BASE_CLASS
 /*----- PROTECTED REGION ID(A1Axis::Data Members) ENABLED START -----*/
 
 private:
-    A1Bridge_ns::A1Bridge* m_A1Bridge; 
+    A1Bridge_ns::A1Bridge*  m_A1Bridge; 
+    HomeTypeEnum	        attr_HomeType_write;
+    MoveTypeEnum	        attr_MoveType_write;
+	Tango::DevDouble	    attr_PositionFeedback_write;
+	Tango::DevDouble	    attr_VelocityFeedback_write;
+
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis::Data Members
 

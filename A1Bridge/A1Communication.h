@@ -14,7 +14,7 @@
 namespace A1Bridge_ns {
 
 
-void throwWithLastA1Error_origin(std::string reason, std::string origin);
+void throwWithLastA1Error_origin(const std::string& reason, const std::string& origin);
 #define throwWithLastA1Error(reason) throwWithLastA1Error_origin(reason, __func__)
 
 
@@ -184,7 +184,7 @@ class A1Communication: public A1Bridge
     unsigned               m_statusContollerPollLength; 
     unsigned               m_statusAxisPollLength; 
 
-    virtual void connect_impl(std::string username, std::string password, std::string ip); 
+    virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
 
     virtual void readController_impl(); 
@@ -197,9 +197,9 @@ class A1Communication: public A1Bridge
     virtual void initialiseAxis_impl(unsigned axis); 
 
 
-    void getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, std::string origin);
-    void getTaskResult(unsigned task, double *controllerResults, A1AttributeContainer &attr, std::string origin);
-    void getSystemResult(double *controllerResults, A1AttributeContainer &attr, std::string origin);
+    void getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, const std::string& origin);
+    void getTaskResult(unsigned task, double *controllerResults, A1AttributeContainer &attr, const std::string& origin);
+    void getSystemResult(double *controllerResults, A1AttributeContainer &attr, const std::string& origin);
 
     void checkController();
 
@@ -221,14 +221,14 @@ class A1Communication: public A1Bridge
     virtual void controller_AeroScriptProgramStop();
     virtual void controller_AeroScriptProgramPause();
     virtual void axis_Abort(int32_t axis);
-    virtual void axis_Home(int32_t axis);
-    virtual void axis_Move(int32_t axis);
+    virtual void axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType);
+    virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity); 
     virtual void axis_Enable(int32_t axis);
     virtual void axis_Disable(int32_t axis);
     virtual void axis_BrakeOn(int32_t axis);
     virtual void axis_BrakeOff(int32_t axis);
     virtual void axis_MoveFromLimit(int32_t axis);
-    virtual void axis_FreeRun(int32_t axis, double vel);
+    virtual void axis_FreeRun(int32_t axis, Tango::DevDouble velocity);
     virtual void axis_FreeRunStop(int32_t axis);
     virtual void axis_ThrowAllFaults(int32_t axis);
     virtual void axis_AcknowledgeFaults(int32_t axis);

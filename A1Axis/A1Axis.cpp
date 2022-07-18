@@ -252,7 +252,9 @@ void A1Axis::init_device()
 	/*----- PROTECTED REGION ID(A1Axis::init_device) ENABLED START -----*/
 	
 	attr_PositionFeedback_read[0] = 0;
+    attr_PositionFeedback_write = 0; 
 	attr_VelocityFeedback_read[0] = 0;
+    attr_VelocityFeedback_write = 0; 
 	attr_AccelerationFeedback_read[0] = 0;
 	attr_InPosition_read[0] = 0;
 	attr_Enabled_read[0] = 0;
@@ -262,8 +264,10 @@ void A1Axis::init_device()
 	attr_PositionError_read[0] = 0;
 	attr_CurrentFeedback_read[0] = 0;
 	attr_MotorType_read[0] = Tango::string_dup("");
-	attr_HomeType_read[0] = _ASYNCHRONOUS;
-	attr_MoveType_read[0] = _ABSOLUTEMOVE;
+    attr_HomeType_read[0] = _ASYNCHRONOUS;
+    attr_HomeType_write = _ASYNCHRONOUS; 
+    attr_MoveType_read[0] = _ABSOLUTEMOVE;
+    attr_MoveType_write = _ABSOLUTEMOVE; 
 	attr_LastMoveDuration_read[0] = 0;
 	attr_PositionTarget_read[0] = 0;
 	attr_VelocityTarget_read[0] = 0;
@@ -530,7 +534,7 @@ void A1Axis::write_PositionFeedback(Tango::WAttribute &attr)
 	Tango::DevDouble	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_PositionFeedback) ENABLED START -----*/
-	
+	attr_PositionFeedback_write = w_val; 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_PositionFeedback
 }
@@ -568,7 +572,7 @@ void A1Axis::write_VelocityFeedback(Tango::WAttribute &attr)
 	Tango::DevDouble	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_VelocityFeedback) ENABLED START -----*/
-	
+	attr_VelocityFeedback_write = w_val; 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_VelocityFeedback
 }
@@ -768,6 +772,8 @@ void A1Axis::write_HomeType(Tango::WAttribute &attr)
 	HomeTypeEnum	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_HomeType) ENABLED START -----*/
+    attr_HomeType_write = w_val; 
+    *attr_HomeType_read = w_val; 
 	
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_HomeType
@@ -806,6 +812,8 @@ void A1Axis::write_MoveType(Tango::WAttribute &attr)
 	MoveTypeEnum	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_MoveType) ENABLED START -----*/
+    attr_MoveType_write = w_val; 
+    *attr_MoveType_read = w_val; 
 	
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_MoveType
@@ -1299,7 +1307,7 @@ void A1Axis::home()
 	DEBUG_STREAM << "A1Axis::Home()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::home) ENABLED START -----*/
 	
-	m_A1Bridge->axis_Home(this->axis); 
+    m_A1Bridge->axis_Home(this->axis, attr_HomeType_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::home
 }
@@ -1315,7 +1323,7 @@ void A1Axis::move()
 	DEBUG_STREAM << "A1Axis::Move()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::move) ENABLED START -----*/
 	
-	m_A1Bridge->axis_Move(this->axis); 
+	m_A1Bridge->axis_Move(this->axis, attr_MoveType_write, attr_PositionFeedback_write, attr_VelocityFeedback_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::move
 }
@@ -1411,7 +1419,7 @@ void A1Axis::free_run()
 	DEBUG_STREAM << "A1Axis::FreeRun()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::free_run) ENABLED START -----*/
 	
-	m_A1Bridge->axis_FreeRun(this->axis, 10.0); 
+	m_A1Bridge->axis_FreeRun(this->axis, attr_VelocityFeedback_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::free_run
 }

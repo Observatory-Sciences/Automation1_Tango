@@ -4,7 +4,7 @@
 namespace A1Bridge_ns {
 
 
-void throwWithLastA1Error_origin(std::string reason, std::string origin)
+void throwWithLastA1Error_origin(const std::string& reason, const std::string& origin)
 {
     char errorMessage[2048];
     Automation1_GetLastErrorMessage(errorMessage, 2048);
@@ -16,11 +16,12 @@ void throwWithLastA1Error_origin(std::string reason, std::string origin)
 }
 
 
-A1PollConfig::A1PollConfig()
+A1PollConfig::A1PollConfig(): 
+    m_ptr(nullptr)
 {
     if (!Automation1_StatusConfig_Create(&m_ptr))
     {
-        m_ptr = NULL; 
+        m_ptr = nullptr; 
         throwWithLastA1Error("Failed to create Automation1 status config");
     }
 }
@@ -30,7 +31,7 @@ A1PollConfig::~A1PollConfig()
 {
     if (Automation1_StatusConfig_Destroy(m_ptr))
     {
-        m_ptr = NULL; 
+        m_ptr = nullptr; 
     }
     else 
     {
@@ -51,9 +52,9 @@ A1Communication::A1Communication()
 }
 
 
-A1Communication::~A1Communication()
-{
-}
+A1Communication::~A1Communication() = default; 
+// {
+// }
 
 
 void A1Communication::initialiseController_impl()
@@ -144,7 +145,7 @@ void A1Communication::deleteAxis_impl(unsigned axis)
 }
 
 
-void A1Communication::connect_impl(std::string username, std::string password, std::string ip)
+void A1Communication::connect_impl(const std::string& username, const std::string& password, const std::string& ip)
 {
     bool stat = Automation1_ConnectWithHostAndUser(ip.c_str(), 
                                                    username.c_str(), 
@@ -191,16 +192,16 @@ void A1Communication::connect_impl(std::string username, std::string password, s
 
     ret = Automation1_StatusConfig_AddSystemStatusItem(m_statusControllerPollConfigOnce.get(), Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0);
     // return_checker(ret, std::string(""),std::string("Unable to add status item: Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask"));
-    if(!ret) return;
-    allResultsLen++;
+    // if(!ret) return;
+    // allResultsLen++;
 
     ret = Automation1_Status_GetResults(*m_controller, m_statusControllerPollConfigOnce.get(), &allResultsOut, allResultsLen);
     // return_checker(ret, std::string(""),std::string("Unable to get status results from controller."));
-    if(!ret) return;
+    // if(!ret) return;
 
     ret = Automation1_Status_GetSystemResult(m_statusControllerPollConfigOnce.get(), &allResultsOut, allResultsLen, Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0, &aliveAxesMask);
     // return_checker(ret, std::string(""),std::string("Failed to extract system status item from all results."));
-    if(!ret) return;
+    // if(!ret) return;
 
     Automation1_StatusConfig_ClearAllStatusItems(m_statusControllerPollConfigOnce.get());
 
@@ -233,7 +234,7 @@ void A1Communication::disconnect_impl()
 }
 
 
-void A1Communication::getTaskResult(unsigned task, double *controllerResults, A1AttributeContainer &attr, std::string origin)
+void A1Communication::getTaskResult(unsigned task, double *controllerResults, A1AttributeContainer &attr, const std::string& origin)
 {
     double d; 
     if (!Automation1_Status_GetTaskResult(m_statusControllerPollConfig.get(), controllerResults, m_statusContollerPollLength, task, 
@@ -246,7 +247,7 @@ void A1Communication::getTaskResult(unsigned task, double *controllerResults, A1
 }
 
 
-void A1Communication::getSystemResult(double *controllerResults, A1AttributeContainer &attr, std::string origin)
+void A1Communication::getSystemResult(double *controllerResults, A1AttributeContainer &attr, const std::string& origin)
 {
     double d; 
     if (!Automation1_Status_GetSystemResult(m_statusControllerPollConfig.get(), controllerResults, m_statusContollerPollLength, 
@@ -259,7 +260,7 @@ void A1Communication::getSystemResult(double *controllerResults, A1AttributeCont
 }
 
 
-void A1Communication::getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, std::string origin)
+void A1Communication::getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, const std::string& origin)
 {
     double d; 
     if (!Automation1_Status_GetAxisResult(m_statusAxisPollConfig[axis].get(), axisResults, m_statusAxisPollLength, axis, 
@@ -311,7 +312,7 @@ void A1Communication::readController_impl()
 
     for (auto attr : attr_controllerContainer)
     {
-        getTaskResult(1, controllerResults, attr, std::string(__func__));
+        getTaskResult(1, controllerResults, attr, __func__);
     }
 
     attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
@@ -333,7 +334,7 @@ void A1Communication::readAxis_impl(unsigned axis)
 
     for (auto attr : attr_axisContainer[axis])
     {
-        getAxisResult(axis, axisResults, attr, std::string(__func__));
+        getAxisResult(axis, axisResults, attr, __func__);
     }
 
     // Axis status
@@ -445,11 +446,17 @@ void A1Communication::controller_Stop()
 } 
 void A1Communication::controller_Enable() 
 {
-    NotImplemented(__func__);
+    for (int i = 0; i < attr_AxisCount_read; i++)
+    {
+        A1Communication::axis_Enable(i); 
+    }    
 } 
 void A1Communication::controller_Disable() 
 {
-    NotImplemented(__func__);
+    for (int i = 0; i < attr_AxisCount_read; i++)
+    {
+        A1Communication::axis_Disable(i); 
+    }    
 } 
 void A1Communication::controller_ClearErrors() 
 {
@@ -488,17 +495,51 @@ void A1Communication::axis_Abort(int32_t axis)
     }
 }
 
-void A1Communication::axis_Home(int32_t axis) 
+void A1Communication::axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType) 
 {
-    if (!Automation1_Command_Home(*m_controller, 1, &axis, 1))
+    switch (homeType)
     {
-        throwWithLastA1Error("Automation1_Command_Home failed");
+        case A1Axis_ns::_HomeTypeEnum::_ASYNCHRONOUS: 
+            if (!Automation1_Command_HomeAsync(*m_controller, 1, &axis, 1))
+            {
+                throwWithLastA1Error("Automation1_Command_HomeAsync failed");
+            }
+            break; 
+        case A1Axis_ns::_HomeTypeEnum::_SYNCHRONOUS: 
+            if (!Automation1_Command_Home(*m_controller, 1, &axis, 1))
+            {
+                throwWithLastA1Error("Automation1_Command_Home failed");
+            }
+            break; 
+        default: 
+            Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown home type", __func__);
     }
 } 
 
-void A1Communication::axis_Move(int32_t axis) 
+void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) 
 {
-    NotImplemented(__func__);
+    bool status; 
+    switch (moveType)
+    {
+        case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
+			status = Automation1_Command_MoveAbsolute(*m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+            break;
+        case A1Axis_ns::_MoveTypeEnum::_INCREMENTALMOVE:
+			status = Automation1_Command_MoveIncremental(*m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+            break;
+        case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
+			status = Automation1_Command_MoveLinear(*m_controller, 1, &axis, 1, &position, 1, velocity);
+            break;
+        case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
+			status = Automation1_Command_MoveRapid(*m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+            break;
+        default: 
+            Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown move type", __func__);
+    }
+    if (!status)
+    {
+        throwWithLastA1Error("Automation1_Command_Move failed");
+    }
 } 
 
 void A1Communication::axis_Enable(int32_t axis) 
@@ -541,9 +582,9 @@ void A1Communication::axis_MoveFromLimit(int32_t axis)
     }
 } 
 
-void A1Communication::axis_FreeRun(int32_t axis, double vel) 
+void A1Communication::axis_FreeRun(int32_t axis, Tango::DevDouble velocity) 
 {
-    if (!Automation1_Command_MoveFreerun(*m_controller, 1, &axis, 1, &vel, 1))
+    if (!Automation1_Command_MoveFreerun(*m_controller, 1, &axis, 1, &velocity, 1))
     {
         throwWithLastA1Error("Automation1_Command_MoveFreerun failed");
     }
@@ -559,8 +600,8 @@ void A1Communication::axis_FreeRunStop(int32_t axis)
 
 void A1Communication::axis_ThrowAllFaults(int32_t axis) 
 {
-    int64_t faultMask = ~0x0; 
-    if (!Automation1_Command_FaultThrow(*m_controller, 1, axis, faultMask))
+    int64_t faultMask = 0x0; 
+    if (!Automation1_Command_FaultThrow(*m_controller, 1, axis, ~faultMask))
     {
         throwWithLastA1Error("Automation1_Command_FaultThrow failed");
     }
