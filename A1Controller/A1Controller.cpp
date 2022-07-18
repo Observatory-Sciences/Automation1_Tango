@@ -210,6 +210,28 @@ void A1Controller::init_device()
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
 	} 
 
+
+    std::cout << "IpAddress: " << ipAddress << std::endl; 
+    std::cout << "Simulate:  " << simulate << std::endl; 
+    std::cout << "Username:  " << username << std::endl; 
+    std::cout << "Password:  " << password << std::endl; 	
+    
+    try
+    {
+        m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(simulate);
+
+        m_A1Bridge->setPollingInterval(100); 
+        std::cout << "Bridge in simulation: " << m_A1Bridge->isSimulation() << std::endl; 
+
+        m_A1Bridge->initialiseController(); 
+
+        gotostate_standby();
+    } 
+    catch (Tango::DevFailed& e)
+    {
+        gotostate_fault(); 
+    }
+
     /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
 }
 
@@ -367,22 +389,6 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 {
 	DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
-	
-    if (m_A1Bridge == nullptr)
-    {
-        m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(simulate);
-
-        std::cout << "IpAddress: " << ipAddress << std::endl; 
-        std::cout << "Simulate:  " << simulate << std::endl; 
-        std::cout << "Username:  " << username << std::endl; 
-        std::cout << "Password:  " << password << std::endl; 
-        m_A1Bridge->setPollingInterval(100); 
-        std::cout << "Bridge in simulation: " << m_A1Bridge->isSimulation() << std::endl; 
-
-        m_A1Bridge->initialiseController(); 
-
-        gotostate_standby();
-    } 
 
     DEBUG_STREAM << "read hardware" << std::endl; 
     m_A1Bridge->readController(); 
@@ -532,7 +538,7 @@ void A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr)
 	Tango::DevString	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Controller::write_AeroScriptFilePath) ENABLED START -----*/
-	
+	attr_AeroScriptFilePath_write = w_val; 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::write_AeroScriptFilePath
 }
@@ -754,7 +760,7 @@ void A1Controller::aero_script_program_run()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramRun()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_run) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_AeroScriptProgramRun(attr_AeroScriptFilePath_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_run
 }
@@ -773,7 +779,7 @@ void A1Controller::aero_script_program_load()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramLoad()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_load) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_AeroScriptProgramLoad(attr_AeroScriptFilePath_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_load
 }
@@ -791,7 +797,7 @@ void A1Controller::aero_script_program_start()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramStart()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_start) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_AeroScriptProgramStart(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_start
 }
@@ -809,7 +815,7 @@ void A1Controller::aero_script_program_stop()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramStop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_stop) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_AeroScriptProgramStop(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_stop
 }
@@ -827,7 +833,7 @@ void A1Controller::aero_script_program_pause()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramPause()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_pause) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->controller_AeroScriptProgramPause(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_pause
 }

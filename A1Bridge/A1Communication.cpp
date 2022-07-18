@@ -22,21 +22,26 @@ A1PollConfig::A1PollConfig():
     if (!Automation1_StatusConfig_Create(&m_ptr))
     {
         m_ptr = nullptr; 
-        throwWithLastA1Error("Failed to create Automation1 status config");
+        Tango::Except::throw_exception(
+            "DRIVER_FAILURE", 
+            "Automation1_StatusConfig_Create failed to create status config", 
+            __func__
+        ); 
     }
 }
 
 
 A1PollConfig::~A1PollConfig() 
 {
-    if (Automation1_StatusConfig_Destroy(m_ptr))
+    if (!Automation1_StatusConfig_Destroy(m_ptr))
     {
-        m_ptr = nullptr; 
+        Tango::Except::throw_exception(
+            "DRIVER_FAILURE", 
+            "Automation1_StatusConfig_Create failed to create status config", 
+            __func__
+        ); 
     }
-    else 
-    {
-        throwWithLastA1Error("Failed to destroy Automation1 status config");
-    }
+    m_ptr = nullptr; 
 }
 
 
@@ -190,6 +195,7 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
     double aliveAxesMask, allResultsOut; 
     int allResultsLen = 0; 
 
+    // TODO: config initialisation
     ret = Automation1_StatusConfig_AddSystemStatusItem(m_statusControllerPollConfigOnce.get(), Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask, 0);
     // return_checker(ret, std::string(""),std::string("Unable to add status item: Automation1SystemStatusItem::Automation1SystemStatusItem_AliveAxesMask"));
     // if(!ret) return;
@@ -243,7 +249,6 @@ void A1Communication::getTaskResult(unsigned task, double *controllerResults, A1
         throwWithLastA1Error_origin("ERROR: Failed to extract task info: " + attr.first, origin);
     }
     attr.second.attr.set(d);
-    return;
 }
 
 
@@ -256,7 +261,6 @@ void A1Communication::getSystemResult(double *controllerResults, A1AttributeCont
         throwWithLastA1Error_origin("ERROR: Failed to extract system info: " + attr.first, origin);
     }
     attr.second.attr.set(d);
-    return;
 }
 
 
@@ -269,26 +273,22 @@ void A1Communication::getAxisResult(unsigned axis, double *axisResults, A1Attrib
         throwWithLastA1Error_origin("ERROR: Failed to extract axis info: " + attr.first, origin);
     }
     attr.second.attr.set(d);
-    return;
 }
 
 
 void A1Communication::checkController()
 {
-    if (*m_controller == nullptr)
+    if (m_controller == nullptr)
     {
-        Tango::Except::throw_exception(
-        "DRIVER_FAILURE", 
-        "No controller",
-        __func__); 
+        Tango::Except::throw_exception("DRIVER_FAILURE", 
+                                       "No controller",
+                                       __func__); 
     }
 
     bool isRunning;
-    bool ret; 
-    if (!Automation1_Controller_IsRunning(*m_controller, &isRunning))
-    {
-        throwWithLastA1Error("ERROR: Unable to determine if controller is running.");
-    }
+    
+    A1_GENERIC_CALL_AND_THROW(Automation1_Controller_IsRunning, *m_controller, &isRunning);
+
     if (!isRunning)
     {
         Tango::Except::throw_exception("DRIVER_FAILURE", 
@@ -401,49 +401,55 @@ void A1Communication::readAxis_impl(unsigned axis)
 
     // Axis fault
 
-    attr_axes[axis].attr_AxisFault_read[0]    = (int(attr_axes[axis].axisFault) >> 0 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[1]    = (int(attr_axes[axis].axisFault) >> 1 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[2]    = (int(attr_axes[axis].axisFault) >> 2 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[3]    = (int(attr_axes[axis].axisFault) >> 3 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[4]    = (int(attr_axes[axis].axisFault) >> 4 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[5]    = (int(attr_axes[axis].axisFault) >> 5 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[6]    = (int(attr_axes[axis].axisFault) >> 6 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[7]    = (int(attr_axes[axis].axisFault) >> 7 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[8]    = (int(attr_axes[axis].axisFault) >> 8 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[9]    = (int(attr_axes[axis].axisFault) >> 9 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[10]   = (int(attr_axes[axis].axisFault) >> 10 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[11]   = (int(attr_axes[axis].axisFault) >> 11 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[12]   = (int(attr_axes[axis].axisFault) >> 12 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[13]   = (int(attr_axes[axis].axisFault) >> 13 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[14]   = (int(attr_axes[axis].axisFault) >> 14 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[15]   = (int(attr_axes[axis].axisFault) >> 15 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[16]   = (int(attr_axes[axis].axisFault) >> 16 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[17]   = (int(attr_axes[axis].axisFault) >> 17 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[18]   = (int(attr_axes[axis].axisFault) >> 18 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[19]   = (int(attr_axes[axis].axisFault) >> 19 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[20]   = (int(attr_axes[axis].axisFault) >> 20 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[21]   = (int(attr_axes[axis].axisFault) >> 21 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[22]   = (int(attr_axes[axis].axisFault) >> 22 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[23]   = (int(attr_axes[axis].axisFault) >> 23 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[24]   = (int(attr_axes[axis].axisFault) >> 24 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[25]   = (int(attr_axes[axis].axisFault) >> 25 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[26]   = (int(attr_axes[axis].axisFault) >> 26 ) & 1U;
-    attr_axes[axis].attr_AxisFault_read[27]   = (int(attr_axes[axis].axisFault) >> 27 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_POSITION_ERROR]     = (int(attr_axes[axis].axisFault) >> 0 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_OVER_CURRENT]       = (int(attr_axes[axis].axisFault) >> 1 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_CW_EOT_LIMIT]       = (int(attr_axes[axis].axisFault) >> 2 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_CCW_EOT_LIMIT]      = (int(attr_axes[axis].axisFault) >> 3 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_CW_SOFT_LIMIT]      = (int(attr_axes[axis].axisFault) >> 4 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_CCW_SOFT_LIMIT]     = (int(attr_axes[axis].axisFault) >> 5 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_AMPLIFIER_FAULT]    = (int(attr_axes[axis].axisFault) >> 6 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_FBK_INPUT0]         = (int(attr_axes[axis].axisFault) >> 7 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_FBK_INPUT1]         = (int(attr_axes[axis].axisFault) >> 8 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_HALL_FAULT]         = (int(attr_axes[axis].axisFault) >> 9 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_MAX_VELOCITY]       = (int(attr_axes[axis].axisFault) >> 10 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_E_STOP_FAULT]       = (int(attr_axes[axis].axisFault) >> 11 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_VELOCITY_ERROR]     = (int(attr_axes[axis].axisFault) >> 12 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_EXTERNAL_FAULT]     = (int(attr_axes[axis].axisFault) >> 13 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_MOTOR_TEMP]         = (int(attr_axes[axis].axisFault) >> 14 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_AMPLIFIER_TEMP]     = (int(attr_axes[axis].axisFault) >> 15 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_ENCODER_FAULT]      = (int(attr_axes[axis].axisFault) >> 16 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_MISALIGNMENT_FAULT] = (int(attr_axes[axis].axisFault) >> 17 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_FBK_SCALING_FAULT]  = (int(attr_axes[axis].axisFault) >> 18 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_MRK_SEARCH_FAULT]   = (int(attr_axes[axis].axisFault) >> 19 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_SAFE_ZONE_FAULT]    = (int(attr_axes[axis].axisFault) >> 20 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_IN_POS_TIMEOUT]     = (int(attr_axes[axis].axisFault) >> 21 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_VOLTAGE_CLAMP]      = (int(attr_axes[axis].axisFault) >> 22 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_MOTOR_SUPPLY]       = (int(attr_axes[axis].axisFault) >> 23 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[AX_F_INTERNAL]           = (int(attr_axes[axis].axisFault) >> 24 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[25]                      = (int(attr_axes[axis].axisFault) >> 25 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[26]                      = (int(attr_axes[axis].axisFault) >> 26 ) & 1U;
+    attr_axes[axis].attr_AxisFault_read[27]                      = (int(attr_axes[axis].axisFault) >> 27 ) & 1U;
 }
 
 
 void A1Communication::controller_Reset() 
 {
-    Automation1_Controller_Reset(*m_controller);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Controller_Reset, *m_controller); 
 } 
+
+
 void A1Communication::controller_Start() 
 {
-    Automation1_Controller_Start(*m_controller);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Controller_Start, *m_controller);
 } 
+
+
 void A1Communication::controller_Stop() 
 {
-    Automation1_Controller_Stop(*m_controller);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Controller_Stop, *m_controller);
 } 
+
+
 void A1Communication::controller_Enable() 
 {
     for (int i = 0; i < attr_AxisCount_read; i++)
@@ -451,6 +457,8 @@ void A1Communication::controller_Enable()
         A1Communication::axis_Enable(i); 
     }    
 } 
+
+
 void A1Communication::controller_Disable() 
 {
     for (int i = 0; i < attr_AxisCount_read; i++)
@@ -458,63 +466,65 @@ void A1Communication::controller_Disable()
         A1Communication::axis_Disable(i); 
     }    
 } 
+
+
 void A1Communication::controller_ClearErrors() 
 {
-    if (!Automation1_Command_AcknowledgeAll(*m_controller, 1))
-    {
-        throwWithLastA1Error("Automation1_Command_AcknowledgeAll failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_AcknowledgeAll, *m_controller, 1);
 } 
-void A1Communication::controller_AeroScriptProgramRun() 
+
+
+void A1Communication::controller_AeroScriptProgramRun(const std::string& file) 
 {
-    NotImplemented(__func__);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramRun, *m_controller, 1, file.c_str());
 } 
-void A1Communication::controller_AeroScriptProgramLoad() 
+
+
+void A1Communication::controller_AeroScriptProgramLoad(const std::string& file) 
 {
-    NotImplemented(__func__);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramLoad, *m_controller, 1, file.c_str());
 } 
+
+
 void A1Communication::controller_AeroScriptProgramStart() 
 {
-    NotImplemented(__func__);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramStart, *m_controller, 1);
 } 
+
+
 void A1Communication::controller_AeroScriptProgramStop() 
 {
-    NotImplemented(__func__);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramStop, *m_controller, 1, m_programHaltTimeout);
 } 
+
+
 void A1Communication::controller_AeroScriptProgramPause() 
 {
-    NotImplemented(__func__);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramPause, *m_controller, 1, m_programHaltTimeout);
 } 
 
 
 void A1Communication::axis_Abort(int32_t axis) 
 {
-    if (!Automation1_Command_Abort(*m_controller, &axis, 1))
-    {
-        throwWithLastA1Error("Automation1_Command_Abort failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_Abort, *m_controller, &axis, 1);
 }
+
 
 void A1Communication::axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType) 
 {
     switch (homeType)
     {
         case A1Axis_ns::_HomeTypeEnum::_ASYNCHRONOUS: 
-            if (!Automation1_Command_HomeAsync(*m_controller, 1, &axis, 1))
-            {
-                throwWithLastA1Error("Automation1_Command_HomeAsync failed");
-            }
+            A1_GENERIC_CALL_AND_THROW(Automation1_Command_HomeAsync, *m_controller, 1, &axis, 1);
             break; 
         case A1Axis_ns::_HomeTypeEnum::_SYNCHRONOUS: 
-            if (!Automation1_Command_Home(*m_controller, 1, &axis, 1))
-            {
-                throwWithLastA1Error("Automation1_Command_Home failed");
-            }
+            A1_GENERIC_CALL_AND_THROW(Automation1_Command_Home, *m_controller, 1, &axis, 1);
             break; 
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown home type", __func__);
     }
 } 
+
 
 void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) 
 {
@@ -522,110 +532,97 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
     switch (moveType)
     {
         case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
-			status = Automation1_Command_MoveAbsolute(*m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveAbsolute, *m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_INCREMENTALMOVE:
-			status = Automation1_Command_MoveIncremental(*m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveIncremental, *m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
-			status = Automation1_Command_MoveLinear(*m_controller, 1, &axis, 1, &position, 1, velocity);
+			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveLinear, *m_controller, 1, &axis, 1, &position, 1, velocity);
             break;
         case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
-			status = Automation1_Command_MoveRapid(*m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveRapid, *m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
             break;
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown move type", __func__);
     }
-    if (!status)
-    {
-        throwWithLastA1Error("Automation1_Command_Move failed");
-    }
 } 
+
 
 void A1Communication::axis_Enable(int32_t axis) 
 {
-    if (!Automation1_Command_Enable(*m_controller, 1, &axis, 1))
-    {
-        throwWithLastA1Error("Automation1_Command_Enable failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_Enable, *m_controller, 1, &axis, 1);
 } 
+
 
 void A1Communication::axis_Disable(int32_t axis) 
 {
-    if (!Automation1_Command_Disable(*m_controller, &axis, 1))
-    {
-        throwWithLastA1Error("Automation1_Command_Disable failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_Disable, *m_controller, &axis, 1);
 } 
+
 
 void A1Communication::axis_BrakeOn(int32_t axis) 
 {
-    if (!Automation1_Command_DriveBrakeOn(*m_controller, 1, axis))
-    {
-        throwWithLastA1Error("Automation1_Command_DriveBrakeOn failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveBrakeOn, *m_controller, 1, axis);
 } 
+
 
 void A1Communication::axis_BrakeOff(int32_t axis) 
 {
-    if (!Automation1_Command_DriveBrakeOff(*m_controller, 1, axis))
-    {
-        throwWithLastA1Error("Automation1_Command_DriveBrakeOff failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveBrakeOff, *m_controller, 1, axis);
 } 
+
 
 void A1Communication::axis_MoveFromLimit(int32_t axis) 
 {
-    if (!Automation1_Command_MoveOutOfLimit(*m_controller, 1, axis))
-    {
-        throwWithLastA1Error("Automation1_Command_MoveOutOfLimit failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveOutOfLimit, *m_controller, 1, axis);
 } 
+
 
 void A1Communication::axis_FreeRun(int32_t axis, Tango::DevDouble velocity) 
 {
-    if (!Automation1_Command_MoveFreerun(*m_controller, 1, &axis, 1, &velocity, 1))
-    {
-        throwWithLastA1Error("Automation1_Command_MoveFreerun failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveFreerun, *m_controller, 1, &axis, 1, &velocity, 1);
 } 
+
 
 void A1Communication::axis_FreeRunStop(int32_t axis) 
 {
-    if (!Automation1_Command_MoveFreerunStop(*m_controller, 1, &axis, 1))
-    {
-        throwWithLastA1Error("Automation1_Command_MoveFreerunStop failed");
-    }
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveFreerunStop, *m_controller, 1, &axis, 1);
 } 
+
 
 void A1Communication::axis_ThrowAllFaults(int32_t axis) 
 {
-    int64_t faultMask = 0x0; 
-    if (!Automation1_Command_FaultThrow(*m_controller, 1, axis, ~faultMask))
-    {
-        throwWithLastA1Error("Automation1_Command_FaultThrow failed");
-    }
+    int64_t faultMask = 0b111111111111111111111111; 
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_FaultThrow, *m_controller, 1, axis, faultMask);
 } 
+
 
 void A1Communication::axis_AcknowledgeFaults(int32_t axis) 
 {
-    if (!Automation1_Command_FaultAcknowledge(*m_controller, 1, &axis, 1))
-    {
-        throwWithLastA1Error("Automation1_Command_FaultAcknowledge failed");
-    }
-} 
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_FaultAcknowledge, *m_controller, 1, &axis, 1);
+}
+
+
+// TODO: data collection methods
 void A1Communication::axis_DataCollectionStart(int32_t axis) 
 {
     NotImplemented(__func__);
 } 
+
+
 void A1Communication::axis_DataCollectionStop(int32_t axis) 
 {
     NotImplemented(__func__);
 } 
+
+
 void A1Communication::axis_DataCollectionRefresh(int32_t axis) 
 {
     NotImplemented(__func__);
 } 
+
+
 void A1Communication::axis_DataCollectionGetResults(int32_t axis) 
 {
     NotImplemented(__func__);

@@ -472,14 +472,34 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 		set_state(Tango::OFF);
 	}
     
+    bool fault = false; 
 	for (int i=0; i < 27; i++)
 	{
 		attr_AxisFault_read[i] = m_A1Bridge->attr_axes[axis].attr_AxisFault_read[i]; 
+        fault |= attr_AxisFault_read[i];
 	}
+    *attr_Error_read = fault; 
 
 	for (int i=0; i < 30; i++)
 	{
 		attr_DriveStatus_read[i] = m_A1Bridge->attr_axes[axis].attr_DriveStatus_read[i]; 
+	}
+
+    if (fault)
+    {
+        set_state(Tango::FAULT); 
+    }
+    else if (attr_AxisStatus_read[AX_JOGGING] || attr_AxisStatus_read[AX_HOMING])
+    {
+        set_state(Tango::MOVING); 
+    }    
+    else if (*attr_Enabled_read) 
+    {
+		set_state(Tango::ON);
+    }
+	else
+	{
+		set_state(Tango::OFF);
 	}
 
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_attr_hardware
@@ -1371,7 +1391,7 @@ void A1Axis::brake_on()
 	DEBUG_STREAM << "A1Axis::BrakeOn()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::brake_on) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_BrakeOn(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::brake_on
 }
@@ -1387,7 +1407,7 @@ void A1Axis::brake_off()
 	DEBUG_STREAM << "A1Axis::BrakeOff()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::brake_off) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_BrakeOff(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::brake_off
 }
@@ -1403,7 +1423,7 @@ void A1Axis::move_from_limit()
 	DEBUG_STREAM << "A1Axis::MoveFromLimit()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::move_from_limit) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_MoveFromLimit(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::move_from_limit
 }
@@ -1451,7 +1471,7 @@ void A1Axis::throw_all_faults()
 	DEBUG_STREAM << "A1Axis::ThrowAllFaults()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::throw_all_faults) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_ThrowAllFaults(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::throw_all_faults
 }
@@ -1467,7 +1487,7 @@ void A1Axis::acknowledge_faults()
 	DEBUG_STREAM << "A1Axis::AcknowledgeFaults()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::acknowledge_faults) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_AcknowledgeFaults(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::acknowledge_faults
 }
@@ -1483,7 +1503,7 @@ void A1Axis::data_collection_start()
 	DEBUG_STREAM << "A1Axis::DataCollectionStart()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::data_collection_start) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_DataCollectionStart(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::data_collection_start
 }
@@ -1499,7 +1519,7 @@ void A1Axis::data_collection_stop()
 	DEBUG_STREAM << "A1Axis::DataCollectionStop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::data_collection_stop) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_DataCollectionStop(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::data_collection_stop
 }
@@ -1515,7 +1535,7 @@ void A1Axis::data_collection_refresh()
 	DEBUG_STREAM << "A1Axis::DataCollectionRefresh()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::data_collection_refresh) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_DataCollectionRefresh(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::data_collection_refresh
 }
@@ -1546,7 +1566,7 @@ void A1Axis::data_collection_get_results()
 	DEBUG_STREAM << "A1Axis::DataCollectionGetResults()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::data_collection_get_results) ENABLED START -----*/
 	
-	//	Add your own code
+	m_A1Bridge->axis_DataCollectionGetResults(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::data_collection_get_results
 }

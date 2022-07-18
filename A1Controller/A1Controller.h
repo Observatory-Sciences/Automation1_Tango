@@ -60,9 +60,7 @@ class A1Controller : public TANGO_BASE_CLASS
 
 private:
     A1Bridge_ns::A1Bridge* m_A1Bridge; 
-    void gotostate_fault();
-    void gotostate_off();
-    void gotostate_standby();
+    std::string            attr_AeroScriptFilePath_write;
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Data Members
 
@@ -370,7 +368,9 @@ public:
 
 /*----- PROTECTED REGION ID(A1Controller::Additional Method prototypes) ENABLED START -----*/
 
-//	Additional Method prototypes
+    void gotostate_fault();
+    void gotostate_off();
+    void gotostate_standby();
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Additional Method prototypes
 };

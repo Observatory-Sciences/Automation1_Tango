@@ -126,8 +126,8 @@ class A1Bridge
     virtual void controller_Enable() {NotImplemented(__func__);}; 
     virtual void controller_Disable() {NotImplemented(__func__);}; 
     virtual void controller_ClearErrors() {NotImplemented(__func__);}; 
-    virtual void controller_AeroScriptProgramRun() {NotImplemented(__func__);}; 
-    virtual void controller_AeroScriptProgramLoad() {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramRun(const std::string& file) {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramLoad(const std::string& file) {NotImplemented(__func__);}; 
     virtual void controller_AeroScriptProgramStart() {NotImplemented(__func__);}; 
     virtual void controller_AeroScriptProgramStop() {NotImplemented(__func__);}; 
     virtual void controller_AeroScriptProgramPause() {NotImplemented(__func__);}; 

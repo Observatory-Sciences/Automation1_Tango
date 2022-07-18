@@ -14,8 +14,19 @@
 namespace A1Bridge_ns {
 
 
+// Helper functions
+// Throws a TANGO error with the last error message from the A1 controller
 void throwWithLastA1Error_origin(const std::string& reason, const std::string& origin);
+
+// Macro that includes __func__ as location of error
 #define throwWithLastA1Error(reason) throwWithLastA1Error_origin(reason, __func__)
+
+// Macro to call an A1 function and report last A1 error if call returns an error code
+#define A1_GENERIC_CALL_AND_THROW(A1F, ...) \
+    if (!(A1F)(__VA_ARGS__)) \
+    { \
+        throwWithLastA1Error("ERROR: " #A1F " failed"); \
+    } 
 
 
 class A1PollConfig
@@ -101,6 +112,8 @@ enum A1EnumVariantType
     A1EnumVariantAutomation1TaskStatusItem
 };
 
+
+// TODO: fix status item containers
 // Type *should be* inferred when called with Automation1 API. 
 class A1EnumVariant 
 {
@@ -173,16 +186,21 @@ typedef std::pair<std::string, A1Attribute> A1AttributeContainer;
 typedef std::vector<A1AttributeContainer> A1AttributeVector;
 
 
+// TODO: implement task ID 
+// TODO: specify a timeout for program pause and stop
+// TODO: string containers
 class A1Communication: public A1Bridge
 {
   protected:
-    Automation1Controller  m_controller_s;
-    Automation1Controller  *m_controller = &m_controller_s; 
+    Automation1Controller  m_controller_instance;
+    Automation1Controller  *m_controller = &m_controller_instance; 
 	A1PollConfig           m_statusControllerPollConfigOnce; 
     A1PollConfig           m_statusControllerPollConfig;
     A1PollConfig           m_statusAxisPollConfig[MAX_AXES];
     unsigned               m_statusContollerPollLength; 
     unsigned               m_statusAxisPollLength; 
+    unsigned               m_programHaltTimeout = 100; 
+    unsigned               m_taskID = 1; 
 
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
@@ -215,8 +233,8 @@ class A1Communication: public A1Bridge
     virtual void controller_Enable();
     virtual void controller_Disable();
     virtual void controller_ClearErrors();
-    virtual void controller_AeroScriptProgramRun();
-    virtual void controller_AeroScriptProgramLoad();
+    virtual void controller_AeroScriptProgramRun(const std::string& file);
+    virtual void controller_AeroScriptProgramLoad(const std::string& file);
     virtual void controller_AeroScriptProgramStart();
     virtual void controller_AeroScriptProgramStop();
     virtual void controller_AeroScriptProgramPause();
