@@ -20,8 +20,7 @@ A1Bridge* A1Bridge::m_instance = nullptr;
 A1Bridge::A1Bridge():
     m_connected(false)
 {
-    // TODO: 1000 hours is stupid here
-    m_lastPoll = std::chrono::steady_clock::now() - std::chrono::hours(1000); 
+    m_lastPoll = std::chrono::steady_clock::time_point::min();  
     
     for (unsigned idx = 0; idx < MAX_AXES; idx++)
     {

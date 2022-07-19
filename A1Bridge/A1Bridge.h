@@ -56,7 +56,6 @@ typedef struct A1AxisAttributes
 	Tango::DevBoolean	attr_DriveStatus_read[27];
 } A1AxisAttributes; 
 
-// TODO: ensure Axis calls getInstance after Controller
 
 class A1Bridge
 {
@@ -165,7 +164,6 @@ class A1Bridge
 	Tango::DevBoolean	attr_TaskStatus2_read[24];
 	Tango::DevString	attr_AeroScriptFiles_read[32];
 
-// TODO: Move enum definitions
     A1AxisAttributes attr_axes[MAX_AXES]; 
 };
 

@@ -315,6 +315,66 @@ void A1Communication::readController_impl()
         getTaskResult(1, controllerResults, attr, __func__);
     }
 
+    attr_TaskStatus0_read[TSK0_PROGRAM_ASSOCIATED]             = (int(attr_taskStatus0) >> TSK0_PROGRAM_ASSOCIATED) & 1U; 
+    attr_TaskStatus0_read[TSK0_IMMEDIATE_EXECUTING]            = (int(attr_taskStatus0) >> TSK0_IMMEDIATE_EXECUTING) & 1U; 
+    attr_TaskStatus0_read[TSK0_RETURN_MOTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_RETURN_MOTION_EXECUTING) & 1U; 
+    attr_TaskStatus0_read[TSK0_PROGRAM_RESET]                  = (int(attr_taskStatus0) >> TSK0_PROGRAM_RESET) & 1U; 
+    attr_TaskStatus0_read[TSK0_PENDING_AXES_STOP]              = (int(attr_taskStatus0) >> TSK0_PENDING_AXES_STOP) & 1U; 
+    attr_TaskStatus0_read[TSK0_FEEDHOLD_ACTIVE]                = (int(attr_taskStatus0) >> TSK0_FEEDHOLD_ACTIVE) & 1U; 
+    attr_TaskStatus0_read[TSK0_CALLBACK_HOLD_ACTIVE]           = (int(attr_taskStatus0) >> TSK0_CALLBACK_HOLD_ACTIVE) & 1U; 
+    attr_TaskStatus0_read[TSK0_CALLBACK_RESPONDING]            = (int(attr_taskStatus0) >> TSK0_CALLBACK_RESPONDING) & 1U; 
+    attr_TaskStatus0_read[TSK0_SPINDLE_ACTIVE]                 = (int(attr_taskStatus0) >> TSK0_SPINDLE_ACTIVE) & 1U; 
+    attr_TaskStatus0_read[TSK0_RETRACE]                        = (int(attr_taskStatus0) >> TSK0_RETRACE) & 1U; 
+    attr_TaskStatus0_read[TSK0_INTERRUPT_MOTION_ACTIVE]        = (int(attr_taskStatus0) >> TSK0_INTERRUPT_MOTION_ACTIVE) & 1U; 
+    attr_TaskStatus0_read[TSK0_JOYSTICK_ACTIVE]                = (int(attr_taskStatus0) >> TSK0_JOYSTICK_ACTIVE) & 1U; 
+    attr_TaskStatus0_read[TSK0_CORNER_ROUNDING]                = (int(attr_taskStatus0) >> TSK0_CORNER_ROUNDING) & 1U; 
+    attr_TaskStatus0_read[TSK0_JOYSTICK_LOW_SPEED_ACTIVE]      = (int(attr_taskStatus0) >> TSK0_JOYSTICK_LOW_SPEED_ACTIVE) & 1U; 
+    attr_TaskStatus0_read[TSK0_SYNC_FUNCTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_SYNC_FUNCTION_EXECUTING) & 1U; 
+    attr_TaskStatus0_read[TSK0_TASK_CONTROL_RESTRICTED]        = (int(attr_taskStatus0) >> TSK0_TASK_CONTROL_RESTRICTED) & 1U; 
+
+    attr_TaskStatus1_read[TSK1_ASYNC_SMC_MOTION_ABORT_PENDING] = (int(attr_taskStatus1) >> TSK1_ASYNC_SMC_MOTION_ABORT_PENDING) & 1U; 
+    attr_TaskStatus1_read[TSK1_RETRACE_REQUESTED]              = (int(attr_taskStatus1) >> TSK1_RETRACE_REQUESTED) & 1U; 
+    attr_TaskStatus1_read[TSK1_MSO_CHANGE]                     = (int(attr_taskStatus1) >> TSK1_MSO_CHANGE) & 1U; 
+    attr_TaskStatus1_read[TSK1_SPINDLE_FEEDHOLD]               = (int(attr_taskStatus1) >> TSK1_SPINDLE_FEEDHOLD) & 1U; 
+    attr_TaskStatus1_read[TSK1_FEEDHOLD_AXES_STOPPED]          = (int(attr_taskStatus1) >> TSK1_FEEDHOLD_AXES_STOPPED) & 1U; 
+    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_ENABLING]         = (int(attr_taskStatus1) >> TSK1_CUTTER_RADIUS_ENABLING) & 1U; 
+    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_DISABLING]        = (int(attr_taskStatus1) >> TSK1_CUTTER_RADIUS_DISABLING) & 1U; 
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_POS]    = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_ENABLING_POS) & 1U; 
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_NEG]    = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_ENABLING_NEG) & 1U; 
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_DISABLING]       = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_DISABLING) & 1U; 
+    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_PENDING]       = (int(attr_taskStatus1) >> TSK1_ON_ERROR_HANDLER_PENDING) & 1U; 
+    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_EXECUTING]     = (int(attr_taskStatus1) >> TSK1_ON_ERROR_HANDLER_EXECUTING) & 1U; 
+    attr_TaskStatus1_read[TSK1_PROGRAM_STOP_PENDING]           = (int(attr_taskStatus1) >> TSK1_PROGRAM_STOP_PENDING) & 1U; 
+    attr_TaskStatus1_read[TSK1_SYNC_FUNCTION_PENDING]          = (int(attr_taskStatus1) >> TSK1_SYNC_FUNCTION_PENDING) & 1U; 
+    attr_TaskStatus1_read[TSK1_NO_MFO_FLOOR]                   = (int(attr_taskStatus1) >> TSK1_NO_MFO_FLOOR) & 1U; 
+    attr_TaskStatus1_read[TSK1_INTERRUPTED]                    = (int(attr_taskStatus1) >> TSK1_INTERRUPTED) & 1U; 
+    attr_TaskStatus1_read[TSK1_IFOV_BUFFER_HOLD]               = (int(attr_taskStatus1) >> TSK1_IFOV_BUFFER_HOLD) & 1U; 
+
+    attr_TaskStatus2_read[TSK2_SCALING_ACTIVE]                 = (int(attr_taskStatus2) >> TSK2_SCALING_ACTIVE) & 1U; 
+    attr_TaskStatus2_read[TSK2_OFFSET_FIXTURE_ACTIVE]          = (int(attr_taskStatus2) >> TSK2_OFFSET_FIXTURE_ACTIVE) & 1U; 
+    attr_TaskStatus2_read[TSK2_PROFILE_ACTIVE]                 = (int(attr_taskStatus2) >> TSK2_PROFILE_ACTIVE) & 1U; 
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_RAPID]              = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_RAPID) & 1U; 
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_LINEAR]             = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_LINEAR) & 1U; 
+    attr_TaskStatus2_read[TSK2_MOTION_PVT]                     = (int(attr_taskStatus2) >> TSK2_MOTION_PVT) & 1U; 
+    attr_TaskStatus2_read[TSK2_MOTION_CONTINUOUS_ACTIVE]       = (int(attr_taskStatus2) >> TSK2_MOTION_CONTINUOUS_ACTIVE) & 1U; 
+    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_POS]      = (int(attr_taskStatus2) >> TSK2_CUTTER_OFFSETS_ACTIVE_POS) & 1U; 
+    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_LEFT]      = (int(attr_taskStatus2) >> TSK2_CUTTER_RADIUS_ACTIVE_LEFT) & 1U; 
+    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_RIGHT]     = (int(attr_taskStatus2) >> TSK2_CUTTER_RADIUS_ACTIVE_RIGHT) & 1U; 
+    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_NEG]      = (int(attr_taskStatus2) >> TSK2_CUTTER_OFFSETS_ACTIVE_NEG) & 1U; 
+    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_LEFT]           = (int(attr_taskStatus2) >> TSK2_NORMALCY_ACTIVE_LEFT) & 1U; 
+    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_RIGHT]          = (int(attr_taskStatus2) >> TSK2_NORMALCY_ACTIVE_RIGHT) & 1U; 
+    attr_TaskStatus2_read[TSK2_NORMALCY_ALIGNMENT]             = (int(attr_taskStatus2) >> TSK2_NORMALCY_ALIGNMENT) & 1U; 
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_CW]                 = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_CW) & 1U; 
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_CCW]                = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_CCW) & 1U; 
+    attr_TaskStatus2_read[TSK2_LIMIT_FEEDRATE_ACTIVE]          = (int(attr_taskStatus2) >> TSK2_LIMIT_FEEDRATE_ACTIVE) & 1U; 
+    attr_TaskStatus2_read[TSK2_LIMIT_MFO_ACTIVE]               = (int(attr_taskStatus2) >> TSK2_LIMIT_MFO_ACTIVE) & 1U; 
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE1]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE1) & 1U; 
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE2) & 1U; 
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE3) & 1U; 
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE1]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE1) & 1U; 
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE2) & 1U; 
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE3) & 1U; 
+
     attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
     attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller);
 }

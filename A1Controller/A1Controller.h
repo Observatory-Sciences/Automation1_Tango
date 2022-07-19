@@ -368,9 +368,7 @@ public:
 
 /*----- PROTECTED REGION ID(A1Controller::Additional Method prototypes) ENABLED START -----*/
 
-    void gotostate_fault();
-    void gotostate_off();
-    void gotostate_standby();
+
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Additional Method prototypes
 };

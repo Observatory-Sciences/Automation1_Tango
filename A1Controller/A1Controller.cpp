@@ -210,7 +210,6 @@ void A1Controller::init_device()
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
 	} 
 
-
     std::cout << "IpAddress: " << ipAddress << std::endl; 
     std::cout << "Simulate:  " << simulate << std::endl; 
     std::cout << "Username:  " << username << std::endl; 
@@ -225,11 +224,12 @@ void A1Controller::init_device()
 
         m_A1Bridge->initialiseController(); 
 
-        gotostate_standby();
+        m_A1Bridge->connect(username, password, ipAddress); 
+        set_state(Tango::STANDBY); 
     } 
     catch (Tango::DevFailed& e)
     {
-        gotostate_fault(); 
+        set_state(Tango::FAULT);
     }
 
     /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
