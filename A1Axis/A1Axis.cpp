@@ -160,6 +160,8 @@ void A1Axis::delete_device()
 	/*----- PROTECTED REGION ID(A1Axis::delete_device) ENABLED START -----*/
 	
 	m_A1Bridge->deleteAxis(axis);
+    delete *attr_FirmwareVersion_read; 
+    delete *attr_MotorType_read; 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::delete_device
 	delete[] attr_PositionFeedback_read;
@@ -281,8 +283,11 @@ void A1Axis::init_device()
 	attr_DataCollectionFrequency_read[0] = _1_KHZ;
 	attr_DataCollectionMode_read[0] = _SNAPSHOT;
 	attr_RampType_read[0] = _LINEAR;
+    attr_RampType_write = _LINEAR;
 	attr_RampMode_read[0] = _RATE;
+    attr_RampMode_write = _RATE;
 	attr_RampValue_read[0] = 0;
+    attr_RampValue_write = 0;
 	for (int i = 0; i < 24; i++) 
 	{
 		attr_AxisStatus_read[i] = false;
@@ -441,6 +446,11 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
     }
 
     m_A1Bridge->readAxis(axis); 
+
+    memcpy(attr_AxisStatus_read,  m_A1Bridge->attr_axes[axis].attr_AxisStatus_read,  24); 
+    memcpy(attr_AxisFault_read,   m_A1Bridge->attr_axes[axis].attr_AxisFault_read,   24); 
+    memcpy(attr_DriveStatus_read, m_A1Bridge->attr_axes[axis].attr_DriveStatus_read, 30); 
+
     *attr_PositionFeedback_read     = m_A1Bridge->attr_axes[axis].attr_PositionFeedback_read; 
 	*attr_PositionError_read        = m_A1Bridge->attr_axes[axis].attr_PositionError_read; 
 	*attr_PositionTarget_read       = m_A1Bridge->attr_axes[axis].attr_PositionTarget_read; 
@@ -453,53 +463,40 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	*attr_CurrentFeedback_read      = m_A1Bridge->attr_axes[axis].attr_CurrentFeedback_read; 
 	*attr_CurrentError_read         = m_A1Bridge->attr_axes[axis].attr_CurrentError_read; 
 	*attr_CurrentTarget_read        = m_A1Bridge->attr_axes[axis].attr_CurrentTarget_read;
-	
-	for (int i=0; i < 24; i++)
-	{
-		attr_AxisStatus_read[i] = m_A1Bridge->attr_axes[axis].attr_AxisStatus_read[i]; 
-	}
 
-	*attr_Enabled_read    = m_A1Bridge->attr_axes[axis].attr_Enabled_read;
-	*attr_InPosition_read = m_A1Bridge->attr_axes[axis].attr_InPosition_read;
-	*attr_Homed_read      = m_A1Bridge->attr_axes[axis].attr_Homed_read;
-	
-    if (*attr_Enabled_read) 
-    {
-		set_state(Tango::ON);
-    }
-	else
-	{
-		set_state(Tango::OFF);
-	}
+	*attr_Enabled_read              = m_A1Bridge->attr_axes[axis].attr_Enabled_read;
+	*attr_InPosition_read           = m_A1Bridge->attr_axes[axis].attr_InPosition_read;
+	*attr_Homed_read                = m_A1Bridge->attr_axes[axis].attr_Homed_read;
+    *attr_Error_read                = m_A1Bridge->attr_axes[axis].attr_Error_read;
+    *attr_LastMoveDuration_read     = m_A1Bridge->attr_axes[axis].attr_LastMoveDuration_read;
     
-    bool fault = false; 
-	for (int i=0; i < 27; i++)
-	{
-		attr_AxisFault_read[i] = m_A1Bridge->attr_axes[axis].attr_AxisFault_read[i]; 
-        fault |= attr_AxisFault_read[i];
-	}
-    *attr_Error_read = fault; 
+    delete *attr_FirmwareVersion_read; 
+    *attr_FirmwareVersion_read      = Tango::string_dup(m_A1Bridge->attr_axes[axis].attr_FirmwareVersion_read); 
 
-	for (int i=0; i < 30; i++)
-	{
-		attr_DriveStatus_read[i] = m_A1Bridge->attr_axes[axis].attr_DriveStatus_read[i]; 
-	}
+    delete *attr_MotorType_read; 
+    *attr_MotorType_read            = Tango::string_dup(m_A1Bridge->attr_axes[axis].attr_MotorType_read); 
 
-    if (fault)
+    // TODO: Read ramp values? 
+
+    if (*attr_Error_read)
     {
         set_state(Tango::FAULT); 
+        set_status("Axis has a fault");
     }
     else if (attr_AxisStatus_read[AX_JOGGING] || attr_AxisStatus_read[AX_HOMING])
     {
         set_state(Tango::MOVING); 
+        set_status("Axis is jogging");
     }    
     else if (*attr_Enabled_read) 
     {
 		set_state(Tango::ON);
+        set_status("Axis is enabled");
     }
 	else
 	{
 		set_state(Tango::OFF);
+        set_status("Axis is off");
 	}
 
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_attr_hardware
@@ -1148,7 +1145,9 @@ void A1Axis::write_RampType(Tango::WAttribute &attr)
 	RampTypeEnum	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_RampType) ENABLED START -----*/
-	
+	attr_RampType_write = w_val; 
+    *attr_RampType_read = w_val; 
+
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampType
 }
@@ -1186,6 +1185,8 @@ void A1Axis::write_RampMode(Tango::WAttribute &attr)
 	RampModeEnum	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_RampMode) ENABLED START -----*/
+	attr_RampMode_write = w_val; 
+    *attr_RampMode_read = w_val; 
 	
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampMode
@@ -1224,6 +1225,8 @@ void A1Axis::write_RampValue(Tango::WAttribute &attr)
 	Tango::DevDouble	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_RampValue) ENABLED START -----*/
+	attr_RampValue_write = w_val; 
+    *attr_RampValue_read = w_val; 
 	
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampValue
@@ -1327,6 +1330,7 @@ void A1Axis::home()
 	DEBUG_STREAM << "A1Axis::Home()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::home) ENABLED START -----*/
 	
+    m_A1Bridge->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
     m_A1Bridge->axis_Home(this->axis, attr_HomeType_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::home
@@ -1343,6 +1347,7 @@ void A1Axis::move()
 	DEBUG_STREAM << "A1Axis::Move()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::move) ENABLED START -----*/
 	
+    m_A1Bridge->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
 	m_A1Bridge->axis_Move(this->axis, attr_MoveType_write, attr_PositionFeedback_write, attr_VelocityFeedback_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::move

@@ -134,6 +134,12 @@ void A1Controller::delete_device()
 	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
 		
     m_A1Bridge->deleteController(); 
+    delete *attr_APIVersion_read; 
+    for (unsigned file = 0; file < 32; file++)
+    {
+        delete attr_AeroScriptFiles_read[file];
+    }
+    
 
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::delete_device
 	delete[] attr_ControllerRunning_read;
@@ -182,28 +188,28 @@ void A1Controller::init_device()
 		return;
 
 	/*----- PROTECTED REGION ID(A1Controller::init_device) ENABLED START -----*/
-	
 
-	attr_ControllerRunning_read[0] = true;
-	attr_AxisCount_read[0] = 1;
-	attr_TaskCount_read[0] = 1;
+
+    attr_ControllerRunning_read[0] = false;
+	attr_AxisCount_read[0] = 0;
+	attr_TaskCount_read[0] = 0;
 	attr_APIVersion_read[0] = Tango::string_dup("");
 	attr_AeroScriptFilePath_read[0] = Tango::string_dup("");
 	for (int i = 0; i < 32; i++) 
 	{
-		attr_AxisHealth_read[i] = true;
+		attr_AxisHealth_read[i] = false;
 	}
 	for (int i = 0; i < 16; i++) 
 	{
-		attr_TaskStatus0_read[i] = true;
+		attr_TaskStatus0_read[i] = false;
 	}
 	for (int i = 0; i < 17; i++) 
 	{
-		attr_TaskStatus1_read[i] = true;
+		attr_TaskStatus1_read[i] = false;
 	}
 	for (int i = 0; i < 24; i++) 
 	{
-		attr_TaskStatus2_read[i] = true;
+		attr_TaskStatus2_read[i] = false;
 	}
 	for (int i = 0; i < 32; i++) 
 	{
@@ -215,6 +221,8 @@ void A1Controller::init_device()
     std::cout << "Username:  " << username << std::endl; 
     std::cout << "Password:  " << password << std::endl; 	
     
+    // TODO: segfault on bad connect?
+    // TODO: status when disconnected
     try
     {
         m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(simulate);
@@ -226,10 +234,12 @@ void A1Controller::init_device()
 
         m_A1Bridge->connect(username, password, ipAddress); 
         set_state(Tango::STANDBY); 
+        set_status("Connected to Automation1 controller"); 
     } 
     catch (Tango::DevFailed& e)
     {
         set_state(Tango::FAULT);
+        set_status("Unable to connect to Automation1 controller"); 
     }
 
     /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
@@ -397,22 +407,63 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     *attr_AxisCount_read         = m_A1Bridge->attr_AxisCount_read;
     *attr_TaskCount_read         = m_A1Bridge->attr_TaskCount_read;
 
-	for (int i=0; i < 16; i++)
-	{
-		attr_TaskStatus0_read[i] = m_A1Bridge->attr_TaskStatus0_read[i]; 
-	}
-    
-    for (int i=0; i < 17; i++)
-	{
-		attr_TaskStatus1_read[i] = m_A1Bridge->attr_TaskStatus1_read[i]; 
-	}
-    
-    for (int i=0; i < 24; i++)
-	{
-		attr_TaskStatus2_read[i] = m_A1Bridge->attr_TaskStatus2_read[i]; 
-	}
-
+    delete *attr_APIVersion_read;
     *attr_APIVersion_read = Tango::string_dup(m_A1Bridge->attr_APIVersion_read); 
+
+    for (unsigned file = 0; file < 32; file++)
+    {
+        delete attr_AeroScriptFiles_read[file];
+        attr_AeroScriptFiles_read[file] = Tango::string_dup(m_A1Bridge->attr_AeroScriptFiles_read[file]); 
+    }
+    
+    memcpy(attr_AxisHealth_read,  m_A1Bridge->attr_AxisHealth_read,  MAX_AXES); 
+    memcpy(attr_TaskStatus0_read, m_A1Bridge->attr_TaskStatus0_read, 16); 
+    memcpy(attr_TaskStatus1_read, m_A1Bridge->attr_TaskStatus1_read, 17); 
+    memcpy(attr_TaskStatus2_read, m_A1Bridge->attr_TaskStatus2_read, 24); 
+
+
+    bool fault   = false; 
+    bool enabled = false; 
+    bool moving  = false; 
+    
+    for (unsigned axis = 0; axis < *attr_AxisCount_read; axis++)
+    {
+        if (!attr_AxisHealth_read[axis])
+        {
+            fault = true; 
+            break; 
+        }
+        else if (m_A1Bridge->attr_axes[axis].attr_AxisStatus_read[AX_JOGGING])
+        {
+            moving = true; 
+        }
+        else if ((!moving) && m_A1Bridge->attr_axes[axis].attr_Enabled_read)
+        {
+            enabled = true; 
+        }
+    }
+
+    if (fault)
+    {
+        set_state(Tango::FAULT); 
+        set_status("At least one axis has a fault"); 
+    }
+    else if (moving)
+    {
+        set_state(Tango::MOVING);
+        set_status("At least one axis is moving"); 
+    }
+    else if (enabled)
+    {
+        set_state(Tango::ON); 
+        set_status("At least one axis is enabled"); 
+    }
+    else
+    {
+        set_state(Tango::STANDBY); 
+        set_status("No axes enabled"); 
+    }
+
     
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_attr_hardware
 }

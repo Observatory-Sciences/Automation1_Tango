@@ -14,7 +14,7 @@ void sim_axes(void *s_ptr)
 A1Simulation::A1Simulation()
 {
     m_simulation = true;
-    m_axes.resize(MAX_NO_OF_AXES);
+    m_axes.resize(MAX_AXES);
     m_motor_type = "Simulation";
 
     // Create thread to perform the simulations
@@ -31,7 +31,7 @@ void A1Simulation::run()
     while (true){
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         // Loop over the axes and call update for each one
-        for (int axis=0; axis < MAX_NO_OF_AXES; axis++){
+        for (int axis=0; axis < MAX_AXES; axis++){
             m_axes[axis].update();
         }
     }
@@ -53,79 +53,11 @@ void A1Simulation::disconnect_impl()
 
 void A1Simulation::initialiseController_impl()
 {
-    // TODO: vector lifetime
-//    attr_controllerContainer = A1AttributeVector
-//    {
-//        A1AttributeContainer {"TaskStatus0", (A1Attribute) {A1AttrVariant(&attr_taskStatus0), Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0}},
-//        A1AttributeContainer {"TaskStatus1", (A1Attribute) {A1AttrVariant(&attr_taskStatus1), Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1}},
-//        A1AttributeContainer {"TaskStatus2", (A1Attribute) {A1AttrVariant(&attr_taskStatus2), Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2}}
-//    };
-
-
-    // for (auto attr : attr_controllerContainer)
-    // {
-    //     if (!Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig.get(), 1, attr.second.A1Enum.get<Automation1TaskStatusItem>(), 0))
-    //     {
-    //         Tango::Except::throw_exception(
-    //             "DRIVER_FAILURE",
-    //             "Failed to add axis status item: " + attr.first,
-    //             __func__
-    //         );
-    //     }
-    // }
-
-//    m_statusContollerPollLength = attr_controllerContainer.size(); 
-
-
-    // ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0, 0);
-    // return_checker(ret, std::string(""),std::string("ERROR: Failed to add status item: Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0"));
-    // if(ret) m_statusAxisPollLength++;
-
-    // ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1, 0);
-    // return_checker(ret, std::string(""),std::string("ERROR: Failed to add status item: Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1"));
-    // if(ret) m_statusAxisPollLength++;
-
-    // ret = Automation1_StatusConfig_AddTaskStatusItem(m_statusControllerPollConfig, 1, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2, 0);
-    // return_checker(ret, std::string(""),std::string("ERROR: Failed to add status item: Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2"));
-    // if(ret) m_statusAxisPollLength++;
 }
 
 
 void A1Simulation::initialiseAxis_impl(unsigned axis)
 {    
-    // TODO: tidy up
-    // attr_axisContainer[axis] = A1AttributeVector 
-    // {
-    //     A1AttributeContainer {"PositionFeedback",     (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionFeedback_read),     Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback}},
-    //     A1AttributeContainer {"PositionError",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionError_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError}},
-    //     A1AttributeContainer {"PositionTarget",       (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_PositionTarget_read),       Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand}},
-    //     A1AttributeContainer {"VelocityFeedback",     (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityFeedback_read),     Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback}},
-    //     A1AttributeContainer {"VelocityError",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityError_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError}},
-    //     A1AttributeContainer {"VelocityTarget",       (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_VelocityTarget_read),       Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand}},
-    //     A1AttributeContainer {"AccelerationFeedback", (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationFeedback_read), Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback}},
-    //     A1AttributeContainer {"AccelerationError",    (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationError_read),    Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError}},
-    //     A1AttributeContainer {"AccelerationTarget",   (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_AccelerationTarget_read),   Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand}},
-    //     A1AttributeContainer {"CurrentFeedback",      (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentFeedback_read),      Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback}},
-    //     A1AttributeContainer {"CurrentError",         (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentError_read),         Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError}},
-    //     A1AttributeContainer {"CurrentTarget",        (A1Attribute) {A1AttrVariant(&attr_axes[axis].attr_CurrentTarget_read),        Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand}},
-    //     A1AttributeContainer {"AxisStatus",           (A1Attribute) {A1AttrVariant(&attr_axes[axis].axisStatus),                     Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus}},
-    //     A1AttributeContainer {"AxisFault",            (A1Attribute) {A1AttrVariant(&attr_axes[axis].axisFault),                      Automation1AxisStatusItem::Automation1AxisStatusItem_AxisFault}},
-    //     A1AttributeContainer {"DriveStatus",          (A1Attribute) {A1AttrVariant(&attr_axes[axis].driveStatus),                    Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus}}
-    // };
-
-    // m_statusAxisPollLength = attr_axisContainer[axis].size(); 
-
-    // for (auto attr : attr_axisContainer[axis])
-    // {
-    //     if (!Automation1_StatusConfig_AddAxisStatusItem(m_statusAxisPollConfig[axis].get(), axis, attr.second.A1Enum.get<Automation1AxisStatusItem>(), 0))
-    //     {
-    //         Tango::Except::throw_exception(
-    //             "DRIVER_FAILURE",
-    //             "Failed to add axis status item: " + attr.first,
-    //             __func__
-    //         );
-    //     }
-    // }
 }
 
 void A1Simulation::readAxis_impl(unsigned axis)
@@ -243,7 +175,7 @@ void A1Simulation::readAxis_impl(unsigned axis)
 void A1Simulation::axis_Home(int32_t axis) 
 {
     // Check the axis number is within index limits
-    if (axis < 0 || axis > MAX_NO_OF_AXES)
+    if (axis < 0 || axis > MAX_AXES)
     {
         Tango::Except::throw_exception("Tango_DEVICE_ERROR",
                                        "Automation1_Command_Home failed - axis out of range", 
@@ -264,7 +196,7 @@ void A1Simulation::axis_Home(int32_t axis)
 void A1Simulation::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity)
 {
     // Check the axis number is within index limits
-    if (axis < 0 || axis > MAX_NO_OF_AXES)
+    if (axis < 0 || axis > MAX_AXES)
     {
         Tango::Except::throw_exception("Tango_DEVICE_ERROR",
                                        "Automation1_Command_Move failed - axis out of range", 
@@ -306,7 +238,7 @@ void A1Simulation::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Ta
 void A1Simulation::axis_Enable(int32_t axis)
 {
     // Check the axis number is within index limits
-    if (axis < 0 || axis > MAX_NO_OF_AXES)
+    if (axis < 0 || axis > MAX_AXES)
     {
         Tango::Except::throw_exception("Tango_DEVICE_ERROR",
                                        "Automation1_Command_Enable failed - axis out of range", 
@@ -320,7 +252,7 @@ void A1Simulation::axis_Enable(int32_t axis)
 void A1Simulation::axis_Disable(int32_t axis)
 {
     // Check the axis number is within index limits
-    if (axis < 0 || axis > MAX_NO_OF_AXES)
+    if (axis < 0 || axis > MAX_AXES)
     {
         Tango::Except::throw_exception("Tango_DEVICE_ERROR",
                                        "Automation1_Command_Disable failed - axis out of range", 

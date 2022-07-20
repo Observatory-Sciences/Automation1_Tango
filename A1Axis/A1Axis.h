@@ -61,11 +61,14 @@ class A1Axis : public TANGO_BASE_CLASS
 /*----- PROTECTED REGION ID(A1Axis::Data Members) ENABLED START -----*/
 
 private:
-    A1Bridge_ns::A1Bridge*  m_A1Bridge; 
-    HomeTypeEnum	        attr_HomeType_write;
-    MoveTypeEnum	        attr_MoveType_write;
-	Tango::DevDouble	    attr_PositionFeedback_write;
-	Tango::DevDouble	    attr_VelocityFeedback_write;
+    A1Bridge_ns::A1Bridge*      m_A1Bridge; 
+    HomeTypeEnum	            attr_HomeType_write;
+    MoveTypeEnum	            attr_MoveType_write;
+	Tango::DevDouble	        attr_PositionFeedback_write;
+	Tango::DevDouble	        attr_VelocityFeedback_write;
+    RampTypeEnum	            attr_RampType_write;
+	RampModeEnum	            attr_RampMode_write;
+	Tango::DevDouble	        attr_RampValue_write;
 
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis::Data Members
@@ -81,37 +84,37 @@ public:
 
 //	Attribute data members
 public:
-	Tango::DevDouble	*attr_PositionFeedback_read;
-	Tango::DevDouble	*attr_VelocityFeedback_read;
-	Tango::DevDouble	*attr_AccelerationFeedback_read;
-	Tango::DevBoolean	*attr_InPosition_read;
-	Tango::DevBoolean	*attr_Enabled_read;
-	Tango::DevBoolean	*attr_Homed_read;
-	Tango::DevBoolean	*attr_Error_read;
-	Tango::DevString	*attr_FirmwareVersion_read;
-	Tango::DevDouble	*attr_PositionError_read;
-	Tango::DevDouble	*attr_CurrentFeedback_read;
-	Tango::DevString	*attr_MotorType_read;
-	HomeTypeEnum	*attr_HomeType_read;
-	MoveTypeEnum	*attr_MoveType_read;
-	Tango::DevDouble	*attr_LastMoveDuration_read;
-	Tango::DevDouble	*attr_PositionTarget_read;
-	Tango::DevDouble	*attr_VelocityTarget_read;
-	Tango::DevDouble	*attr_VelocityError_read;
-	Tango::DevDouble	*attr_AccelerationTarget_read;
-	Tango::DevDouble	*attr_AccelerationError_read;
-	Tango::DevDouble	*attr_CurrentTarget_read;
-	Tango::DevDouble	*attr_CurrentError_read;
-	Tango::DevDouble	*attr_ServoUpdateRate_read;
-	Tango::DevULong	*attr_DataCollectionNumPoints_read;
-	DataCollectionFrequencyEnum	*attr_DataCollectionFrequency_read;
-	DataCollectionModeEnum	*attr_DataCollectionMode_read;
-	RampTypeEnum	*attr_RampType_read;
-	RampModeEnum	*attr_RampMode_read;
-	Tango::DevDouble	*attr_RampValue_read;
-	Tango::DevBoolean	*attr_AxisStatus_read;
-	Tango::DevBoolean	*attr_AxisFault_read;
-	Tango::DevBoolean	*attr_DriveStatus_read;
+	Tango::DevDouble	            *attr_PositionFeedback_read;
+	Tango::DevDouble	            *attr_VelocityFeedback_read;
+	Tango::DevDouble	            *attr_AccelerationFeedback_read;
+	Tango::DevBoolean	            *attr_InPosition_read;
+	Tango::DevBoolean	            *attr_Enabled_read;
+	Tango::DevBoolean	            *attr_Homed_read;
+	Tango::DevBoolean	            *attr_Error_read;
+	Tango::DevString	            *attr_FirmwareVersion_read;
+	Tango::DevDouble	            *attr_PositionError_read;
+	Tango::DevDouble	            *attr_CurrentFeedback_read;
+	Tango::DevString	            *attr_MotorType_read;
+	HomeTypeEnum	                *attr_HomeType_read;
+	MoveTypeEnum	                *attr_MoveType_read;
+	Tango::DevDouble	            *attr_LastMoveDuration_read;
+	Tango::DevDouble	            *attr_PositionTarget_read;
+	Tango::DevDouble	            *attr_VelocityTarget_read;
+	Tango::DevDouble	            *attr_VelocityError_read;
+	Tango::DevDouble	            *attr_AccelerationTarget_read;
+	Tango::DevDouble	            *attr_AccelerationError_read;
+	Tango::DevDouble	            *attr_CurrentTarget_read;
+	Tango::DevDouble	            *attr_CurrentError_read;
+	Tango::DevDouble	            *attr_ServoUpdateRate_read;
+	Tango::DevULong	                *attr_DataCollectionNumPoints_read;
+	DataCollectionFrequencyEnum	    *attr_DataCollectionFrequency_read;
+	DataCollectionModeEnum	        *attr_DataCollectionMode_read;
+	RampTypeEnum	                *attr_RampType_read;
+	RampModeEnum	                *attr_RampMode_read;
+	Tango::DevDouble	            *attr_RampValue_read;
+	Tango::DevBoolean	            *attr_AxisStatus_read;
+	Tango::DevBoolean	            *attr_AxisFault_read;
+	Tango::DevBoolean	            *attr_DriveStatus_read;
 
 //	Constructors and destructors
 public:

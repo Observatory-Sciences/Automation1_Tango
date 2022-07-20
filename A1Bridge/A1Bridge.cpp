@@ -14,21 +14,18 @@ void NotImplemented(const std::string& feature)
 };
 
 
-A1Bridge* A1Bridge::m_instance = nullptr;
-
-
-A1Bridge::A1Bridge():
-    m_connected(false)
+bool PollClock::checkAndUpdate(std::chrono::milliseconds interval)
 {
-    m_lastPoll = std::chrono::steady_clock::time_point::min();  
-    
-    for (unsigned idx = 0; idx < MAX_AXES; idx++)
+    if (m_lastPoll < std::chrono::steady_clock::now() - interval)
     {
-        m_lastAxisPoll[idx] = m_lastPoll; 
+        m_lastPoll = std::chrono::steady_clock::now(); 
+        return true; 
     }
-
-    m_pollInterval_ms = std::chrono::milliseconds(-1); 
+    return false; 
 }
+
+
+A1Bridge* A1Bridge::m_instance = nullptr;
 
 
 A1Bridge::~A1Bridge()
@@ -75,11 +72,13 @@ bool A1Bridge::instanceReady()
 
 A1Bridge* A1Bridge::setSimulation(bool simulation) 
 {
-    if ((m_instance != nullptr) && (m_instance->isSimulation() != simulation))
-    {
-        std::cout << "Halted bridge" << std::endl; 
-        delete m_instance;
-    }
+    // This method is currently disallowed due to dangling pointer implications. 
+    
+    // if ((m_instance != nullptr) && (m_instance->isSimulation() != simulation))
+    // {
+    //     std::cout << "Halted bridge" << std::endl; 
+    //     delete m_instance;
+    // }
 
     return getInstance(simulation);
 }
@@ -147,20 +146,18 @@ void A1Bridge::deleteAxis(unsigned axis)
 
 void A1Bridge::readController()
 {
-    if (m_lastPoll < std::chrono::steady_clock::now() - m_pollInterval_ms)
+    if (m_lastPoll.checkAndUpdate(m_pollInterval_ms))
     {
         this->readController_impl(); 
-        m_lastPoll = std::chrono::steady_clock::now(); 
     }
 }
 
 
 void A1Bridge::readAxis(unsigned axis)
 {
-    if (m_lastAxisPoll[axis] < std::chrono::steady_clock::now() - m_pollInterval_ms)
+    if (m_lastAxisPoll[axis].checkAndUpdate(m_pollInterval_ms))
     {
         this->readAxis_impl(axis); 
-        m_lastAxisPoll[axis] = std::chrono::steady_clock::now(); 
     }
 }
 

@@ -15,6 +15,7 @@ namespace A1Bridge_ns {
 
 
 // Helper functions
+
 // Throws a TANGO error with the last error message from the A1 controller
 void throwWithLastA1Error_origin(const std::string& reason, const std::string& origin);
 
@@ -31,202 +32,101 @@ void throwWithLastA1Error_origin(const std::string& reason, const std::string& o
 
 class A1PollConfig
 {
-public: 
+    // RAII wrapper around Automation1StatusConfig_T 
+  public: 
     A1PollConfig();
     A1PollConfig(const A1PollConfig&) = delete; 
     ~A1PollConfig(); 
     Automation1StatusConfig_T *get(); 
-private: 
+  private: 
     Automation1StatusConfig_T *m_ptr; 
 };
 
 
-enum A1AttrVariantType 
+template<typename T> struct Automation1StatusIndexItem
 {
-    A1AttrVariantDevBoolean, 
-    A1AttrVariantDevDouble,
-    A1AttrVariantDevUShort,
-    A1AttrVariantDevString,
-    A1AttrVariantDevULong
+    // The item will be retrieved and put in destination.
+    double*  destination;
+    unsigned index; 
+    T        item;  
 };
-
-// This class only holds a pointer to a Tango attribute. When the value is 
-// retrieved from hardware, we set the value using the pointer. A C++17 variant
-// would have done this job nicely for us. 
-typedef struct A1AttrVariant
+template<typename T> struct Automation1StatusItem
 {
-  private:
-    A1AttrVariantType m_type; 
-    union
-    {
-        Tango::DevBoolean *m_DevBoolean;
-        Tango::DevDouble  *m_DevDouble;
-        Tango::DevUShort  *m_DevUShort;
-        Tango::DevString  *m_DevString;
-        Tango::DevULong   *m_DevULong;
-    };
-
-  public: 
-    A1AttrVariant(Tango::DevBoolean *arg): m_DevBoolean(arg) 
-        {m_type = A1AttrVariantDevBoolean;};
-    A1AttrVariant(Tango::DevDouble *arg):  m_DevDouble(arg) 
-        {m_type = A1AttrVariantDevDouble;};
-    A1AttrVariant(Tango::DevUShort *arg):  m_DevUShort(arg) 
-        {m_type = A1AttrVariantDevUShort;};
-    A1AttrVariant(Tango::DevString *arg):  m_DevString(arg) 
-        {m_type = A1AttrVariantDevString;};
-    A1AttrVariant(Tango::DevULong *arg):   m_DevULong(arg) 
-        {m_type = A1AttrVariantDevULong;};
-
-    template<typename T> void set(T value) 
-    {
-        switch (m_type)
-        {
-            case A1AttrVariantDevBoolean:
-                *m_DevBoolean = static_cast<Tango::DevBoolean>(value); 
-                break; 
-            case A1AttrVariantDevDouble:
-                *m_DevDouble  = static_cast<Tango::DevDouble>(value); 
-                break; 
-            case A1AttrVariantDevUShort:
-                *m_DevUShort  = static_cast<Tango::DevUShort>(value); 
-                break; 
-            // case A1AttrVariantDevString:
-            //     *m_DevString  = static_cast<Tango::DevString>(value); 
-                break; 
-            case A1AttrVariantDevULong:
-                *m_DevULong   = static_cast<Tango::DevULong>(value); 
-                break; 
-            default:
-                Tango::Except::throw_exception("DRIVER_FAILURE",
-                                                "A1AttrVariant::set() fall through",
-                                                __func__);
-        }
-    };
-} A1AttrVariant;
-
-
-enum A1EnumVariantType 
-{
-    A1EnumVariantAutomation1AxisStatusItem, 
-    A1EnumVariantAutomation1TaskStatusItem
+    // The item will be retrieved and put in destination.
+    double*  destination;
+    T        item;  
 };
 
 
-// TODO: fix status item containers
-// Type *should be* inferred when called with Automation1 API. 
-class A1EnumVariant 
+class A1PollManager
 {
   private:
-    A1EnumVariantType      m_type;
-    union
-    {
-        Automation1AxisStatusItem  m_Automation1AxisStatusItem;
-        Automation1TaskStatusItem  m_Automation1TaskStatusItem;
-        // Automation1DriveStatus m_Automation1DriveStatus;
-        // Automation1TaskState   m_Automation1TaskState;
-        // Automation1TaskStatus0 m_Automation1TaskStatus0;
-        // Automation1TaskStatus1 m_Automation1TaskStatus1;
-        // Automation1TaskStatus2 m_Automation1TaskStatus2;
-    };
-
+    A1PollConfig m_config; 
+    unsigned     m_refCount; 
+    std::vector<Automation1StatusIndexItem<Automation1AxisStatusItem>> m_axisStatusItems; 
+    std::vector<Automation1StatusIndexItem<Automation1TaskStatusItem>> m_taskStatusItems; 
+    std::vector<Automation1StatusItem<Automation1SystemStatusItem>>    m_systemStatusItems; 
   public:
-    A1EnumVariant(Automation1AxisStatusItem  a): m_Automation1AxisStatusItem(a)  
-        {m_type = A1EnumVariantAutomation1AxisStatusItem;};
-    A1EnumVariant(Automation1TaskStatusItem  a): m_Automation1TaskStatusItem(a)   
-        {m_type = A1EnumVariantAutomation1TaskStatusItem;};
-    // A1EnumVariant(Automation1DriveStatus a): m_Automation1DriveStatus(a) 
-    //     {m_type = A1EnumVariantAutomation1DriveStatus;};
-    // A1EnumVariant(Automation1TaskState   a): m_Automation1TaskState(a)   
-    //     {m_type = A1EnumVariantAutomation1TaskState;};
-    // A1EnumVariant(Automation1TaskStatus0 a): m_Automation1TaskStatus0(a) 
-    //     {m_type = A1EnumVariantAutomation1TaskStatus0;};
-    // A1EnumVariant(Automation1TaskStatus1 a): m_Automation1TaskStatus1(a) 
-    //     {m_type = A1EnumVariantAutomation1TaskStatus1;};
-    // A1EnumVariant(Automation1TaskStatus2 a): m_Automation1TaskStatus2(a) 
-    //     {m_type = A1EnumVariantAutomation1TaskStatus2;};
-
-    // Automation1AxisStatusItem  get() {return m_Automation1AxisStatusItem;};
-    // Automation1DriveStatus get() {return m_Automation1DriveStatus;};
-    // Automation1TaskState   get() {return m_Automation1TaskState;};
-    // Automation1TaskStatus0 get() {return m_Automation1TaskStatus0;};
-    // Automation1TaskStatus1 get() {return m_Automation1TaskStatus1;};
-    // Automation1TaskStatus2 get() {return m_Automation1TaskStatus2;};
-
-    template<class T> T get()
-    {
-        switch (m_type)
-        {
-                case A1EnumVariantAutomation1AxisStatusItem: 
-                    return static_cast<T>(m_Automation1AxisStatusItem);
-                case A1EnumVariantAutomation1TaskStatusItem: 
-                    return static_cast<T>(m_Automation1TaskStatusItem);
-
-                // case A1EnumVariantAutomation1DriveStatus: 
-                //     return static_cast<T>(m_Automation1DriveStatus);
-                // case A1EnumVariantAutomation1TaskState: 
-                //     return static_cast<T>(m_Automation1TaskState);
-                // case A1EnumVariantAutomation1TaskStatus0: 
-                //     return static_cast<T>(m_Automation1TaskStatus0);
-                // case A1EnumVariantAutomation1TaskStatus1: 
-                //     return static_cast<T>(m_Automation1TaskStatus1);
-                // case A1EnumVariantAutomation1TaskStatus2: 
-                //     return static_cast<T>(m_Automation1TaskStatus2);
-        }
-    }
+    A1PollManager() : m_refCount(0) {};
+    ~A1PollManager() = default;
+    void push(double* destination, unsigned axis, Automation1AxisStatusItem item); 
+    void push(double* destination, unsigned task, Automation1TaskStatusItem item); 
+    void push(double* destination, Automation1SystemStatusItem item); 
+    void poll(Automation1Controller* controller);
+    // All classes need the common polling, so we can't delete common poll manager until no one else is using it. 
+    // We use a ref count for this. 
+    void incrementRefCount(); 
+    void decrementRefCount(); 
+    void clear(); 
+    size_t size();
 };
-
-
-typedef struct A1Attribute
-{
-    A1AttrVariant attr;
-    A1EnumVariant A1Enum; 
-} A1Attribute; 
-typedef std::pair<std::string, A1Attribute> A1AttributeContainer;
-typedef std::vector<A1AttributeContainer> A1AttributeVector;
 
 
 // TODO: implement task ID 
+// TODO: check usage MAX_AXES vs. attr_AxisCount_read (max vs. current)
 // TODO: specify a timeout for program pause and stop
-// TODO: string containers
 class A1Communication: public A1Bridge
 {
   protected:
-    Automation1Controller  m_controller_instance;
-    Automation1Controller  *m_controller = &m_controller_instance; 
-	A1PollConfig           m_statusControllerPollConfigOnce; 
-    A1PollConfig           m_statusControllerPollConfig;
-    A1PollConfig           m_statusAxisPollConfig[MAX_AXES];
-    unsigned               m_statusContollerPollLength; 
-    unsigned               m_statusAxisPollLength; 
-    unsigned               m_programHaltTimeout = 100; 
-    unsigned               m_taskID = 1; 
+    unsigned                m_programHaltTimeout; 
+    unsigned                m_taskID; 
 
+    Automation1Controller   m_controller_instance;
+    Automation1Controller   *m_controller = &m_controller_instance; 
+    
+    // We have three sets of config: 
+    // - one for common data like error status of each axis
+    // - one for controller-only data
+    // - one (per axis) for axis-only data
+    A1PollManager           m_pollManagerCommon; 
+    A1PollManager           m_pollManagerController; 
+    A1PollManager           m_pollManagerAxis[MAX_AXES];
+
+    PollClock m_lastCommonPoll; 
+    
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
 
+    void onConnectController(); 
+    void onConnectAxis(unsigned axis);
+
+    virtual void initialiseController_impl(); 
+    virtual void initialiseAxis_impl(unsigned axis); 
+    
     virtual void readController_impl(); 
     virtual void readAxis_impl(unsigned axis); 
     
     virtual void deleteController_impl(); 
     virtual void deleteAxis_impl(unsigned axis); 
 
-    virtual void initialiseController_impl(); 
-    virtual void initialiseAxis_impl(unsigned axis); 
-
-
-    void getAxisResult(unsigned axis, double *axisResults, A1AttributeContainer &attr, const std::string& origin);
-    void getTaskResult(unsigned task, double *controllerResults, A1AttributeContainer &attr, const std::string& origin);
-    void getSystemResult(double *controllerResults, A1AttributeContainer &attr, const std::string& origin);
+    void initialiseCommonPolling();
+    void readCommon(); 
 
     void checkController();
 
-    A1AttributeVector attr_controllerContainer;
-    A1AttributeVector attr_axisContainer[MAX_AXES];
-
   public: 
-    A1Communication(); 
-    virtual ~A1Communication();
+    A1Communication() : m_programHaltTimeout(100), m_taskID(1) {m_simulation = false;}; 
+    virtual ~A1Communication() = default;
     virtual void controller_Reset();
     virtual void controller_Start();
     virtual void controller_Stop();
@@ -254,6 +154,8 @@ class A1Communication: public A1Bridge
     virtual void axis_DataCollectionStop(int32_t axis);
     virtual void axis_DataCollectionRefresh(int32_t axis);
     virtual void axis_DataCollectionGetResults(int32_t axis);
+    
+    virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value);
 };
 
 } // namespace A1Bridge_ns

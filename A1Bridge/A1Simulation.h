@@ -12,11 +12,6 @@
 namespace A1Bridge_ns {
 
 
-/**
- * TODO:  Can the define be read from somewhere?
-*/
-#define MAX_NO_OF_AXES 32
-
 #define SIM_AX_HOMED                           0  //Homed
 #define SIM_AX_PROFILING                       1  //Profiling
 #define SIM_AX_WAIT_DONE                       2  //WaitDone

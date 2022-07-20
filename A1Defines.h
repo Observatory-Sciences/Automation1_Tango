@@ -149,6 +149,18 @@
 #define TSK2_COORD2_PLANE2              22
 #define TSK2_COORD2_PLANE3              23
 
+// TODO: use Automation1MotorType
+enum AX_MOTOR_TYPE
+{
+    AX_MOTOR_TYPE_BRUSHLESS_LINEAR       = 0,
+    AX_MOTOR_TYPE_BRUSHLESS_ROTARY       = 1,
+    AX_MOTOR_TYPE_DC_BRUSH               = 2,
+    AX_MOTOR_TYPE_STEPPER_MOTOR          = 3,
+    AX_MOTOR_TYPE_TWO_PHASE_AC_BRUSHLESS = 6,
+    AX_MOTOR_TYPE_PIEZO_ACTUATOR         = 8,
+    AX_MOTOR_TYPE_GALVO                  = 9,
+}; 
+
 //constants
 #define ERR_MSG_SZ                      2048
 #define AXIS_NAME_SZ                    256

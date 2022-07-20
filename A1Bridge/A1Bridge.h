@@ -18,50 +18,59 @@ namespace A1Bridge_ns {
 void NotImplemented(const std::string& feature);
 
 
+class PollClock
+{
+  private: 
+    std::chrono::time_point<std::chrono::steady_clock> m_lastPoll; 
+  public: 
+    PollClock() : m_lastPoll(std::chrono::steady_clock::time_point::min()) {}; 
+    bool checkAndUpdate(std::chrono::milliseconds interval);
+};
+
+
 typedef struct A1AxisAttributes
 {
-    Tango::DevDouble	attr_PositionFeedback_read;
-	Tango::DevDouble	attr_VelocityFeedback_read;
-	Tango::DevDouble	attr_AccelerationFeedback_read;
-	Tango::DevBoolean	attr_InPosition_read;
-	Tango::DevBoolean	attr_Enabled_read;
-	Tango::DevBoolean	attr_Homed_read;
-	Tango::DevBoolean	attr_Error_read;
-	Tango::DevString	attr_FirmwareVersion_read;
-	Tango::DevDouble	attr_PositionError_read;
-	Tango::DevDouble	attr_CurrentFeedback_read;
-	Tango::DevString	attr_MotorType_read;
-    A1Axis_ns::_HomeTypeEnum	attr_HomeType_read;
-    A1Axis_ns::_MoveTypeEnum	attr_MoveType_read;
-	Tango::DevDouble	attr_LastMoveDuration_read;
-	Tango::DevDouble	attr_PositionTarget_read;
-	Tango::DevDouble	attr_VelocityTarget_read;
-	Tango::DevDouble	attr_VelocityError_read;
-	Tango::DevDouble	attr_AccelerationTarget_read;
-	Tango::DevDouble	attr_AccelerationError_read;
-	Tango::DevDouble	attr_CurrentTarget_read;
-	Tango::DevDouble	attr_CurrentError_read;
-	Tango::DevDouble	attr_ServoUpdateRate_read;
-	Tango::DevULong 	attr_DataCollectionNumPoints_read;
-    A1Axis_ns::_DataCollectionFrequencyEnum	attr_DataCollectionFrequency_read;
-    A1Axis_ns::_DataCollectionModeEnum	attr_DataCollectionMode_read;
-    A1Axis_ns::_RampTypeEnum	attr_RampType_read;
-    A1Axis_ns::_RampModeEnum	attr_RampMode_read;
-	Tango::DevDouble	attr_RampValue_read;
-    Tango::DevDouble    axisStatus; 
-	Tango::DevBoolean	attr_AxisStatus_read[24];
-    Tango::DevDouble    axisFault; 
-	Tango::DevBoolean	attr_AxisFault_read[25];
-    Tango::DevDouble    driveStatus; 
-	Tango::DevBoolean	attr_DriveStatus_read[27];
+    Tango::DevDouble	                    attr_PositionFeedback_read;
+	Tango::DevDouble	                    attr_VelocityFeedback_read;
+	Tango::DevDouble	                    attr_AccelerationFeedback_read;
+	Tango::DevBoolean	                    attr_InPosition_read;
+	Tango::DevBoolean	                    attr_Enabled_read;
+	Tango::DevBoolean	                    attr_Homed_read;
+	Tango::DevBoolean	                    attr_Error_read;
+	Tango::DevString	                    attr_FirmwareVersion_read;
+	Tango::DevDouble	                    attr_PositionError_read;
+	Tango::DevDouble	                    attr_CurrentFeedback_read;
+	Tango::DevString	                    attr_MotorType_read;
+    A1Axis_ns::HomeTypeEnum 	            attr_HomeType_read;
+    A1Axis_ns::MoveTypeEnum 	            attr_MoveType_read;
+	Tango::DevDouble	                    attr_LastMoveDuration_read;
+	Tango::DevDouble	                    attr_PositionTarget_read;
+	Tango::DevDouble	                    attr_VelocityTarget_read;
+	Tango::DevDouble	                    attr_VelocityError_read;
+	Tango::DevDouble	                    attr_AccelerationTarget_read;
+	Tango::DevDouble	                    attr_AccelerationError_read;
+	Tango::DevDouble	                    attr_CurrentTarget_read;
+	Tango::DevDouble	                    attr_CurrentError_read;
+	Tango::DevDouble	                    attr_ServoUpdateRate_read;
+	Tango::DevULong 	                    attr_DataCollectionNumPoints_read;
+    A1Axis_ns::DataCollectionFrequencyEnum	attr_DataCollectionFrequency_read;
+    A1Axis_ns::DataCollectionModeEnum	    attr_DataCollectionMode_read;
+    A1Axis_ns::RampTypeEnum	                attr_RampType_read;
+    A1Axis_ns::RampModeEnum	                attr_RampMode_read;
+	Tango::DevDouble	                    attr_RampValue_read;
+    Tango::DevDouble                        axisStatus; 
+	Tango::DevBoolean	                    attr_AxisStatus_read[24];
+    Tango::DevDouble                        axisFault; 
+	Tango::DevBoolean	                    attr_AxisFault_read[25];
+    Tango::DevDouble                        driveStatus; 
+	Tango::DevBoolean	                    attr_DriveStatus_read[27];
 } A1AxisAttributes; 
 
 
 class A1Bridge
 {
   protected: 
-    A1Bridge();
-    virtual ~A1Bridge();
+    // Member variables
     static A1Bridge *m_instance; 
     bool m_connected; 
     bool m_simulation; 
@@ -70,8 +79,12 @@ class A1Bridge
     std::string m_password; 
     std::string m_ip; 
     std::chrono::milliseconds m_pollInterval_ms; 
-    std::chrono::time_point<std::chrono::steady_clock> m_lastPoll; 
-    std::chrono::time_point<std::chrono::steady_clock> m_lastAxisPoll[MAX_AXES]; 
+    PollClock m_lastPoll; 
+    PollClock m_lastAxisPoll[MAX_AXES]; 
+
+    // Methods
+    A1Bridge(): m_connected(false), m_pollInterval_ms(std::chrono::milliseconds(-1)) {}; 
+    virtual ~A1Bridge();
 
     // implementation of connection
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip) {NotImplemented(__func__);}; 
@@ -90,10 +103,30 @@ class A1Bridge
     virtual void readAxis_impl(unsigned axis) {NotImplemented(__func__);}; 
 
   public: 
+    // Attributes
+	Tango::DevBoolean	attr_ControllerRunning_read;
+	Tango::DevUShort	attr_AxisCount_read;
+	Tango::DevUShort	attr_TaskCount_read;
+	Tango::DevString	attr_APIVersion_read;
+	Tango::DevString	attr_AeroScriptFilePath_read;
+    
+    double              attr_axisHealth;
+	Tango::DevBoolean	attr_AxisHealth_read[32];
+    double              attr_taskStatus0;
+	Tango::DevBoolean	attr_TaskStatus0_read[16];
+    double              attr_taskStatus1;
+	Tango::DevBoolean	attr_TaskStatus1_read[17];
+    double              attr_taskStatus2;
+	Tango::DevBoolean	attr_TaskStatus2_read[24];
+	Tango::DevString	attr_AeroScriptFiles_read[32];
+
+    A1AxisAttributes attr_axes[MAX_AXES]; 
+
+    // Methods
     static A1Bridge* getInstance();
     static A1Bridge* getInstance(bool simulation);
-    static bool      instanceReady(); 
-    static A1Bridge* setSimulation(bool simulation); 
+    static bool      instanceReady();
+    static A1Bridge* setSimulation(bool simulation);
     bool isSimulation();
     bool isConnected();
     void connect(const std::string& username, const std::string& password, const std::string& ip); 
@@ -114,57 +147,68 @@ class A1Bridge
         m_pollInterval_ms = std::chrono::milliseconds(interval);
     };  
 
-
     // Interface between Tango <-> Automation1 API is left up to the derived class
-    // We just call the Tango command or retrieve the attributes 
+    // We just call the Tango command or retrieve the attributes. 
+    // In other words, we do not reimplement the Automation1 API for the simulator. 
 
     // Commands
-    virtual void controller_Reset() {NotImplemented(__func__);}; 
-    virtual void controller_Start() {NotImplemented(__func__);}; 
-    virtual void controller_Stop() {NotImplemented(__func__);}; 
-    virtual void controller_Enable() {NotImplemented(__func__);}; 
-    virtual void controller_Disable() {NotImplemented(__func__);}; 
-    virtual void controller_ClearErrors() {NotImplemented(__func__);}; 
-    virtual void controller_AeroScriptProgramRun(const std::string& file) {NotImplemented(__func__);}; 
-    virtual void controller_AeroScriptProgramLoad(const std::string& file) {NotImplemented(__func__);}; 
-    virtual void controller_AeroScriptProgramStart() {NotImplemented(__func__);}; 
-    virtual void controller_AeroScriptProgramStop() {NotImplemented(__func__);}; 
-    virtual void controller_AeroScriptProgramPause() {NotImplemented(__func__);}; 
-    virtual void axis_Abort(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType) {NotImplemented(__func__);}; 
-    virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) {NotImplemented(__func__);}; 
-    virtual void axis_Enable(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_Disable(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_BrakeOn(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_BrakeOff(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_MoveFromLimit(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_FreeRun(int32_t axis, Tango::DevDouble velocity) {NotImplemented(__func__);}; 
-    virtual void axis_FreeRunStop(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_ThrowAllFaults(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_AcknowledgeFaults(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_DataCollectionStart(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_DataCollectionStop(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_DataCollectionRefresh(int32_t axis) {NotImplemented(__func__);}; 
-    virtual void axis_DataCollectionGetResults(int32_t axis) {NotImplemented(__func__);}; 
+    virtual void controller_Reset() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_Start() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_Stop() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_Enable() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_Disable() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_ClearErrors() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramRun(const std::string& file) 
+            {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramLoad(const std::string& file) 
+            {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramStart() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramStop() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_AeroScriptProgramPause() 
+            {NotImplemented(__func__);}; 
+    virtual void axis_Abort(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_Enable(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_Disable(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_BrakeOn(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_BrakeOff(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_MoveFromLimit(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_FreeRun(int32_t axis, Tango::DevDouble velocity) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_FreeRunStop(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_ThrowAllFaults(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_AcknowledgeFaults(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_DataCollectionStart(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_DataCollectionStop(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_DataCollectionRefresh(int32_t axis) 
+            {NotImplemented(__func__);}; 
+    virtual void axis_DataCollectionGetResults(int32_t axis) 
+            {NotImplemented(__func__);}; 
 
-    // Attributes
-	Tango::DevBoolean	attr_ControllerRunning_read;
-	Tango::DevUShort	attr_AxisCount_read;
-	Tango::DevUShort	attr_TaskCount_read;
-	Tango::DevString	attr_APIVersion_read;
-	Tango::DevString	attr_AeroScriptFilePath_read;
-    
-    double              attr_axisHealth;
-	Tango::DevBoolean	attr_AxisHealth_read[32];
-    double              attr_taskStatus0;
-	Tango::DevBoolean	attr_TaskStatus0_read[16];
-    double              attr_taskStatus1;
-	Tango::DevBoolean	attr_TaskStatus1_read[17];
-    double              attr_taskStatus2;
-	Tango::DevBoolean	attr_TaskStatus2_read[24];
-	Tango::DevString	attr_AeroScriptFiles_read[32];
-
-    A1AxisAttributes attr_axes[MAX_AXES]; 
+    virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value)
+            {};
 };
 
 
