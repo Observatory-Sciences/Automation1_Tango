@@ -28,6 +28,26 @@ bool PollClock::checkAndUpdate(std::chrono::milliseconds interval)
 A1Bridge* A1Bridge::m_instance = nullptr;
 
 
+A1Bridge::A1Bridge() : 
+    m_connected(false),
+    m_initialised(false),
+    m_pollInterval_ms(std::chrono::milliseconds(-1)) 
+{
+    attr_APIVersion_read         = Tango::string_dup("");
+    attr_AeroScriptFilePath_read = Tango::string_dup("");
+
+    for (unsigned i = 0; i < 32; i++)
+    {
+        attr_AeroScriptFiles_read[i] = Tango::string_dup(""); 
+    }
+    for (unsigned i = 0; i < MAX_AXES; i++)
+    {
+        attr_axes[i].attr_FirmwareVersion_read = Tango::string_dup("");
+        attr_axes[i].attr_MotorType_read       = Tango::string_dup("");
+    }
+}
+
+
 A1Bridge::~A1Bridge()
 {
     if (m_instance != nullptr)
@@ -64,9 +84,19 @@ A1Bridge* A1Bridge::getInstance(bool simulation)
 }
 
 
-bool A1Bridge::instanceReady()
+void A1Bridge::instanceReady()
 {
-    return (m_instance != nullptr);
+    m_initialised = true; 
+}
+
+
+bool A1Bridge::checkInstanceReady()
+{
+    if (m_instance != nullptr)
+    {
+        return m_instance->m_initialised;
+    }
+    return false; 
 }
 
 
@@ -102,6 +132,7 @@ void A1Bridge::connect(const std::string& username, const std::string& password,
     m_password = password; 
     m_ip = ip; 
     this->connect_impl(username, password, ip); 
+    std::cout << "Connected to A1 controller" << std::endl; 
     m_connected = true; 
 }
 

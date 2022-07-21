@@ -90,6 +90,7 @@ class A1Communication: public A1Bridge
   protected:
     unsigned                m_programHaltTimeout; 
     unsigned                m_taskID; 
+    unsigned                m_reconnect; 
 
     Automation1Controller   m_controller_instance;
     Automation1Controller   *m_controller = &m_controller_instance; 
@@ -125,7 +126,7 @@ class A1Communication: public A1Bridge
     void checkController();
 
   public: 
-    A1Communication() : m_programHaltTimeout(100), m_taskID(1) {m_simulation = false;}; 
+    A1Communication() : m_programHaltTimeout(100), m_taskID(1),  m_reconnect(0) {m_simulation = false;}; 
     virtual ~A1Communication() = default;
     virtual void controller_Reset();
     virtual void controller_Start();

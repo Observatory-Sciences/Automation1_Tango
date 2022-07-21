@@ -222,7 +222,6 @@ void A1Communication::deleteController_impl()
 
 void A1Communication::deleteAxis_impl(unsigned axis)
 {
-    std::cout << __func__ << "(" << axis << ")" << std::endl; 
     delete attr_axes[axis].attr_FirmwareVersion_read; 
     delete attr_axes[axis].attr_MotorType_read; 
     m_pollManagerAxis[axis].clear(); 
@@ -232,19 +231,22 @@ void A1Communication::deleteAxis_impl(unsigned axis)
 
 void A1Communication::connect_impl(const std::string& username, const std::string& password, const std::string& ip)
 {
-    bool stat = Automation1_ConnectWithHostAndUser(ip.c_str(), 
-                                                   username.c_str(), 
-                                                   password.c_str(), 
-                                                   m_controller);
-    if (!stat)
+    if (m_connected)
     {
-        std::cout << "ERROR: Connect to A1 controller failed" << std::endl; 
+        return; 
+    }
+
+
+    if (!Automation1_ConnectWithHostAndUser(ip.c_str(), 
+                                            username.c_str(), 
+                                            password.c_str(), 
+                                            m_controller))
+    {
+        // std::cout << "ERROR: Connect to A1 controller failed" << std::endl; 
         Tango::Except::throw_exception("COMMUNICATION_BROKEN", 
                                        "Connect to A1 controller failed",
                                        __func__);
     }
-    m_connected = true; 
-    std::cout << "Connected to A1 controller" << std::endl;
 
     if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
     {
@@ -276,7 +278,9 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
     {
         onConnectAxis(axis); 
     }
-
+    
+    m_connected = true; 
+    m_reconnect = 0; 
 }
 
 
@@ -371,15 +375,43 @@ void A1Communication::disconnect_impl()
 
 void A1Communication::checkController()
 {
-    bool isRunning;
-    
-    A1_GENERIC_CALL_AND_THROW(Automation1_Controller_IsRunning, *m_controller, &isRunning);
-
-    if (!isRunning)
+    if (m_reconnect)
     {
         Tango::Except::throw_exception("DRIVER_FAILURE", 
-                                       "Controller not running",
-                                       __func__); 
+                                    "Unable to connect to controller",
+                                    __func__); 
+    }
+    unsigned retries; 
+    for (retries = 0; retries < 3; retries++)
+    {
+        try
+        {
+            if (!m_connected)
+            {
+                reconnect(); 
+            }
+
+            bool isRunning;
+            A1_GENERIC_CALL_AND_THROW(Automation1_Controller_IsRunning, *m_controller, &isRunning);
+
+            if (!isRunning)
+            {
+                Tango::Except::throw_exception("DRIVER_FAILURE", 
+                                            "Controller not running",
+                                            __func__); 
+            }
+        }
+        catch (Tango::DevFailed &e)
+        {
+            m_connected = false; 
+            if (retries == 3)
+            {
+                m_reconnect = 1; 
+                throw(e); 
+            }
+        }
+        // m_reconnect++; 
+        // usleep(1000 * std::pow(2, m_reconnect)); 
     }
 }
 
@@ -498,7 +530,7 @@ void A1Communication::readController_impl()
     readCommon(); 
 
     m_pollManagerController.poll(m_controller); 
-
+    
     attr_TaskStatus0_read[TSK0_PROGRAM_ASSOCIATED]             = (int(attr_taskStatus0) >> TSK0_PROGRAM_ASSOCIATED) & 1U; 
     attr_TaskStatus0_read[TSK0_IMMEDIATE_EXECUTING]            = (int(attr_taskStatus0) >> TSK0_IMMEDIATE_EXECUTING) & 1U; 
     attr_TaskStatus0_read[TSK0_RETURN_MOTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_RETURN_MOTION_EXECUTING) & 1U; 

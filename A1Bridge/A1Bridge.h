@@ -73,17 +73,18 @@ class A1Bridge
     // Member variables
     static A1Bridge *m_instance; 
     bool m_connected; 
+    bool m_initialised; 
     bool m_simulation; 
     bool m_verbose; 
     std::string m_username; 
     std::string m_password; 
     std::string m_ip; 
-    std::chrono::milliseconds m_pollInterval_ms; 
+    std::chrono::milliseconds m_pollInterval_ms;
     PollClock m_lastPoll; 
     PollClock m_lastAxisPoll[MAX_AXES]; 
 
     // Methods
-    A1Bridge(): m_connected(false), m_pollInterval_ms(std::chrono::milliseconds(-1)) {}; 
+    A1Bridge(); 
     virtual ~A1Bridge();
 
     // implementation of connection
@@ -125,7 +126,8 @@ class A1Bridge
     // Methods
     static A1Bridge* getInstance();
     static A1Bridge* getInstance(bool simulation);
-    static bool      instanceReady();
+    static bool      checkInstanceReady();
+    void             instanceReady();
     static A1Bridge* setSimulation(bool simulation);
     bool isSimulation();
     bool isConnected();

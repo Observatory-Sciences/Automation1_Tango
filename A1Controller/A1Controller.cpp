@@ -133,12 +133,13 @@ void A1Controller::delete_device()
 	DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
 		
-    m_A1Bridge->deleteController(); 
     delete *attr_APIVersion_read; 
     for (unsigned file = 0; file < 32; file++)
     {
         delete attr_AeroScriptFiles_read[file];
     }
+
+    m_A1Bridge->deleteController(); 
     
 
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::delete_device
@@ -221,24 +222,26 @@ void A1Controller::init_device()
     std::cout << "Username:  " << username << std::endl; 
     std::cout << "Password:  " << password << std::endl; 	
     
-    // TODO: segfault on bad connect?
+    // TODO: bad connect?
     // TODO: status when disconnected
+    m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(simulate);
+
+    m_A1Bridge->setPollingInterval(100); 
+    std::cout << "Bridge in simulation: " << m_A1Bridge->isSimulation() << std::endl; 
+
+    m_A1Bridge->initialiseController(); 
+
     try
     {
-        m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(simulate);
-
-        m_A1Bridge->setPollingInterval(100); 
-        std::cout << "Bridge in simulation: " << m_A1Bridge->isSimulation() << std::endl; 
-
-        m_A1Bridge->initialiseController(); 
-
         m_A1Bridge->connect(username, password, ipAddress); 
+        m_A1Bridge->instanceReady(); 
         set_state(Tango::STANDBY); 
         set_status("Connected to Automation1 controller"); 
     } 
     catch (Tango::DevFailed& e)
     {
-        set_state(Tango::FAULT);
+        m_A1Bridge->instanceReady(); 
+        set_state(Tango::UNKNOWN);
         set_status("Unable to connect to Automation1 controller"); 
     }
 
@@ -400,8 +403,16 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 	DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
 
-    DEBUG_STREAM << "read hardware" << std::endl; 
-    m_A1Bridge->readController(); 
+    try
+    {
+        m_A1Bridge->readController(); 
+    } 
+    catch (Tango::DevFailed &e)
+    {
+        set_state(Tango::UNKNOWN); 
+        set_status("Unable to connect to Automation1 controller"); 
+        return; 
+    }
 
     *attr_ControllerRunning_read = m_A1Bridge->attr_ControllerRunning_read;
     *attr_AxisCount_read         = m_A1Bridge->attr_AxisCount_read;

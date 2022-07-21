@@ -159,9 +159,9 @@ void A1Axis::delete_device()
 	DEBUG_STREAM << "A1Axis::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::delete_device) ENABLED START -----*/
 	
-	m_A1Bridge->deleteAxis(axis);
     delete *attr_FirmwareVersion_read; 
     delete *attr_MotorType_read; 
+	m_A1Bridge->deleteAxis(axis);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::delete_device
 	delete[] attr_PositionFeedback_read;
@@ -433,19 +433,29 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	
     if (m_A1Bridge == nullptr)
     {  
-        if (A1Bridge_ns::A1Bridge::instanceReady()) 
+        if (A1Bridge_ns::A1Bridge::checkInstanceReady()) 
         {
             m_A1Bridge = A1Bridge_ns::A1Bridge::getInstance(); 
             m_A1Bridge->initialiseAxis(this->axis);
         }
         else
         {
-            set_state(Tango::OFF); 
+            set_state(Tango::UNKNOWN); 
+            set_status("Unable to connect to Automation1 controller"); 
             return; 
         }
     }
 
-    m_A1Bridge->readAxis(axis); 
+    try
+    {
+        m_A1Bridge->readAxis(axis); 
+    } 
+    catch (Tango::DevFailed &e)
+    {
+        set_state(Tango::UNKNOWN); 
+        set_status("Unable to connect to Automation1 controller"); 
+        return; 
+    }
 
     memcpy(attr_AxisStatus_read,  m_A1Bridge->attr_axes[axis].attr_AxisStatus_read,  24); 
     memcpy(attr_AxisFault_read,   m_A1Bridge->attr_axes[axis].attr_AxisFault_read,   24); 
