@@ -308,10 +308,10 @@ void A1Communication::onConnectAxis(unsigned axis)
 {
     double firmware[4]; 
     std::stringstream firmwareS; 
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, 1, axis, Automation1DriveItem_FirmwareVersionMajor, 0, &firmware[0]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, 1, axis, Automation1DriveItem_FirmwareVersionMinor, 0, &firmware[1]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, 1, axis, Automation1DriveItem_FirmwareVersionPatch, 0, &firmware[2]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, 1, axis, Automation1DriveItem_FirmwareVersionBuild, 0, &firmware[3]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, m_taskID, axis, Automation1DriveItem_FirmwareVersionMajor, 0, &firmware[0]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, m_taskID, axis, Automation1DriveItem_FirmwareVersionMinor, 0, &firmware[1]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, m_taskID, axis, Automation1DriveItem_FirmwareVersionPatch, 0, &firmware[2]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, m_taskID, axis, Automation1DriveItem_FirmwareVersionBuild, 0, &firmware[3]);
 
     firmwareS << firmware[0] << "." << firmware[0] << "." << firmware[0] << "." << firmware[0]; 
     delete attr_axes[axis].attr_FirmwareVersion_read; 
@@ -666,37 +666,37 @@ void A1Communication::controller_Disable()
 
 void A1Communication::controller_ClearErrors() 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_AcknowledgeAll, *m_controller, 1);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_AcknowledgeAll, *m_controller, m_taskID);
 } 
 
 
 void A1Communication::controller_AeroScriptProgramRun(const std::string& file) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramRun, *m_controller, 1, file.c_str());
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramRun,   *m_controller, m_taskID, file.c_str());
 } 
 
 
 void A1Communication::controller_AeroScriptProgramLoad(const std::string& file) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramLoad, *m_controller, 1, file.c_str());
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramLoad,  *m_controller, m_taskID, file.c_str());
 } 
 
 
 void A1Communication::controller_AeroScriptProgramStart() 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramStart, *m_controller, 1);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramStart, *m_controller, m_taskID);
 } 
 
 
 void A1Communication::controller_AeroScriptProgramStop() 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramStop, *m_controller, 1, m_programHaltTimeout);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramStop,  *m_controller, m_taskID, m_programHaltTimeout);
 } 
 
 
 void A1Communication::controller_AeroScriptProgramPause() 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramPause, *m_controller, 1, m_programHaltTimeout);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Task_ProgramPause, *m_controller, m_taskID, m_programHaltTimeout);
 } 
 
 
@@ -728,8 +728,8 @@ void A1Communication::axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type
 		    break;
 	}
 
-	A1_GENERIC_CALL_AND_THROW(Automation1_Command_SetupAxisRampType,  *m_controller, 1, axis, typeA1, 0.5, typeA1, 0.5);
-	A1_GENERIC_CALL_AND_THROW(Automation1_Command_SetupAxisRampValue, *m_controller, 1, axis, modeA1, value, modeA1, value);
+	A1_GENERIC_CALL_AND_THROW(Automation1_Command_SetupAxisRampType,  *m_controller, m_taskID, axis, typeA1, 0.5, typeA1, 0.5);
+	A1_GENERIC_CALL_AND_THROW(Automation1_Command_SetupAxisRampValue, *m_controller, m_taskID, axis, modeA1, value, modeA1, value);
 
 }
 
@@ -745,10 +745,10 @@ void A1Communication::axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType)
     switch (homeType)
     {
         case A1Axis_ns::_HomeTypeEnum::_ASYNCHRONOUS: 
-            A1_GENERIC_CALL_AND_THROW(Automation1_Command_HomeAsync, *m_controller, 1, &axis, 1);
+            A1_GENERIC_CALL_AND_THROW(Automation1_Command_HomeAsync, *m_controller, m_taskID, &axis, 1);
             break; 
         case A1Axis_ns::_HomeTypeEnum::_SYNCHRONOUS: 
-            A1_GENERIC_CALL_AND_THROW(Automation1_Command_Home, *m_controller, 1, &axis, 1);
+            A1_GENERIC_CALL_AND_THROW(Automation1_Command_Home, *m_controller, m_taskID, &axis, 1);
             break; 
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown home type", __func__);
@@ -762,16 +762,16 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
     switch (moveType)
     {
         case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
-			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveAbsolute, *m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveAbsolute, *m_controller, m_taskID, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_INCREMENTALMOVE:
-			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveIncremental, *m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveIncremental, *m_controller, m_taskID, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
-			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveLinear, *m_controller, 1, &axis, 1, &position, 1, velocity);
+			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveLinear, *m_controller, m_taskID, &axis, 1, &position, 1, velocity);
             break;
         case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
-			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveRapid, *m_controller, 1, &axis, 1, &position, 1, &velocity, 1);
+			A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveRapid, *m_controller, m_taskID, &axis, 1, &position, 1, &velocity, 1);
             break;
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown move type", __func__);
@@ -781,7 +781,7 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
 
 void A1Communication::axis_Enable(int32_t axis) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_Enable, *m_controller, 1, &axis, 1);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_Enable, *m_controller, m_taskID, &axis, 1);
 } 
 
 
@@ -793,44 +793,44 @@ void A1Communication::axis_Disable(int32_t axis)
 
 void A1Communication::axis_BrakeOn(int32_t axis) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveBrakeOn, *m_controller, 1, axis);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveBrakeOn, *m_controller, m_taskID, axis);
 } 
 
 
 void A1Communication::axis_BrakeOff(int32_t axis) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveBrakeOff, *m_controller, 1, axis);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveBrakeOff, *m_controller, m_taskID, axis);
 } 
 
 
 void A1Communication::axis_MoveFromLimit(int32_t axis) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveOutOfLimit, *m_controller, 1, axis);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveOutOfLimit, *m_controller, m_taskID, axis);
 } 
 
 
 void A1Communication::axis_FreeRun(int32_t axis, Tango::DevDouble velocity) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveFreerun, *m_controller, 1, &axis, 1, &velocity, 1);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveFreerun, *m_controller, m_taskID, &axis, 1, &velocity, 1);
 } 
 
 
 void A1Communication::axis_FreeRunStop(int32_t axis) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveFreerunStop, *m_controller, 1, &axis, 1);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_MoveFreerunStop, *m_controller, m_taskID, &axis, 1);
 } 
 
 
 void A1Communication::axis_ThrowAllFaults(int32_t axis) 
 {
     int64_t faultMask = 0xffffff; 
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_FaultThrow, *m_controller, 1, axis, faultMask);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_FaultThrow, *m_controller, m_taskID, axis, faultMask);
 } 
 
 
 void A1Communication::axis_AcknowledgeFaults(int32_t axis) 
 {
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_FaultAcknowledge, *m_controller, 1, &axis, 1);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_FaultAcknowledge, *m_controller, m_taskID, &axis, 1);
 }
 
 

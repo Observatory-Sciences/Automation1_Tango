@@ -427,10 +427,10 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
         attr_AeroScriptFiles_read[file] = Tango::string_dup(m_A1Bridge->attr_AeroScriptFiles_read[file]); 
     }
     
-    memcpy(attr_AxisHealth_read,  m_A1Bridge->attr_AxisHealth_read,  MAX_AXES); 
-    memcpy(attr_TaskStatus0_read, m_A1Bridge->attr_TaskStatus0_read, 16); 
-    memcpy(attr_TaskStatus1_read, m_A1Bridge->attr_TaskStatus1_read, 17); 
-    memcpy(attr_TaskStatus2_read, m_A1Bridge->attr_TaskStatus2_read, 24); 
+    memcpy(attr_AxisHealth_read,  m_A1Bridge->attr_AxisHealth_read,  sizeof(Tango::DevBoolean) * MAX_AXES); 
+    memcpy(attr_TaskStatus0_read, m_A1Bridge->attr_TaskStatus0_read, sizeof(Tango::DevBoolean) * 16); 
+    memcpy(attr_TaskStatus1_read, m_A1Bridge->attr_TaskStatus1_read, sizeof(Tango::DevBoolean) * 17); 
+    memcpy(attr_TaskStatus2_read, m_A1Bridge->attr_TaskStatus2_read, sizeof(Tango::DevBoolean) * 24); 
 
 
     bool fault   = false; 
