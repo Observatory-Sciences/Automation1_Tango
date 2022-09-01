@@ -87,8 +87,9 @@ INC_DIR_USER= -I . \
 #   - for a device server, tango libraries directories are automatically appended
 #   - '-L ../lib' is automatically appended in all cases
 #
-LIB_DIR_USER= -L $(A1BRIDGE_HOME)/Automation1/Lib \
-			  -L /usr/local/lib 
+
+#LIB_DIR_USER= -L $(A1BRIDGE_HOME)/Automation1/Lib \
+#			  -L /usr/local/lib 
 
 #=============================================================================
 # LFLAGS_USR is the list of user link flags
