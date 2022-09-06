@@ -14,7 +14,7 @@ void NotImplemented(const std::string& feature)
 };
 
 
-bool PollClock::checkAndUpdate(std::chrono::milliseconds interval)
+bool PeriodicClock::checkAndUpdate(std::chrono::milliseconds interval)
 {
     if (m_lastPoll < std::chrono::steady_clock::now() - interval)
     {
@@ -25,12 +25,8 @@ bool PollClock::checkAndUpdate(std::chrono::milliseconds interval)
 }
 
 
-A1Bridge* A1Bridge::m_instance = nullptr;
-
-
 A1Bridge::A1Bridge() : 
     m_connected(false),
-    m_initialised(false),
     m_pollInterval_ms(std::chrono::milliseconds(-1)) 
 {
     attr_APIVersion_read         = Tango::string_dup("");
@@ -50,68 +46,80 @@ A1Bridge::A1Bridge() :
 
 A1Bridge::~A1Bridge()
 {
-    if (m_instance != nullptr)
-    {
-        delete m_instance;
-        m_instance = nullptr; 
-    }
+    // std::cout << "A1Bridge desctructed" << std::endl; 
 }
 
 
-A1Bridge* A1Bridge::getInstance() 
+std::shared_ptr<A1Bridge> startInstance(bool simulation) 
 {
-    getInstance(DEFAULT_TO_SIMULATION);
-}
-
-
-A1Bridge* A1Bridge::getInstance(bool simulation) 
-{
-    if (m_instance == nullptr)
+    std::lock_guard<std::mutex> instanceLock(instanceMutex);
+    if (instance.get() == nullptr)
     {
         if (simulation)
         {
             std::cout << "Entering simulation mode" << std::endl; 
-            m_instance = new A1Simulation();
+            instance = std::make_shared<A1Simulation>();
         }
         else
         {
             std::cout << "Entering communication mode" << std::endl; 
-            m_instance = new A1Communication();
+            instance = std::make_shared<A1Communication>();
         }
     }
 
-    return m_instance;
+    return instance;
 }
 
 
-void A1Bridge::instanceReady()
+std::shared_ptr<A1Bridge> getInstance()
 {
-    m_initialised = true; 
-}
-
-
-bool A1Bridge::checkInstanceReady()
-{
-    if (m_instance != nullptr)
+    std::lock_guard<std::mutex> instanceLock(instanceMutex);
+    if (instance.get() == nullptr)
     {
-        return m_instance->m_initialised;
+        Tango::Except::throw_exception("DRIVER_FAILURE",
+                                   "Bridge not initialised",
+                                   __func__);
     }
-    return false; 
+    return instance; 
 }
 
 
-A1Bridge* A1Bridge::setSimulation(bool simulation) 
+void stopInstance()
 {
-    // This method is currently disallowed due to dangling pointer implications. 
-    
-    // if ((m_instance != nullptr) && (m_instance->isSimulation() != simulation))
-    // {
-    //     std::cout << "Halted bridge" << std::endl; 
-    //     delete m_instance;
-    // }
-
-    return getInstance(simulation);
+    std::lock_guard<std::mutex> instanceLock(instanceMutex);
+    // delete instance; 
+    instance = nullptr; 
 }
+
+
+// void A1Bridge::instanceReady()
+// {
+//     m_initialised = true; 
+// }
+
+
+// bool A1Bridge::checkInstanceReady()
+// {
+//     if (m_instance != nullptr)
+//     {
+//         return m_instance->m_initialised;
+//     }
+//     return false; 
+// }
+
+
+// A1Bridge* A1Bridge::setSimulation(bool simulation) 
+// {
+//     // This method is currently disallowed due to dangling pointer implications. 
+    
+//     // if ((m_instance != nullptr) && (m_instance->isSimulation() != simulation))
+//     // {
+//     //     std::cout << "Halted bridge" << std::endl; 
+//     //     delete m_instance;
+//     // }
+
+//     return getInstance(simulation);
+// }
 
 
 bool A1Bridge::isSimulation()
@@ -148,6 +156,19 @@ void A1Bridge::reconnect()
 {
     this->disconnect();
     this->connect(m_username, m_password, m_ip);
+}
+
+
+void A1Bridge::checkConnection()
+{
+    if (this->isConnected())
+    {
+        this->checkConnection_impl();
+    }
+    else
+    {
+        this->reconnect();
+    }
 }
 
 

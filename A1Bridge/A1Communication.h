@@ -90,7 +90,8 @@ class A1Communication: public A1Bridge
   protected:
     unsigned                m_programHaltTimeout; 
     unsigned                m_taskID; 
-    unsigned                m_reconnect; 
+    unsigned                m_connectionRetries;
+    PeriodicClock           m_lastReconnectionAttempt; 
 
     Automation1Controller   m_controller_instance;
     Automation1Controller   *m_controller = &m_controller_instance; 
@@ -103,10 +104,11 @@ class A1Communication: public A1Bridge
     A1PollManager           m_pollManagerController; 
     A1PollManager           m_pollManagerAxis[MAX_AXES];
 
-    PollClock m_lastCommonPoll; 
+    PeriodicClock           m_lastCommonPoll; 
     
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
+    virtual void checkConnection_impl(); 
 
     void onConnectController(); 
     void onConnectAxis(unsigned axis);
@@ -123,10 +125,10 @@ class A1Communication: public A1Bridge
     void initialiseCommonPolling();
     void readCommon(); 
 
-    void checkController();
+    // void checkController();
 
   public: 
-    A1Communication() : m_programHaltTimeout(100), m_taskID(1),  m_reconnect(0) {m_simulation = false;}; 
+    A1Communication() : m_programHaltTimeout(100), m_taskID(1), m_connectionRetries(0)   {m_simulation = false;}; 
     virtual ~A1Communication() = default;
     virtual void controller_Reset();
     virtual void controller_Start();

@@ -59,7 +59,7 @@ class A1Controller : public TANGO_BASE_CLASS
 /*----- PROTECTED REGION ID(A1Controller::Data Members) ENABLED START -----*/
 
 private:
-    A1Bridge_ns::A1Bridge* m_A1Bridge; 
+    // std::shared_ptr<A1Bridge_ns::A1Bridge> m_A1Bridge; 
     std::string            attr_AeroScriptFilePath_write;
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Data Members
@@ -368,7 +368,8 @@ public:
 
 /*----- PROTECTED REGION ID(A1Controller::Additional Method prototypes) ENABLED START -----*/
 
-
+  private:
+    void bridgeReady(); 
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Additional Method prototypes
 };

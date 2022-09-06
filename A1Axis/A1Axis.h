@@ -61,7 +61,7 @@ class A1Axis : public TANGO_BASE_CLASS
 /*----- PROTECTED REGION ID(A1Axis::Data Members) ENABLED START -----*/
 
 private:
-    A1Bridge_ns::A1Bridge*      m_A1Bridge; 
+    bool                        m_initialised; 
     HomeTypeEnum	            attr_HomeType_write;
     MoveTypeEnum	            attr_MoveType_write;
 	Tango::DevDouble	        attr_PositionFeedback_write;
@@ -630,7 +630,8 @@ public:
 
 /*----- PROTECTED REGION ID(A1Axis::Additional Method prototypes) ENABLED START -----*/
 
-//	Additional Method prototypes
+  private: 
+    void bridgeReady(); 
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis::Additional Method prototypes
 };

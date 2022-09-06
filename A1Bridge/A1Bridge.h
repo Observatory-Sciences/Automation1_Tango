@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>  
 #include <chrono> 
+#include <mutex>
 #include <tango.h>
 
 #include "A1AxisEnum.h"
@@ -18,12 +19,12 @@ namespace A1Bridge_ns {
 void NotImplemented(const std::string& feature);
 
 
-class PollClock
+class PeriodicClock
 {
   private: 
     std::chrono::time_point<std::chrono::steady_clock> m_lastPoll; 
   public: 
-    PollClock() : m_lastPoll(std::chrono::steady_clock::time_point::min()) {}; 
+    PeriodicClock() : m_lastPoll(std::chrono::steady_clock::time_point::min()) {}; 
     bool checkAndUpdate(std::chrono::milliseconds interval);
 };
 
@@ -71,25 +72,24 @@ class A1Bridge
 {
   protected: 
     // Member variables
-    static A1Bridge *m_instance; 
     bool m_connected; 
-    bool m_initialised; 
     bool m_simulation; 
     bool m_verbose; 
     std::string m_username; 
     std::string m_password; 
     std::string m_ip; 
     std::chrono::milliseconds m_pollInterval_ms;
-    PollClock m_lastPoll; 
-    PollClock m_lastAxisPoll[MAX_AXES]; 
+    PeriodicClock m_lastPoll; 
+    PeriodicClock m_lastAxisPoll[MAX_AXES]; 
 
     // Methods
     A1Bridge(); 
     virtual ~A1Bridge();
 
     // implementation of connection
-    virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip) {NotImplemented(__func__);}; 
-    virtual void disconnect_impl() {NotImplemented(__func__);}; 
+    virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip) {}; 
+    virtual void disconnect_impl() {}; 
+    virtual void checkConnection_impl() {}; 
 
     // initialise an axis or controller
     virtual void initialiseController_impl() {};
@@ -124,16 +124,12 @@ class A1Bridge
     A1AxisAttributes attr_axes[MAX_AXES]; 
 
     // Methods
-    static A1Bridge* getInstance();
-    static A1Bridge* getInstance(bool simulation);
-    static bool      checkInstanceReady();
-    void             instanceReady();
-    static A1Bridge* setSimulation(bool simulation);
     bool isSimulation();
     bool isConnected();
     void connect(const std::string& username, const std::string& password, const std::string& ip); 
     void disconnect(); 
     void reconnect(); 
+    void checkConnection(); 
 
     void initialiseController(); 
     void initialiseAxis(unsigned axis); 
@@ -212,6 +208,13 @@ class A1Bridge
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value)
             {};
 };
+
+
+static std::mutex instanceMutex;
+static std::shared_ptr<A1Bridge> instance = nullptr; 
+std::shared_ptr<A1Bridge> startInstance(bool simulation); 
+std::shared_ptr<A1Bridge> getInstance();
+void stopInstance(); 
 
 
 } // namespace A1Bridge_ns

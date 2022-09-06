@@ -235,6 +235,14 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
     {
         return; 
     }
+    
+    int interval = 5 * std::pow(2, m_connectionRetries); 
+    if (!m_lastReconnectionAttempt.checkAndUpdate(std::chrono::milliseconds(interval)))
+    {
+        Tango::Except::throw_exception("COMMUNICATION_BROKEN", 
+                                       "Connect to A1 controller failed",
+                                       __func__);
+    }
 
 
     if (!Automation1_ConnectWithHostAndUser(ip.c_str(), 
@@ -242,33 +250,14 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
                                             password.c_str(), 
                                             m_controller))
     {
-        // std::cout << "ERROR: Connect to A1 controller failed" << std::endl; 
+        std::cout << "Connect to A1 controller failed, retyring in " << interval * 2 << "ms..." << std::endl; 
+        m_connectionRetries++; 
         Tango::Except::throw_exception("COMMUNICATION_BROKEN", 
                                        "Connect to A1 controller failed",
                                        __func__);
     }
 
-    if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
-    {
-        throwWithLastA1Error("Failed to determine if controller is running");
-    }
-
-    if (!attr_ControllerRunning_read)
-    {
-        std::cout << "Controller is not running; starting..." << endl;
-        if (!Automation1_Controller_Start(*m_controller))
-        {
-            throwWithLastA1Error("Failed to start controller");
-        }
-        if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
-        {
-            throwWithLastA1Error("Failed to determine if controller is running");
-        }
-        if (!attr_ControllerRunning_read)
-        {
-            throwWithLastA1Error("Controller not running after start request");
-        }
-    }
+    checkConnection_impl(); 
 
     std::cout << "Controller is running" << std::endl; 
 
@@ -280,7 +269,42 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
     }
     
     m_connected = true; 
-    m_reconnect = 0; 
+    m_connectionRetries = 0; 
+}
+
+void A1Communication::checkConnection_impl()
+{
+    std::cout << "Check connection" << std::endl; 
+    
+    if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
+    {
+        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
+        {
+            this->disconnect();
+            throwWithLastA1Error("Controller communication error"); 
+        }
+        else
+        {
+            throwWithLastA1Error("Failed to determine if controller is running");
+        }
+    }
+
+    if (!attr_ControllerRunning_read)
+    {
+        std::cout << "Controller is not running; starting..." << endl;
+        if (!Automation1_Controller_Start(*m_controller))
+        {
+            throwWithLastA1Error("Failed to start controller");
+        }
+        if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
+        {
+            throwWithLastA1Error("Failed to determine if controller is running after start request");
+        }
+        if (!attr_ControllerRunning_read)
+        {
+            throwWithLastA1Error("Controller not running after start request");
+        }
+    }
 }
 
 
@@ -369,49 +393,6 @@ void A1Communication::disconnect_impl()
         Tango::Except::throw_exception("COMMUNICATION_BROKEN", 
                                        "Disconnect from A1 controller failed",
                                        __func__);
-    }
-}
-
-
-void A1Communication::checkController()
-{
-    if (m_reconnect)
-    {
-        Tango::Except::throw_exception("DRIVER_FAILURE", 
-                                    "Unable to connect to controller",
-                                    __func__); 
-    }
-    unsigned retries; 
-    for (retries = 0; retries < 3; retries++)
-    {
-        try
-        {
-            if (!m_connected)
-            {
-                reconnect(); 
-            }
-
-            bool isRunning;
-            A1_GENERIC_CALL_AND_THROW(Automation1_Controller_IsRunning, *m_controller, &isRunning);
-
-            if (!isRunning)
-            {
-                Tango::Except::throw_exception("DRIVER_FAILURE", 
-                                            "Controller not running",
-                                            __func__); 
-            }
-        }
-        catch (Tango::DevFailed &e)
-        {
-            m_connected = false; 
-            if (retries == 3)
-            {
-                m_reconnect = 1; 
-                throw(e); 
-            }
-        }
-        // m_reconnect++; 
-        // usleep(1000 * std::pow(2, m_reconnect)); 
     }
 }
 
@@ -525,8 +506,6 @@ void A1Communication::readCommon()
 
 void A1Communication::readController_impl()
 {
-    checkController();
-
     readCommon(); 
 
     m_pollManagerController.poll(m_controller); 
@@ -620,8 +599,6 @@ void A1Communication::readController_impl()
 
 void A1Communication::readAxis_impl(unsigned axis)
 {
-    checkController(); 
-
     readCommon(); 
 
     m_pollManagerAxis[axis].poll(m_controller); 
