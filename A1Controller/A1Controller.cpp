@@ -132,7 +132,10 @@ void A1Controller::delete_device()
 {
 	DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
-		
+
+    m_stopPollFlag = true;
+    m_pollThread.join();
+
     // delete *attr_APIVersion_read; 
     // for (unsigned file = 0; file < 32; file++)
     // {
@@ -173,7 +176,6 @@ void A1Controller::init_device()
 	DEBUG_STREAM << "A1Controller::init_device() create device " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::init_device_before) ENABLED START -----*/
 	
-
 
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::init_device_before
 	
@@ -224,19 +226,27 @@ void A1Controller::init_device()
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
 	} 
 
-    std::cout << "IpAddress: " << ipAddress << std::endl; 
-    std::cout << "Simulate:  " << simulate << std::endl; 
-    std::cout << "Username:  " << username << std::endl; 
-    std::cout << "Password:  " << password << std::endl; 	
+    INFO_STREAM << "IpAddress: " << ipAddress << std::endl; 
+    INFO_STREAM << "Simulate:  " << simulate << std::endl; 
+    INFO_STREAM << "Username:  " << username << std::endl; 
+    INFO_STREAM << "Password:  " << password << std::endl; 	
     
-    // TODO: bad connect?
-    // TODO: status when disconnected
     A1Bridge_ns::startInstance(simulate);
-    
-    A1Bridge_ns::getInstance()->initialiseController(); 
+    A1Bridge_ns::getInstance()->setPollingInterval(100);
 
-    A1Bridge_ns::getInstance()->setPollingInterval(100); 
-    std::cout << "Bridge in simulation: " << A1Bridge_ns::getInstance()->isSimulation() << std::endl; 
+    try
+    {
+        A1Bridge_ns::getInstance()->connect(username, password, ipAddress); 
+    } 
+    catch (Tango::DevFailed &e)
+    {
+        // do nothing - we will try to reconnect later
+    }
+
+    INFO_STREAM << "Bridge in simulation: " << std::boolalpha << A1Bridge_ns::getInstance()->isSimulation() << std::endl; 
+
+    m_stopPollFlag = false;
+    m_pollThread = std::thread(&A1Controller::pollThread, this);
 
     /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
 }
@@ -396,16 +406,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 	DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
     
-	try
-    {
-        bridgeReady();
-    }
-    catch (Tango::DevFailed &e)
-    {
-        set_state(Tango::UNKNOWN); 
-        set_status("Automation1 controller not connected"); 
-        return; 
-    }
+    A1Bridge_ns::getInstance()->checkConnection();
 
     try
     {
@@ -422,12 +423,12 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     *attr_AxisCount_read         = A1Bridge_ns::getInstance()->attr_AxisCount_read;
     *attr_TaskCount_read         = A1Bridge_ns::getInstance()->attr_TaskCount_read;
 
-    delete *attr_APIVersion_read;
+    delete[] *attr_APIVersion_read;
     *attr_APIVersion_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_APIVersion_read); 
 
     for (unsigned file = 0; file < 32; file++)
     {
-        delete attr_AeroScriptFiles_read[file];
+        delete[] attr_AeroScriptFiles_read[file];
         attr_AeroScriptFiles_read[file] = Tango::string_dup(A1Bridge_ns::getInstance()->attr_AeroScriptFiles_read[file]); 
     }
     
@@ -727,7 +728,7 @@ void A1Controller::reset()
 	DEBUG_STREAM << "A1Controller::Reset()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::reset) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Reset(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::reset
@@ -744,7 +745,7 @@ void A1Controller::start()
 	DEBUG_STREAM << "A1Controller::Start()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::start) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Start(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::start
@@ -761,7 +762,7 @@ void A1Controller::stop()
 	DEBUG_STREAM << "A1Controller::Stop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::stop) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Stop(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::stop
@@ -778,7 +779,7 @@ void A1Controller::enable()
 	DEBUG_STREAM << "A1Controller::Enable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::enable) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Enable(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::enable
@@ -795,7 +796,7 @@ void A1Controller::disable()
 	DEBUG_STREAM << "A1Controller::Disable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::disable) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Disable(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::disable
@@ -812,7 +813,7 @@ void A1Controller::clear_errors()
 	DEBUG_STREAM << "A1Controller::ClearErrors()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::clear_errors) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_ClearErrors(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::clear_errors
@@ -832,7 +833,7 @@ void A1Controller::aero_script_program_run()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramRun()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_run) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramRun(attr_AeroScriptFilePath_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_run
@@ -852,7 +853,7 @@ void A1Controller::aero_script_program_load()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramLoad()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_load) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramLoad(attr_AeroScriptFilePath_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_load
@@ -871,7 +872,7 @@ void A1Controller::aero_script_program_start()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramStart()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_start) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramStart(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_start
@@ -890,7 +891,7 @@ void A1Controller::aero_script_program_stop()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramStop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_stop) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramStop(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_stop
@@ -909,7 +910,7 @@ void A1Controller::aero_script_program_pause()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramPause()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_pause) ENABLED START -----*/
 	
-    bridgeReady(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramPause(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_pause
@@ -932,10 +933,24 @@ void A1Controller::add_dynamic_commands()
 
 /*----- PROTECTED REGION ID(A1Controller::namespace_ending) ENABLED START -----*/
 
-void A1Controller::bridgeReady()
+
+void A1Controller::pollThread()
 {
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    while (!m_stopPollFlag)
+    {
+        try
+        {
+            std::vector<long> attr_list; 
+            read_attr_hardware(attr_list); 
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+        catch (Tango::DevFailed &e)
+        {
+            DEBUG_STREAM << "Controller polling thread read failed" << std::endl; 
+        }
+    }
 }
+
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::namespace_ending
 } //	namespace

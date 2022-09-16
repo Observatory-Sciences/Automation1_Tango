@@ -1,9 +1,9 @@
 #pragma once 
 
 #include <iostream>
-#include <string> 
-#include <variant> 
-#include <map> 
+#include <string>
+#include <variant>
+#include <map>
 #include <tango.h> 
 
 #include "A1Bridge.h"
@@ -14,25 +14,49 @@
 namespace A1Bridge_ns {
 
 
-// Helper functions
-
 // Throws a TANGO error with the last error message from the A1 controller
 void throwWithLastA1Error_origin(const std::string& reason, const std::string& origin);
 
 // Macro that includes __func__ as location of error
 #define throwWithLastA1Error(reason) throwWithLastA1Error_origin(reason, __func__)
 
+
 // Macro to call an A1 function and report last A1 error if call returns an error code
 #define A1_GENERIC_CALL_AND_THROW(A1F, ...) \
     if (!(A1F)(__VA_ARGS__)) \
     { \
-        throwWithLastA1Error("ERROR: " #A1F " failed"); \
+        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError())) \
+        { \
+            throwWithLastA1Error("Controller communication error"); \
+        } \
+        else \
+        { \
+            throwWithLastA1Error("ERROR: " #A1F " failed"); \
+        } \
+    } 
+
+
+// Macro to call an A1 function - if error code indicates communication problem, 
+// disconnect and then report last A1 error 
+#define A1_TRY_CALL_AND_DISCONNECT(A1F, ...) \
+    try \
+    { \
+        A1_GENERIC_CALL_AND_THROW(A1F, __VA_ARGS__); \
+    } \
+    catch (Tango::DevFailed &e) \
+    { \
+        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError())) \
+        { \
+            this->disconnect(); \
+        } \
+        throw(e); \
     } 
 
 
 class A1PollConfig
 {
-    // RAII wrapper around Automation1StatusConfig_T 
+    // This class is an RAII wrapper around Automation1StatusConfig_T 
+    // which must be allocated and deallocated manually. 
   public: 
     A1PollConfig();
     A1PollConfig(const A1PollConfig&) = delete; 
@@ -45,14 +69,14 @@ class A1PollConfig
 
 template<typename T> struct Automation1StatusIndexItem
 {
-    // The item will be retrieved and put in destination.
+    // The item will be retrieved and put into destination.
     double*  destination;
     unsigned index; 
     T        item;  
 };
 template<typename T> struct Automation1StatusItem
 {
-    // The item will be retrieved and put in destination.
+    // The item will be retrieved and put into destination.
     double*  destination;
     T        item;  
 };
@@ -60,6 +84,9 @@ template<typename T> struct Automation1StatusItem
 
 class A1PollManager
 {
+    // This is a class that is initialised with a set of A1 status items which it then polls all in one go. 
+    // Makes use of overloaded push() method during init to dispatch to appropriate container. 
+    // Simplifies grouping of status items. 
   private:
     A1PollConfig m_config; 
     unsigned     m_refCount; 
@@ -87,35 +114,49 @@ class A1PollManager
 // TODO: specify a timeout for program pause and stop
 class A1Communication: public A1Bridge
 {
+    // Inherits from A1Bridge and implements communication with Automation1 controller. 
   protected:
-    unsigned                m_programHaltTimeout; 
-    unsigned                m_taskID; 
+    bool                    m_simulation;
+    unsigned                m_programHaltTimeout;
+    unsigned                m_taskID;
+
+    // Rate-limit reconnection attemps; clock and counter
     unsigned                m_connectionRetries;
     PeriodicClock           m_lastReconnectionAttempt; 
 
+    // Automation1 API uses a pointer to controller instance, but we want RAII
     Automation1Controller   m_controller_instance;
     Automation1Controller   *m_controller = &m_controller_instance; 
     
-    // We have three sets of config: 
-    // - one for common data like error status of each axis
-    // - one for controller-only data
-    // - one (per axis) for axis-only data
+    // We have three sets of polled data to configure: 
+    // - common data 
+    //      e.g. the controller needs error status of each axis to determine its own 
+    //      error state - we only want to poll this once, not once per device
+    // - controller-only data
+    // - axis-only data (per axis)
     A1PollManager           m_pollManagerCommon; 
     A1PollManager           m_pollManagerController; 
     A1PollManager           m_pollManagerAxis[MAX_AXES];
 
+    // Clock to rate-limit polling of common data
     PeriodicClock           m_lastCommonPoll; 
     
+    // Mutex to wrap communication with hardware
+    std::recursive_mutex    m_connectionLock;
+
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
     virtual void checkConnection_impl(); 
+    virtual bool isConnected(); 
 
+    // Methods to set up controller and axis when connection is initiated
     void onConnectController(); 
     void onConnectAxis(unsigned axis);
+    void checkControllerRunning(); 
 
     virtual void initialiseController_impl(); 
     virtual void initialiseAxis_impl(unsigned axis); 
-    
+
     virtual void readController_impl(); 
     virtual void readAxis_impl(unsigned axis); 
     
@@ -125,11 +166,9 @@ class A1Communication: public A1Bridge
     void initialiseCommonPolling();
     void readCommon(); 
 
-    // void checkController();
-
   public: 
-    A1Communication() : m_programHaltTimeout(100), m_taskID(1), m_connectionRetries(0)   {m_simulation = false;}; 
-    virtual ~A1Communication() = default;
+    A1Communication();
+    virtual ~A1Communication() = default; 
     virtual void controller_Reset();
     virtual void controller_Start();
     virtual void controller_Stop();
@@ -157,7 +196,6 @@ class A1Communication: public A1Bridge
     virtual void axis_DataCollectionStop(int32_t axis);
     virtual void axis_DataCollectionRefresh(int32_t axis);
     virtual void axis_DataCollectionGetResults(int32_t axis);
-    
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value);
 };
 

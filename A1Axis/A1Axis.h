@@ -35,9 +35,12 @@
 
 #include <tango.h>
 
-#include "A1Defines.h"
-#include "A1Bridge.h"
-#include "A1AxisEnum.h"
+#include <thread>
+#include <atomic>
+
+#include <A1Defines.h>
+#include <A1Bridge.h>
+#include <A1AxisEnum.h>
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis.h
 
@@ -61,7 +64,9 @@ class A1Axis : public TANGO_BASE_CLASS
 /*----- PROTECTED REGION ID(A1Axis::Data Members) ENABLED START -----*/
 
 private:
-    bool                        m_initialised; 
+    std::atomic<bool>      m_stopPollFlag; 
+    std::thread            m_pollThread; 
+    
     HomeTypeEnum	            attr_HomeType_write;
     MoveTypeEnum	            attr_MoveType_write;
 	Tango::DevDouble	        attr_PositionFeedback_write;
@@ -630,8 +635,8 @@ public:
 
 /*----- PROTECTED REGION ID(A1Axis::Additional Method prototypes) ENABLED START -----*/
 
-  private: 
-    void bridgeReady(); 
+  private:
+    void pollThread(); 
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis::Additional Method prototypes
 };

@@ -124,8 +124,8 @@ class A1Bridge
     A1AxisAttributes attr_axes[MAX_AXES]; 
 
     // Methods
-    bool isSimulation();
-    bool isConnected();
+    virtual bool isSimulation();
+    virtual bool isConnected();
     void connect(const std::string& username, const std::string& password, const std::string& ip); 
     void disconnect(); 
     void reconnect(); 

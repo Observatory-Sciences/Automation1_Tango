@@ -35,8 +35,11 @@
 
 #include <tango.h>
 
-#include "A1Defines.h"
-#include "A1Bridge.h"
+#include <thread>
+#include <atomic>
+
+#include <A1Defines.h>
+#include <A1Bridge.h>
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller.h
 
@@ -59,8 +62,9 @@ class A1Controller : public TANGO_BASE_CLASS
 /*----- PROTECTED REGION ID(A1Controller::Data Members) ENABLED START -----*/
 
 private:
-    // std::shared_ptr<A1Bridge_ns::A1Bridge> m_A1Bridge; 
     std::string            attr_AeroScriptFilePath_write;
+    std::atomic<bool>      m_stopPollFlag;
+    std::thread            m_pollThread;
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Data Members
 
@@ -369,7 +373,7 @@ public:
 /*----- PROTECTED REGION ID(A1Controller::Additional Method prototypes) ENABLED START -----*/
 
   private:
-    void bridgeReady(); 
+    void pollThread();
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Additional Method prototypes
 };
