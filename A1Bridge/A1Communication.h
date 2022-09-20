@@ -116,10 +116,6 @@ class A1Communication: public A1Bridge
 {
     // Inherits from A1Bridge and implements communication with Automation1 controller. 
   protected:
-    bool                    m_simulation;
-    unsigned                m_programHaltTimeout;
-    unsigned                m_taskID;
-
     // Rate-limit reconnection attemps; clock and counter
     unsigned                m_connectionRetries;
     PeriodicClock           m_lastReconnectionAttempt; 
@@ -180,6 +176,7 @@ class A1Communication: public A1Bridge
     virtual void controller_AeroScriptProgramStart();
     virtual void controller_AeroScriptProgramStop();
     virtual void controller_AeroScriptProgramPause();
+    virtual void controller_Run(const std::string& aeroScriptText);
     virtual void axis_Abort(int32_t axis);
     virtual void axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType);
     virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity); 
@@ -197,6 +194,7 @@ class A1Communication: public A1Bridge
     virtual void axis_DataCollectionRefresh(int32_t axis);
     virtual void axis_DataCollectionGetResults(int32_t axis);
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value);
+
 };
 
 } // namespace A1Bridge_ns

@@ -121,6 +121,36 @@ public:
 		{return (static_cast<A1Controller *>(dev))->is_AeroScriptFilePath_allowed(ty);}
 };
 
+//	Attribute Automation1ProgramStopTimeout class definition
+class Automation1ProgramStopTimeoutAttrib: public Tango::Attr
+{
+public:
+	Automation1ProgramStopTimeoutAttrib():Attr("Automation1ProgramStopTimeout",
+			Tango::DEV_USHORT, Tango::READ_WRITE) {};
+	~Automation1ProgramStopTimeoutAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<A1Controller *>(dev))->read_Automation1ProgramStopTimeout(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Controller *>(dev))->write_Automation1ProgramStopTimeout(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Controller *>(dev))->is_Automation1ProgramStopTimeout_allowed(ty);}
+};
+
+//	Attribute Automation1TaskID class definition
+class Automation1TaskIDAttrib: public Tango::Attr
+{
+public:
+	Automation1TaskIDAttrib():Attr("Automation1TaskID",
+			Tango::DEV_USHORT, Tango::READ_WRITE) {};
+	~Automation1TaskIDAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<A1Controller *>(dev))->read_Automation1TaskID(att);}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Controller *>(dev))->write_Automation1TaskID(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Controller *>(dev))->is_Automation1TaskID_allowed(ty);}
+};
+
 //	Attribute AxisHealth class definition
 class AxisHealthAttrib: public Tango::SpectrumAttr
 {
@@ -178,7 +208,7 @@ class AeroScriptFilesAttrib: public Tango::SpectrumAttr
 {
 public:
 	AeroScriptFilesAttrib():SpectrumAttr("AeroScriptFiles",
-			Tango::DEV_STRING, Tango::READ, 32) {};
+			Tango::DEV_STRING, Tango::READ, 1024) {};
 	~AeroScriptFilesAttrib() {};
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_AeroScriptFiles(att);}
@@ -441,6 +471,29 @@ public:
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Controller *>(dev))->is_AeroScriptProgramPause_allowed(any);}
+};
+
+//	Command Run class definition
+class RunClass : public Tango::Command
+{
+public:
+	RunClass(const char   *name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(name,in,out,in_desc,out_desc, level)	{};
+
+	RunClass(const char   *name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(name,in,out)	{};
+	~RunClass() {};
+	
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Controller *>(dev))->is_Run_allowed(any);}
 };
 
 

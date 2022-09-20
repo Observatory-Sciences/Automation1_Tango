@@ -65,6 +65,7 @@ private:
     std::string            attr_AeroScriptFilePath_write;
     std::atomic<bool>      m_stopPollFlag;
     std::thread            m_pollThread;
+    std::recursive_mutex   m_readLock; 
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Data Members
 
@@ -88,6 +89,8 @@ public:
 	Tango::DevUShort	*attr_TaskCount_read;
 	Tango::DevString	*attr_APIVersion_read;
 	Tango::DevString	*attr_AeroScriptFilePath_read;
+	Tango::DevUShort	*attr_Automation1ProgramStopTimeout_read;
+	Tango::DevUShort	*attr_Automation1TaskID_read;
 	Tango::DevBoolean	*attr_AxisHealth_read;
 	Tango::DevBoolean	*attr_TaskStatus0_read;
 	Tango::DevBoolean	*attr_TaskStatus1_read;
@@ -212,6 +215,27 @@ public:
 	virtual void write_AeroScriptFilePath(Tango::WAttribute &attr);
 	virtual bool is_AeroScriptFilePath_allowed(Tango::AttReqType type);
 /**
+ *	Attribute Automation1ProgramStopTimeout related methods
+ *	Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
+ *               than the timeout, the controller returns an error.
+ *
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
+ */
+	virtual void read_Automation1ProgramStopTimeout(Tango::Attribute &attr);
+	virtual void write_Automation1ProgramStopTimeout(Tango::WAttribute &attr);
+	virtual bool is_Automation1ProgramStopTimeout_allowed(Tango::AttReqType type);
+/**
+ *	Attribute Automation1TaskID related methods
+ *	Description: Automation1 task index number. Automation1 commands are run under this task.
+ *
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
+ */
+	virtual void read_Automation1TaskID(Tango::Attribute &attr);
+	virtual void write_Automation1TaskID(Tango::WAttribute &attr);
+	virtual bool is_Automation1TaskID_allowed(Tango::AttReqType type);
+/**
  *	Attribute AxisHealth related methods
  *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
  *
@@ -252,7 +276,7 @@ public:
  *	Description: A list of the files present on the Automation1 controller.
  *
  *	Data type:	Tango::DevString
- *	Attr type:	Spectrum max = 32
+ *	Attr type:	Spectrum max = 1024
  */
 	virtual void read_AeroScriptFiles(Tango::Attribute &attr);
 	virtual bool is_AeroScriptFiles_allowed(Tango::AttReqType type);
@@ -360,6 +384,14 @@ public:
 	 */
 	virtual void aero_script_program_pause();
 	virtual bool is_AeroScriptProgramPause_allowed(const CORBA::Any &any);
+	/**
+	 *	Command Run related method
+	 *	Description: Run an arbitrary command on the Automation1 controller
+	 *
+	 *	@param argin input
+	 */
+	virtual void run(Tango::DevString argin);
+	virtual bool is_Run_allowed(const CORBA::Any &any);
 
 
 	//--------------------------------------------------------

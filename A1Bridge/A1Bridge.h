@@ -110,6 +110,8 @@ class A1Bridge
 	Tango::DevUShort	attr_TaskCount_read;
 	Tango::DevString	attr_APIVersion_read;
 	Tango::DevString	attr_AeroScriptFilePath_read;
+    unsigned short      attr_Automation1ProgramStopTimeout_read; 
+    unsigned short      attr_Automation1TaskID_read; 
     
     double              attr_axisHealth;
 	Tango::DevBoolean	attr_AxisHealth_read[32];
@@ -119,7 +121,7 @@ class A1Bridge
 	Tango::DevBoolean	attr_TaskStatus1_read[17];
     double              attr_taskStatus2;
 	Tango::DevBoolean	attr_TaskStatus2_read[24];
-	Tango::DevString	attr_AeroScriptFiles_read[32];
+	Tango::DevString	attr_AeroScriptFiles_read[1024];
 
     A1AxisAttributes attr_axes[MAX_AXES]; 
 
@@ -140,10 +142,20 @@ class A1Bridge
     void readController();
     void readAxis(unsigned axis);
     
-    template<class T = int> void setPollingInterval(T interval) 
+    template<class T = int> void setPollingInterval_ms(T interval) 
     {
         m_pollInterval_ms = std::chrono::milliseconds(interval);
-    };  
+    };
+    
+    template<class T = unsigned short> void setAutomation1ProgramTimeout_ms(T interval) 
+    {
+        attr_Automation1ProgramStopTimeout_read = interval;
+    };
+    
+    template<class T = unsigned short> void setTaskID(T taskID) 
+    {
+        attr_Automation1TaskID_read = taskID;
+    };
 
     // Interface between Tango <-> Automation1 API is left up to the derived class
     // We just call the Tango command or retrieve the attributes. 
@@ -171,6 +183,8 @@ class A1Bridge
     virtual void controller_AeroScriptProgramStop() 
             {NotImplemented(__func__);}; 
     virtual void controller_AeroScriptProgramPause() 
+            {NotImplemented(__func__);}; 
+    virtual void controller_Run(const std::string& aeroScriptText)
             {NotImplemented(__func__);}; 
     virtual void axis_Abort(int32_t axis) 
             {NotImplemented(__func__);}; 

@@ -66,6 +66,7 @@ class A1Axis : public TANGO_BASE_CLASS
 private:
     std::atomic<bool>      m_stopPollFlag; 
     std::thread            m_pollThread; 
+    std::recursive_mutex   m_readLock;
     
     HomeTypeEnum	            attr_HomeType_write;
     MoveTypeEnum	            attr_MoveType_write;
@@ -82,8 +83,6 @@ private:
 public:
 	//	Axis:	Axis index that this device will control
 	Tango::DevUShort	axis;
-	//	MainDeviceName:	Name of the TANGO A1Controller class for this axis
-	std::string	mainDeviceName;
 
 	bool	mandatoryNotDefined;
 

@@ -5,12 +5,8 @@
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at observatorysciences.co.uk - jsy" author="jsy" emailDomain="observatorysciences.co.uk" classFamily="Motion" siteSpecific="" platform="Unix Like" bus="Ethernet" manufacturer="Aerotech" reference=""/>
     </description>
-    <deviceProperties name="Axis" description="Axis index that this device will control">
+    <deviceProperties name="Axis" mandatory="true" description="Axis index that this device will control">
       <type xsi:type="pogoDsl:UShortType"/>
-      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-    </deviceProperties>
-    <deviceProperties name="MainDeviceName" mandatory="true" description="Name of the TANGO A1Controller class for this axis">
-      <type xsi:type="pogoDsl:StringType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </deviceProperties>
     <commands name="State" description="This command gets the device state (stored in its device_state data member) and returns it to the caller." execMethod="dev_state" displayLevel="OPERATOR" polledPeriod="0">

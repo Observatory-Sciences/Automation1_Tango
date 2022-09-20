@@ -136,6 +136,46 @@ bool A1Controller::is_AeroScriptFilePath_allowed(TANGO_UNUSED(Tango::AttReqType 
 
 //--------------------------------------------------------
 /**
+ *	Method      : A1Controller::is_Automation1ProgramStopTimeout_allowed()
+ *	Description : Execution allowed for Automation1ProgramStopTimeout attribute
+ */
+//--------------------------------------------------------
+bool A1Controller::is_Automation1ProgramStopTimeout_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+	//	Not any excluded states for Automation1ProgramStopTimeout attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1ProgramStopTimeoutStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1ProgramStopTimeoutStateAllowed_WRITE
+
+	//	Not any excluded states for Automation1ProgramStopTimeout attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1ProgramStopTimeoutStateAllowed_READ) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1ProgramStopTimeoutStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method      : A1Controller::is_Automation1TaskID_allowed()
+ *	Description : Execution allowed for Automation1TaskID attribute
+ */
+//--------------------------------------------------------
+bool A1Controller::is_Automation1TaskID_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+	//	Not any excluded states for Automation1TaskID attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1TaskIDStateAllowed_WRITE) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1TaskIDStateAllowed_WRITE
+
+	//	Not any excluded states for Automation1TaskID attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1TaskIDStateAllowed_READ) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1TaskIDStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
  *	Method      : A1Controller::is_AxisHealth_allowed()
  *	Description : Execution allowed for AxisHealth attribute
  */
@@ -381,6 +421,21 @@ bool A1Controller::is_AeroScriptProgramPause_allowed(TANGO_UNUSED(const CORBA::A
 	/*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramPauseStateAllowed) ENABLED START -----*/
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptProgramPauseStateAllowed
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method      : A1Controller::is_Run_allowed()
+ *	Description : Execution allowed for Run attribute
+ */
+//--------------------------------------------------------
+bool A1Controller::is_Run_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for Run command.
+	/*----- PROTECTED REGION ID(A1Controller::RunStateAllowed) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::RunStateAllowed
 	return true;
 }
 

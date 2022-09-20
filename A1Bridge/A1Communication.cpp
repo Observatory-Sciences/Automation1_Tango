@@ -161,12 +161,11 @@ void A1PollManager::clear()
 
 
 A1Communication::A1Communication() :
-    m_programHaltTimeout(100),
-    m_taskID(1),
-    m_connectionRetries(0),
-    m_simulation(false)
+    m_connectionRetries(0)
 {
-    // nothing to do
+    m_simulation = false;
+    attr_Automation1ProgramStopTimeout_read = 100;
+    attr_Automation1TaskID_read = 1;
 }
 
 
@@ -202,9 +201,9 @@ void A1Communication::initialiseController_impl()
     initialiseCommonPolling();
     m_pollManagerCommon.incrementRefCount(); 
 
-    m_pollManagerController.push(&attr_taskStatus0,                           m_taskID, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0); 
-    m_pollManagerController.push(&attr_taskStatus1,                           m_taskID, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1); 
-    m_pollManagerController.push(&attr_taskStatus2,                           m_taskID, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2); 
+    m_pollManagerController.push(&attr_taskStatus0,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0); 
+    m_pollManagerController.push(&attr_taskStatus1,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1); 
+    m_pollManagerController.push(&attr_taskStatus2,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2); 
 }
 
 
@@ -241,6 +240,10 @@ void A1Communication::deleteController_impl()
     // Delete the controller if it is no longer required
     // (but keep the A1Communication instance alive)
     delete[] attr_APIVersion_read; 
+    for (unsigned i = 0; i++; i < 1024)
+    {
+        delete[] attr_AeroScriptFiles_read[i];
+    }
     m_pollManagerController.clear(); 
     m_pollManagerCommon.decrementRefCount(); 
 }
@@ -393,10 +396,10 @@ void A1Communication::onConnectAxis(unsigned axis)
     
     double firmware[4]; 
     std::stringstream firmwareS; 
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, m_taskID, axis, Automation1DriveItem_FirmwareVersionMajor, 0, &firmware[0]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, m_taskID, axis, Automation1DriveItem_FirmwareVersionMinor, 0, &firmware[1]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, m_taskID, axis, Automation1DriveItem_FirmwareVersionPatch, 0, &firmware[2]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, m_taskID, axis, Automation1DriveItem_FirmwareVersionBuild, 0, &firmware[3]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionMajor, 0, &firmware[0]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionMinor, 0, &firmware[1]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionPatch, 0, &firmware[2]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionBuild, 0, &firmware[3]);
 
     firmwareS << firmware[0] << "." << firmware[0] << "." << firmware[0] << "." << firmware[0]; 
     delete[] attr_axes[axis].attr_FirmwareVersion_read; 
@@ -468,28 +471,26 @@ void A1Communication::disconnect_impl()
 void A1Communication::readCommon()
 {
     // DEBUG_STREAM << "Reading common data from controller" << std::endl; 
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    if (!m_lastCommonPoll.checkAndUpdate(m_pollInterval_ms))
     {
-        std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-        if (!m_lastCommonPoll.checkAndUpdate(m_pollInterval_ms))
-        {
-            return; 
-        }
+        return; 
+    }
 
-        try
-        {
-            attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
-            attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller);
+    try
+    {
+        attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
+        attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller);
 
-            m_pollManagerCommon.poll(m_controller); 
-        }
-        catch (Tango::DevFailed &e)
+        m_pollManagerCommon.poll(m_controller); 
+    }
+    catch (Tango::DevFailed &e)
+    {
+        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
         {
-            if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
-            {
-                this->disconnect();
-            }
-            throw(e);
+            this->disconnect();
         }
+        throw(e);
     }
 
     for (unsigned axis = 0; axis < attr_AxisCount_read; axis++)
@@ -581,7 +582,7 @@ void A1Communication::readCommon()
         attr_axes[axis].attr_AxisFault_read[AX_F_MOTOR_SUPPLY]       = (int(attr_axes[axis].axisFault) >> 23 ) & 1U;
         attr_axes[axis].attr_AxisFault_read[AX_F_INTERNAL]           = (int(attr_axes[axis].axisFault) >> 24 ) & 1U;
 
-        attr_axes[axis].attr_Error_read = (int(attr_axes[axis].axisFault) & 0xffffff) != 0; 
+        attr_axes[axis].attr_Error_read = (int(attr_axes[axis].axisFault) & 0xffffff) != 0;
         attr_AxisHealth_read[axis]      = !attr_axes[axis].attr_Error_read; // Healthy if no error
     }
 }
@@ -589,23 +590,21 @@ void A1Communication::readCommon()
 
 void A1Communication::readController_impl()
 {
-    {
-        std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-        readCommon(); 
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    readCommon(); 
 
-        // DEBUG_STREAM << "Reading controller-specific data from controller" << std::endl; 
-        try
+    // DEBUG_STREAM << "Reading controller-specific data from controller" << std::endl; 
+    try
+    {
+        m_pollManagerController.poll(m_controller);
+    }
+    catch (Tango::DevFailed &e)
+    {
+        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
         {
-            m_pollManagerController.poll(m_controller);
+            this->disconnect();
         }
-        catch (Tango::DevFailed &e)
-        {
-            if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
-            {
-                this->disconnect();
-            }
-            throw(e);
-        }
+        throw(e);
     }
     
     attr_TaskStatus0_read[TSK0_PROGRAM_ASSOCIATED]             = (int(attr_taskStatus0) >> TSK0_PROGRAM_ASSOCIATED) & 1U; 
@@ -668,31 +667,28 @@ void A1Communication::readController_impl()
     attr_TaskStatus2_read[TSK2_COORD2_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE2) & 1U; 
     attr_TaskStatus2_read[TSK2_COORD2_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE3) & 1U; 
 
+    int32_t fileCount, filenameLength; 
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, NULL, &fileCount, &filenameLength); 
 
+    int32_t maxFiles = min(fileCount, 1024); 
+    fileCount = maxFiles; 
+    int32_t maxFilenameLength = min(fileCount, 50); 
+
+    char files[maxFiles * maxFilenameLength];
+
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, files, &fileCount, &maxFilenameLength); 
+
+    int32_t file = 0;
+    for (; file < fileCount; file++)
     {
-        std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-        int32_t fileCount, filenameLength; 
-        A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, NULL, &fileCount, &filenameLength); 
+        delete[] attr_AeroScriptFiles_read[file];
+        attr_AeroScriptFiles_read[file] = Tango::string_dup(&files[file*maxFilenameLength]);
+    }
 
-        int32_t maxFiles = min(fileCount, 32); 
-        fileCount = maxFiles; 
-
-        char files[maxFiles * filenameLength];
-
-        A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, files, &fileCount, &filenameLength); 
-
-        int32_t file = 0;
-        for (; file < fileCount; file++)
-        {
-            delete[] attr_AeroScriptFiles_read[file]; 
-            attr_AeroScriptFiles_read[file] = Tango::string_dup(&files[file*filenameLength]); 
-        }
-
-        for (; file < maxFiles; file++)
-        {
-            delete[] attr_AeroScriptFiles_read[file]; 
-            attr_AeroScriptFiles_read[file] = Tango::string_dup(""); 
-        }
+    for (; file < 1024; file++)
+    {
+        delete[] attr_AeroScriptFiles_read[file];
+        attr_AeroScriptFiles_read[file] = Tango::string_dup("");
     }
 }
 
@@ -741,6 +737,7 @@ void A1Communication::controller_Stop()
 
 void A1Communication::controller_Enable() 
 {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     for (int i = 0; i < attr_AxisCount_read; i++)
     {
         A1Communication::axis_Enable(i); 
@@ -750,6 +747,7 @@ void A1Communication::controller_Enable()
 
 void A1Communication::controller_Disable() 
 {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     for (int i = 0; i < attr_AxisCount_read; i++)
     {
         A1Communication::axis_Disable(i); 
@@ -760,43 +758,50 @@ void A1Communication::controller_Disable()
 void A1Communication::controller_ClearErrors() 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_AcknowledgeAll, *m_controller, m_taskID);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_AcknowledgeAll, *m_controller, attr_Automation1TaskID_read);
 } 
 
 
 void A1Communication::controller_AeroScriptProgramRun(const std::string& file) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramRun,   *m_controller, m_taskID, file.c_str());
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramRun,   *m_controller, attr_Automation1TaskID_read, file.c_str());
 } 
 
 
 void A1Communication::controller_AeroScriptProgramLoad(const std::string& file) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramLoad,  *m_controller, m_taskID, file.c_str());
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramLoad,  *m_controller, attr_Automation1TaskID_read, file.c_str());
 } 
 
 
 void A1Communication::controller_AeroScriptProgramStart() 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramStart, *m_controller, m_taskID);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramStart, *m_controller, attr_Automation1TaskID_read);
 } 
 
 
 void A1Communication::controller_AeroScriptProgramStop() 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramStop,  *m_controller, m_taskID, m_programHaltTimeout);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramStop,  *m_controller, attr_Automation1TaskID_read, attr_Automation1ProgramStopTimeout_read);
 } 
 
 
 void A1Communication::controller_AeroScriptProgramPause() 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramPause, *m_controller, m_taskID, m_programHaltTimeout);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_ProgramPause, *m_controller, attr_Automation1TaskID_read, attr_Automation1ProgramStopTimeout_read);
 } 
+
+
+void A1Communication::controller_Run(const std::string& aeroScriptText)
+{
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Execute, *m_controller, attr_Automation1TaskID_read, aeroScriptText.c_str());
+}
 
 
 void A1Communication::axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value)
@@ -833,8 +838,8 @@ void A1Communication::axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type
 	}
     
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-	A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampType,  *m_controller, m_taskID, axis, typeA1, 0.5, typeA1, 0.5);
-	A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampValue, *m_controller, m_taskID, axis, modeA1, value, modeA1, value);
+	A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampType,  *m_controller, attr_Automation1TaskID_read, axis, typeA1, 0.5, typeA1, 0.5);
+	A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampValue, *m_controller, attr_Automation1TaskID_read, axis, modeA1, value, modeA1, value);
 
 }
 
@@ -853,11 +858,11 @@ void A1Communication::axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType)
     {
         case A1Axis_ns::_HomeTypeEnum::_ASYNCHRONOUS: 
             // DEBUG_STREAM << "Home type: ASYNCHRONOUS" << std::endl; 
-            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_HomeAsync, *m_controller, m_taskID, &axis, 1);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_HomeAsync, *m_controller, attr_Automation1TaskID_read, &axis, 1);
             break; 
         case A1Axis_ns::_HomeTypeEnum::_SYNCHRONOUS: 
             // DEBUG_STREAM << "Home type: SYNCHRONOUS" << std::endl; 
-            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Home, *m_controller, m_taskID, &axis, 1);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Home, *m_controller, attr_Automation1TaskID_read, &axis, 1);
             break; 
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown home type", __func__);
@@ -873,19 +878,19 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
     {
         case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
             // DEBUG_STREAM << "Move type: ABSOLUTE" << std::endl; 
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveAbsolute, *m_controller, m_taskID, &axis, 1, &position, 1, &velocity, 1);
+			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveAbsolute, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_INCREMENTALMOVE:
             // DEBUG_STREAM << "Move type: INCREMENTAL" << std::endl; 
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveIncremental, *m_controller, m_taskID, &axis, 1, &position, 1, &velocity, 1);
+			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveIncremental, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
             // DEBUG_STREAM << "Move type: LINEAR" << std::endl; 
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, m_taskID, &axis, 1, &position, 1, velocity);
+			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, velocity);
             break;
         case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
             // DEBUG_STREAM << "Move type: RAPID" << std::endl; 
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, m_taskID, &axis, 1, &position, 1, &velocity, 1);
+			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown move type", __func__);
@@ -896,7 +901,7 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
 void A1Communication::axis_Enable(int32_t axis) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Enable, *m_controller, m_taskID, &axis, 1);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Enable, *m_controller, attr_Automation1TaskID_read, &axis, 1);
 } 
 
 
@@ -910,35 +915,35 @@ void A1Communication::axis_Disable(int32_t axis)
 void A1Communication::axis_BrakeOn(int32_t axis) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_DriveBrakeOn, *m_controller, m_taskID, axis);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_DriveBrakeOn, *m_controller, attr_Automation1TaskID_read, axis);
 } 
 
 
 void A1Communication::axis_BrakeOff(int32_t axis) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_DriveBrakeOff, *m_controller, m_taskID, axis);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_DriveBrakeOff, *m_controller, attr_Automation1TaskID_read, axis);
 } 
 
 
 void A1Communication::axis_MoveFromLimit(int32_t axis) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveOutOfLimit, *m_controller, m_taskID, axis);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveOutOfLimit, *m_controller, attr_Automation1TaskID_read, axis);
 } 
 
 
 void A1Communication::axis_FreeRun(int32_t axis, Tango::DevDouble velocity) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveFreerun, *m_controller, m_taskID, &axis, 1, &velocity, 1);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveFreerun, *m_controller, attr_Automation1TaskID_read, &axis, 1, &velocity, 1);
 } 
 
 
 void A1Communication::axis_FreeRunStop(int32_t axis) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveFreerunStop, *m_controller, m_taskID, &axis, 1);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveFreerunStop, *m_controller, attr_Automation1TaskID_read, &axis, 1);
 } 
 
 
@@ -946,14 +951,14 @@ void A1Communication::axis_ThrowAllFaults(int32_t axis)
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     int64_t faultMask = 0xffffff; 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_FaultThrow, *m_controller, m_taskID, axis, faultMask);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_FaultThrow, *m_controller, attr_Automation1TaskID_read, axis, faultMask);
 } 
 
 
 void A1Communication::axis_AcknowledgeFaults(int32_t axis) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_FaultAcknowledge, *m_controller, m_taskID, &axis, 1);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_FaultAcknowledge, *m_controller, attr_Automation1TaskID_read, &axis, 1);
 }
 
 

@@ -63,21 +63,24 @@
 //  AeroScriptProgramStart  |  aero_script_program_start
 //  AeroScriptProgramStop   |  aero_script_program_stop
 //  AeroScriptProgramPause  |  aero_script_program_pause
+//  Run                     |  run
 //================================================================
 
 //================================================================
 //  Attributes managed are:
 //================================================================
-//  ControllerRunning   |  Tango::DevBoolean	Scalar
-//  AxisCount           |  Tango::DevUShort	Scalar
-//  TaskCount           |  Tango::DevUShort	Scalar
-//  APIVersion          |  Tango::DevString	Scalar
-//  AeroScriptFilePath  |  Tango::DevString	Scalar
-//  AxisHealth          |  Tango::DevBoolean	Spectrum  ( max = 32)
-//  TaskStatus0         |  Tango::DevBoolean	Spectrum  ( max = 16)
-//  TaskStatus1         |  Tango::DevBoolean	Spectrum  ( max = 17)
-//  TaskStatus2         |  Tango::DevBoolean	Spectrum  ( max = 24)
-//  AeroScriptFiles     |  Tango::DevString	Spectrum  ( max = 32)
+//  ControllerRunning              |  Tango::DevBoolean	Scalar
+//  AxisCount                      |  Tango::DevUShort	Scalar
+//  TaskCount                      |  Tango::DevUShort	Scalar
+//  APIVersion                     |  Tango::DevString	Scalar
+//  AeroScriptFilePath             |  Tango::DevString	Scalar
+//  Automation1ProgramStopTimeout  |  Tango::DevUShort	Scalar
+//  Automation1TaskID              |  Tango::DevUShort	Scalar
+//  AxisHealth                     |  Tango::DevBoolean	Spectrum  ( max = 32)
+//  TaskStatus0                    |  Tango::DevBoolean	Spectrum  ( max = 16)
+//  TaskStatus1                    |  Tango::DevBoolean	Spectrum  ( max = 17)
+//  TaskStatus2                    |  Tango::DevBoolean	Spectrum  ( max = 24)
+//  AeroScriptFiles                |  Tango::DevString	Spectrum  ( max = 1024)
 //================================================================
 
 namespace A1Controller_ns
@@ -133,19 +136,22 @@ void A1Controller::delete_device()
 	DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
 
+    std::cout << "Waiting for polling threads to exit..." << std::endl; 
     m_stopPollFlag = true;
     m_pollThread.join();
 
-    // delete *attr_APIVersion_read; 
-    // for (unsigned file = 0; file < 32; file++)
-    // {
-    //     delete attr_AeroScriptFiles_read[file];
-    // }
+    // may cause segfault for unknown reasons
+    // delete[] *attr_APIVersion_read; 
+    for (unsigned file = 0; file < 1024; file++)
+    {
+        delete[] attr_AeroScriptFiles_read[file];
+    }
 
     try
     {
         A1Bridge_ns::getInstance()->deleteController(); 
-        A1Bridge_ns::stopInstance(); 
+        std::cout << "Deleted controller..." << std::endl; 
+        // A1Bridge_ns::stopInstance(); 
     }
     catch (Tango::DevFailed &e)
     {
@@ -158,6 +164,8 @@ void A1Controller::delete_device()
 	delete[] attr_TaskCount_read;
 	delete[] attr_APIVersion_read;
 	delete[] attr_AeroScriptFilePath_read;
+	delete[] attr_Automation1ProgramStopTimeout_read;
+	delete[] attr_Automation1TaskID_read;
 	delete[] attr_AxisHealth_read;
 	delete[] attr_TaskStatus0_read;
 	delete[] attr_TaskStatus1_read;
@@ -188,11 +196,13 @@ void A1Controller::init_device()
 	attr_TaskCount_read = new Tango::DevUShort[1];
 	attr_APIVersion_read = new Tango::DevString[1];
 	attr_AeroScriptFilePath_read = new Tango::DevString[1];
+	attr_Automation1ProgramStopTimeout_read = new Tango::DevUShort[1];
+	attr_Automation1TaskID_read = new Tango::DevUShort[1];
 	attr_AxisHealth_read = new Tango::DevBoolean[32];
 	attr_TaskStatus0_read = new Tango::DevBoolean[16];
 	attr_TaskStatus1_read = new Tango::DevBoolean[17];
 	attr_TaskStatus2_read = new Tango::DevBoolean[24];
-	attr_AeroScriptFiles_read = new Tango::DevString[32];
+	attr_AeroScriptFiles_read = new Tango::DevString[1024];
 	//	No longer if mandatory property not set. 
 	if (mandatoryNotDefined)
 		return;
@@ -221,7 +231,7 @@ void A1Controller::init_device()
 	{
 		attr_TaskStatus2_read[i] = false;
 	}
-	for (int i = 0; i < 32; i++) 
+	for (int i = 0; i < 1024; i++) 
 	{
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
 	} 
@@ -232,7 +242,9 @@ void A1Controller::init_device()
     INFO_STREAM << "Password:  " << password << std::endl; 	
     
     A1Bridge_ns::startInstance(simulate);
-    A1Bridge_ns::getInstance()->setPollingInterval(100);
+    A1Bridge_ns::getInstance()->setPollingInterval_ms(100);
+    A1Bridge_ns::getInstance()->setAutomation1ProgramTimeout_ms(100);
+    A1Bridge_ns::getInstance()->setTaskID(1);
 
     try
     {
@@ -406,6 +418,8 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 	DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
     
+    std::lock_guard<std::recursive_mutex> hw_lock(m_readLock); 
+
     A1Bridge_ns::getInstance()->checkConnection();
 
     try
@@ -422,11 +436,14 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     *attr_ControllerRunning_read = A1Bridge_ns::getInstance()->attr_ControllerRunning_read;
     *attr_AxisCount_read         = A1Bridge_ns::getInstance()->attr_AxisCount_read;
     *attr_TaskCount_read         = A1Bridge_ns::getInstance()->attr_TaskCount_read;
+    *attr_Automation1TaskID_read = A1Bridge_ns::getInstance()->attr_Automation1TaskID_read;
+    *attr_Automation1ProgramStopTimeout_read = A1Bridge_ns::getInstance()->attr_Automation1ProgramStopTimeout_read; 
+    
 
     delete[] *attr_APIVersion_read;
     *attr_APIVersion_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_APIVersion_read); 
 
-    for (unsigned file = 0; file < 32; file++)
+    for (unsigned file = 0; file < 1024; file++)
     {
         delete[] attr_AeroScriptFiles_read[file];
         attr_AeroScriptFiles_read[file] = Tango::string_dup(A1Bridge_ns::getInstance()->attr_AeroScriptFiles_read[file]); 
@@ -611,6 +628,84 @@ void A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Read attribute Automation1ProgramStopTimeout related method
+ *	Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
+ *               than the timeout, the controller returns an error.
+ *
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr) entering... " << endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_Automation1ProgramStopTimeout) ENABLED START -----*/
+	//	Set the attribute value
+	attr.set_value(attr_Automation1ProgramStopTimeout_read);
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_Automation1ProgramStopTimeout
+}
+//--------------------------------------------------------
+/**
+ *	Write attribute Automation1ProgramStopTimeout related method
+ *	Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
+ *               than the timeout, the controller returns an error.
+ *
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::write_Automation1ProgramStopTimeout(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::write_Automation1ProgramStopTimeout(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	Tango::DevUShort	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Controller::write_Automation1ProgramStopTimeout) ENABLED START -----*/
+	A1Bridge_ns::getInstance()->setAutomation1ProgramTimeout_ms(w_val);
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::write_Automation1ProgramStopTimeout
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute Automation1TaskID related method
+ *	Description: Automation1 task index number. Automation1 commands are run under this task.
+ *
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::read_Automation1TaskID(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::read_Automation1TaskID(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_Automation1TaskID) ENABLED START -----*/
+	//	Set the attribute value
+	attr.set_value(attr_Automation1TaskID_read);
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_Automation1TaskID
+}
+//--------------------------------------------------------
+/**
+ *	Write attribute Automation1TaskID related method
+ *	Description: Automation1 task index number. Automation1 commands are run under this task.
+ *
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::write_Automation1TaskID(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::write_Automation1TaskID(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	Tango::DevUShort	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Controller::write_Automation1TaskID) ENABLED START -----*/
+	A1Bridge_ns::getInstance()->setTaskID(w_val);
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::write_Automation1TaskID
+}
+//--------------------------------------------------------
+/**
  *	Read attribute AxisHealth related method
  *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
  *
@@ -687,7 +782,7 @@ void A1Controller::read_TaskStatus2(Tango::Attribute &attr)
  *	Description: A list of the files present on the Automation1 controller.
  *
  *	Data type:	Tango::DevString
- *	Attr type:	Spectrum max = 32
+ *	Attr type:	Spectrum max = 1024
  */
 //--------------------------------------------------------
 void A1Controller::read_AeroScriptFiles(Tango::Attribute &attr)
@@ -695,7 +790,7 @@ void A1Controller::read_AeroScriptFiles(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Controller::read_AeroScriptFiles(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptFiles) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_AeroScriptFiles_read, 32);
+	attr.set_value(attr_AeroScriptFiles_read, 1024);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptFiles
 }
@@ -914,6 +1009,23 @@ void A1Controller::aero_script_program_pause()
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramPause(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_pause
+}
+//--------------------------------------------------------
+/**
+ *	Command Run related method
+ *	Description: Run an arbitrary command on the Automation1 controller
+ *
+ *	@param argin input
+ */
+//--------------------------------------------------------
+void A1Controller::run(Tango::DevString argin)
+{
+	DEBUG_STREAM << "A1Controller::Run()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::run) ENABLED START -----*/
+	
+	//	Add your own code
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::run
 }
 //--------------------------------------------------------
 /**

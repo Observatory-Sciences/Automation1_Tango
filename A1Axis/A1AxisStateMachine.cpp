@@ -36,7 +36,12 @@
 //================================================================
 //  States   |  Description
 //================================================================
-//  STANDBY  |  
+//  STANDBY  |  Axis is enabled and ready to accept motion tasks.
+//  OFF      |  Axis is disabled.
+//  MOVING   |  Axis is performing a motion task.
+//  FAULT    |  At least one fault is present on this axis.
+//  INIT     |  Axis is initialising.
+//  UNKNOWN  |  No connection detected. Controller in unknown state.
 
 
 namespace A1Axis_ns

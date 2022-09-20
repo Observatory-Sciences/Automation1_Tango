@@ -27,12 +27,16 @@ bool PeriodicClock::checkAndUpdate(std::chrono::milliseconds interval)
 
 A1Bridge::A1Bridge() : 
     m_connected(false),
+    m_simulation(false),
+    m_verbose(false),
+    attr_Automation1ProgramStopTimeout_read(100), 
+    attr_Automation1TaskID_read(1),
     m_pollInterval_ms(std::chrono::milliseconds(-1)) 
 {
     attr_APIVersion_read         = Tango::string_dup("");
     attr_AeroScriptFilePath_read = Tango::string_dup("");
 
-    for (unsigned i = 0; i < 32; i++)
+    for (unsigned i = 0; i < 1024; i++)
     {
         attr_AeroScriptFiles_read[i] = Tango::string_dup(""); 
     }
@@ -90,36 +94,6 @@ void stopInstance()
     // delete instance; 
     instance = nullptr; 
 }
-
-
-// void A1Bridge::instanceReady()
-// {
-//     m_initialised = true; 
-// }
-
-
-// bool A1Bridge::checkInstanceReady()
-// {
-//     if (m_instance != nullptr)
-//     {
-//         return m_instance->m_initialised;
-//     }
-//     return false; 
-// }
-
-
-// A1Bridge* A1Bridge::setSimulation(bool simulation) 
-// {
-//     // This method is currently disallowed due to dangling pointer implications. 
-    
-//     // if ((m_instance != nullptr) && (m_instance->isSimulation() != simulation))
-//     // {
-//     //     std::cout << "Halted bridge" << std::endl; 
-//     //     delete m_instance;
-//     // }
-
-//     return getInstance(simulation);
-// }
 
 
 bool A1Bridge::isSimulation()

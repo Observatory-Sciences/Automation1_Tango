@@ -346,6 +346,26 @@ CORBA::Any *AeroScriptProgramPauseClass::execute(Tango::DeviceImpl *device, TANG
 	return new CORBA::Any();
 }
 
+//--------------------------------------------------------
+/**
+ * method : 		RunClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *RunClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	cout2 << "RunClass::execute(): arrived" << std::endl;
+	Tango::DevString argin;
+	extract(in_any, argin);
+	((static_cast<A1Controller *>(device))->run(argin));
+	return new CORBA::Any();
+}
+
 
 //===================================================================
 //	Properties management
@@ -693,6 +713,54 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Not Memorized
 	att_list.push_back(aeroscriptfilepath);
 
+	//	Attribute : Automation1ProgramStopTimeout
+	Automation1ProgramStopTimeoutAttrib	*automation1programstoptimeout = new Automation1ProgramStopTimeoutAttrib();
+	Tango::UserDefaultAttrProp	automation1programstoptimeout_prop;
+	automation1programstoptimeout_prop.set_description("Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer\nthan the timeout, the controller returns an error.");
+	automation1programstoptimeout_prop.set_label("Program stop/pause timeout");
+	automation1programstoptimeout_prop.set_unit("ms");
+	//	standard_unit	not set for Automation1ProgramStopTimeout
+	//	display_unit	not set for Automation1ProgramStopTimeout
+	//	format	not set for Automation1ProgramStopTimeout
+	//	max_value	not set for Automation1ProgramStopTimeout
+	//	min_value	not set for Automation1ProgramStopTimeout
+	//	max_alarm	not set for Automation1ProgramStopTimeout
+	//	min_alarm	not set for Automation1ProgramStopTimeout
+	//	max_warning	not set for Automation1ProgramStopTimeout
+	//	min_warning	not set for Automation1ProgramStopTimeout
+	//	delta_t	not set for Automation1ProgramStopTimeout
+	//	delta_val	not set for Automation1ProgramStopTimeout
+	
+	automation1programstoptimeout->set_default_properties(automation1programstoptimeout_prop);
+	//	Not Polled
+	automation1programstoptimeout->set_disp_level(Tango::EXPERT);
+	//	Not Memorized
+	att_list.push_back(automation1programstoptimeout);
+
+	//	Attribute : Automation1TaskID
+	Automation1TaskIDAttrib	*automation1taskid = new Automation1TaskIDAttrib();
+	Tango::UserDefaultAttrProp	automation1taskid_prop;
+	automation1taskid_prop.set_description("Automation1 task index number. Automation1 commands are run under this task.");
+	automation1taskid_prop.set_label("Automation1 task ID");
+	//	unit	not set for Automation1TaskID
+	//	standard_unit	not set for Automation1TaskID
+	//	display_unit	not set for Automation1TaskID
+	//	format	not set for Automation1TaskID
+	automation1taskid_prop.set_max_value("32");
+	automation1taskid_prop.set_min_value("1");
+	//	max_alarm	not set for Automation1TaskID
+	//	min_alarm	not set for Automation1TaskID
+	//	max_warning	not set for Automation1TaskID
+	//	min_warning	not set for Automation1TaskID
+	//	delta_t	not set for Automation1TaskID
+	//	delta_val	not set for Automation1TaskID
+	
+	automation1taskid->set_default_properties(automation1taskid_prop);
+	//	Not Polled
+	automation1taskid->set_disp_level(Tango::EXPERT);
+	//	Not Memorized
+	att_list.push_back(automation1taskid);
+
 	//	Attribute : AxisHealth
 	AxisHealthAttrib	*axishealth = new AxisHealthAttrib();
 	Tango::UserDefaultAttrProp	axishealth_prop;
@@ -956,6 +1024,15 @@ void A1ControllerClass::command_factory()
 			"",
 			Tango::OPERATOR);
 	command_list.push_back(pAeroScriptProgramPauseCmd);
+
+	//	Command Run
+	RunClass	*pRunCmd =
+		new RunClass("Run",
+			Tango::DEV_STRING, Tango::DEV_VOID,
+			"input",
+			"",
+			Tango::OPERATOR);
+	command_list.push_back(pRunCmd);
 
 	/*----- PROTECTED REGION ID(A1ControllerClass::command_factory_after) ENABLED START -----*/
 	

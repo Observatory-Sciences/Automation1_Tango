@@ -159,12 +159,17 @@ void A1Axis::delete_device()
 	DEBUG_STREAM << "A1Axis::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::delete_device) ENABLED START -----*/
 	
+    // may cause segfault for unknown reasons
+    // delete[] *attr_FirmwareVersion_read;
+    // delete[] *attr_MotorType_read;
+
     m_stopPollFlag = true;
     m_pollThread.join();
 
     try
     {
         A1Bridge_ns::getInstance()->deleteAxis(axis);
+        std::cout << "Delete axis..." << std::endl; 
     }
     catch (Tango::DevFailed &e)
     {
@@ -333,7 +338,6 @@ void A1Axis::get_device_property()
 	//	Read device properties from database.
 	Tango::DbData	dev_prop;
 	dev_prop.push_back(Tango::DbDatum("Axis"));
-	dev_prop.push_back(Tango::DbDatum("MainDeviceName"));
 
 	//	is there at least one property to be read ?
 	if (dev_prop.size()>0)
@@ -358,17 +362,6 @@ void A1Axis::get_device_property()
 		}
 		//	And try to extract Axis value from database
 		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  axis;
-
-		//	Try to initialize MainDeviceName from class property
-		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
-		if (cl_prop.is_empty()==false)	cl_prop  >>  mainDeviceName;
-		else {
-			//	Try to initialize MainDeviceName from default device value
-			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
-			if (def_prop.is_empty()==false)	def_prop  >>  mainDeviceName;
-		}
-		//	And try to extract MainDeviceName value from database
-		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  mainDeviceName;
 		//	Property StartDsPath is mandatory, check if has been defined in database.
 		check_mandatory_property(cl_prop, dev_prop[i]);
 
@@ -440,6 +433,8 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 {
 	DEBUG_STREAM << "A1Axis::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_attr_hardware) ENABLED START -----*/
+
+    std::lock_guard<std::recursive_mutex> hw_lock(m_readLock); 
 
     A1Bridge_ns::getInstance()->checkConnection();
 
