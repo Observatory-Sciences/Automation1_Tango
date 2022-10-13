@@ -65,8 +65,9 @@ class Automation1Proxy:
     """
     Wrapper around tango.DeviceProxy to interact with TANGO device
     """
-    def __init__(self, device):
+    def __init__(self, device, printResponse):
         self.m_automation1 = tango.DeviceProxy(device)
+        self.m_printResponse = printResponse
         self.callbacks = {
             "set": self.attr_set,
             "get": self.attr_get,
@@ -103,7 +104,7 @@ class Automation1Proxy:
             att_info = self.m_automation1[attribute]
         except tango.DevFailed as e:
             print("Error:", e)
-            return 1
+            return 1, None
 
         att = att_info.value
         verbose_print("Attr. current value:\t {}".format(att))
@@ -117,23 +118,23 @@ class Automation1Proxy:
                 out[:] = values
             except ValueError as e:
                 print("Error:", e)
-                return 1
+                return 1, None
         else:
             # attempt to convert to matching type
             try:
                 out = t_att(values)
             except Exception as e:
                 print("Error:", e)
-                return 1
+                return 1, None
 
         verbose_print("Input after conversion:\t {}".format(out))
         try:
             self.m_automation1[attribute] = out
         except Exception as e:
             print("Error: failed to set attribute {}: \n".format(attribute), e)
-            return 1
+            return 1, None
 
-        return 0
+        return 0, "OK"
 
     def attr_get(self, attribute):
         """
@@ -146,11 +147,12 @@ class Automation1Proxy:
             att_info = self.m_automation1[attribute]
             att = att_info.value
             verbose_print("Value:")
-            print(att)
-            return 0
+            if self.m_printResponse:
+                print(att)
+            return 0, att
         except Exception as e:
             print("Error:", e)
-        return 1
+        return 1, None
 
     def attr_info(self, attribute):
         """
@@ -161,11 +163,12 @@ class Automation1Proxy:
         verbose_print("Get info for attribute:\t {}".format(attribute))
         try:
             att = self.m_automation1[attribute]
-            print(att)
-            return 0
+            if self.m_printResponse:
+                print(att)
+            return 0, att
         except Exception as e:
             print("Error:", e)
-        return 1
+        return 1, None
 
     def command(self, command, *arguments):
         """
@@ -185,11 +188,12 @@ class Automation1Proxy:
         try:
             out = self.m_automation1.command_inout(command, arguments)
             verbose_print("Response:")
-            print(out)
-            return 0
+            if self.m_printResponse:
+                print(out)
+            return 0, out
         except Exception as e:
             print("Error: command {} failed:\n{}".format(command, e))
-        return 1
+        return 1, None
 
 
 def _main():
@@ -215,16 +219,16 @@ def _main():
     verbose_print("Using device:\t", device)
 
     try:
-        automation1 = Automation1Proxy(device)
+        automation1 = Automation1Proxy(device, True)
     except tango.DevFailed as e:
         print("Error: failed to connect to device {}:\n{}".format(device, e))
         exit(1)
 
     verbose_print("Device state:\t", automation1.m_automation1.state())
 
-    out = automation1.call(cmdArgs.action, *cmdArgs.arguments)
+    stat, out = automation1.call(cmdArgs.action, *cmdArgs.arguments)
 
-    exit(out)
+    exit(stat)
 
 
 if __name__ == "__main__":
