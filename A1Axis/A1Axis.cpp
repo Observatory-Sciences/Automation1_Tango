@@ -160,8 +160,8 @@ void A1Axis::delete_device()
 	/*----- PROTECTED REGION ID(A1Axis::delete_device) ENABLED START -----*/
 	
     // may cause segfault for unknown reasons
-    // delete[] *attr_FirmwareVersion_read;
-    // delete[] *attr_MotorType_read;
+    Tango::string_free(*attr_FirmwareVersion_read);
+    Tango::string_free(*attr_MotorType_read);
 
     m_stopPollFlag = true;
     m_pollThread.join();
@@ -313,9 +313,17 @@ void A1Axis::init_device()
 		attr_DriveStatus_read[i] = false;
 	}
 
+	// The A1Bridge instance pointer does not exist on startup, but no need to call initialise on axes
+	// at startup as this is handled in A1Communication. So, check whether or not the instance pointer
+	// exists and we are connected before attempting to initialise. Note order of checks in AND is 
+	// important here - getInstance() throws an exception if the pointer is NULL and this only works as
+	// a single AND statment due to lazy evaluation. Swapping the operands will cause an exception.
+	if(A1Bridge_ns::checkInstance() && A1Bridge_ns::getInstance()->isConnected())
+		A1Bridge_ns::getInstance()->initialiseAxis(axis);
+
     m_stopPollFlag = false;
     m_pollThread = std::thread(&A1Axis::pollThread, this); 
-	
+
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::init_device
 }
 
@@ -472,10 +480,10 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
     *attr_Error_read                = A1Bridge_ns::getInstance()->attr_axes[axis].attr_Error_read;
     *attr_LastMoveDuration_read     = A1Bridge_ns::getInstance()->attr_axes[axis].attr_LastMoveDuration_read;
     
-    delete[] *attr_FirmwareVersion_read; 
+    Tango::string_free(*attr_FirmwareVersion_read);
     *attr_FirmwareVersion_read      = Tango::string_dup(A1Bridge_ns::getInstance()->attr_axes[axis].attr_FirmwareVersion_read); 
 
-    delete[] *attr_MotorType_read; 
+    Tango::string_free(*attr_MotorType_read);
     *attr_MotorType_read            = Tango::string_dup(A1Bridge_ns::getInstance()->attr_axes[axis].attr_MotorType_read); 
 
     // TODO: Read ramp values? 

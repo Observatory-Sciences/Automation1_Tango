@@ -195,6 +195,12 @@ class A1Communication: public A1Bridge
     virtual void axis_DataCollectionGetResults(int32_t axis);
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value);
 
+  private:
+    string getFirmwareVersionString(unsigned axis);
+    string getMotorTypeString(unsigned axis);
+
+
+
 };
 
 } // namespace A1Bridge_ns

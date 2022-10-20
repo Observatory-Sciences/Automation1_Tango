@@ -87,6 +87,11 @@ std::shared_ptr<A1Bridge> getInstance()
     return instance; 
 }
 
+bool checkInstance()
+{
+    std::lock_guard<std::mutex> instanceLock(instanceMutex);
+    return instance.get() != nullptr;
+}
 
 void stopInstance()
 {

@@ -232,6 +232,9 @@ void A1Communication::initialiseAxis_impl(unsigned axis)
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_CurrentError_read,         axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError);
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_CurrentTarget_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand);
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_LastMoveDuration_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_TotalMoveTime);
+
+    attr_axes[axis].attr_FirmwareVersion_read = Tango::string_dup(getFirmwareVersionString(axis).c_str()); 
+    attr_axes[axis].attr_MotorType_read = Tango::string_dup(getMotorTypeString(axis).c_str());
 }
 
 
@@ -253,8 +256,8 @@ void A1Communication::deleteAxis_impl(unsigned axis)
 {
     // Delete the axis if it is no longer required
     // (but keep the A1Communication instance alive)
-    delete[] attr_axes[axis].attr_FirmwareVersion_read; 
-    delete[] attr_axes[axis].attr_MotorType_read; 
+    Tango::string_free(attr_axes[axis].attr_FirmwareVersion_read); 
+    Tango::string_free(attr_axes[axis].attr_MotorType_read); 
     m_pollManagerAxis[axis].clear(); 
     m_pollManagerCommon.decrementRefCount(); 
 }
@@ -392,52 +395,7 @@ void A1Communication::onConnectAxis(unsigned axis)
 {
     // DEBUG_STREAM << "Setting up axis " << axis << "..." << std::endl; 
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    initialiseAxis(axis); 
-    
-    double firmware[4]; 
-    std::stringstream firmwareS; 
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionMajor, 0, &firmware[0]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionMinor, 0, &firmware[1]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionPatch, 0, &firmware[2]);
-    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionBuild, 0, &firmware[3]);
-
-    firmwareS << firmware[0] << "." << firmware[0] << "." << firmware[0] << "." << firmware[0]; 
-    delete[] attr_axes[axis].attr_FirmwareVersion_read; 
-    attr_axes[axis].attr_FirmwareVersion_read = Tango::string_dup(firmwareS.str().c_str()); 
-
-    double motorType; 
-    std::string motorTypeS; 
-    A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_GetAxisValue, *m_controller, axis, Automation1AxisParameterId_MotorType, &motorType);
-
-    switch(int(motorType))
-    {
-        case Automation1MotorType_ACBrushlessLinear:
-            motorTypeS = "AC Brushless Linear";
-            break;
-        case Automation1MotorType_ACBrushlessRotary:
-            motorTypeS = "AC Brushless Rotary";
-            break;
-        case Automation1MotorType_DCBrush:
-            motorTypeS = "DC Brush";
-            break;
-        case Automation1MotorType_StepperMotor:
-            motorTypeS = "Stepper Motor";
-            break;
-        case Automation1MotorType_TwoPhaseACBrushless:
-            motorTypeS = "Two Phase AC Brushless";
-            break;
-        case Automation1MotorType_PiezoActuator:
-            motorTypeS = "Piezo Actuator";
-            break;
-        case Automation1MotorType_Galvo:
-            motorTypeS = "Galvo";
-            break;
-        default:
-            motorTypeS = "Unknown";
-    }
-
-    delete[] attr_axes[axis].attr_MotorType_read; 
-    attr_axes[axis].attr_MotorType_read = Tango::string_dup(motorTypeS.c_str()); 
+    initialiseAxis(axis);  
 }
 
 void A1Communication::disconnect_impl()
@@ -985,5 +943,54 @@ void A1Communication::axis_DataCollectionGetResults(int32_t axis)
 {
     NotImplemented(__func__);
 } 
+
+string A1Communication::getFirmwareVersionString(unsigned axis)
+{
+    double firmware[4]; 
+    std::stringstream firmwareS; 
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionMajor, 0, &firmware[0]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionMinor, 0, &firmware[1]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionPatch, 0, &firmware[2]);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionBuild, 0, &firmware[3]);
+
+    firmwareS << firmware[0] << "." << firmware[1] << "." << firmware[2] << "." << firmware[3];
+    return firmwareS.str();
+}
+
+string A1Communication::getMotorTypeString(unsigned axis)
+{
+    double motorType; 
+    std::string motorTypeS; 
+    A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_GetAxisValue, *m_controller, axis, Automation1AxisParameterId_MotorType, &motorType);
+
+    switch(int(motorType))
+    {
+        case Automation1MotorType_ACBrushlessLinear:
+            motorTypeS = "AC Brushless Linear";
+            break;
+        case Automation1MotorType_ACBrushlessRotary:
+            motorTypeS = "AC Brushless Rotary";
+            break;
+        case Automation1MotorType_DCBrush:
+            motorTypeS = "DC Brush";
+            break;
+        case Automation1MotorType_StepperMotor:
+            motorTypeS = "Stepper Motor";
+            break;
+        case Automation1MotorType_TwoPhaseACBrushless:
+            motorTypeS = "Two Phase AC Brushless";
+            break;
+        case Automation1MotorType_PiezoActuator:
+            motorTypeS = "Piezo Actuator";
+            break;
+        case Automation1MotorType_Galvo:
+            motorTypeS = "Galvo";
+            break;
+        default:
+            motorTypeS = "Unknown";
+    }
+
+    return motorTypeS;
+}
 
 } // A1Bridge_ns

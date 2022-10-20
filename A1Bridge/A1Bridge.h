@@ -228,6 +228,7 @@ static std::mutex instanceMutex;
 static std::shared_ptr<A1Bridge> instance = nullptr; 
 std::shared_ptr<A1Bridge> startInstance(bool simulation); 
 std::shared_ptr<A1Bridge> getInstance();
+bool checkInstance();
 void stopInstance(); 
 
 
