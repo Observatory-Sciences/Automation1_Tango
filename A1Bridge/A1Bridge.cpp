@@ -40,6 +40,9 @@ A1Bridge::A1Bridge() :
     {
         attr_AeroScriptFiles_read[i] = Tango::string_dup(""); 
     }
+
+    attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup("");
+
     for (unsigned i = 0; i < MAX_AXES; i++)
     {
         attr_axes[i].attr_FirmwareVersion_read = Tango::string_dup("");

@@ -1,4 +1,5 @@
 #include "A1Communication.h"
+#include "tango.h"
 
 
 namespace A1Bridge_ns {
@@ -204,6 +205,16 @@ void A1Communication::initialiseController_impl()
     m_pollManagerController.push(&attr_taskStatus0,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0); 
     m_pollManagerController.push(&attr_taskStatus1,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1); 
     m_pollManagerController.push(&attr_taskStatus2,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2); 
+
+    int32_t api[3];
+    Automation1_GetApiVersion(&api[0], &api[1], &api[2]);
+    std::stringstream apiS; 
+    apiS << api[0] << "." << api[1] << "." << api[2]; 
+    if(attr_APIVersion_read != nullptr)
+    {
+        delete[] attr_APIVersion_read; 
+    }
+    attr_APIVersion_read = Tango::string_dup(apiS.str().c_str());
 }
 
 
@@ -242,7 +253,8 @@ void A1Communication::deleteController_impl()
 {
     // Delete the controller if it is no longer required
     // (but keep the A1Communication instance alive)
-    delete[] attr_APIVersion_read; 
+    delete[] attr_APIVersion_read;
+    attr_APIVersion_read = nullptr;
     for (unsigned i = 0; i++; MAX_AEROSCRIPTS)
     {
         delete[] attr_AeroScriptFiles_read[i];
@@ -380,14 +392,7 @@ void A1Communication::onConnectController()
 
     // Get number of axis and task slots.
     attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
-    attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller);
-
-    int32_t api[3];
-    Automation1_GetApiVersion(&api[0], &api[1], &api[2]);
-    std::stringstream apiS; 
-    apiS << api[0] << "." << api[1] << "." << api[2]; 
-    delete[] attr_APIVersion_read; 
-    attr_APIVersion_read = Tango::string_dup(apiS.str().c_str()); 
+    attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller); 
 }
 
 
@@ -647,6 +652,28 @@ void A1Communication::readController_impl()
     {
         delete[] attr_AeroScriptFiles_read[file];
         attr_AeroScriptFiles_read[file] = Tango::string_dup("");
+    }
+
+    Automation1TaskStatus taskStatuses[2];
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_GetStatus, *m_controller, taskStatuses, 2);
+
+    std::string sourceName;
+    std::string compiledName;
+
+    sourceName = string(taskStatuses[1].AeroScriptSourceFileName);
+    compiledName = string(taskStatuses[1].CompiledAeroScriptFileName);
+
+    printf("source: %s; compiled: %s\n", sourceName.c_str(), compiledName.c_str());
+
+    //Tango::string_free(attr_AeroScriptCurrentFileLoaded_read);
+
+    if(sourceName[0] != '\0')
+    {
+        attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup(sourceName);
+    }
+    else
+    {
+        attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup(compiledName);
     }
 }
 
