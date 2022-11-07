@@ -91,6 +91,7 @@ public:
 	Tango::DevString	*attr_AeroScriptFilePath_read;
 	Tango::DevUShort	*attr_Automation1ProgramStopTimeout_read;
 	Tango::DevUShort	*attr_Automation1TaskID_read;
+	Tango::DevString	*attr_AeroScriptCurrentFileLoaded_read;
 	Tango::DevBoolean	*attr_AxisHealth_read;
 	Tango::DevBoolean	*attr_TaskStatus0_read;
 	Tango::DevBoolean	*attr_TaskStatus1_read;
@@ -235,6 +236,15 @@ public:
 	virtual void read_Automation1TaskID(Tango::Attribute &attr);
 	virtual void write_Automation1TaskID(Tango::WAttribute &attr);
 	virtual bool is_Automation1TaskID_allowed(Tango::AttReqType type);
+/**
+ *	Attribute AeroScriptCurrentFileLoaded related methods
+ *	Description: Shows the file path of the last successfully loaded AeroScript program
+ *
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
+ */
+	virtual void read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr);
+	virtual bool is_AeroScriptCurrentFileLoaded_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisHealth related methods
  *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).

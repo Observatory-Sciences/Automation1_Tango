@@ -151,6 +151,19 @@ public:
 		{return (static_cast<A1Controller *>(dev))->is_Automation1TaskID_allowed(ty);}
 };
 
+//	Attribute AeroScriptCurrentFileLoaded class definition
+class AeroScriptCurrentFileLoadedAttrib: public Tango::Attr
+{
+public:
+	AeroScriptCurrentFileLoadedAttrib():Attr("AeroScriptCurrentFileLoaded",
+			Tango::DEV_STRING, Tango::READ) {};
+	~AeroScriptCurrentFileLoadedAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<A1Controller *>(dev))->read_AeroScriptCurrentFileLoaded(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Controller *>(dev))->is_AeroScriptCurrentFileLoaded_allowed(ty);}
+};
+
 //	Attribute AxisHealth class definition
 class AxisHealthAttrib: public Tango::SpectrumAttr
 {

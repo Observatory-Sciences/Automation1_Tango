@@ -761,6 +761,30 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Not Memorized
 	att_list.push_back(automation1taskid);
 
+	//	Attribute : AeroScriptCurrentFileLoaded
+	AeroScriptCurrentFileLoadedAttrib	*aeroscriptcurrentfileloaded = new AeroScriptCurrentFileLoadedAttrib();
+	Tango::UserDefaultAttrProp	aeroscriptcurrentfileloaded_prop;
+	aeroscriptcurrentfileloaded_prop.set_description("Shows the file path of the last successfully loaded AeroScript program");
+	aeroscriptcurrentfileloaded_prop.set_label("Current AeroScript File");
+	//	unit	not set for AeroScriptCurrentFileLoaded
+	//	standard_unit	not set for AeroScriptCurrentFileLoaded
+	//	display_unit	not set for AeroScriptCurrentFileLoaded
+	//	format	not set for AeroScriptCurrentFileLoaded
+	//	max_value	not set for AeroScriptCurrentFileLoaded
+	//	min_value	not set for AeroScriptCurrentFileLoaded
+	//	max_alarm	not set for AeroScriptCurrentFileLoaded
+	//	min_alarm	not set for AeroScriptCurrentFileLoaded
+	//	max_warning	not set for AeroScriptCurrentFileLoaded
+	//	min_warning	not set for AeroScriptCurrentFileLoaded
+	//	delta_t	not set for AeroScriptCurrentFileLoaded
+	//	delta_val	not set for AeroScriptCurrentFileLoaded
+	
+	aeroscriptcurrentfileloaded->set_default_properties(aeroscriptcurrentfileloaded_prop);
+	//	Not Polled
+	aeroscriptcurrentfileloaded->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	att_list.push_back(aeroscriptcurrentfileloaded);
+
 	//	Attribute : AxisHealth
 	AxisHealthAttrib	*axishealth = new AxisHealthAttrib();
 	Tango::UserDefaultAttrProp	axishealth_prop;

@@ -76,6 +76,7 @@
 //  AeroScriptFilePath             |  Tango::DevString	Scalar
 //  Automation1ProgramStopTimeout  |  Tango::DevUShort	Scalar
 //  Automation1TaskID              |  Tango::DevUShort	Scalar
+//  AeroScriptCurrentFileLoaded    |  Tango::DevString	Scalar
 //  AxisHealth                     |  Tango::DevBoolean	Spectrum  ( max = 32)
 //  TaskStatus0                    |  Tango::DevBoolean	Spectrum  ( max = 16)
 //  TaskStatus1                    |  Tango::DevBoolean	Spectrum  ( max = 17)
@@ -166,6 +167,7 @@ void A1Controller::delete_device()
 	delete[] attr_AeroScriptFilePath_read;
 	delete[] attr_Automation1ProgramStopTimeout_read;
 	delete[] attr_Automation1TaskID_read;
+	delete[] attr_AeroScriptCurrentFileLoaded_read;
 	delete[] attr_AxisHealth_read;
 	delete[] attr_TaskStatus0_read;
 	delete[] attr_TaskStatus1_read;
@@ -198,6 +200,7 @@ void A1Controller::init_device()
 	attr_AeroScriptFilePath_read = new Tango::DevString[1];
 	attr_Automation1ProgramStopTimeout_read = new Tango::DevUShort[1];
 	attr_Automation1TaskID_read = new Tango::DevUShort[1];
+	attr_AeroScriptCurrentFileLoaded_read = new Tango::DevString[1];
 	attr_AxisHealth_read = new Tango::DevBoolean[32];
 	attr_TaskStatus0_read = new Tango::DevBoolean[16];
 	attr_TaskStatus1_read = new Tango::DevBoolean[17];
@@ -241,6 +244,11 @@ void A1Controller::init_device()
     INFO_STREAM << "Username:  " << username << std::endl; 
     INFO_STREAM << "Password:  " << password << std::endl; 	
     
+	// Only attempt to initialise the controller if there is already a bridge
+	// instance and we are connected
+	if(A1Bridge_ns::checkInstance() && A1Bridge_ns::getInstance()->isConnected())
+		A1Bridge_ns::getInstance()->initialiseController();
+
     A1Bridge_ns::startInstance(simulate);
     A1Bridge_ns::getInstance()->setPollingInterval_ms(100);
     A1Bridge_ns::getInstance()->setAutomation1ProgramTimeout_ms(100);
@@ -454,6 +462,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     memcpy(attr_TaskStatus1_read, A1Bridge_ns::getInstance()->attr_TaskStatus1_read, sizeof(Tango::DevBoolean) * 17); 
     memcpy(attr_TaskStatus2_read, A1Bridge_ns::getInstance()->attr_TaskStatus2_read, sizeof(Tango::DevBoolean) * 24); 
 
+	*attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_AeroScriptCurrentFileLoaded_read);
 
     bool fault   = false; 
     bool enabled = false; 
@@ -703,6 +712,24 @@ void A1Controller::write_Automation1TaskID(Tango::WAttribute &attr)
 	A1Bridge_ns::getInstance()->setTaskID(w_val);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::write_Automation1TaskID
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute AeroScriptCurrentFileLoaded related method
+ *	Description: Shows the file path of the last successfully loaded AeroScript program
+ *
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr) entering... " << endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptCurrentFileLoaded) ENABLED START -----*/
+	//	Set the attribute value
+	attr.set_value(attr_AeroScriptCurrentFileLoaded_read);
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptCurrentFileLoaded
 }
 //--------------------------------------------------------
 /**
