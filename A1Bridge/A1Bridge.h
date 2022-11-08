@@ -7,6 +7,7 @@
 #include <tango.h>
 
 #include "A1AxisEnum.h"
+#include "A1ControllerEnum.h"
 
 
 #define DEFAULT_TO_SIMULATION false
@@ -123,6 +124,7 @@ class A1Bridge
 	Tango::DevBoolean	attr_TaskStatus2_read[24];
 	Tango::DevString	attr_AeroScriptFiles_read[1024];
         Tango::DevString        attr_AeroScriptCurrentFileLoaded_read;
+    A1Controller_ns::Automation1TaskStatusEnum attr_Automation1TaskStatus_read;
 
     A1AxisAttributes attr_axes[MAX_AXES]; 
 

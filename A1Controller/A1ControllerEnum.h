@@ -3,12 +3,20 @@
 
 namespace A1Controller_ns
 {
-    enum _LastAeroscriptTaskStatusEnum {
-        _OK,
-        _WARN,
-        _ERROR
-    } ;
-    typedef _LastAeroscriptTaskStatusEnum LastAeroscriptTaskStatusEnum;
+    enum _Automation1TaskStatusEnum {
+	_UNAVAILABLE,
+	_INACTIVE,
+	_IDLE,
+	_PROGRAMREADY,
+	_PROGRAMRUNNING,
+	_PROGRAMFEEDHOLD,
+	_PROGRAMPAUSED,
+	_PROGRAMCOMPLETE,
+	_ERROR,
+	_QUEUERUNNING,
+	_QUEUEPAUSED,
+} ;
+typedef _Automation1TaskStatusEnum Automation1TaskStatusEnum;
 }
 
 #endif

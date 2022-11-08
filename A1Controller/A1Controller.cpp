@@ -77,6 +77,7 @@
 //  Automation1ProgramStopTimeout  |  Tango::DevUShort	Scalar
 //  Automation1TaskID              |  Tango::DevUShort	Scalar
 //  AeroScriptCurrentFileLoaded    |  Tango::DevString	Scalar
+//  Automation1TaskStatus          |  Tango::DevEnum	Scalar
 //  AxisHealth                     |  Tango::DevBoolean	Spectrum  ( max = 32)
 //  TaskStatus0                    |  Tango::DevBoolean	Spectrum  ( max = 16)
 //  TaskStatus1                    |  Tango::DevBoolean	Spectrum  ( max = 17)
@@ -168,6 +169,7 @@ void A1Controller::delete_device()
 	delete[] attr_Automation1ProgramStopTimeout_read;
 	delete[] attr_Automation1TaskID_read;
 	delete[] attr_AeroScriptCurrentFileLoaded_read;
+	delete[] attr_Automation1TaskStatus_read;
 	delete[] attr_AxisHealth_read;
 	delete[] attr_TaskStatus0_read;
 	delete[] attr_TaskStatus1_read;
@@ -201,6 +203,7 @@ void A1Controller::init_device()
 	attr_Automation1ProgramStopTimeout_read = new Tango::DevUShort[1];
 	attr_Automation1TaskID_read = new Tango::DevUShort[1];
 	attr_AeroScriptCurrentFileLoaded_read = new Tango::DevString[1];
+	attr_Automation1TaskStatus_read = new Automation1TaskStatusEnum[1];
 	attr_AxisHealth_read = new Tango::DevBoolean[32];
 	attr_TaskStatus0_read = new Tango::DevBoolean[16];
 	attr_TaskStatus1_read = new Tango::DevBoolean[17];
@@ -463,6 +466,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     memcpy(attr_TaskStatus2_read, A1Bridge_ns::getInstance()->attr_TaskStatus2_read, sizeof(Tango::DevBoolean) * 24); 
 
 	*attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_AeroScriptCurrentFileLoaded_read);
+	*attr_Automation1TaskStatus_read = A1Bridge_ns::getInstance()->attr_Automation1TaskStatus_read;
 
     bool fault   = false; 
     bool enabled = false; 
@@ -730,6 +734,24 @@ void A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr)
 	attr.set_value(attr_AeroScriptCurrentFileLoaded_read);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptCurrentFileLoaded
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute Automation1TaskStatus related method
+ *	Description: Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
+ *
+ *	Data type:	Tango::DevEnum (Automation1TaskStatusEnum)
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::read_Automation1TaskStatus(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::read_Automation1TaskStatus(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_Automation1TaskStatus) ENABLED START -----*/
+	//	Set the attribute value
+	attr.set_value(attr_Automation1TaskStatus_read);
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_Automation1TaskStatus
 }
 //--------------------------------------------------------
 /**

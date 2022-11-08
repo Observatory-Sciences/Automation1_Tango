@@ -40,6 +40,7 @@
 
 #include <A1Defines.h>
 #include <A1Bridge.h>
+#include <A1ControllerEnum.h>
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller.h
 
@@ -92,6 +93,7 @@ public:
 	Tango::DevUShort	*attr_Automation1ProgramStopTimeout_read;
 	Tango::DevUShort	*attr_Automation1TaskID_read;
 	Tango::DevString	*attr_AeroScriptCurrentFileLoaded_read;
+	Automation1TaskStatusEnum	*attr_Automation1TaskStatus_read;
 	Tango::DevBoolean	*attr_AxisHealth_read;
 	Tango::DevBoolean	*attr_TaskStatus0_read;
 	Tango::DevBoolean	*attr_TaskStatus1_read;
@@ -245,6 +247,15 @@ public:
  */
 	virtual void read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr);
 	virtual bool is_AeroScriptCurrentFileLoaded_allowed(Tango::AttReqType type);
+/**
+ *	Attribute Automation1TaskStatus related methods
+ *	Description: Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
+ *
+ *	Data type:	Tango::DevEnum
+ *	Attr type:	Scalar
+ */
+	virtual void read_Automation1TaskStatus(Tango::Attribute &attr);
+	virtual bool is_Automation1TaskStatus_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisHealth related methods
  *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
