@@ -170,43 +170,71 @@ void A1Simulation::readAxis_impl(unsigned axis)
     // attr_axes[axis].attr_AxisFault_read[26]   = (int(attr_axes[axis].axisFault) >> 26 ) & 1U;
     // attr_axes[axis].attr_AxisFault_read[27]   = (int(attr_axes[axis].axisFault) >> 27 ) & 1U;
 }
+void A1Simulation::checkEnabledAxis(int32_t axis, std::string cmdName) 
+{    
+    if (!m_axes[axis].m_enabled)
+    {
+        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
+                                       "Automation1_Command_" + cmdName + " failed - axis not enabled", 
+                                       "A1Simulation::axis_" + cmdName);
+    }
 
-void A1Simulation::axis_Home(int32_t axis) 
+}
+void A1Simulation::checkValidAxis(int32_t axis, std::string cmdName)
 {
     // Check the axis number is within index limits
     if (axis < 0 || axis > MAX_AXES)
     {
         Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Home failed - axis out of range", 
-                                       "A1Simulation::axis_Home");
+                                       "Automation1_Command_" + cmdName + " failed - axis out of range", 
+                                       "A1Simulation::axis_" + cmdName);
     }
-    // Check the axis is enabled
-    if (!m_axes[axis].m_enabled)
-    {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Home failed - axis not enabled", 
-                                       "A1Simulation::axis_Home");
-    }
+}
 
+void A1Simulation::axis_Abort(int32_t axis)
+{
+    checkValidAxis(axis, "Abort");
+    checkEnabledAxis(axis, "Abort");
+    m_axes[axis].m_moving = false;
+    m_axes[axis].m_freeRunning = false;
+    m_axes[axis].m_current_velocity = 0.0;
+}
+
+void A1Simulation::axis_Home(int32_t axis) 
+{
+    checkValidAxis(axis, "Home");
+    checkEnabledAxis(axis, "Home");
     // Set the homed flag for the particular axis
     m_axes[axis].m_homed = true;
 } 
 
+void A1Simulation::axis_BrakeOn(int32_t axis)
+{
+    checkValidAxis(axis, "BrakeOn");
+    checkEnabledAxis(axis, "BrakeOn");
+    m_axes[axis].m_braking = true;
+    m_axes[axis].m_moving = false;
+    m_axes[axis].m_freeRunning = false;
+    m_axes[axis].m_current_velocity = 0.0;
+}
+
+void A1Simulation::axis_BrakeOff(int32_t axis)
+{
+    checkValidAxis(axis, "BrakeOff");
+    checkEnabledAxis(axis, "BrakeOff");
+    m_axes[axis].m_braking = false;
+}
+
 void A1Simulation::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity)
 {
-    // Check the axis number is within index limits
-    if (axis < 0 || axis > MAX_AXES)
+    checkValidAxis(axis, "Move");
+    checkEnabledAxis(axis, "Move");
+
+    if (m_axes[axis].m_braking)
     {
         Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Move failed - axis out of range", 
-                                       "A1Simulation::axis_Move");
-    }
-    // Check the axis is enabled
-    if (!m_axes[axis].m_enabled)
-    {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Move failed - axis not enabled", 
-                                       "A1Simulation::axis_Move");
+            "Automation1_Command_Move failed - brake is on", 
+            "A1Simulation::axis_Move");
     }
 
     switch (moveType)
@@ -232,17 +260,40 @@ void A1Simulation::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Ta
     m_axes[axis].m_in_position = false;
     // Set the internal moving flag true for the axis
     m_axes[axis].m_moving = true;
+    m_axes[axis].m_freeRunning = false;
+
+}
+
+void A1Simulation::axis_FreeRun(int32_t axis, Tango::DevDouble velocity)
+{
+    checkValidAxis(axis, "FreeRun");
+    checkEnabledAxis(axis, "FreeRun");
+
+    if (m_axes[axis].m_braking)
+    {
+        Tango::Except::throw_excception("Tango_DEVICE_ERROR",
+            "Automation1_Command_FreeRun failed - brake is on", 
+            "A1Simulation::axis_FreeRun");
+    }
+    m_axes[axis].m_demand_velocity = velocity;
+
+    m_axes[axis].m_freeRunning = true;
+    m_axes[axis].m_moving = false;
+}
+
+void A1Simulation::axis_FreeRunStop(int32_t axis)
+{
+    checkValidAxis(axis, "FreeRunStop");
+    checkEnabledAxis(axis, "FreeRunStop");
+
+    m_axes[axis].m_current_velocity = 0.0;
+
+    m_axes[axis].m_freeRunning = false;
 }
 
 void A1Simulation::axis_Enable(int32_t axis)
 {
-    // Check the axis number is within index limits
-    if (axis < 0 || axis > MAX_AXES)
-    {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Enable failed - axis out of range", 
-                                       "A1Simulation::axis_Enable");
-    }
+    checkValidAxis(axis, "Enable");
 
     // Set the enabled flag for the particular axis
     m_axes[axis].m_enabled = true;
@@ -250,13 +301,7 @@ void A1Simulation::axis_Enable(int32_t axis)
 
 void A1Simulation::axis_Disable(int32_t axis)
 {
-    // Check the axis number is within index limits
-    if (axis < 0 || axis > MAX_AXES)
-    {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Disable failed - axis out of range", 
-                                       "A1Simulation::axis_Disable");
-    }
+    checkValidAxis(axis, "Disable");
 
     // Set the enabled flag for the particular axis
     m_axes[axis].m_enabled = false;

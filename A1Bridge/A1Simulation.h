@@ -48,6 +48,8 @@ class A1Simulation: public A1Bridge
     virtual void initialiseController_impl();
     virtual void initialiseAxis_impl(unsigned axis);
     virtual void readAxis_impl(unsigned axis);
+    virtual void checkEnabledAxis(int32_t axis, std::string cmdName);
+    virtual void checkValidAxis(int32_t axis, std::string cmdName);
 
   public:
     A1Simulation(); 
@@ -57,6 +59,11 @@ class A1Simulation: public A1Bridge
     virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity);
     virtual void axis_Enable(int32_t axis);
     virtual void axis_Disable(int32_t axis);
+    virtual void axis_Abort(int32_t axis);
+    virtual void axis_BrakeOn(int32_t axis);
+    virtual void axis_BrakeOff(int32_t axis);
+    virtual void axis_FreeRun(int32_t axis, Tango::DevDouble velocity);
+    virtual void axis_FreeRunStop(int32_t axis);
 
   private:
     std::vector<A1SimulatedAxis> m_axes;

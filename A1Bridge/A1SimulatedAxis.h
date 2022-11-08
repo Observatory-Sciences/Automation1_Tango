@@ -20,10 +20,13 @@ class A1SimulatedAxis
     bool m_enabled;
     bool m_moving;
     bool m_in_position;
+    bool m_braking;
+    bool m_freeRunning;
     double m_position;
     double m_demand_position;
     double m_max_velocity;
     double m_current_velocity;
+    double m_demand_velocity;
     double m_acceleration;
 
     A1SimulatedAxis();
