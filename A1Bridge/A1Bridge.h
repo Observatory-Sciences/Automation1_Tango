@@ -7,6 +7,7 @@
 #include <tango.h>
 
 #include "A1AxisEnum.h"
+#include "A1ControllerEnum.h"
 #include "A1Defines.h"
 
 
@@ -119,6 +120,7 @@ class A1Bridge
     double              attr_taskStatus2;
 	Tango::DevBoolean	attr_TaskStatus2_read[TASK2_STATUSES];
 	Tango::DevString	attr_AeroScriptFiles_read[MAX_AEROSCRIPTS];
+    A1Controller_ns::Automation1TaskStatusEnum attr_Automation1TaskStatus_read;
 
     A1AxisAttributes attr_axes[MAX_AXES]; 
 

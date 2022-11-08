@@ -786,6 +786,45 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Not Memorized
 	att_list.push_back(aeroscriptcurrentfileloaded);
 
+	//	Attribute : Automation1TaskStatus
+	Automation1TaskStatusAttrib	*automation1taskstatus = new Automation1TaskStatusAttrib();
+	Tango::UserDefaultAttrProp	automation1taskstatus_prop;
+	automation1taskstatus_prop.set_description("Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)");
+	automation1taskstatus_prop.set_label("Automation1 Task Status");
+	//	unit	not set for Automation1TaskStatus
+	//	standard_unit	not set for Automation1TaskStatus
+	//	display_unit	not set for Automation1TaskStatus
+	//	format	not set for Automation1TaskStatus
+	//	max_value	not set for Automation1TaskStatus
+	//	min_value	not set for Automation1TaskStatus
+	//	max_alarm	not set for Automation1TaskStatus
+	//	min_alarm	not set for Automation1TaskStatus
+	//	max_warning	not set for Automation1TaskStatus
+	//	min_warning	not set for Automation1TaskStatus
+	//	delta_t	not set for Automation1TaskStatus
+	//	delta_val	not set for Automation1TaskStatus
+	
+	{
+		std::vector<std::string> labels;
+		labels.push_back("Unavailable");
+		labels.push_back("Inactive");
+		labels.push_back("Idle");
+		labels.push_back("Program Ready");
+		labels.push_back("Program Running");
+		labels.push_back("Program Feedhold");
+		labels.push_back("Program Paused");
+		labels.push_back("Program Complete");
+		labels.push_back("Error");
+		labels.push_back("Queue Running");
+		labels.push_back("Queue Paused");
+		automation1taskstatus_prop.set_enum_labels(labels);
+	}
+	automation1taskstatus->set_default_properties(automation1taskstatus_prop);
+	//	Not Polled
+	automation1taskstatus->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	att_list.push_back(automation1taskstatus);
+
 	//	Attribute : AxisHealth
 	AxisHealthAttrib	*axishealth = new AxisHealthAttrib();
 	Tango::UserDefaultAttrProp	axishealth_prop;

@@ -164,6 +164,21 @@ public:
 		{return (static_cast<A1Controller *>(dev))->is_AeroScriptCurrentFileLoaded_allowed(ty);}
 };
 
+//	Attribute Automation1TaskStatus class definition
+class Automation1TaskStatusAttrib: public Tango::Attr
+{
+public:
+	Automation1TaskStatusAttrib():Attr("Automation1TaskStatus",
+			Tango::DEV_ENUM, Tango::READ) {};
+	~Automation1TaskStatusAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<A1Controller *>(dev))->read_Automation1TaskStatus(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Controller *>(dev))->is_Automation1TaskStatus_allowed(ty);}
+	virtual bool same_type(const type_info &in_type) {return typeid(Automation1TaskStatusEnum) == in_type;}
+	virtual std::string get_enum_type() {return std::string("Automation1TaskStatusEnum");}
+};
+
 //	Attribute AxisHealth class definition
 class AxisHealthAttrib: public Tango::SpectrumAttr
 {

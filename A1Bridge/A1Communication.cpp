@@ -654,18 +654,11 @@ void A1Communication::readController_impl()
         attr_AeroScriptFiles_read[file] = Tango::string_dup("");
     }
 
-    Automation1TaskStatus taskStatuses[2];
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_GetStatus, *m_controller, taskStatuses, 2);
+    Automation1TaskStatus taskStatuses[attr_Automation1TaskID_read + 1];
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_GetStatus, *m_controller, taskStatuses, attr_Automation1TaskID_read + 1);
 
-    std::string sourceName;
-    std::string compiledName;
-
-    sourceName = string(taskStatuses[1].AeroScriptSourceFileName);
-    compiledName = string(taskStatuses[1].CompiledAeroScriptFileName);
-
-    printf("source: %s; compiled: %s\n", sourceName.c_str(), compiledName.c_str());
-
-    //Tango::string_free(attr_AeroScriptCurrentFileLoaded_read);
+    std::string sourceName(taskStatuses[attr_Automation1TaskID_read].AeroScriptSourceFileName);
+    std::string compiledName(taskStatuses[attr_Automation1TaskID_read].CompiledAeroScriptFileName);
 
     if(sourceName[0] != '\0')
     {
@@ -675,6 +668,8 @@ void A1Communication::readController_impl()
     {
         attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup(compiledName);
     }
+
+    attr_Automation1TaskStatus_read = (A1Controller_ns::Automation1TaskStatusEnum)taskStatuses[attr_Automation1TaskID_read].TaskState;
 }
 
 

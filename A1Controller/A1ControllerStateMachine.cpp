@@ -192,6 +192,22 @@ bool A1Controller::is_AeroScriptCurrentFileLoaded_allowed(TANGO_UNUSED(Tango::At
 
 //--------------------------------------------------------
 /**
+ *	Method      : A1Controller::is_Automation1TaskStatus_allowed()
+ *	Description : Execution allowed for Automation1TaskStatus attribute
+ */
+//--------------------------------------------------------
+bool A1Controller::is_Automation1TaskStatus_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+
+	//	Not any excluded states for Automation1TaskStatus attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1TaskStatusStateAllowed_READ) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1TaskStatusStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
  *	Method      : A1Controller::is_AxisHealth_allowed()
  * Description:  Execution allowed for AxisHealth attribute
  */
