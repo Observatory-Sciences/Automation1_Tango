@@ -94,7 +94,7 @@ namespace A1Controller_ns
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::A1Controller()
- *	Description : Constructors for a Tango device
+ * Description:  Constructors for a Tango device
  *                implementing the classA1Controller
  */
 //--------------------------------------------------------
@@ -124,11 +124,16 @@ A1Controller::A1Controller(Tango::DeviceClass *cl, const char *s, const char *d)
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::constructor_3
 }
+//--------------------------------------------------------
+A1Controller::~A1Controller()
+{
+	delete_device();
+}
 
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::delete_device()
- *	Description : will be called at device destruction or at init command
+ * Description:  will be called at device destruction or at init command
  */
 //--------------------------------------------------------
 void A1Controller::delete_device()
@@ -142,7 +147,7 @@ void A1Controller::delete_device()
 
     // may cause segfault for unknown reasons
     // delete[] *attr_APIVersion_read; 
-    for (unsigned file = 0; file < 1024; file++)
+    for (unsigned file = 0; file < numAeroScripts; file++)
     {
         delete[] attr_AeroScriptFiles_read[file];
     }
@@ -176,7 +181,7 @@ void A1Controller::delete_device()
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::init_device()
- *	Description : will be called at device initialization.
+ * Description:  will be called at device initialization.
  */
 //--------------------------------------------------------
 void A1Controller::init_device()
@@ -186,11 +191,11 @@ void A1Controller::init_device()
 	
 
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::init_device_before
-	
+
 
 	//	Get the device properties from database
 	get_device_property();
-	
+
 	attr_ControllerRunning_read = new Tango::DevBoolean[1];
 	attr_AxisCount_read = new Tango::DevUShort[1];
 	attr_TaskCount_read = new Tango::DevUShort[1];
@@ -203,7 +208,7 @@ void A1Controller::init_device()
 	attr_TaskStatus1_read = new Tango::DevBoolean[17];
 	attr_TaskStatus2_read = new Tango::DevBoolean[24];
 	attr_AeroScriptFiles_read = new Tango::DevString[1024];
-	//	No longer if mandatory property not set. 
+	//	No longer if mandatory property not set.
 	if (mandatoryNotDefined)
 		return;
 
@@ -231,7 +236,7 @@ void A1Controller::init_device()
 	{
 		attr_TaskStatus2_read[i] = false;
 	}
-	for (int i = 0; i < 1024; i++) 
+	for (int i = 0; i < numAeroScripts; i++) 
 	{
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
 	} 
@@ -266,7 +271,7 @@ void A1Controller::init_device()
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::get_device_property()
- *	Description : Read database to initialize property data members.
+ * Description:  Read database to initialize property data members.
  */
 //--------------------------------------------------------
 void A1Controller::get_device_property()
@@ -285,6 +290,8 @@ void A1Controller::get_device_property()
 	dev_prop.push_back(Tango::DbDatum("Simulate"));
 	dev_prop.push_back(Tango::DbDatum("Username"));
 	dev_prop.push_back(Tango::DbDatum("Password"));
+	dev_prop.push_back(Tango::DbDatum("numAxes"));
+	dev_prop.push_back(Tango::DbDatum("numAeroScripts"));
 
 	//	is there at least one property to be read ?
 	if (dev_prop.size()>0)
@@ -292,7 +299,7 @@ void A1Controller::get_device_property()
 		//	Call database and extract values
 		if (Tango::Util::instance()->_UseDb==true)
 			get_db_device()->get_property(dev_prop);
-	
+
 		//	get instance on A1ControllerClass to get class property
 		Tango::DbDatum	def_prop, cl_prop;
 		A1ControllerClass	*ds_class =
@@ -349,6 +356,28 @@ void A1Controller::get_device_property()
 		//	Property StartDsPath is mandatory, check if has been defined in database.
 		check_mandatory_property(cl_prop, dev_prop[i]);
 
+		//	Try to initialize numAxes from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  numAxes;
+		else {
+			//	Try to initialize numAxes from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  numAxes;
+		}
+		//	And try to extract numAxes value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  numAxes;
+
+		//	Try to initialize numAeroScripts from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  numAeroScripts;
+		else {
+			//	Try to initialize numAeroScripts from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  numAeroScripts;
+		}
+		//	And try to extract numAeroScripts value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  numAeroScripts;
+
 	}
 
 	/*----- PROTECTED REGION ID(A1Controller::get_device_property_after) ENABLED START -----*/
@@ -360,7 +389,7 @@ void A1Controller::get_device_property()
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::check_mandatory_property()
- *	Description : For mandatory properties check if defined in database.
+ * Description:  For mandatory properties check if defined in database.
  */
 //--------------------------------------------------------
 void A1Controller::check_mandatory_property(Tango::DbDatum &class_prop, Tango::DbDatum &dev_prop)
@@ -387,7 +416,7 @@ void A1Controller::check_mandatory_property(Tango::DbDatum &class_prop, Tango::D
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::always_executed_hook()
- *	Description : method always executed before any command is executed
+ * Description:  method always executed before any command is executed
  */
 //--------------------------------------------------------
 void A1Controller::always_executed_hook()
@@ -410,7 +439,7 @@ void A1Controller::always_executed_hook()
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::read_attr_hardware()
- *	Description : Hardware acquisition for attributes
+ * Description:  Hardware acquisition for attributes
  */
 //--------------------------------------------------------
 void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
@@ -443,7 +472,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     delete[] *attr_APIVersion_read;
     *attr_APIVersion_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_APIVersion_read); 
 
-    for (unsigned file = 0; file < 1024; file++)
+    for (unsigned file = 0; file < numAeroScripts; file++)
     {
         delete[] attr_AeroScriptFiles_read[file];
         attr_AeroScriptFiles_read[file] = Tango::string_dup(A1Bridge_ns::getInstance()->attr_AeroScriptFiles_read[file]); 
@@ -503,7 +532,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::write_attr_hardware()
- *	Description : Hardware writing for attributes
+ * Description:  Hardware writing for attributes
  */
 //--------------------------------------------------------
 void A1Controller::write_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
@@ -519,7 +548,7 @@ void A1Controller::write_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list
 //--------------------------------------------------------
 /**
  *	Read attribute ControllerRunning related method
- *	Description: True if the controller has been started otherwise false.
+ * Description:  True if the controller has been started otherwise false.
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -537,7 +566,7 @@ void A1Controller::read_ControllerRunning(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AxisCount related method
- *	Description: The maximum number of axis slots available on this controller, not the number of drives connected.
+ * Description:  The maximum number of axis slots available on this controller, not the number of drives connected.
  *
  *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
@@ -555,7 +584,7 @@ void A1Controller::read_AxisCount(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute TaskCount related method
- *	Description: The maximum number of task slots available on this controller.
+ * Description:  The maximum number of task slots available on this controller.
  *
  *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
@@ -573,7 +602,7 @@ void A1Controller::read_TaskCount(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute APIVersion related method
- *	Description: The version of the C API in use.
+ * Description:  The version of the C API in use.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -591,7 +620,7 @@ void A1Controller::read_APIVersion(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AeroScriptFilePath related method
- *	Description: Full file path of the AeroScript file on the controller to target.
+ * Description:  Full file path of the AeroScript file on the controller to target.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -609,7 +638,7 @@ void A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Write attribute AeroScriptFilePath related method
- *	Description: Full file path of the AeroScript file on the controller to target.
+ * Description:  Full file path of the AeroScript file on the controller to target.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -629,7 +658,7 @@ void A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute Automation1ProgramStopTimeout related method
- *	Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
+ * Description:  Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
  *               than the timeout, the controller returns an error.
  *
  *	Data type:	Tango::DevUShort
@@ -638,7 +667,7 @@ void A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr)
 //--------------------------------------------------------
 void A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr)
 {
-	DEBUG_STREAM << "A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr) entering... " << endl;
+	DEBUG_STREAM << "A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_Automation1ProgramStopTimeout) ENABLED START -----*/
 	//	Set the attribute value
 	attr.set_value(attr_Automation1ProgramStopTimeout_read);
@@ -648,7 +677,7 @@ void A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Write attribute Automation1ProgramStopTimeout related method
- *	Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
+ * Description:  Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
  *               than the timeout, the controller returns an error.
  *
  *	Data type:	Tango::DevUShort
@@ -669,7 +698,7 @@ void A1Controller::write_Automation1ProgramStopTimeout(Tango::WAttribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute Automation1TaskID related method
- *	Description: Automation1 task index number. Automation1 commands are run under this task.
+ * Description:  Automation1 task index number. Automation1 commands are run under this task.
  *
  *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
@@ -687,7 +716,7 @@ void A1Controller::read_Automation1TaskID(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Write attribute Automation1TaskID related method
- *	Description: Automation1 task index number. Automation1 commands are run under this task.
+ * Description:  Automation1 task index number. Automation1 commands are run under this task.
  *
  *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
@@ -707,7 +736,7 @@ void A1Controller::write_Automation1TaskID(Tango::WAttribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AxisHealth related method
- *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
+ * Description:  Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 32
@@ -725,7 +754,7 @@ void A1Controller::read_AxisHealth(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute TaskStatus0 related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 16
@@ -743,7 +772,7 @@ void A1Controller::read_TaskStatus0(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute TaskStatus1 related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 17
@@ -761,7 +790,7 @@ void A1Controller::read_TaskStatus1(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute TaskStatus2 related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 24
@@ -779,7 +808,7 @@ void A1Controller::read_TaskStatus2(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AeroScriptFiles related method
- *	Description: A list of the files present on the Automation1 controller.
+ * Description:  A list of the files present on the Automation1 controller.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Spectrum max = 1024
@@ -798,7 +827,7 @@ void A1Controller::read_AeroScriptFiles(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::add_dynamic_attributes()
- *	Description : Create the dynamic attributes if any
+ * Description:  Create the dynamic attributes if any
  *                for specified device.
  */
 //--------------------------------------------------------
@@ -814,7 +843,7 @@ void A1Controller::add_dynamic_attributes()
 //--------------------------------------------------------
 /**
  *	Command Reset related method
- *	Description: Reboots the Automation1 motion controller.
+ * Description:  Reboots the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
@@ -831,7 +860,7 @@ void A1Controller::reset()
 //--------------------------------------------------------
 /**
  *	Command Start related method
- *	Description: Starts the Automation1 motion controller.
+ * Description:  Starts the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
@@ -848,7 +877,7 @@ void A1Controller::start()
 //--------------------------------------------------------
 /**
  *	Command Stop related method
- *	Description: Stops the Automation1 motion controller.
+ * Description:  Stops the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
@@ -865,7 +894,7 @@ void A1Controller::stop()
 //--------------------------------------------------------
 /**
  *	Command Enable related method
- *	Description: Enables all active axes connected to the controller.
+ * Description:  Enables all active axes connected to the controller.
  *
  */
 //--------------------------------------------------------
@@ -882,7 +911,7 @@ void A1Controller::enable()
 //--------------------------------------------------------
 /**
  *	Command Disable related method
- *	Description: Disables all active axes connected to the controller.
+ * Description:  Disables all active axes connected to the controller.
  *
  */
 //--------------------------------------------------------
@@ -899,7 +928,7 @@ void A1Controller::disable()
 //--------------------------------------------------------
 /**
  *	Command ClearErrors related method
- *	Description: Acknowledges all axis faults and clears all task errors.
+ * Description:  Acknowledges all axis faults and clears all task errors.
  *
  */
 //--------------------------------------------------------
@@ -916,7 +945,7 @@ void A1Controller::clear_errors()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramRun related method
- *	Description: Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.
+ * Description:  Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.
  *               Running a program will automatically load the program and begin program execution. This function waits for the program to load and start but it does not wait for the program to complete.
  *               The AeroScript program must exist as a controller file on the Automation1 controller.
  *               AeroScript libraries cannot be run, the controller file must be an AeroScript program (either a source program file or a compiled program file).
@@ -936,7 +965,7 @@ void A1Controller::aero_script_program_run()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramLoad related method
- *	Description: Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.
+ * Description:  Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.
  *               Loading does not start the program, you must call AeroScriptProgramStart to begin program execution.
  *               The AeroScript program must exist as a controller file on the Automation1 controller.
  *               AeroScript libraries cannot be loaded on a task, the controller file must be an AeroScript program (either a source program file or a compiled program file).
@@ -956,7 +985,7 @@ void A1Controller::aero_script_program_load()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramStart related method
- *	Description: Starts or resumes the currently loaded AeroScript program, beginning program execution.
+ * Description:  Starts or resumes the currently loaded AeroScript program, beginning program execution.
  *               A program must be loaded to be able to start or resume it. To load a program, call AeroScriptProgramLoad.
  *               This function waits for the loaded program to start but it does not wait for the program to complete.
  *
@@ -975,7 +1004,7 @@ void A1Controller::aero_script_program_start()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramStop related method
- *	Description: Stops the currently running AeroScript program, terminating program execution.
+ * Description:  Stops the currently running AeroScript program, terminating program execution.
  *               This function will wait for the specified amount of time for the loaded program to stop. If the timeout is set to -1, this function will wait indefinitely.
  *               This function will also stop queue mode and buffered run mode. After a program is stopped it is unloaded.
  *
@@ -994,7 +1023,7 @@ void A1Controller::aero_script_program_stop()
 //--------------------------------------------------------
 /**
  *	Command AeroScriptProgramPause related method
- *	Description: Pauses the currently running AeroScript program, suspending program execution.
+ * Description:  Pauses the currently running AeroScript program, suspending program execution.
  *               This function will wait for the specified amount of time for the loaded program to pause. If the timeout is set to -1, this function will wait indefinitely.
  *               To resume program execution, call AeroScriptProgramStart.
  *
@@ -1013,7 +1042,7 @@ void A1Controller::aero_script_program_pause()
 //--------------------------------------------------------
 /**
  *	Command Run related method
- *	Description: Run an arbitrary command on the Automation1 controller
+ * Description:  Run an arbitrary command on the Automation1 controller
  *
  *	@param argin input
  */
@@ -1030,7 +1059,7 @@ void A1Controller::run(Tango::DevString argin)
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::add_dynamic_commands()
- *	Description : Create the dynamic commands if any
+ * Description:  Create the dynamic commands if any
  *                for specified device.
  */
 //--------------------------------------------------------

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://www.esrf.fr/tango/pogo/PogoDsl">
-  <classes name="A1Controller" pogoRevision="9.7">
-    <description description="Controller class for the Aerotech Automation 1 device server" title="" sourcePath="/home/tango-cs/work/Automation1_Tango/A1Controller" language="Cpp" filestogenerate="XMI   file,Code files,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="true" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
+  <classes name="A1Controller" pogoRevision="9.8">
+    <description description="Controller class for the Aerotech Automation 1 device server" title="" sourcePath="/home/tango-cs/Automation1/A1_Tango_git/A1Controller" language="Cpp" filestogenerate="XMI   file,Code files,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="true" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at observatorysciences.co.uk - jsy" author="jsy" emailDomain="observatorysciences.co.uk" classFamily="Motion" siteSpecific="" platform="All Platforms" bus="Ethernet" manufacturer="none" reference=""/>
     </description>
@@ -21,6 +21,16 @@
     <deviceProperties name="Password" mandatory="true" description="Password used to connect to Automation1 controller">
       <type xsi:type="pogoDsl:StringType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </deviceProperties>
+    <deviceProperties name="numAxes" description="The maximum number of axes that this controller will control. Defaults to 32 (the maximum number supported).">
+      <type xsi:type="pogoDsl:UShortType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>32</DefaultPropValue>
+    </deviceProperties>
+    <deviceProperties name="numAeroScripts" description="The maximum number of Aeroscript files the controller will attempt to find. Defaults to 1024 (the maximum number supported).">
+      <type xsi:type="pogoDsl:UShortType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>1024</DefaultPropValue>
     </deviceProperties>
     <commands name="State" description="This command gets the device state (stored in its device_state data member) and returns it to the caller." execMethod="dev_state" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="none">
