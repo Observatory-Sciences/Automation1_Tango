@@ -52,10 +52,7 @@ typedef struct A1AxisAttributes
 	Tango::DevDouble	                    attr_AccelerationError_read;
 	Tango::DevDouble	                    attr_CurrentTarget_read;
 	Tango::DevDouble	                    attr_CurrentError_read;
-	Tango::DevDouble	                    attr_ServoUpdateRate_read;
-	Tango::DevULong 	                    attr_DataCollectionNumPoints_read;
-    A1Axis_ns::DataCollectionFrequencyEnum	attr_DataCollectionFrequency_read;
-    A1Axis_ns::DataCollectionModeEnum	    attr_DataCollectionMode_read;
+	Tango::DevDouble	                    attr_ServoUpdateRate_read;;
     A1Axis_ns::RampTypeEnum	                attr_RampType_read;
     A1Axis_ns::RampModeEnum	                attr_RampMode_read;
 	Tango::DevDouble	                    attr_RampValue_read;
@@ -209,14 +206,6 @@ class A1Bridge
     virtual void axis_ThrowAllFaults(int32_t axis) 
             {NotImplemented(__func__);}; 
     virtual void axis_AcknowledgeFaults(int32_t axis) 
-            {NotImplemented(__func__);}; 
-    virtual void axis_DataCollectionStart(int32_t axis) 
-            {NotImplemented(__func__);}; 
-    virtual void axis_DataCollectionStop(int32_t axis) 
-            {NotImplemented(__func__);}; 
-    virtual void axis_DataCollectionRefresh(int32_t axis) 
-            {NotImplemented(__func__);}; 
-    virtual void axis_DataCollectionGetResults(int32_t axis) 
             {NotImplemented(__func__);}; 
 
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value)

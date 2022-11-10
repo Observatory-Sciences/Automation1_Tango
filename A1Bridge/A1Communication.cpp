@@ -919,31 +919,6 @@ void A1Communication::axis_AcknowledgeFaults(int32_t axis)
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_FaultAcknowledge, *m_controller, attr_Automation1TaskID_read, &axis, 1);
 }
 
-
-// TODO: data collection methods
-void A1Communication::axis_DataCollectionStart(int32_t axis) 
-{
-    NotImplemented(__func__);
-} 
-
-
-void A1Communication::axis_DataCollectionStop(int32_t axis) 
-{
-    NotImplemented(__func__);
-} 
-
-
-void A1Communication::axis_DataCollectionRefresh(int32_t axis) 
-{
-    NotImplemented(__func__);
-} 
-
-
-void A1Communication::axis_DataCollectionGetResults(int32_t axis) 
-{
-    NotImplemented(__func__);
-} 
-
 string A1Communication::getFirmwareVersionString(unsigned axis)
 {
     double firmware[4]; 

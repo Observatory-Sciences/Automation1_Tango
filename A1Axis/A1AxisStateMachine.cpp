@@ -420,66 +420,6 @@ bool A1Axis::is_ServoUpdateRate_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_DataCollectionNumPoints_allowed()
- *	Description : Execution allowed for DataCollectionNumPoints attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_DataCollectionNumPoints_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-	//	Not any excluded states for DataCollectionNumPoints attribute in Write access.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionNumPointsStateAllowed_WRITE) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionNumPointsStateAllowed_WRITE
-
-	//	Not any excluded states for DataCollectionNumPoints attribute in read access.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionNumPointsStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionNumPointsStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : A1Axis::is_DataCollectionFrequency_allowed()
- *	Description : Execution allowed for DataCollectionFrequency attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_DataCollectionFrequency_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-	//	Not any excluded states for DataCollectionFrequency attribute in Write access.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionFrequencyStateAllowed_WRITE) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionFrequencyStateAllowed_WRITE
-
-	//	Not any excluded states for DataCollectionFrequency attribute in read access.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionFrequencyStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionFrequencyStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : A1Axis::is_DataCollectionMode_allowed()
- *	Description : Execution allowed for DataCollectionMode attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_DataCollectionMode_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-	//	Not any excluded states for DataCollectionMode attribute in Write access.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionModeStateAllowed_WRITE) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionModeStateAllowed_WRITE
-
-	//	Not any excluded states for DataCollectionMode attribute in read access.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionModeStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionModeStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
  *	Method      : A1Axis::is_RampType_allowed()
  *	Description : Execution allowed for RampType attribute
  */
@@ -768,66 +708,6 @@ bool A1Axis::is_AcknowledgeFaults_allowed(TANGO_UNUSED(const CORBA::Any &any))
 	/*----- PROTECTED REGION ID(A1Axis::AcknowledgeFaultsStateAllowed) ENABLED START -----*/
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::AcknowledgeFaultsStateAllowed
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : A1Axis::is_DataCollectionStart_allowed()
- *	Description : Execution allowed for DataCollectionStart attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_DataCollectionStart_allowed(TANGO_UNUSED(const CORBA::Any &any))
-{
-	//	Not any excluded states for DataCollectionStart command.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionStartStateAllowed) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionStartStateAllowed
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : A1Axis::is_DataCollectionStop_allowed()
- *	Description : Execution allowed for DataCollectionStop attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_DataCollectionStop_allowed(TANGO_UNUSED(const CORBA::Any &any))
-{
-	//	Not any excluded states for DataCollectionStop command.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionStopStateAllowed) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionStopStateAllowed
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : A1Axis::is_DataCollectionRefresh_allowed()
- *	Description : Execution allowed for DataCollectionRefresh attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_DataCollectionRefresh_allowed(TANGO_UNUSED(const CORBA::Any &any))
-{
-	//	Not any excluded states for DataCollectionRefresh command.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionRefreshStateAllowed) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionRefreshStateAllowed
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : A1Axis::is_DataCollectionGetResults_allowed()
- *	Description : Execution allowed for DataCollectionGetResults attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_DataCollectionGetResults_allowed(TANGO_UNUSED(const CORBA::Any &any))
-{
-	//	Not any excluded states for DataCollectionGetResults command.
-	/*----- PROTECTED REGION ID(A1Axis::DataCollectionGetResultsStateAllowed) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::DataCollectionGetResultsStateAllowed
 	return true;
 }
 

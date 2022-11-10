@@ -19,21 +19,6 @@ enum _MoveTypeEnum {
 } ;
 typedef _MoveTypeEnum MoveTypeEnum;
 
-enum _DataCollectionFrequencyEnum {
-    _1_KHZ,
-    _10_KHZ,
-    _20_KHZ,
-    _100_KHZ,
-    _200_KHZ,
-} ;
-typedef _DataCollectionFrequencyEnum DataCollectionFrequencyEnum;
-
-enum _DataCollectionModeEnum {
-    _SNAPSHOT,
-    _CONTINUOUS,
-} ;
-typedef _DataCollectionModeEnum DataCollectionModeEnum;
-
 enum _RampTypeEnum {
     _LINEAR,
     _S_CURVE,

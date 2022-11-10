@@ -364,78 +364,6 @@ CORBA::Any *AcknowledgeFaultsClass::execute(Tango::DeviceImpl *device, TANGO_UNU
 	return new CORBA::Any();
 }
 
-//--------------------------------------------------------
-/**
- * method : 		DataCollectionStartClass::execute()
- * description : 	method to trigger the execution of the command.
- *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
- *
- *	returns The command output data (packed in the Any object)
- */
-//--------------------------------------------------------
-CORBA::Any *DataCollectionStartClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
-{
-	cout2 << "DataCollectionStartClass::execute(): arrived" << std::endl;
-	((static_cast<A1Axis *>(device))->data_collection_start());
-	return new CORBA::Any();
-}
-
-//--------------------------------------------------------
-/**
- * method : 		DataCollectionStopClass::execute()
- * description : 	method to trigger the execution of the command.
- *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
- *
- *	returns The command output data (packed in the Any object)
- */
-//--------------------------------------------------------
-CORBA::Any *DataCollectionStopClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
-{
-	cout2 << "DataCollectionStopClass::execute(): arrived" << std::endl;
-	((static_cast<A1Axis *>(device))->data_collection_stop());
-	return new CORBA::Any();
-}
-
-//--------------------------------------------------------
-/**
- * method : 		DataCollectionRefreshClass::execute()
- * description : 	method to trigger the execution of the command.
- *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
- *
- *	returns The command output data (packed in the Any object)
- */
-//--------------------------------------------------------
-CORBA::Any *DataCollectionRefreshClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
-{
-	cout2 << "DataCollectionRefreshClass::execute(): arrived" << std::endl;
-	((static_cast<A1Axis *>(device))->data_collection_refresh());
-	return new CORBA::Any();
-}
-
-//--------------------------------------------------------
-/**
- * method : 		DataCollectionGetResultsClass::execute()
- * description : 	method to trigger the execution of the command.
- *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
- *
- *	returns The command output data (packed in the Any object)
- */
-//--------------------------------------------------------
-CORBA::Any *DataCollectionGetResultsClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
-{
-	cout2 << "DataCollectionGetResultsClass::execute(): arrived" << std::endl;
-	((static_cast<A1Axis *>(device))->data_collection_get_results());
-	return new CORBA::Any();
-}
-
 
 //===================================================================
 //	Properties management
@@ -906,7 +834,7 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_val	not set for HomeType
 	
 	{
-		vector<std::string> labels;
+		std::vector<std::string> labels;
 		labels.push_back("Asynchronous");
 		labels.push_back("Synchronous");
 		hometype_prop.set_enum_labels(labels);
@@ -936,7 +864,7 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_val	not set for MoveType
 	
 	{
-		vector<std::string> labels;
+		std::vector<std::string> labels;
 		labels.push_back("AbsoluteMove");
 		labels.push_back("IncrementalMove");
 		labels.push_back("LinearMove");
@@ -1165,93 +1093,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Not Memorized
 	att_list.push_back(servoupdaterate);
 
-	//	Attribute : DataCollectionNumPoints
-	DataCollectionNumPointsAttrib	*datacollectionnumpoints = new DataCollectionNumPointsAttrib();
-	Tango::UserDefaultAttrProp	datacollectionnumpoints_prop;
-	datacollectionnumpoints_prop.set_description("Number of data points to retrieve during data collection.");
-	datacollectionnumpoints_prop.set_label("Num Data Points");
-	//	unit	not set for DataCollectionNumPoints
-	//	standard_unit	not set for DataCollectionNumPoints
-	//	display_unit	not set for DataCollectionNumPoints
-	//	format	not set for DataCollectionNumPoints
-	//	max_value	not set for DataCollectionNumPoints
-	//	min_value	not set for DataCollectionNumPoints
-	//	max_alarm	not set for DataCollectionNumPoints
-	//	min_alarm	not set for DataCollectionNumPoints
-	//	max_warning	not set for DataCollectionNumPoints
-	//	min_warning	not set for DataCollectionNumPoints
-	//	delta_t	not set for DataCollectionNumPoints
-	//	delta_val	not set for DataCollectionNumPoints
-	
-	datacollectionnumpoints->set_default_properties(datacollectionnumpoints_prop);
-	//	Not Polled
-	datacollectionnumpoints->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(datacollectionnumpoints);
-
-	//	Attribute : DataCollectionFrequency
-	DataCollectionFrequencyAttrib	*datacollectionfrequency = new DataCollectionFrequencyAttrib();
-	Tango::UserDefaultAttrProp	datacollectionfrequency_prop;
-	datacollectionfrequency_prop.set_description("Frequency of data collection.");
-	datacollectionfrequency_prop.set_label("Data Collection Frequency");
-	datacollectionfrequency_prop.set_unit("Hz");
-	//	standard_unit	not set for DataCollectionFrequency
-	datacollectionfrequency_prop.set_display_unit("Hz");
-	//	format	not set for DataCollectionFrequency
-	//	max_value	not set for DataCollectionFrequency
-	//	min_value	not set for DataCollectionFrequency
-	//	max_alarm	not set for DataCollectionFrequency
-	//	min_alarm	not set for DataCollectionFrequency
-	//	max_warning	not set for DataCollectionFrequency
-	//	min_warning	not set for DataCollectionFrequency
-	//	delta_t	not set for DataCollectionFrequency
-	//	delta_val	not set for DataCollectionFrequency
-	
-	{
-		vector<std::string> labels;
-		labels.push_back("1 kHz");
-		labels.push_back("10 kHz");
-		labels.push_back("20 kHz");
-		labels.push_back("100 kHz");
-		labels.push_back("200 kHz");
-		datacollectionfrequency_prop.set_enum_labels(labels);
-	}
-	datacollectionfrequency->set_default_properties(datacollectionfrequency_prop);
-	//	Not Polled
-	datacollectionfrequency->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(datacollectionfrequency);
-
-	//	Attribute : DataCollectionMode
-	DataCollectionModeAttrib	*datacollectionmode = new DataCollectionModeAttrib();
-	Tango::UserDefaultAttrProp	datacollectionmode_prop;
-	//	description	not set for DataCollectionMode
-	//	label	not set for DataCollectionMode
-	//	unit	not set for DataCollectionMode
-	//	standard_unit	not set for DataCollectionMode
-	//	display_unit	not set for DataCollectionMode
-	//	format	not set for DataCollectionMode
-	//	max_value	not set for DataCollectionMode
-	//	min_value	not set for DataCollectionMode
-	//	max_alarm	not set for DataCollectionMode
-	//	min_alarm	not set for DataCollectionMode
-	//	max_warning	not set for DataCollectionMode
-	//	min_warning	not set for DataCollectionMode
-	//	delta_t	not set for DataCollectionMode
-	//	delta_val	not set for DataCollectionMode
-	
-	{
-		vector<std::string> labels;
-		labels.push_back("Snapshot");
-		labels.push_back("Continuous");
-		datacollectionmode_prop.set_enum_labels(labels);
-	}
-	datacollectionmode->set_default_properties(datacollectionmode_prop);
-	//	Not Polled
-	datacollectionmode->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(datacollectionmode);
-
 	//	Attribute : RampType
 	RampTypeAttrib	*ramptype = new RampTypeAttrib();
 	Tango::UserDefaultAttrProp	ramptype_prop;
@@ -1271,7 +1112,7 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_val	not set for RampType
 	
 	{
-		vector<std::string> labels;
+		std::vector<std::string> labels;
 		labels.push_back("Linear");
 		labels.push_back("S Curve");
 		labels.push_back("Sine");
@@ -1302,7 +1143,7 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	delta_val	not set for RampMode
 	
 	{
-		vector<std::string> labels;
+		std::vector<std::string> labels;
 		labels.push_back("Rate");
 		labels.push_back("Time");
 		rampmode_prop.set_enum_labels(labels);
@@ -1561,42 +1402,6 @@ void A1AxisClass::command_factory()
 			"",
 			Tango::OPERATOR);
 	command_list.push_back(pAcknowledgeFaultsCmd);
-
-	//	Command DataCollectionStart
-	DataCollectionStartClass	*pDataCollectionStartCmd =
-		new DataCollectionStartClass("DataCollectionStart",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pDataCollectionStartCmd);
-
-	//	Command DataCollectionStop
-	DataCollectionStopClass	*pDataCollectionStopCmd =
-		new DataCollectionStopClass("DataCollectionStop",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pDataCollectionStopCmd);
-
-	//	Command DataCollectionRefresh
-	DataCollectionRefreshClass	*pDataCollectionRefreshCmd =
-		new DataCollectionRefreshClass("DataCollectionRefresh",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pDataCollectionRefreshCmd);
-
-	//	Command DataCollectionGetResults
-	DataCollectionGetResultsClass	*pDataCollectionGetResultsCmd =
-		new DataCollectionGetResultsClass("DataCollectionGetResults",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pDataCollectionGetResultsCmd);
 
 	/*----- PROTECTED REGION ID(A1AxisClass::command_factory_after) ENABLED START -----*/
 	

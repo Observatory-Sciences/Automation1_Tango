@@ -48,62 +48,55 @@
 //  The following table gives the correspondence
 //  between command and method names.
 //
-//  Command name              |  Method name
+//  Command name       |  Method name
 //================================================================
-//  State                     |  Inherited (no method)
-//  Status                    |  Inherited (no method)
-//  Abort                     |  abort
-//  Home                      |  home
-//  Move                      |  move
-//  Enable                    |  enable
-//  Disable                   |  disable
-//  BrakeOn                   |  brake_on
-//  BrakeOff                  |  brake_off
-//  MoveFromLimit             |  move_from_limit
-//  FreeRun                   |  free_run
-//  FreeRunStop               |  free_run_stop
-//  ThrowAllFaults            |  throw_all_faults
-//  AcknowledgeFaults         |  acknowledge_faults
-//  DataCollectionStart       |  data_collection_start
-//  DataCollectionStop        |  data_collection_stop
-//  DataCollectionRefresh     |  data_collection_refresh
-//  DataCollectionGetResults  |  data_collection_get_results
+//  State              |  Inherited (no method)
+//  Status             |  Inherited (no method)
+//  Abort              |  abort
+//  Home               |  home
+//  Move               |  move
+//  Enable             |  enable
+//  Disable            |  disable
+//  BrakeOn            |  brake_on
+//  BrakeOff           |  brake_off
+//  MoveFromLimit      |  move_from_limit
+//  FreeRun            |  free_run
+//  FreeRunStop        |  free_run_stop
+//  ThrowAllFaults     |  throw_all_faults
+//  AcknowledgeFaults  |  acknowledge_faults
 //================================================================
 
 //================================================================
 //  Attributes managed are:
 //================================================================
-//  PositionFeedback         |  Tango::DevDouble	Scalar
-//  VelocityFeedback         |  Tango::DevDouble	Scalar
-//  AccelerationFeedback     |  Tango::DevDouble	Scalar
-//  InPosition               |  Tango::DevBoolean	Scalar
-//  Enabled                  |  Tango::DevBoolean	Scalar
-//  Homed                    |  Tango::DevBoolean	Scalar
-//  Error                    |  Tango::DevBoolean	Scalar
-//  FirmwareVersion          |  Tango::DevString	Scalar
-//  PositionError            |  Tango::DevDouble	Scalar
-//  CurrentFeedback          |  Tango::DevDouble	Scalar
-//  MotorType                |  Tango::DevString	Scalar
-//  HomeType                 |  Tango::DevEnum	Scalar
-//  MoveType                 |  Tango::DevEnum	Scalar
-//  LastMoveDuration         |  Tango::DevDouble	Scalar
-//  PositionTarget           |  Tango::DevDouble	Scalar
-//  VelocityTarget           |  Tango::DevDouble	Scalar
-//  VelocityError            |  Tango::DevDouble	Scalar
-//  AccelerationTarget       |  Tango::DevDouble	Scalar
-//  AccelerationError        |  Tango::DevDouble	Scalar
-//  CurrentTarget            |  Tango::DevDouble	Scalar
-//  CurrentError             |  Tango::DevDouble	Scalar
-//  ServoUpdateRate          |  Tango::DevDouble	Scalar
-//  DataCollectionNumPoints  |  Tango::DevULong	Scalar
-//  DataCollectionFrequency  |  Tango::DevEnum	Scalar
-//  DataCollectionMode       |  Tango::DevEnum	Scalar
-//  RampType                 |  Tango::DevEnum	Scalar
-//  RampMode                 |  Tango::DevEnum	Scalar
-//  RampValue                |  Tango::DevDouble	Scalar
-//  AxisStatus               |  Tango::DevBoolean	Spectrum  ( max = 24)
-//  AxisFault                |  Tango::DevBoolean	Spectrum  ( max = 25)
-//  DriveStatus              |  Tango::DevBoolean	Spectrum  ( max = 27)
+//  PositionFeedback      |  Tango::DevDouble	Scalar
+//  VelocityFeedback      |  Tango::DevDouble	Scalar
+//  AccelerationFeedback  |  Tango::DevDouble	Scalar
+//  InPosition            |  Tango::DevBoolean	Scalar
+//  Enabled               |  Tango::DevBoolean	Scalar
+//  Homed                 |  Tango::DevBoolean	Scalar
+//  Error                 |  Tango::DevBoolean	Scalar
+//  FirmwareVersion       |  Tango::DevString	Scalar
+//  PositionError         |  Tango::DevDouble	Scalar
+//  CurrentFeedback       |  Tango::DevDouble	Scalar
+//  MotorType             |  Tango::DevString	Scalar
+//  HomeType              |  Tango::DevEnum	Scalar
+//  MoveType              |  Tango::DevEnum	Scalar
+//  LastMoveDuration      |  Tango::DevDouble	Scalar
+//  PositionTarget        |  Tango::DevDouble	Scalar
+//  VelocityTarget        |  Tango::DevDouble	Scalar
+//  VelocityError         |  Tango::DevDouble	Scalar
+//  AccelerationTarget    |  Tango::DevDouble	Scalar
+//  AccelerationError     |  Tango::DevDouble	Scalar
+//  CurrentTarget         |  Tango::DevDouble	Scalar
+//  CurrentError          |  Tango::DevDouble	Scalar
+//  ServoUpdateRate       |  Tango::DevDouble	Scalar
+//  RampType              |  Tango::DevEnum	Scalar
+//  RampMode              |  Tango::DevEnum	Scalar
+//  RampValue             |  Tango::DevDouble	Scalar
+//  AxisStatus            |  Tango::DevBoolean	Spectrum  ( max = 24)
+//  AxisFault             |  Tango::DevBoolean	Spectrum  ( max = 25)
+//  DriveStatus           |  Tango::DevBoolean	Spectrum  ( max = 27)
 //================================================================
 
 namespace A1Axis_ns
@@ -121,7 +114,7 @@ namespace A1Axis_ns
  *                implementing the classA1Axis
  */
 //--------------------------------------------------------
-A1Axis::A1Axis(Tango::DeviceClass *cl, std::string &s)
+A1Axis::A1Axis(Tango::DeviceClass *cl, string &s)
  : TANGO_BASE_CLASS(cl, s.c_str())
 {
 	/*----- PROTECTED REGION ID(A1Axis::constructor_1) ENABLED START -----*/
@@ -199,9 +192,6 @@ void A1Axis::delete_device()
 	delete[] attr_CurrentTarget_read;
 	delete[] attr_CurrentError_read;
 	delete[] attr_ServoUpdateRate_read;
-	delete[] attr_DataCollectionNumPoints_read;
-	delete[] attr_DataCollectionFrequency_read;
-	delete[] attr_DataCollectionMode_read;
 	delete[] attr_RampType_read;
 	delete[] attr_RampMode_read;
 	delete[] attr_RampValue_read;
@@ -250,9 +240,6 @@ void A1Axis::init_device()
 	attr_CurrentTarget_read = new Tango::DevDouble[1];
 	attr_CurrentError_read = new Tango::DevDouble[1];
 	attr_ServoUpdateRate_read = new Tango::DevDouble[1];
-	attr_DataCollectionNumPoints_read = new Tango::DevULong[1];
-	attr_DataCollectionFrequency_read = new DataCollectionFrequencyEnum[1];
-	attr_DataCollectionMode_read = new DataCollectionModeEnum[1];
 	attr_RampType_read = new RampTypeEnum[1];
 	attr_RampMode_read = new RampModeEnum[1];
 	attr_RampValue_read = new Tango::DevDouble[1];
@@ -291,9 +278,6 @@ void A1Axis::init_device()
 	attr_CurrentTarget_read[0] = 0;
 	attr_CurrentError_read[0] = 0;
 	attr_ServoUpdateRate_read[0] = 0;
-	attr_DataCollectionNumPoints_read[0] = 0;
-	attr_DataCollectionFrequency_read[0] = _1_KHZ;
-	attr_DataCollectionMode_read[0] = _SNAPSHOT;
 	attr_RampType_read[0] = _LINEAR;
     attr_RampType_write = _LINEAR;
 	attr_RampMode_read[0] = _RATE;
@@ -1009,120 +993,6 @@ void A1Axis::read_ServoUpdateRate(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
- *	Read attribute DataCollectionNumPoints related method
- *	Description: Number of data points to retrieve during data collection.
- *
- *	Data type:	Tango::DevULong
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::read_DataCollectionNumPoints(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::read_DataCollectionNumPoints(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::read_DataCollectionNumPoints) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_DataCollectionNumPoints_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_DataCollectionNumPoints
-}
-//--------------------------------------------------------
-/**
- *	Write attribute DataCollectionNumPoints related method
- *	Description: Number of data points to retrieve during data collection.
- *
- *	Data type:	Tango::DevULong
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::write_DataCollectionNumPoints(Tango::WAttribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::write_DataCollectionNumPoints(Tango::WAttribute &attr) entering... " << std::endl;
-	//	Retrieve write value
-	Tango::DevULong	w_val;
-	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(A1Axis::write_DataCollectionNumPoints) ENABLED START -----*/
-	
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_DataCollectionNumPoints
-}
-//--------------------------------------------------------
-/**
- *	Read attribute DataCollectionFrequency related method
- *	Description: Frequency of data collection.
- *
- *	Data type:	Tango::DevEnum (DataCollectionFrequencyEnum)
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::read_DataCollectionFrequency(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::read_DataCollectionFrequency(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::read_DataCollectionFrequency) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_DataCollectionFrequency_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_DataCollectionFrequency
-}
-//--------------------------------------------------------
-/**
- *	Write attribute DataCollectionFrequency related method
- *	Description: Frequency of data collection.
- *
- *	Data type:	Tango::DevEnum (DataCollectionFrequencyEnum)
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::write_DataCollectionFrequency(Tango::WAttribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::write_DataCollectionFrequency(Tango::WAttribute &attr) entering... " << std::endl;
-	//	Retrieve write value
-	DataCollectionFrequencyEnum	w_val;
-	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(A1Axis::write_DataCollectionFrequency) ENABLED START -----*/
-	
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_DataCollectionFrequency
-}
-//--------------------------------------------------------
-/**
- *	Read attribute DataCollectionMode related method
- *	Description: 
- *
- *	Data type:	Tango::DevEnum (DataCollectionModeEnum)
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::read_DataCollectionMode(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::read_DataCollectionMode(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::read_DataCollectionMode) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_DataCollectionMode_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_DataCollectionMode
-}
-//--------------------------------------------------------
-/**
- *	Write attribute DataCollectionMode related method
- *	Description: 
- *
- *	Data type:	Tango::DevEnum (DataCollectionModeEnum)
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::write_DataCollectionMode(Tango::WAttribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::write_DataCollectionMode(Tango::WAttribute &attr) entering... " << std::endl;
-	//	Retrieve write value
-	DataCollectionModeEnum	w_val;
-	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(A1Axis::write_DataCollectionMode) ENABLED START -----*/
-	
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_DataCollectionMode
-}
-//--------------------------------------------------------
-/**
  *	Read attribute RampType related method
  *	Description: Type of ramping profile to use on this axis.
  *
@@ -1517,89 +1387,6 @@ void A1Axis::acknowledge_faults()
 	A1Bridge_ns::getInstance()->axis_AcknowledgeFaults(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::acknowledge_faults
-}
-//--------------------------------------------------------
-/**
- *	Command DataCollectionStart related method
- *	Description: Begins data collection on this axis.
- *
- */
-//--------------------------------------------------------
-void A1Axis::data_collection_start()
-{
-	DEBUG_STREAM << "A1Axis::DataCollectionStart()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::data_collection_start) ENABLED START -----*/
-	
-    A1Bridge_ns::getInstance()->checkConnection();
-	A1Bridge_ns::getInstance()->axis_DataCollectionStart(this->axis); 
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::data_collection_start
-}
-//--------------------------------------------------------
-/**
- *	Command DataCollectionStop related method
- *	Description: Stops data collection on this axis.
- *
- */
-//--------------------------------------------------------
-void A1Axis::data_collection_stop()
-{
-	DEBUG_STREAM << "A1Axis::DataCollectionStop()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::data_collection_stop) ENABLED START -----*/
-	
-    A1Bridge_ns::getInstance()->checkConnection();
-	A1Bridge_ns::getInstance()->axis_DataCollectionStop(this->axis); 
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::data_collection_stop
-}
-//--------------------------------------------------------
-/**
- *	Command DataCollectionRefresh related method
- *	Description: Re-initialises the data collection configuration with the selected data collection frequency and number of data points to collect.
- *
- */
-//--------------------------------------------------------
-void A1Axis::data_collection_refresh()
-{
-	DEBUG_STREAM << "A1Axis::DataCollectionRefresh()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::data_collection_refresh) ENABLED START -----*/
-	
-    A1Bridge_ns::getInstance()->checkConnection();
-	A1Bridge_ns::getInstance()->axis_DataCollectionRefresh(this->axis); 
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::data_collection_refresh
-}
-//--------------------------------------------------------
-/**
- *	Command DataCollectionGetResults related method
- *	Description: Gets results from data collection from the Automation1 controller. This function can return data from completed data collection or from data collection that is still occurring.
- *               This function waits for data collection to collect the specified number of points, blocking until they are available, and then returns them.
- *               
- *               Data is written as a csv text file.
- *               First line is metadata containing the number of rows and columns.
- *               Second line contains the column headers.
- *               Lines 3+ contain the data (of which there are numRows elements) for the column headers.
- *               
- *               e.g.
- *               NumRows,5,NumCols,3
- *               colName1,colName2,colName3
- *               data11,data21,data31
- *               data12,data22,data32
- *               data13,data23,data33
- *               data14,data24,data34
- *               data15,data25,data35
- *
- */
-//--------------------------------------------------------
-void A1Axis::data_collection_get_results()
-{
-	DEBUG_STREAM << "A1Axis::DataCollectionGetResults()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::data_collection_get_results) ENABLED START -----*/
-	
-    A1Bridge_ns::getInstance()->checkConnection();
-	A1Bridge_ns::getInstance()->axis_DataCollectionGetResults(this->axis); 
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::data_collection_get_results
 }
 //--------------------------------------------------------
 /**

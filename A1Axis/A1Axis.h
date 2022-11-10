@@ -88,37 +88,34 @@ public:
 
 //	Attribute data members
 public:
-	Tango::DevDouble	            *attr_PositionFeedback_read;
-	Tango::DevDouble	            *attr_VelocityFeedback_read;
-	Tango::DevDouble	            *attr_AccelerationFeedback_read;
-	Tango::DevBoolean	            *attr_InPosition_read;
-	Tango::DevBoolean	            *attr_Enabled_read;
-	Tango::DevBoolean	            *attr_Homed_read;
-	Tango::DevBoolean	            *attr_Error_read;
-	Tango::DevString	            *attr_FirmwareVersion_read;
-	Tango::DevDouble	            *attr_PositionError_read;
-	Tango::DevDouble	            *attr_CurrentFeedback_read;
-	Tango::DevString	            *attr_MotorType_read;
-	HomeTypeEnum	                *attr_HomeType_read;
-	MoveTypeEnum	                *attr_MoveType_read;
-	Tango::DevDouble	            *attr_LastMoveDuration_read;
-	Tango::DevDouble	            *attr_PositionTarget_read;
-	Tango::DevDouble	            *attr_VelocityTarget_read;
-	Tango::DevDouble	            *attr_VelocityError_read;
-	Tango::DevDouble	            *attr_AccelerationTarget_read;
-	Tango::DevDouble	            *attr_AccelerationError_read;
-	Tango::DevDouble	            *attr_CurrentTarget_read;
-	Tango::DevDouble	            *attr_CurrentError_read;
-	Tango::DevDouble	            *attr_ServoUpdateRate_read;
-	Tango::DevULong	                *attr_DataCollectionNumPoints_read;
-	DataCollectionFrequencyEnum	    *attr_DataCollectionFrequency_read;
-	DataCollectionModeEnum	        *attr_DataCollectionMode_read;
-	RampTypeEnum	                *attr_RampType_read;
-	RampModeEnum	                *attr_RampMode_read;
-	Tango::DevDouble	            *attr_RampValue_read;
-	Tango::DevBoolean	            *attr_AxisStatus_read;
-	Tango::DevBoolean	            *attr_AxisFault_read;
-	Tango::DevBoolean	            *attr_DriveStatus_read;
+	Tango::DevDouble	*attr_PositionFeedback_read;
+	Tango::DevDouble	*attr_VelocityFeedback_read;
+	Tango::DevDouble	*attr_AccelerationFeedback_read;
+	Tango::DevBoolean	*attr_InPosition_read;
+	Tango::DevBoolean	*attr_Enabled_read;
+	Tango::DevBoolean	*attr_Homed_read;
+	Tango::DevBoolean	*attr_Error_read;
+	Tango::DevString	*attr_FirmwareVersion_read;
+	Tango::DevDouble	*attr_PositionError_read;
+	Tango::DevDouble	*attr_CurrentFeedback_read;
+	Tango::DevString	*attr_MotorType_read;
+	HomeTypeEnum	*attr_HomeType_read;
+	MoveTypeEnum	*attr_MoveType_read;
+	Tango::DevDouble	*attr_LastMoveDuration_read;
+	Tango::DevDouble	*attr_PositionTarget_read;
+	Tango::DevDouble	*attr_VelocityTarget_read;
+	Tango::DevDouble	*attr_VelocityError_read;
+	Tango::DevDouble	*attr_AccelerationTarget_read;
+	Tango::DevDouble	*attr_AccelerationError_read;
+	Tango::DevDouble	*attr_CurrentTarget_read;
+	Tango::DevDouble	*attr_CurrentError_read;
+	Tango::DevDouble	*attr_ServoUpdateRate_read;
+	RampTypeEnum	*attr_RampType_read;
+	RampModeEnum	*attr_RampMode_read;
+	Tango::DevDouble	*attr_RampValue_read;
+	Tango::DevBoolean	*attr_AxisStatus_read;
+	Tango::DevBoolean	*attr_AxisFault_read;
+	Tango::DevBoolean	*attr_DriveStatus_read;
 
 //	Constructors and destructors
 public:
@@ -394,36 +391,6 @@ public:
 	virtual void read_ServoUpdateRate(Tango::Attribute &attr);
 	virtual bool is_ServoUpdateRate_allowed(Tango::AttReqType type);
 /**
- *	Attribute DataCollectionNumPoints related methods
- *	Description: Number of data points to retrieve during data collection.
- *
- *	Data type:	Tango::DevULong
- *	Attr type:	Scalar
- */
-	virtual void read_DataCollectionNumPoints(Tango::Attribute &attr);
-	virtual void write_DataCollectionNumPoints(Tango::WAttribute &attr);
-	virtual bool is_DataCollectionNumPoints_allowed(Tango::AttReqType type);
-/**
- *	Attribute DataCollectionFrequency related methods
- *	Description: Frequency of data collection.
- *
- *	Data type:	Tango::DevEnum
- *	Attr type:	Scalar
- */
-	virtual void read_DataCollectionFrequency(Tango::Attribute &attr);
-	virtual void write_DataCollectionFrequency(Tango::WAttribute &attr);
-	virtual bool is_DataCollectionFrequency_allowed(Tango::AttReqType type);
-/**
- *	Attribute DataCollectionMode related methods
- *	Description: 
- *
- *	Data type:	Tango::DevEnum
- *	Attr type:	Scalar
- */
-	virtual void read_DataCollectionMode(Tango::Attribute &attr);
-	virtual void write_DataCollectionMode(Tango::WAttribute &attr);
-	virtual bool is_DataCollectionMode_allowed(Tango::AttReqType type);
-/**
  *	Attribute RampType related methods
  *	Description: Type of ramping profile to use on this axis.
  *
@@ -579,49 +546,6 @@ public:
 	 */
 	virtual void acknowledge_faults();
 	virtual bool is_AcknowledgeFaults_allowed(const CORBA::Any &any);
-	/**
-	 *	Command DataCollectionStart related method
-	 *	Description: Begins data collection on this axis.
-	 *
-	 */
-	virtual void data_collection_start();
-	virtual bool is_DataCollectionStart_allowed(const CORBA::Any &any);
-	/**
-	 *	Command DataCollectionStop related method
-	 *	Description: Stops data collection on this axis.
-	 *
-	 */
-	virtual void data_collection_stop();
-	virtual bool is_DataCollectionStop_allowed(const CORBA::Any &any);
-	/**
-	 *	Command DataCollectionRefresh related method
-	 *	Description: Re-initialises the data collection configuration with the selected data collection frequency and number of data points to collect.
-	 *
-	 */
-	virtual void data_collection_refresh();
-	virtual bool is_DataCollectionRefresh_allowed(const CORBA::Any &any);
-	/**
-	 *	Command DataCollectionGetResults related method
-	 *	Description: Gets results from data collection from the Automation1 controller. This function can return data from completed data collection or from data collection that is still occurring.
-	 *               This function waits for data collection to collect the specified number of points, blocking until they are available, and then returns them.
-	 *               
-	 *               Data is written as a csv text file.
-	 *               First line is metadata containing the number of rows and columns.
-	 *               Second line contains the column headers.
-	 *               Lines 3+ contain the data (of which there are numRows elements) for the column headers.
-	 *               
-	 *               e.g.
-	 *               NumRows,5,NumCols,3
-	 *               colName1,colName2,colName3
-	 *               data11,data21,data31
-	 *               data12,data22,data32
-	 *               data13,data23,data33
-	 *               data14,data24,data34
-	 *               data15,data25,data35
-	 *
-	 */
-	virtual void data_collection_get_results();
-	virtual bool is_DataCollectionGetResults_allowed(const CORBA::Any &any);
 
 
 	//--------------------------------------------------------

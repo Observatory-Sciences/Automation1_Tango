@@ -189,10 +189,6 @@ class A1Communication: public A1Bridge
     virtual void axis_FreeRunStop(int32_t axis);
     virtual void axis_ThrowAllFaults(int32_t axis);
     virtual void axis_AcknowledgeFaults(int32_t axis);
-    virtual void axis_DataCollectionStart(int32_t axis);
-    virtual void axis_DataCollectionStop(int32_t axis);
-    virtual void axis_DataCollectionRefresh(int32_t axis);
-    virtual void axis_DataCollectionGetResults(int32_t axis);
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value);
 
   private:
