@@ -696,7 +696,7 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AeroScriptFilePath
 	AeroScriptFilePathAttrib	*aeroscriptfilepath = new AeroScriptFilePathAttrib();
 	Tango::UserDefaultAttrProp	aeroscriptfilepath_prop;
-	aeroscriptfilepath_prop.set_description("Full file path of the AeroScript file on the controller to target.");
+	aeroscriptfilepath_prop.set_description("Sets the file path of the Aeroscript to attempt to load on the controller at the next \nAeroScriptLoad or AeroScriptRun command. The read attribute shows the currently staged\nfile path and the write attribute is used to update this. Press enter to stage current value in\nthe write attribute. Full file paths must be used.");
 	aeroscriptfilepath_prop.set_label("AeroScript File");
 	//	unit	not set for AeroScriptFilePath
 	//	standard_unit	not set for AeroScriptFilePath
@@ -765,7 +765,7 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AeroScriptCurrentFileLoaded
 	AeroScriptCurrentFileLoadedAttrib	*aeroscriptcurrentfileloaded = new AeroScriptCurrentFileLoadedAttrib();
 	Tango::UserDefaultAttrProp	aeroscriptcurrentfileloaded_prop;
-	aeroscriptcurrentfileloaded_prop.set_description("Shows the file path of the last successfully loaded AeroScript program");
+	aeroscriptcurrentfileloaded_prop.set_description("Shows the file path of the last AeroScript program successfully loaded by the controller.");
 	aeroscriptcurrentfileloaded_prop.set_label("Current AeroScript File");
 	//	unit	not set for AeroScriptCurrentFileLoaded
 	//	standard_unit	not set for AeroScriptCurrentFileLoaded
@@ -779,7 +779,6 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for AeroScriptCurrentFileLoaded
 	//	delta_t	not set for AeroScriptCurrentFileLoaded
 	//	delta_val	not set for AeroScriptCurrentFileLoaded
-	
 	aeroscriptcurrentfileloaded->set_default_properties(aeroscriptcurrentfileloaded_prop);
 	//	Not Polled
 	aeroscriptcurrentfileloaded->set_disp_level(Tango::OPERATOR);
@@ -803,7 +802,6 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for Automation1TaskStatus
 	//	delta_t	not set for Automation1TaskStatus
 	//	delta_val	not set for Automation1TaskStatus
-	
 	{
 		std::vector<std::string> labels;
 		labels.push_back("Unavailable");

@@ -170,7 +170,6 @@ void A1Controller::delete_device()
 	delete[] attr_AxisCount_read;
 	delete[] attr_TaskCount_read;
 	delete[] attr_APIVersion_read;
-	delete[] attr_AeroScriptFilePath_read;
 	delete[] attr_Automation1ProgramStopTimeout_read;
 	delete[] attr_Automation1TaskID_read;
 	delete[] attr_AeroScriptCurrentFileLoaded_read;
@@ -204,7 +203,6 @@ void A1Controller::init_device()
 	attr_AxisCount_read = new Tango::DevUShort[1];
 	attr_TaskCount_read = new Tango::DevUShort[1];
 	attr_APIVersion_read = new Tango::DevString[1];
-	attr_AeroScriptFilePath_read = new Tango::DevString[1];
 	attr_Automation1ProgramStopTimeout_read = new Tango::DevUShort[1];
 	attr_Automation1TaskID_read = new Tango::DevUShort[1];
 	attr_AeroScriptCurrentFileLoaded_read = new Tango::DevString[1];
@@ -608,26 +606,11 @@ void A1Controller::read_APIVersion(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
- *	Read attribute AeroScriptFilePath related method
- * Description:  Full file path of the AeroScript file on the controller to target.
- *
- *	Data type:	Tango::DevString
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptFilePath) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_AeroScriptFilePath_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptFilePath
-}
-//--------------------------------------------------------
-/**
  *	Write attribute AeroScriptFilePath related method
- * Description:  Full file path of the AeroScript file on the controller to target.
+ * Description:  Sets the file path of the Aeroscript to attempt to load on the controller at the next 
+ *               AeroScriptLoad or AeroScriptRun command. The read attribute shows the currently staged
+ *               file path and the write attribute is used to update this. Press enter to stage current value in
+ *               the write attribute. Full file paths must be used.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -725,7 +708,7 @@ void A1Controller::write_Automation1TaskID(Tango::WAttribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute AeroScriptCurrentFileLoaded related method
- *	Description: Shows the file path of the last successfully loaded AeroScript program
+ * Description:  Shows the file path of the last AeroScript program successfully loaded by the controller.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -733,7 +716,7 @@ void A1Controller::write_Automation1TaskID(Tango::WAttribute &attr)
 //--------------------------------------------------------
 void A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr)
 {
-	DEBUG_STREAM << "A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr) entering... " << endl;
+	DEBUG_STREAM << "A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptCurrentFileLoaded) ENABLED START -----*/
 	//	Set the attribute value
 	attr.set_value(attr_AeroScriptCurrentFileLoaded_read);
@@ -743,7 +726,7 @@ void A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute Automation1TaskStatus related method
- *	Description: Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
+ * Description:  Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
  *
  *	Data type:	Tango::DevEnum (Automation1TaskStatusEnum)
  *	Attr type:	Scalar

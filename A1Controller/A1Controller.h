@@ -100,7 +100,6 @@ public:
 	Tango::DevUShort	*attr_AxisCount_read;
 	Tango::DevUShort	*attr_TaskCount_read;
 	Tango::DevString	*attr_APIVersion_read;
-	Tango::DevString	*attr_AeroScriptFilePath_read;
 	Tango::DevUShort	*attr_Automation1ProgramStopTimeout_read;
 	Tango::DevUShort	*attr_Automation1TaskID_read;
 	Tango::DevString	*attr_AeroScriptCurrentFileLoaded_read;
@@ -220,12 +219,14 @@ public:
 	virtual bool is_APIVersion_allowed(Tango::AttReqType type);
 /**
  *	Attribute AeroScriptFilePath related methods
- * Description:  Full file path of the AeroScript file on the controller to target.
+ * Description:  Sets the file path of the Aeroscript to attempt to load on the controller at the next 
+ *               AeroScriptLoad or AeroScriptRun command. The read attribute shows the currently staged
+ *               file path and the write attribute is used to update this. Press enter to stage current value in
+ *               the write attribute. Full file paths must be used.
  *
  *	Data type:  Tango::DevString
  *	Attr type:	Scalar
  */
-	virtual void read_AeroScriptFilePath(Tango::Attribute &attr);
 	virtual void write_AeroScriptFilePath(Tango::WAttribute &attr);
 	virtual bool is_AeroScriptFilePath_allowed(Tango::AttReqType type);
 /**
@@ -251,18 +252,18 @@ public:
 	virtual bool is_Automation1TaskID_allowed(Tango::AttReqType type);
 /**
  *	Attribute AeroScriptCurrentFileLoaded related methods
- *	Description: Shows the file path of the last successfully loaded AeroScript program
+ * Description:  Shows the file path of the last AeroScript program successfully loaded by the controller.
  *
- *	Data type:	Tango::DevString
+ *	Data type:  Tango::DevString
  *	Attr type:	Scalar
  */
 	virtual void read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr);
 	virtual bool is_AeroScriptCurrentFileLoaded_allowed(Tango::AttReqType type);
 /**
  *	Attribute Automation1TaskStatus related methods
- *	Description: Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
+ * Description:  Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
  *
- *	Data type:	Tango::DevEnum
+ *	Data type:  Tango::DevEnum
  *	Attr type:	Scalar
  */
 	virtual void read_Automation1TaskStatus(Tango::Attribute &attr);
