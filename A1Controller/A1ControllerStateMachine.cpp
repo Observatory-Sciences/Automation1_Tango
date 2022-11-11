@@ -53,7 +53,7 @@ namespace A1Controller_ns
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_ControllerRunning_allowed()
- *	Description : Execution allowed for ControllerRunning attribute
+ * Description:  Execution allowed for ControllerRunning attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_ControllerRunning_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -69,7 +69,7 @@ bool A1Controller::is_ControllerRunning_allowed(TANGO_UNUSED(Tango::AttReqType t
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_AxisCount_allowed()
- *	Description : Execution allowed for AxisCount attribute
+ * Description:  Execution allowed for AxisCount attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AxisCount_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -85,7 +85,7 @@ bool A1Controller::is_AxisCount_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_TaskCount_allowed()
- *	Description : Execution allowed for TaskCount attribute
+ * Description:  Execution allowed for TaskCount attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_TaskCount_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -101,7 +101,7 @@ bool A1Controller::is_TaskCount_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_APIVersion_allowed()
- *	Description : Execution allowed for APIVersion attribute
+ * Description:  Execution allowed for APIVersion attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_APIVersion_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -116,28 +116,30 @@ bool A1Controller::is_APIVersion_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Controller::is_AeroScriptFilePath_allowed()
- *	Description : Execution allowed for AeroScriptFilePath attribute
+ *	Method      : A1Controller::is_AeroScriptCurrentFilePath_allowed()
+ * Description:  Execution allowed for AeroScriptCurrentFilePath attribute
  */
 //--------------------------------------------------------
-bool A1Controller::is_AeroScriptFilePath_allowed(TANGO_UNUSED(Tango::AttReqType type))
+bool A1Controller::is_AeroScriptCurrentFilePath_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
-	//	Not any excluded states for AeroScriptFilePath attribute in Write access.
-	/*----- PROTECTED REGION ID(A1Controller::AeroScriptFilePathStateAllowed_WRITE) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptFilePathStateAllowed_WRITE
+	//	Not any excluded states for AeroScriptCurrentFilePath attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptCurrentFilePathStateAllowed_WRITE) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptCurrentFilePathStateAllowed_WRITE
 
-	//	Not any excluded states for AeroScriptFilePath attribute in read access.
-	/*----- PROTECTED REGION ID(A1Controller::AeroScriptFilePathStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptFilePathStateAllowed_READ
+	//	Not any excluded states for AeroScriptCurrentFilePath attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptCurrentFilePathStateAllowed_READ) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptCurrentFilePathStateAllowed_READ
 	return true;
 }
 
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_Automation1ProgramStopTimeout_allowed()
- *	Description : Execution allowed for Automation1ProgramStopTimeout attribute
+ * Description:  Execution allowed for Automation1ProgramStopTimeout attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Automation1ProgramStopTimeout_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -157,7 +159,7 @@ bool A1Controller::is_Automation1ProgramStopTimeout_allowed(TANGO_UNUSED(Tango::
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_Automation1TaskID_allowed()
- *	Description : Execution allowed for Automation1TaskID attribute
+ * Description:  Execution allowed for Automation1TaskID attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Automation1TaskID_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -176,24 +178,8 @@ bool A1Controller::is_Automation1TaskID_allowed(TANGO_UNUSED(Tango::AttReqType t
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Controller::is_AeroScriptCurrentFileLoaded_allowed()
- *	Description : Execution allowed for AeroScriptCurrentFileLoaded attribute
- */
-//--------------------------------------------------------
-bool A1Controller::is_AeroScriptCurrentFileLoaded_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-
-	//	Not any excluded states for AeroScriptCurrentFileLoaded attribute in read access.
-	/*----- PROTECTED REGION ID(A1Controller::AeroScriptCurrentFileLoadedStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptCurrentFileLoadedStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
  *	Method      : A1Controller::is_Automation1TaskStatus_allowed()
- *	Description : Execution allowed for Automation1TaskStatus attribute
+ * Description:  Execution allowed for Automation1TaskStatus attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Automation1TaskStatus_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -209,7 +195,7 @@ bool A1Controller::is_Automation1TaskStatus_allowed(TANGO_UNUSED(Tango::AttReqTy
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_AxisHealth_allowed()
- *	Description : Execution allowed for AxisHealth attribute
+ * Description:  Execution allowed for AxisHealth attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AxisHealth_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -225,7 +211,7 @@ bool A1Controller::is_AxisHealth_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_TaskStatus0_allowed()
- *	Description : Execution allowed for TaskStatus0 attribute
+ * Description:  Execution allowed for TaskStatus0 attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_TaskStatus0_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -241,7 +227,7 @@ bool A1Controller::is_TaskStatus0_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_TaskStatus1_allowed()
- *	Description : Execution allowed for TaskStatus1 attribute
+ * Description:  Execution allowed for TaskStatus1 attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_TaskStatus1_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -257,7 +243,7 @@ bool A1Controller::is_TaskStatus1_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_TaskStatus2_allowed()
- *	Description : Execution allowed for TaskStatus2 attribute
+ * Description:  Execution allowed for TaskStatus2 attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_TaskStatus2_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -273,7 +259,7 @@ bool A1Controller::is_TaskStatus2_allowed(TANGO_UNUSED(Tango::AttReqType type))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_AeroScriptFiles_allowed()
- *	Description : Execution allowed for AeroScriptFiles attribute
+ * Description:  Execution allowed for AeroScriptFiles attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptFiles_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -294,7 +280,7 @@ bool A1Controller::is_AeroScriptFiles_allowed(TANGO_UNUSED(Tango::AttReqType typ
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_Reset_allowed()
- *	Description : Execution allowed for Reset attribute
+ * Description:  Execution allowed for Reset attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Reset_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -309,7 +295,7 @@ bool A1Controller::is_Reset_allowed(TANGO_UNUSED(const CORBA::Any &any))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_Start_allowed()
- *	Description : Execution allowed for Start attribute
+ * Description:  Execution allowed for Start attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Start_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -324,7 +310,7 @@ bool A1Controller::is_Start_allowed(TANGO_UNUSED(const CORBA::Any &any))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_Stop_allowed()
- *	Description : Execution allowed for Stop attribute
+ * Description:  Execution allowed for Stop attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Stop_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -339,7 +325,7 @@ bool A1Controller::is_Stop_allowed(TANGO_UNUSED(const CORBA::Any &any))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_Enable_allowed()
- *	Description : Execution allowed for Enable attribute
+ * Description:  Execution allowed for Enable attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Enable_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -354,7 +340,7 @@ bool A1Controller::is_Enable_allowed(TANGO_UNUSED(const CORBA::Any &any))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_Disable_allowed()
- *	Description : Execution allowed for Disable attribute
+ * Description:  Execution allowed for Disable attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Disable_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -369,7 +355,7 @@ bool A1Controller::is_Disable_allowed(TANGO_UNUSED(const CORBA::Any &any))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_ClearErrors_allowed()
- *	Description : Execution allowed for ClearErrors attribute
+ * Description:  Execution allowed for ClearErrors attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_ClearErrors_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -384,7 +370,7 @@ bool A1Controller::is_ClearErrors_allowed(TANGO_UNUSED(const CORBA::Any &any))
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_AeroScriptProgramRun_allowed()
- *	Description : Execution allowed for AeroScriptProgramRun attribute
+ * Description:  Execution allowed for AeroScriptProgramRun attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramRun_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -399,7 +385,7 @@ bool A1Controller::is_AeroScriptProgramRun_allowed(TANGO_UNUSED(const CORBA::Any
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_AeroScriptProgramLoad_allowed()
- *	Description : Execution allowed for AeroScriptProgramLoad attribute
+ * Description:  Execution allowed for AeroScriptProgramLoad attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramLoad_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -414,7 +400,7 @@ bool A1Controller::is_AeroScriptProgramLoad_allowed(TANGO_UNUSED(const CORBA::An
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_AeroScriptProgramStart_allowed()
- *	Description : Execution allowed for AeroScriptProgramStart attribute
+ * Description:  Execution allowed for AeroScriptProgramStart attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramStart_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -429,7 +415,7 @@ bool A1Controller::is_AeroScriptProgramStart_allowed(TANGO_UNUSED(const CORBA::A
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_AeroScriptProgramStop_allowed()
- *	Description : Execution allowed for AeroScriptProgramStop attribute
+ * Description:  Execution allowed for AeroScriptProgramStop attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramStop_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -444,7 +430,7 @@ bool A1Controller::is_AeroScriptProgramStop_allowed(TANGO_UNUSED(const CORBA::An
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_AeroScriptProgramPause_allowed()
- *	Description : Execution allowed for AeroScriptProgramPause attribute
+ * Description:  Execution allowed for AeroScriptProgramPause attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramPause_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -459,7 +445,7 @@ bool A1Controller::is_AeroScriptProgramPause_allowed(TANGO_UNUSED(const CORBA::A
 //--------------------------------------------------------
 /**
  *	Method      : A1Controller::is_Run_allowed()
- *	Description : Execution allowed for Run attribute
+ * Description:  Execution allowed for Run attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Run_allowed(TANGO_UNUSED(const CORBA::Any &any))

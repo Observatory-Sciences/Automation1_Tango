@@ -247,7 +247,7 @@ void A1Communication::initialiseAxis_impl(unsigned axis)
     attr_axes[axis].attr_FirmwareVersion_read = Tango::string_dup(getFirmwareVersionString(axis).c_str()); 
     attr_axes[axis].attr_MotorType_read = Tango::string_dup(getMotorTypeString(axis).c_str());
 
-    attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup("");
+    attr_AeroScriptCurrentFilePath_read = Tango::string_dup("");
 }
 
 
@@ -262,7 +262,7 @@ void A1Communication::deleteController_impl()
         delete[] attr_AeroScriptFiles_read[i];
     }
 
-    Tango::string_free(attr_AeroScriptCurrentFileLoaded_read);
+    Tango::string_free(attr_AeroScriptCurrentFilePath_read);
     m_pollManagerController.clear(); 
     m_pollManagerCommon.decrementRefCount(); 
 }
@@ -666,11 +666,11 @@ void A1Communication::readController_impl()
 
     if(sourceName[0] != '\0')
     {
-        attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup(sourceName);
+        attr_AeroScriptCurrentFilePath_read = Tango::string_dup(sourceName);
     }
     else
     {
-        attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup(compiledName);
+        attr_AeroScriptCurrentFilePath_read = Tango::string_dup(compiledName);
     }
 
     attr_Automation1TaskStatus_read = (A1Controller_ns::Automation1TaskStatusEnum)taskStatuses[attr_Automation1TaskID_read].TaskState;

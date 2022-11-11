@@ -123,7 +123,7 @@ class A1Bridge
     double              attr_taskStatus2;
 	Tango::DevBoolean	attr_TaskStatus2_read[24];
 	Tango::DevString	attr_AeroScriptFiles_read[1024];
-        Tango::DevString        attr_AeroScriptCurrentFileLoaded_read;
+        Tango::DevString        attr_AeroScriptCurrentFilePath_read;
     A1Controller_ns::Automation1TaskStatusEnum attr_Automation1TaskStatus_read;
 
     A1AxisAttributes attr_axes[MAX_AXES]; 
