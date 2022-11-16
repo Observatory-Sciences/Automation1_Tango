@@ -111,8 +111,10 @@ class AeroScriptFilePathAttrib: public Tango::Attr
 {
 public:
 	AeroScriptFilePathAttrib():Attr("AeroScriptFilePath",
-			Tango::DEV_STRING, Tango::WRITE) {};
+			Tango::DEV_STRING, Tango::READ_WRITE) {};
 	~AeroScriptFilePathAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<A1Controller *>(dev))->read_AeroScriptFilePath(att);}
 	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
 		{(static_cast<A1Controller *>(dev))->write_AeroScriptFilePath(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -147,19 +149,6 @@ public:
 		{(static_cast<A1Controller *>(dev))->write_Automation1TaskID(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Controller *>(dev))->is_Automation1TaskID_allowed(ty);}
-};
-
-//	Attribute AeroScriptCurrentFileLoaded class definition
-class AeroScriptCurrentFileLoadedAttrib: public Tango::Attr
-{
-public:
-	AeroScriptCurrentFileLoadedAttrib():Attr("AeroScriptCurrentFileLoaded",
-			Tango::DEV_STRING, Tango::READ) {};
-	~AeroScriptCurrentFileLoadedAttrib() {};
-	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
-		{(static_cast<A1Controller *>(dev))->read_AeroScriptCurrentFileLoaded(att);}
-	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
-		{return (static_cast<A1Controller *>(dev))->is_AeroScriptCurrentFileLoaded_allowed(ty);}
 };
 
 //	Attribute Automation1TaskStatus class definition

@@ -127,6 +127,11 @@ bool A1Controller::is_AeroScriptFilePath_allowed(TANGO_UNUSED(Tango::AttReqType 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptFilePathStateAllowed_WRITE
 
+	//	Not any excluded states for AeroScriptFilePath attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptFilePathStateAllowed_READ) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptFilePathStateAllowed_READ
 	return true;
 }
 
@@ -167,22 +172,6 @@ bool A1Controller::is_Automation1TaskID_allowed(TANGO_UNUSED(Tango::AttReqType t
 	/*----- PROTECTED REGION ID(A1Controller::Automation1TaskIDStateAllowed_READ) ENABLED START -----*/
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1TaskIDStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method      : A1Controller::is_AeroScriptCurrentFileLoaded_allowed()
- * Description:  Execution allowed for AeroScriptCurrentFileLoaded attribute
- */
-//--------------------------------------------------------
-bool A1Controller::is_AeroScriptCurrentFileLoaded_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-
-	//	Not any excluded states for AeroScriptCurrentFileLoaded attribute in read access.
-	/*----- PROTECTED REGION ID(A1Controller::AeroScriptCurrentFileLoadedStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptCurrentFileLoadedStateAllowed_READ
 	return true;
 }
 

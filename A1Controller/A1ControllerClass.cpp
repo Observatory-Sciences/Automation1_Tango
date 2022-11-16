@@ -696,7 +696,7 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Attribute : AeroScriptFilePath
 	AeroScriptFilePathAttrib	*aeroscriptfilepath = new AeroScriptFilePathAttrib();
 	Tango::UserDefaultAttrProp	aeroscriptfilepath_prop;
-	aeroscriptfilepath_prop.set_description("Sets the file path of the Aeroscript to attempt to load on the controller at the next \nAeroScriptLoad or AeroScriptRun command. The read attribute shows the currently staged\nfile path and the write attribute is used to update this. Press enter to stage current value in\nthe write attribute. Full file paths must be used.");
+	aeroscriptfilepath_prop.set_description("Attempts to load the file path entered into the write attribute as an AeroScript on the\ncontroller. The read attribute shows the currently loaded file path. Full file paths must be\nused.");
 	aeroscriptfilepath_prop.set_label("AeroScript File");
 	//	unit	not set for AeroScriptFilePath
 	//	standard_unit	not set for AeroScriptFilePath
@@ -761,29 +761,6 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	automation1taskid->set_disp_level(Tango::EXPERT);
 	//	Not Memorized
 	att_list.push_back(automation1taskid);
-
-	//	Attribute : AeroScriptCurrentFileLoaded
-	AeroScriptCurrentFileLoadedAttrib	*aeroscriptcurrentfileloaded = new AeroScriptCurrentFileLoadedAttrib();
-	Tango::UserDefaultAttrProp	aeroscriptcurrentfileloaded_prop;
-	aeroscriptcurrentfileloaded_prop.set_description("Shows the file path of the last AeroScript program successfully loaded by the controller.");
-	aeroscriptcurrentfileloaded_prop.set_label("Current AeroScript File");
-	//	unit	not set for AeroScriptCurrentFileLoaded
-	//	standard_unit	not set for AeroScriptCurrentFileLoaded
-	//	display_unit	not set for AeroScriptCurrentFileLoaded
-	//	format	not set for AeroScriptCurrentFileLoaded
-	//	max_value	not set for AeroScriptCurrentFileLoaded
-	//	min_value	not set for AeroScriptCurrentFileLoaded
-	//	max_alarm	not set for AeroScriptCurrentFileLoaded
-	//	min_alarm	not set for AeroScriptCurrentFileLoaded
-	//	max_warning	not set for AeroScriptCurrentFileLoaded
-	//	min_warning	not set for AeroScriptCurrentFileLoaded
-	//	delta_t	not set for AeroScriptCurrentFileLoaded
-	//	delta_val	not set for AeroScriptCurrentFileLoaded
-	aeroscriptcurrentfileloaded->set_default_properties(aeroscriptcurrentfileloaded_prop);
-	//	Not Polled
-	aeroscriptcurrentfileloaded->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(aeroscriptcurrentfileloaded);
 
 	//	Attribute : Automation1TaskStatus
 	Automation1TaskStatusAttrib	*automation1taskstatus = new Automation1TaskStatusAttrib();

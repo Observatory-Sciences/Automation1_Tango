@@ -76,7 +76,6 @@
 //  AeroScriptFilePath             |  Tango::DevString	Scalar
 //  Automation1ProgramStopTimeout  |  Tango::DevUShort	Scalar
 //  Automation1TaskID              |  Tango::DevUShort	Scalar
-//  AeroScriptCurrentFileLoaded    |  Tango::DevString	Scalar
 //  Automation1TaskStatus          |  Tango::DevEnum	Scalar
 //  AxisHealth                     |  Tango::DevBoolean	Spectrum  ( max = 32)
 //  TaskStatus0                    |  Tango::DevBoolean	Spectrum  ( max = 16)
@@ -170,9 +169,9 @@ void A1Controller::delete_device()
 	delete[] attr_AxisCount_read;
 	delete[] attr_TaskCount_read;
 	delete[] attr_APIVersion_read;
+	delete[] attr_AeroScriptFilePath_read;
 	delete[] attr_Automation1ProgramStopTimeout_read;
 	delete[] attr_Automation1TaskID_read;
-	delete[] attr_AeroScriptCurrentFileLoaded_read;
 	delete[] attr_Automation1TaskStatus_read;
 	delete[] attr_AxisHealth_read;
 	delete[] attr_TaskStatus0_read;
@@ -203,9 +202,9 @@ void A1Controller::init_device()
 	attr_AxisCount_read = new Tango::DevUShort[1];
 	attr_TaskCount_read = new Tango::DevUShort[1];
 	attr_APIVersion_read = new Tango::DevString[1];
+	attr_AeroScriptFilePath_read = new Tango::DevString[1];
 	attr_Automation1ProgramStopTimeout_read = new Tango::DevUShort[1];
 	attr_Automation1TaskID_read = new Tango::DevUShort[1];
-	attr_AeroScriptCurrentFileLoaded_read = new Tango::DevString[1];
 	attr_Automation1TaskStatus_read = new Automation1TaskStatusEnum[1];
 	attr_AxisHealth_read = new Tango::DevBoolean[32];
 	attr_TaskStatus0_read = new Tango::DevBoolean[16];
@@ -468,7 +467,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     memcpy(attr_TaskStatus1_read, A1Bridge_ns::getInstance()->attr_TaskStatus1_read, sizeof(Tango::DevBoolean) * TASK1_STATUSES); 
     memcpy(attr_TaskStatus2_read, A1Bridge_ns::getInstance()->attr_TaskStatus2_read, sizeof(Tango::DevBoolean) * TASK2_STATUSES); 
 
-	*attr_AeroScriptCurrentFileLoaded_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_AeroScriptCurrentFileLoaded_read);
+	*attr_AeroScriptFilePath_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_AeroScriptFilePath_read);
 	*attr_Automation1TaskStatus_read = A1Bridge_ns::getInstance()->attr_Automation1TaskStatus_read;
 
     bool fault   = false; 
@@ -606,11 +605,29 @@ void A1Controller::read_APIVersion(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Read attribute AeroScriptFilePath related method
+ * Description:  Attempts to load the file path entered into the write attribute as an AeroScript on the
+ *               controller. The read attribute shows the currently loaded file path. Full file paths must be
+ *               used.
+ *
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptFilePath) ENABLED START -----*/
+	//	Set the attribute value
+	attr.set_value(attr_AeroScriptFilePath_read);
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptFilePath
+}
+//--------------------------------------------------------
+/**
  *	Write attribute AeroScriptFilePath related method
- * Description:  Sets the file path of the Aeroscript to attempt to load on the controller at the next 
- *               AeroScriptLoad or AeroScriptRun command. The read attribute shows the currently staged
- *               file path and the write attribute is used to update this. Press enter to stage current value in
- *               the write attribute. Full file paths must be used.
+ * Description:  Attempts to load the file path entered into the write attribute as an AeroScript on the
+ *               controller. The read attribute shows the currently loaded file path. Full file paths must be
+ *               used.
  *
  *	Data type:	Tango::DevString
  *	Attr type:	Scalar
@@ -623,7 +640,10 @@ void A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr)
 	Tango::DevString	w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Controller::write_AeroScriptFilePath) ENABLED START -----*/
+
 	attr_AeroScriptFilePath_write = w_val; 
+	DEBUG_STREAM << "write_AeroScriptFilePath() called";
+	aero_script_program_load();
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::write_AeroScriptFilePath
 }
@@ -704,24 +724,6 @@ void A1Controller::write_Automation1TaskID(Tango::WAttribute &attr)
 	A1Bridge_ns::getInstance()->setTaskID(w_val);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::write_Automation1TaskID
-}
-//--------------------------------------------------------
-/**
- *	Read attribute AeroScriptCurrentFileLoaded related method
- * Description:  Shows the file path of the last AeroScript program successfully loaded by the controller.
- *
- *	Data type:	Tango::DevString
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Controller::read_AeroScriptCurrentFileLoaded(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptCurrentFileLoaded) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_AeroScriptCurrentFileLoaded_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptCurrentFileLoaded
 }
 //--------------------------------------------------------
 /**
