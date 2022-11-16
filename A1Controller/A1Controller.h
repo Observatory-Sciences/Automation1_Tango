@@ -90,10 +90,6 @@ public:
 	std::string	username;
 	//	Password:	Password used to connect to Automation1 controller
 	std::string	password;
-	//	numAxes:	The maximum number of axes that this controller will control. Defaults to 32 (the maximum number supported).
-	Tango::DevUShort	numAxes;
-	//	numAeroScripts:	The maximum number of Aeroscript files the controller will attempt to find. Defaults to 1024 (the maximum number supported).
-	Tango::DevUShort	numAeroScripts;
 
 	bool	mandatoryNotDefined;
 

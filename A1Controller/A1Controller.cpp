@@ -147,7 +147,7 @@ void A1Controller::delete_device()
 
     // may cause segfault for unknown reasons
     // delete[] *attr_APIVersion_read; 
-    for (unsigned file = 0; file < numAeroScripts; file++)
+    for (unsigned file = 0; file < MAX_AEROSCRIPTS; file++)
     {
         delete[] attr_AeroScriptFiles_read[file];
     }
@@ -236,7 +236,7 @@ void A1Controller::init_device()
 	{
 		attr_TaskStatus2_read[i] = false;
 	}
-	for (int i = 0; i < numAeroScripts; i++) 
+	for (int i = 0; i < MAX_AEROSCRIPTS; i++) 
 	{
 		attr_AeroScriptFiles_read[i] = Tango::string_dup("");
 	} 
@@ -290,8 +290,6 @@ void A1Controller::get_device_property()
 	dev_prop.push_back(Tango::DbDatum("Simulate"));
 	dev_prop.push_back(Tango::DbDatum("Username"));
 	dev_prop.push_back(Tango::DbDatum("Password"));
-	dev_prop.push_back(Tango::DbDatum("numAxes"));
-	dev_prop.push_back(Tango::DbDatum("numAeroScripts"));
 
 	//	is there at least one property to be read ?
 	if (dev_prop.size()>0)
@@ -355,28 +353,6 @@ void A1Controller::get_device_property()
 		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  password;
 		//	Property StartDsPath is mandatory, check if has been defined in database.
 		check_mandatory_property(cl_prop, dev_prop[i]);
-
-		//	Try to initialize numAxes from class property
-		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
-		if (cl_prop.is_empty()==false)	cl_prop  >>  numAxes;
-		else {
-			//	Try to initialize numAxes from default device value
-			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
-			if (def_prop.is_empty()==false)	def_prop  >>  numAxes;
-		}
-		//	And try to extract numAxes value from database
-		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  numAxes;
-
-		//	Try to initialize numAeroScripts from class property
-		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
-		if (cl_prop.is_empty()==false)	cl_prop  >>  numAeroScripts;
-		else {
-			//	Try to initialize numAeroScripts from default device value
-			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
-			if (def_prop.is_empty()==false)	def_prop  >>  numAeroScripts;
-		}
-		//	And try to extract numAeroScripts value from database
-		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  numAeroScripts;
 
 	}
 
@@ -472,7 +448,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     delete[] *attr_APIVersion_read;
     *attr_APIVersion_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_APIVersion_read); 
 
-    for (unsigned file = 0; file < numAeroScripts; file++)
+    for (unsigned file = 0; file < MAX_AEROSCRIPTS; file++)
     {
         delete[] attr_AeroScriptFiles_read[file];
         attr_AeroScriptFiles_read[file] = Tango::string_dup(A1Bridge_ns::getInstance()->attr_AeroScriptFiles_read[file]); 

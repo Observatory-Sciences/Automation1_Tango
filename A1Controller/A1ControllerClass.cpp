@@ -496,34 +496,6 @@ void A1ControllerClass::set_default_property()
 	}
 	else
 		add_wiz_dev_prop(prop_name, prop_desc);
-	prop_name = "numAxes";
-	prop_desc = "The maximum number of axes that this controller will control. Defaults to 32 (the maximum number supported).";
-	prop_def  = "32";
-	vect_data.clear();
-	vect_data.push_back("32");
-	if (prop_def.length()>0)
-	{
-		Tango::DbDatum	data(prop_name);
-		data << vect_data ;
-		dev_def_prop.push_back(data);
-		add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
-	}
-	else
-		add_wiz_dev_prop(prop_name, prop_desc);
-	prop_name = "numAeroScripts";
-	prop_desc = "The maximum number of Aeroscript files the controller will attempt to find. Defaults to 1024 (the maximum number supported).";
-	prop_def  = "1024";
-	vect_data.clear();
-	vect_data.push_back("1024");
-	if (prop_def.length()>0)
-	{
-		Tango::DbDatum	data(prop_name);
-		data << vect_data ;
-		dev_def_prop.push_back(data);
-		add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
-	}
-	else
-		add_wiz_dev_prop(prop_name, prop_desc);
 }
 
 //--------------------------------------------------------
