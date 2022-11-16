@@ -7,10 +7,10 @@
 #include <tango.h>
 
 #include "A1AxisEnum.h"
+#include "A1Defines.h"
 
 
 #define DEFAULT_TO_SIMULATION false
-#define MAX_AXES 32
 
 
 namespace A1Bridge_ns {
@@ -111,14 +111,14 @@ class A1Bridge
     unsigned short      attr_Automation1TaskID_read; 
     
     double              attr_axisHealth;
-	Tango::DevBoolean	attr_AxisHealth_read[32];
+	Tango::DevBoolean	attr_AxisHealth_read[MAX_AXES];
     double              attr_taskStatus0;
-	Tango::DevBoolean	attr_TaskStatus0_read[16];
+	Tango::DevBoolean	attr_TaskStatus0_read[TASK0_STATUSES];
     double              attr_taskStatus1;
-	Tango::DevBoolean	attr_TaskStatus1_read[17];
+	Tango::DevBoolean	attr_TaskStatus1_read[TASK1_STATUSES];
     double              attr_taskStatus2;
-	Tango::DevBoolean	attr_TaskStatus2_read[24];
-	Tango::DevString	attr_AeroScriptFiles_read[1024];
+	Tango::DevBoolean	attr_TaskStatus2_read[TASK2_STATUSES];
+	Tango::DevString	attr_AeroScriptFiles_read[MAX_AEROSCRIPTS];
 
     A1AxisAttributes attr_axes[MAX_AXES]; 
 

@@ -243,7 +243,7 @@ void A1Communication::deleteController_impl()
     // Delete the controller if it is no longer required
     // (but keep the A1Communication instance alive)
     delete[] attr_APIVersion_read; 
-    for (unsigned i = 0; i++; i < 1024)
+    for (unsigned i = 0; i++; MAX_AEROSCRIPTS)
     {
         delete[] attr_AeroScriptFiles_read[i];
     }
@@ -628,7 +628,7 @@ void A1Communication::readController_impl()
     int32_t fileCount, filenameLength; 
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, NULL, &fileCount, &filenameLength); 
 
-    int32_t maxFiles = min(fileCount, 1024); 
+    int32_t maxFiles = min(fileCount, MAX_AEROSCRIPTS); 
     fileCount = maxFiles; 
     int32_t maxFilenameLength = min(fileCount, 50); 
 
@@ -643,7 +643,7 @@ void A1Communication::readController_impl()
         attr_AeroScriptFiles_read[file] = Tango::string_dup(&files[file*maxFilenameLength]);
     }
 
-    for (; file < 1024; file++)
+    for (; file < MAX_AEROSCRIPTS; file++)
     {
         delete[] attr_AeroScriptFiles_read[file];
         attr_AeroScriptFiles_read[file] = Tango::string_dup("");

@@ -153,3 +153,9 @@
 #define ERR_MSG_SZ                      2048
 #define AXIS_NAME_SZ                    256
 #define DEFAULT_TIMEOUT_MS              300
+
+#define MAX_AXES 32
+#define MAX_AEROSCRIPTS 1024
+#define TASK0_STATUSES 16
+#define TASK1_STATUSES 17
+#define TASK2_STATUSES 24

@@ -36,7 +36,7 @@ A1Bridge::A1Bridge() :
     attr_APIVersion_read         = Tango::string_dup("");
     attr_AeroScriptFilePath_read = Tango::string_dup("");
 
-    for (unsigned i = 0; i < 1024; i++)
+    for (unsigned i = 0; i < MAX_AEROSCRIPTS; i++)
     {
         attr_AeroScriptFiles_read[i] = Tango::string_dup(""); 
     }

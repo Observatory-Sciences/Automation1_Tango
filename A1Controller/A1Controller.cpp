@@ -220,19 +220,19 @@ void A1Controller::init_device()
 	attr_TaskCount_read[0] = 0;
 	attr_APIVersion_read[0] = Tango::string_dup("");
 	attr_AeroScriptFilePath_read[0] = Tango::string_dup("");
-	for (int i = 0; i < 32; i++) 
+	for (int i = 0; i < MAX_AXES; i++) 
 	{
 		attr_AxisHealth_read[i] = false;
 	}
-	for (int i = 0; i < 16; i++) 
+	for (int i = 0; i < TASK0_STATUSES; i++) 
 	{
 		attr_TaskStatus0_read[i] = false;
 	}
-	for (int i = 0; i < 17; i++) 
+	for (int i = 0; i < TASK1_STATUSES; i++) 
 	{
 		attr_TaskStatus1_read[i] = false;
 	}
-	for (int i = 0; i < 24; i++) 
+	for (int i = 0; i < TASK2_STATUSES; i++) 
 	{
 		attr_TaskStatus2_read[i] = false;
 	}
@@ -479,9 +479,9 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     }
     
     memcpy(attr_AxisHealth_read,  A1Bridge_ns::getInstance()->attr_AxisHealth_read,  sizeof(Tango::DevBoolean) * MAX_AXES); 
-    memcpy(attr_TaskStatus0_read, A1Bridge_ns::getInstance()->attr_TaskStatus0_read, sizeof(Tango::DevBoolean) * 16); 
-    memcpy(attr_TaskStatus1_read, A1Bridge_ns::getInstance()->attr_TaskStatus1_read, sizeof(Tango::DevBoolean) * 17); 
-    memcpy(attr_TaskStatus2_read, A1Bridge_ns::getInstance()->attr_TaskStatus2_read, sizeof(Tango::DevBoolean) * 24); 
+    memcpy(attr_TaskStatus0_read, A1Bridge_ns::getInstance()->attr_TaskStatus0_read, sizeof(Tango::DevBoolean) * TASK0_STATUSES); 
+    memcpy(attr_TaskStatus1_read, A1Bridge_ns::getInstance()->attr_TaskStatus1_read, sizeof(Tango::DevBoolean) * TASK1_STATUSES); 
+    memcpy(attr_TaskStatus2_read, A1Bridge_ns::getInstance()->attr_TaskStatus2_read, sizeof(Tango::DevBoolean) * TASK2_STATUSES); 
 
 
     bool fault   = false; 
@@ -747,7 +747,7 @@ void A1Controller::read_AxisHealth(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Controller::read_AxisHealth(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_AxisHealth) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_AxisHealth_read, 32);
+	attr.set_value(attr_AxisHealth_read, MAX_AXES);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_AxisHealth
 }
@@ -765,7 +765,7 @@ void A1Controller::read_TaskStatus0(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Controller::read_TaskStatus0(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_TaskStatus0) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_TaskStatus0_read, 16);
+	attr.set_value(attr_TaskStatus0_read, TASK0_STATUSES);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_TaskStatus0
 }
@@ -783,7 +783,7 @@ void A1Controller::read_TaskStatus1(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Controller::read_TaskStatus1(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_TaskStatus1) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_TaskStatus1_read, 17);
+	attr.set_value(attr_TaskStatus1_read, TASK1_STATUSES);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_TaskStatus1
 }
@@ -801,7 +801,7 @@ void A1Controller::read_TaskStatus2(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Controller::read_TaskStatus2(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_TaskStatus2) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_TaskStatus2_read, 24);
+	attr.set_value(attr_TaskStatus2_read, TASK2_STATUSES);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_TaskStatus2
 }
@@ -819,7 +819,7 @@ void A1Controller::read_AeroScriptFiles(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Controller::read_AeroScriptFiles(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptFiles) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_AeroScriptFiles_read, 1024);
+	attr.set_value(attr_AeroScriptFiles_read, MAX_AEROSCRIPTS);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptFiles
 }
