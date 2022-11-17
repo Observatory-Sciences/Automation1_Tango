@@ -781,7 +781,7 @@ void A1Communication::controller_AeroScriptProgramPause()
 } 
 
 
-void A1Communication::controller_Run(const std::string& aeroScriptText)
+void A1Communication::controller_CommandExecute(const std::string& aeroScriptText)
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Execute, *m_controller, attr_Automation1TaskID_read, aeroScriptText.c_str());

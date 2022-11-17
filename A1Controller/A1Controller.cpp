@@ -63,7 +63,7 @@
 //  AeroScriptProgramStart  |  aero_script_program_start
 //  AeroScriptProgramStop   |  aero_script_program_stop
 //  AeroScriptProgramPause  |  aero_script_program_pause
-//  Run                     |  run
+//  CommandExecute          |  command_execute
 //================================================================
 
 //================================================================
@@ -1051,20 +1051,21 @@ void A1Controller::aero_script_program_pause()
 }
 //--------------------------------------------------------
 /**
- *	Command Run related method
- * Description:  Run an arbitrary command on the Automation1 controller
+ *	Command CommandExecute related method
+ * Description:  Execute an arbitrary command on the Automation1 controller
  *
  *	@param argin input
  */
 //--------------------------------------------------------
-void A1Controller::run(Tango::DevString argin)
+void A1Controller::command_execute(Tango::DevString argin)
 {
-	DEBUG_STREAM << "A1Controller::Run()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(A1Controller::run) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::CommandExecute()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::command_execute) ENABLED START -----*/
 	
-	//	Add your own code
+	A1Bridge_ns::getInstance()->checkConnection(); 
+	A1Bridge_ns::getInstance()->controller_CommandExecute(argin);
 	
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::run
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::command_execute
 }
 //--------------------------------------------------------
 /**

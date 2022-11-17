@@ -356,7 +356,7 @@ CORBA::Any *AeroScriptProgramPauseClass::execute(Tango::DeviceImpl *device, TANG
 
 //--------------------------------------------------------
 /**
- * method : 		RunClass::execute()
+ * method : 		CommandExecuteClass::execute()
  * description : 	method to trigger the execution of the command.
  *
  * @param	device	The device on which the command must be executed
@@ -365,12 +365,12 @@ CORBA::Any *AeroScriptProgramPauseClass::execute(Tango::DeviceImpl *device, TANG
  *	returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
-CORBA::Any *RunClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+CORBA::Any *CommandExecuteClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
 {
-	TANGO_LOG_INFO << "RunClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "CommandExecuteClass::execute(): arrived" << std::endl;
 	Tango::DevString argin;
 	extract(in_any, argin);
-	((static_cast<A1Controller *>(device))->run(argin));
+	((static_cast<A1Controller *>(device))->command_execute(argin));
 	return new CORBA::Any();
 }
 
@@ -1059,14 +1059,14 @@ void A1ControllerClass::command_factory()
 			Tango::OPERATOR);
 	command_list.push_back(pAeroScriptProgramPauseCmd);
 
-	//	Command Run
-	RunClass	*pRunCmd =
-		new RunClass("Run",
+	//	Command CommandExecute
+	CommandExecuteClass	*pCommandExecuteCmd =
+		new CommandExecuteClass("CommandExecute",
 			Tango::DEV_STRING, Tango::DEV_VOID,
 			"input",
 			"",
 			Tango::OPERATOR);
-	command_list.push_back(pRunCmd);
+	command_list.push_back(pCommandExecuteCmd);
 
 	/*----- PROTECTED REGION ID(A1ControllerClass::command_factory_after) ENABLED START -----*/
 	

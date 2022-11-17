@@ -139,7 +139,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Run" description="Run an arbitrary command on the Automation1 controller" execMethod="run" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="CommandExecute" description="Execute an arbitrary command on the Automation1 controller" execMethod="command_execute" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="input">
         <type xsi:type="pogoDsl:StringType"/>
       </argin>

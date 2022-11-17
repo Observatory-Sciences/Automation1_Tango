@@ -498,11 +498,11 @@ public:
 	{return (static_cast<A1Controller *>(dev))->is_AeroScriptProgramPause_allowed(any);}
 };
 
-//	Command Run class definition
-class RunClass : public Tango::Command
+//	Command CommandExecute class definition
+class CommandExecuteClass : public Tango::Command
 {
 public:
-	RunClass(const char   *cmd_name,
+	CommandExecuteClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
@@ -510,15 +510,15 @@ public:
 				   Tango::DispLevel  level)
 	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
 
-	RunClass(const char   *cmd_name,
+	CommandExecuteClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
 	:Command(cmd_name,in,out)	{};
-	~RunClass() {};
+	~CommandExecuteClass() {};
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
-	{return (static_cast<A1Controller *>(dev))->is_Run_allowed(any);}
+	{return (static_cast<A1Controller *>(dev))->is_CommandExecute_allowed(any);}
 };
 
 

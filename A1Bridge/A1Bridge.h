@@ -183,7 +183,7 @@ class A1Bridge
             {NotImplemented(__func__);}; 
     virtual void controller_AeroScriptProgramPause() 
             {NotImplemented(__func__);}; 
-    virtual void controller_Run(const std::string& aeroScriptText)
+    virtual void controller_CommandExecute(const std::string& aeroScriptText)
             {NotImplemented(__func__);}; 
     virtual void axis_Abort(int32_t axis) 
             {NotImplemented(__func__);}; 

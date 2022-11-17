@@ -409,13 +409,13 @@ public:
 	virtual void aero_script_program_pause();
 	virtual bool is_AeroScriptProgramPause_allowed(const CORBA::Any &any);
 	/**
-	 *	Command Run related method
-	 * Description:  Run an arbitrary command on the Automation1 controller
+	 *	Command CommandExecute related method
+	 * Description:  Execute an arbitrary command on the Automation1 controller
 	 *
 	 *	@param argin input
 	 */
-	virtual void run(Tango::DevString argin);
-	virtual bool is_Run_allowed(const CORBA::Any &any);
+	virtual void command_execute(Tango::DevString argin);
+	virtual bool is_CommandExecute_allowed(const CORBA::Any &any);
 
 
 	//--------------------------------------------------------

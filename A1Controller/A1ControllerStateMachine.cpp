@@ -443,16 +443,17 @@ bool A1Controller::is_AeroScriptProgramPause_allowed(TANGO_UNUSED(const CORBA::A
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Controller::is_Run_allowed()
- * Description:  Execution allowed for Run attribute
+ *	Method      : A1Controller::is_CommandExecute_allowed()
+ * Description:  Execution allowed for CommandExecute attribute
  */
 //--------------------------------------------------------
-bool A1Controller::is_Run_allowed(TANGO_UNUSED(const CORBA::Any &any))
+bool A1Controller::is_CommandExecute_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-	//	Not any excluded states for Run command.
-	/*----- PROTECTED REGION ID(A1Controller::RunStateAllowed) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Controller::RunStateAllowed
+	//	Not any excluded states for CommandExecute command.
+	/*----- PROTECTED REGION ID(A1Controller::CommandExecuteStateAllowed) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::CommandExecuteStateAllowed
 	return true;
 }
 
