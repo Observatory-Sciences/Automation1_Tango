@@ -315,7 +315,7 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
                                             password.c_str(), 
                                             m_controller))
     {
-        std::cout << "Connect to A1 controller failed, retyring in " << interval * 2 << "ms..." << std::endl; 
+        std::cout << "Connect to A1 controller failed, retrying in " << interval * 2 << "ms..." << std::endl; 
         m_connectionRetries++; 
         Tango::Except::throw_exception("COMMUNICATION_BROKEN", 
                                     "Connect to A1 controller failed",
