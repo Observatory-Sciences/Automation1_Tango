@@ -61,12 +61,12 @@ def parse_args():
     return parser.parse_args()
 
 
-class PmacProxy:
+class Automation1Proxy:
     """
     Wrapper around tango.DeviceProxy to interact with TANGO device
     """
     def __init__(self, device):
-        self.m_pmac = tango.DeviceProxy(device)
+        self.m_automation1 = tango.DeviceProxy(device)
         self.callbacks = {
             "set": self.attr_set,
             "get": self.attr_get,
@@ -100,7 +100,7 @@ class PmacProxy:
         verbose_print("Set attribute:\t {}\nWith input:\t {}".format(attribute, values))
 
         try:
-            att_info = self.m_pmac[attribute]
+            att_info = self.m_automation1[attribute]
         except tango.DevFailed as e:
             print("Error:", e)
             return 1
@@ -128,7 +128,7 @@ class PmacProxy:
 
         verbose_print("Input after conversion:\t {}".format(out))
         try:
-            self.m_pmac[attribute] = out
+            self.m_automation1[attribute] = out
         except Exception as e:
             print("Error: failed to set attribute {}: \n".format(attribute), e)
             return 1
@@ -143,7 +143,7 @@ class PmacProxy:
         """
         verbose_print("Get attribute:\t {}".format(attribute))
         try:
-            att_info = self.m_pmac[attribute]
+            att_info = self.m_automation1[attribute]
             att = att_info.value
             verbose_print("Value:")
             print(att)
@@ -160,7 +160,7 @@ class PmacProxy:
         """
         verbose_print("Get info for attribute:\t {}".format(attribute))
         try:
-            att = self.m_pmac[attribute]
+            att = self.m_automation1[attribute]
             print(att)
             return 0
         except Exception as e:
@@ -183,7 +183,7 @@ class PmacProxy:
         verbose_print("Arguments:\t {}".format(arguments))
 
         try:
-            out = self.m_pmac.command_inout(command, arguments)
+            out = self.m_automation1.command_inout(command, arguments)
             verbose_print("Response:")
             print(out)
             return 0
@@ -215,14 +215,14 @@ def _main():
     verbose_print("Using device:\t", device)
 
     try:
-        pmac = PmacProxy(device)
+        automation1 = Automation1Proxy(device)
     except tango.DevFailed as e:
         print("Error: failed to connect to device {}:\n{}".format(device, e))
         exit(1)
 
-    verbose_print("Device state:\t", pmac.m_pmac.state())
+    verbose_print("Device state:\t", automation1.m_automation1.state())
 
-    out = pmac.call(cmdArgs.action, *cmdArgs.arguments)
+    out = automation1.call(cmdArgs.action, *cmdArgs.arguments)
 
     exit(out)
 
