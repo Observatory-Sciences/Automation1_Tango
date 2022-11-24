@@ -164,7 +164,7 @@ class A1Communication: public A1Bridge
 
   public: 
     A1Communication();
-    virtual ~A1Communication() = default; 
+    virtual ~A1Communication(); 
     virtual void controller_Reset();
     virtual void controller_Start();
     virtual void controller_Stop();

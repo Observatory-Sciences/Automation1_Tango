@@ -167,6 +167,29 @@ A1Communication::A1Communication() :
     m_simulation = false;
     attr_Automation1ProgramStopTimeout_read = 100;
     attr_Automation1TaskID_read = 1;
+
+    for(int i = 0; i < MAX_AXES; ++i)
+    {
+        attr_axes[i].attr_FirmwareVersion_read = Tango::string_dup("");
+        attr_axes[i].attr_MotorType_read = Tango::string_dup("");
+    }
+}
+
+A1Communication::~A1Communication()
+{
+    for(int i = 0; i < MAX_AXES; ++i)
+    {
+        if(attr_axes[i].attr_FirmwareVersion_read != nullptr)
+        {
+            delete[] attr_axes[i].attr_FirmwareVersion_read;
+            attr_axes[i].attr_FirmwareVersion_read = nullptr;
+        }
+        if(attr_axes[i].attr_MotorType_read != nullptr)
+        {
+            delete[] attr_axes[i].attr_MotorType_read;
+            attr_axes[i].attr_MotorType_read = nullptr;
+        }
+    }
 }
 
 
@@ -222,6 +245,8 @@ void A1Communication::initialiseController_impl()
 
 void A1Communication::initialiseAxis_impl(unsigned axis)
 {
+    printf("Initialise axis %d\n", axis);
+
     // Add all relevant items to the axis polling manager
     if (m_pollManagerAxis[axis].size() > 0)
     {
@@ -270,10 +295,22 @@ void A1Communication::deleteController_impl()
 
 void A1Communication::deleteAxis_impl(unsigned axis)
 {
+    printf("Delete axis %d\n", axis);
+
     // Delete the axis if it is no longer required
     // (but keep the A1Communication instance alive)
-    Tango::string_free(attr_axes[axis].attr_FirmwareVersion_read); 
-    Tango::string_free(attr_axes[axis].attr_MotorType_read); 
+    if(attr_axes[axis].attr_FirmwareVersion_read != nullptr)
+    {
+        Tango::string_free(attr_axes[axis].attr_FirmwareVersion_read);
+        attr_axes[axis].attr_FirmwareVersion_read = nullptr;
+    }
+
+    if(attr_axes[axis].attr_MotorType_read != nullptr)
+    {
+        Tango::string_free(attr_axes[axis].attr_MotorType_read);
+        attr_axes[axis].attr_MotorType_read = nullptr; 
+    }
+
     m_pollManagerAxis[axis].clear(); 
     m_pollManagerCommon.decrementRefCount(); 
 }

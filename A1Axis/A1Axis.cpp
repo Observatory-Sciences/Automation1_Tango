@@ -151,13 +151,17 @@ void A1Axis::delete_device()
 {
 	DEBUG_STREAM << "A1Axis::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::delete_device) ENABLED START -----*/
-	
-    // may cause segfault for unknown reasons
-    Tango::string_free(*attr_FirmwareVersion_read);
-    Tango::string_free(*attr_MotorType_read);
 
     m_stopPollFlag = true;
     m_pollThread.join();
+
+	// Ensure we delete these pointers AFTER joining the poll thread. If we do
+	// not delete after joining the thread, then it is possible that
+	// read_attr_hardware() is called after the deletion of the pointers. This
+	// function dereferences these pointers, so we get a segmentation fault if
+	// the pointers have been deleted
+    Tango::string_free(*attr_FirmwareVersion_read);
+    Tango::string_free(*attr_MotorType_read);
 
     try
     {

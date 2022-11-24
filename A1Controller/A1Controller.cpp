@@ -146,8 +146,6 @@ void A1Controller::delete_device()
     m_stopPollFlag = true;
     m_pollThread.join();
 
-    // may cause segfault for unknown reasons
-    // delete[] *attr_APIVersion_read; 
     for (unsigned file = 0; file < MAX_AEROSCRIPTS; file++)
     {
         delete[] attr_AeroScriptFiles_read[file];
@@ -157,7 +155,6 @@ void A1Controller::delete_device()
     {
         A1Bridge_ns::getInstance()->deleteController(); 
         std::cout << "Deleted controller..." << std::endl; 
-        // A1Bridge_ns::stopInstance(); 
     }
     catch (Tango::DevFailed &e)
     {
