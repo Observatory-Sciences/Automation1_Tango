@@ -1,0 +1,23 @@
+{
+    "TaskStatus1" : {
+        "BooleanLabels" : [
+            "Async SMC Motion Abort Pending", 
+            "Retrace Requested",
+            "MOS Change",
+            "Spindle Feedhold",
+            "Feedhold Axes Stopped",
+            "Cutter Radius Enabling",
+            "Cutter Radius Disabling",
+            "Cutter Offsets Enabling (Positive)",
+            "Cutter Offsets Enabling (Negative)",
+            "Cutter Offsets Disabling",
+            "On Error Handler Pending",
+            "On Error Handler Executing",
+            "Program Stop Pending",
+            "Sync Function Pending",
+            "No MFO Floor",
+            "Interrupted",
+            "IFOV Buffer Hold"
+        ]
+    }
+}

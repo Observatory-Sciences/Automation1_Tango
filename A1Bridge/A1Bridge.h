@@ -82,7 +82,7 @@ class A1Bridge
 
     // Methods
     A1Bridge(); 
-    virtual ~A1Bridge();
+    virtual ~A1Bridge(){};
 
     // implementation of connection
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip) {}; 

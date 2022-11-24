@@ -1,24 +1,15 @@
 #! /usr/bin/env python
 
-from __future__ import print_function 
+"""
+A python script that can get, set and provide info about any attribute for the given TANGO device.
+The script can also send any command to a TANGO device.
+"""
+
+from __future__ import print_function
 
 import argparse
 import tango
-from pprint import pprint
 import numpy
-
-verbose = False
-
-def verbose_print(*args):
-    """
-    Verbose print function. 
-    """
-    global verbose
-
-    if verbose:
-        print(*args)
-    else:
-        pass
 
 
 def _parse_auto_type(string):
@@ -51,33 +42,41 @@ def parse_args():
     parser.add_argument("--verbose", action="store_true",
                         help='Turn on additional printing')
     parser.add_argument("action", type=str,
-                        help='action to take. Use a TANGO command or "get"/"set"/"info" '  
+                        help='action to take. Use a TANGO command or "get"/"set"/"info" '
                              '(respectively) to get, set and get info on an attribute')
     parser.add_argument("arguments", nargs="*", type=_parse_auto_type, default=None,
-                        help='depending on action, either: ' 
-                             'an attribute for a "get"/"info" action, or ' 
+                        help='depending on action, either: '
+                             'an attribute for a "get"/"info" action, or '
                              'an attribute and a value for the "set" action, or '
                              'arguments to pass to a TANGO command. ')
     return parser.parse_args()
 
 
-class Automation1Proxy:
+class Automation1Proxy(object):
     """
     Wrapper around tango.DeviceProxy to interact with TANGO device
     """
-    def __init__(self, device, printResponse):
+    def __init__(self, device, print_response, verbose=False):
         self.m_automation1 = tango.DeviceProxy(device)
-        self.m_printResponse = printResponse
+        self.m_print_response = print_response
         self.callbacks = {
             "set": self.attr_set,
             "get": self.attr_get,
             "info": self.attr_info
         }
+        self.verbose = verbose
+
+    def verbose_print(self, *args):
+        """
+        Verbose print function
+        """
+        if self.verbose:
+            print(*args)
 
     def call(self, action, *args):
         """
-        If "action" string matches pre-defined keyword in callback dictionary, call corresponding function;
-        else pass to TANGO as a command
+        If "action" string matches pre-defined keyword in callback dictionary, call corresponding
+        function; else pass to TANGO as a command
         :param action: string defining action to take
         :param args: passed to action function
         :return: returns value from action function (0 for success, 1 for failure)
@@ -86,8 +85,7 @@ class Automation1Proxy:
         if action in self.callbacks:
             return self.callbacks[action](*args)
         # else pass to TANGO as a command
-        else:
-            return self.command(action, *args)
+        return self.command(action, *args)
 
     def attr_set(self, attribute, *values):
         """
@@ -98,40 +96,40 @@ class Automation1Proxy:
         """
         if len(values) == 1:
             values = values[0]
-        verbose_print("Set attribute:\t {}\nWith input:\t {}".format(attribute, values))
+        self.verbose_print("Set attribute:\t {}\nWith input:\t {}".format(attribute, values))
 
         try:
             att_info = self.m_automation1[attribute]
-        except tango.DevFailed as e:
-            print("Error:", e)
+        except tango.DevFailed as err:
+            print("Error:", err)
             return 1, None
 
         att = att_info.value
-        verbose_print("Attr. current value:\t {}".format(att))
+        self.verbose_print("Attr. current value:\t {}".format(att))
         t_att = type(att)
-        verbose_print("Attr. requires type:\t {}".format(t_att))
+        self.verbose_print("Attr. requires type:\t {}".format(t_att))
 
         if isinstance(att, numpy.ndarray):
             # if attribute is a spectrum (ndarray), must be set using flattened ndarray
-            out = numpy.zeros_like(att).flatten()
+            out = numpy.zeros_like(att).flatten() # pylint: disable=no-member
             try:
                 out[:] = values
-            except ValueError as e:
-                print("Error:", e)
+            except ValueError as err:
+                print("Error:", err)
                 return 1, None
         else:
             # attempt to convert to matching type
             try:
                 out = t_att(values)
-            except Exception as e:
-                print("Error:", e)
+            except Exception as err: # pylint: disable=broad-except
+                print("Error:", err)
                 return 1, None
 
-        verbose_print("Input after conversion:\t {}".format(out))
+        self.verbose_print("Input after conversion:\t {}".format(out))
         try:
             self.m_automation1[attribute] = out
-        except Exception as e:
-            print("Error: failed to set attribute {}: \n".format(attribute), e)
+        except Exception as err: # pylint: disable=broad-except
+            print("Error: failed to set attribute {}: \n".format(attribute), err)
             return 1, None
 
         return 0, "OK"
@@ -142,16 +140,16 @@ class Automation1Proxy:
         :param attribute: attribute to get
         :return: 0 for success, 1 for failure
         """
-        verbose_print("Get attribute:\t {}".format(attribute))
+        self.verbose_print("Get attribute:\t {}".format(attribute))
         try:
             att_info = self.m_automation1[attribute]
             att = att_info.value
-            verbose_print("Value:")
-            if self.m_printResponse:
+            self.verbose_print("Value:")
+            if self.m_print_response:
                 print(att)
             return 0, att
-        except Exception as e:
-            print("Error:", e)
+        except Exception as err: # pylint: disable=broad-except
+            print("Error:", err)
         return 1, None
 
     def attr_info(self, attribute):
@@ -160,14 +158,14 @@ class Automation1Proxy:
         :param attribute: attribute to get info for
         :return: 0 for success, 1 for failure
         """
-        verbose_print("Get info for attribute:\t {}".format(attribute))
+        self.verbose_print("Get info for attribute:\t {}".format(attribute))
         try:
             att = self.m_automation1[attribute]
-            if self.m_printResponse:
+            if self.m_print_response:
                 print(att)
             return 0, att
-        except Exception as e:
-            print("Error:", e)
+        except Exception as err: # pylint: disable=broad-except
+            print("Error:", err)
         return 1, None
 
     def command(self, command, *arguments):
@@ -177,22 +175,23 @@ class Automation1Proxy:
         :param arguments: command arguments
         :return: 0 for success, 1 for failure
         """
-        verbose_print("Send command:\t {}".format(command))
+        self.verbose_print("Send command:\t {}".format(command))
 
-        if len(arguments) == 0:
+        # If arguments is empty
+        if not arguments:
             arguments = None
         elif len(arguments) == 1:
             arguments = arguments[0]
-        verbose_print("Arguments:\t {}".format(arguments))
+        self.verbose_print("Arguments:\t {}".format(arguments))
 
         try:
             out = self.m_automation1.command_inout(command, arguments)
-            verbose_print("Response:")
-            if self.m_printResponse:
+            self.verbose_print("Response:")
+            if self.m_print_response:
                 print(out)
             return 0, out
-        except Exception as e:
-            print("Error: command {} failed:\n{}".format(command, e))
+        except Exception as err: # pylint: disable=broad-except
+            print("Error: command {} failed:\n{}".format(command, err))
         return 1, None
 
 
@@ -203,30 +202,28 @@ def _main():
                   action [arguments ...]
     :return: exits with 0 for success, 1 for failure
     """
-    global verbose
-
-    cmdArgs = parse_args()
+    cmd_args = parse_args()
 
     # turn on printing
-    verbose = cmdArgs.verbose
+    verbose = cmd_args.verbose
 
-    verbose_print("Arguments:\t", cmdArgs)
+    if verbose:
+        print("Arguments:\t", cmd_args)
 
-    # if (cmdArgs.device is None):
-    #     print("No device provided. See usage")
-    #     return 1
-    device = cmdArgs.device
-    verbose_print("Using device:\t", device)
+    device = cmd_args.device
+    if verbose:
+        print("Using device:\t", device)
 
     try:
-        automation1 = Automation1Proxy(device, True)
-    except tango.DevFailed as e:
-        print("Error: failed to connect to device {}:\n{}".format(device, e))
+        automation1 = Automation1Proxy(device, True, verbose)
+    except tango.DevFailed as err:
+        print("Error: failed to connect to device {}:\n{}".format(device, err))
         exit(1)
 
-    verbose_print("Device state:\t", automation1.m_automation1.state())
+    if verbose:
+        print("Device state:\t", automation1.m_automation1.state())
 
-    stat, out = automation1.call(cmdArgs.action, *cmdArgs.arguments)
+    stat, _ = automation1.call(cmd_args.action, *cmd_args.arguments)
 
     exit(stat)
 

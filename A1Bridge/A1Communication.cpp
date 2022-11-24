@@ -280,6 +280,7 @@ void A1Communication::deleteController_impl()
     // (but keep the A1Communication instance alive)
     delete[] attr_APIVersion_read;
     attr_APIVersion_read = nullptr;
+
     for (unsigned i = 0; i++; MAX_AEROSCRIPTS)
     {
         delete[] attr_AeroScriptFiles_read[i];
@@ -325,24 +326,20 @@ bool A1Communication::isConnected()
 void A1Communication::connect_impl(const std::string& username, const std::string& password, const std::string& ip)
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    // INFO_STREAM << "Connecting to controller" << std::endl;
     
     if (m_connected)
     {
-        // DEBUG_STREAM << "Already connected to controller" << std::endl; 
         return; 
     }
     
     int interval = 5 * std::pow(2, m_connectionRetries); 
     if (!m_lastReconnectionAttempt.checkAndUpdate(std::chrono::milliseconds(interval)))
     {
-        // DEBUG_STREAM << "Too soon since last reconnect attempt" << std::endl; 
         Tango::Except::throw_exception("COMMUNICATION_BROKEN", 
                                     "Connect to A1 controller failed",
                                     __func__);
     }
 
-    // DEBUG_STREAM << "Connecting to controller through Automation1 API..." << std::endl; 
     if (!Automation1_ConnectWithHostAndUser(ip.c_str(), 
                                             username.c_str(), 
                                             password.c_str(), 
@@ -355,12 +352,7 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
                                     __func__);
     }
 
-    // We are connected 
-    // DEBUG_STREAM << "Automation1 connect call succeeded" << std::endl;
-
     checkControllerRunning(); 
-
-    // INFO_STREAM << "Controller is running" << std::endl; 
 
     onConnectController(); 
 
@@ -371,14 +363,12 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
     
     m_connected = true; 
     m_connectionRetries = 0; 
-    // DEBUG_STREAM << "Connected!" << std::endl; 
 }
 
 
 void A1Communication::checkControllerRunning()
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    // DEBUG_STREAM << "Checking if Automation1 controller is running" << std::endl; 
 
     if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
     {
@@ -412,7 +402,6 @@ void A1Communication::checkControllerRunning()
 
 void A1Communication::checkConnection_impl()
 {
-    // DEBUG_STREAM << "Checking connection state" << std::endl; 
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     if (!isConnected())
     {
@@ -423,7 +412,6 @@ void A1Communication::checkConnection_impl()
 
 void A1Communication::onConnectController()
 {
-    // DEBUG_STREAM << "Setting up controller..." << std::endl; 
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     initialiseController(); 
 
@@ -435,7 +423,6 @@ void A1Communication::onConnectController()
 
 void A1Communication::onConnectAxis(unsigned axis)
 {
-    // DEBUG_STREAM << "Setting up axis " << axis << "..." << std::endl; 
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     initialiseAxis(axis);  
 }
@@ -443,7 +430,6 @@ void A1Communication::onConnectAxis(unsigned axis)
 void A1Communication::disconnect_impl()
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    // INFO_STREAM << "Disconnecting from controller" << std::endl; 
 
     m_pollManagerCommon.clear(); 
     m_pollManagerController.clear(); 
@@ -454,7 +440,6 @@ void A1Communication::disconnect_impl()
 
     if (m_connected)
     {
-        // DEBUG_STREAM << "Disconnecting through Automation1 API..." << std::endl; 
         bool stat = Automation1_Disconnect(*m_controller);
         m_connected = false; 
         if (!stat)
@@ -470,7 +455,6 @@ void A1Communication::disconnect_impl()
 
 void A1Communication::readCommon()
 {
-    // DEBUG_STREAM << "Reading common data from controller" << std::endl; 
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     if (!m_lastCommonPoll.checkAndUpdate(m_pollInterval_ms))
     {
@@ -524,63 +508,63 @@ void A1Communication::readCommon()
         attr_axes[axis].attr_Homed_read = attr_axes[axis].attr_AxisStatus_read[AX_HOMED];
 
         // Drive status 
-        attr_axes[axis].attr_DriveStatus_read[DRV_ENABLED]                      = (int(attr_axes[axis].driveStatus) >> 0 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_CW_EOT_LIMIT]                 = (int(attr_axes[axis].driveStatus) >> 1 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_CCW_EOT_LIMIT]                = (int(attr_axes[axis].driveStatus) >> 2 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_HOME_LIMIT]                   = (int(attr_axes[axis].driveStatus) >> 3 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_MARKER_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 4 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_HALL_A_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 5 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_HALL_B_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 6 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_HALL_C_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 7 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_SINE_ENCODER_ERROR]           = (int(attr_axes[axis].driveStatus) >> 8 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_COSINE_ENCODER_ERROR]         = (int(attr_axes[axis].driveStatus) >> 9 ) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_E_STOP_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 10) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_BRAKE_OUTPUT]                 = (int(attr_axes[axis].driveStatus) >> 11) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_GALVO_POWER_CORRECTION]       = (int(attr_axes[axis].driveStatus) >> 12) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_NO_MOTOR_SUPPLY]              = (int(attr_axes[axis].driveStatus) >> 14) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_CURRENT_CLAMP]                = (int(attr_axes[axis].driveStatus) >> 15) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_MARKER_LATCH]                 = (int(attr_axes[axis].driveStatus) >> 16) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_POWER_LIMITING]               = (int(attr_axes[axis].driveStatus) >> 17) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_GALVO_CAL_ENABLED]            = (int(attr_axes[axis].driveStatus) >> 20) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_AUTOFOCUS_ACTIVE]             = (int(attr_axes[axis].driveStatus) >> 21) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_PROGRAM_FLASH]                = (int(attr_axes[axis].driveStatus) >> 22) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_SERVO_CONTROL]                = (int(attr_axes[axis].driveStatus) >> 24) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_IN_POSITION]                  = (int(attr_axes[axis].driveStatus) >> 25) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_MOVE_ACTIVE]                  = (int(attr_axes[axis].driveStatus) >> 26) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_ACCEL_PHASE]                  = (int(attr_axes[axis].driveStatus) >> 27) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_DECEL_PHASE]                  = (int(attr_axes[axis].driveStatus) >> 28) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_ENCODER_CLIPPING]             = (int(attr_axes[axis].driveStatus) >> 29) & 1U;
-        attr_axes[axis].attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]             = (int(attr_axes[axis].driveStatus) >> 30) & 1U;
+        attr_axes[axis].attr_DriveStatus_read[DRV_ENABLED]                      = (int(attr_axes[axis].driveStatus) >> 0 ) & 1U; //Enabled
+        attr_axes[axis].attr_DriveStatus_read[DRV_CW_EOT_LIMIT]                 = (int(attr_axes[axis].driveStatus) >> 1 ) & 1U; //CwEotlimit
+        attr_axes[axis].attr_DriveStatus_read[DRV_CCW_EOT_LIMIT]                = (int(attr_axes[axis].driveStatus) >> 2 ) & 1U; //CcsEotLimit
+        attr_axes[axis].attr_DriveStatus_read[DRV_HOME_LIMIT]                   = (int(attr_axes[axis].driveStatus) >> 3 ) & 1U; //HomeLimit
+        attr_axes[axis].attr_DriveStatus_read[DRV_MARKER_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 4 ) & 1U; //MarkerInput
+        attr_axes[axis].attr_DriveStatus_read[DRV_HALL_A_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 5 ) & 1U; //HallAInput
+        attr_axes[axis].attr_DriveStatus_read[DRV_HALL_B_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 6 ) & 1U; //HallBInput
+        attr_axes[axis].attr_DriveStatus_read[DRV_HALL_C_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 7 ) & 1U; //HallCInput
+        attr_axes[axis].attr_DriveStatus_read[DRV_SINE_ENCODER_ERROR]           = (int(attr_axes[axis].driveStatus) >> 8 ) & 1U; //SineEnconderError
+        attr_axes[axis].attr_DriveStatus_read[DRV_COSINE_ENCODER_ERROR]         = (int(attr_axes[axis].driveStatus) >> 9 ) & 1U; //CosineEncoderError
+        attr_axes[axis].attr_DriveStatus_read[DRV_E_STOP_INPUT]                 = (int(attr_axes[axis].driveStatus) >> 10) & 1U; //EstopInput
+        attr_axes[axis].attr_DriveStatus_read[DRV_BRAKE_OUTPUT]                 = (int(attr_axes[axis].driveStatus) >> 11) & 1U; //BrakeOutput
+        attr_axes[axis].attr_DriveStatus_read[DRV_GALVO_POWER_CORRECTION]       = (int(attr_axes[axis].driveStatus) >> 12) & 1U; //GalvoPowerCorrection
+        attr_axes[axis].attr_DriveStatus_read[DRV_NO_MOTOR_SUPPLY]              = (int(attr_axes[axis].driveStatus) >> 14) & 1U; //NoMotorSupply
+        attr_axes[axis].attr_DriveStatus_read[DRV_CURRENT_CLAMP]                = (int(attr_axes[axis].driveStatus) >> 15) & 1U; //CurrentClamp
+        attr_axes[axis].attr_DriveStatus_read[DRV_MARKER_LATCH]                 = (int(attr_axes[axis].driveStatus) >> 16) & 1U; //MarkerLatch
+        attr_axes[axis].attr_DriveStatus_read[DRV_POWER_LIMITING]               = (int(attr_axes[axis].driveStatus) >> 17) & 1U; //PowerLimiting
+        attr_axes[axis].attr_DriveStatus_read[DRV_GALVO_CAL_ENABLED]            = (int(attr_axes[axis].driveStatus) >> 20) & 1U; //GalvoCalEnabled
+        attr_axes[axis].attr_DriveStatus_read[DRV_AUTOFOCUS_ACTIVE]             = (int(attr_axes[axis].driveStatus) >> 21) & 1U; //AutofocusActive
+        attr_axes[axis].attr_DriveStatus_read[DRV_PROGRAM_FLASH]                = (int(attr_axes[axis].driveStatus) >> 22) & 1U; //ProgramFlash
+        attr_axes[axis].attr_DriveStatus_read[DRV_SERVO_CONTROL]                = (int(attr_axes[axis].driveStatus) >> 24) & 1U; //ServoControl
+        attr_axes[axis].attr_DriveStatus_read[DRV_IN_POSITION]                  = (int(attr_axes[axis].driveStatus) >> 25) & 1U; //InPosition
+        attr_axes[axis].attr_DriveStatus_read[DRV_MOVE_ACTIVE]                  = (int(attr_axes[axis].driveStatus) >> 26) & 1U; //MoveActive
+        attr_axes[axis].attr_DriveStatus_read[DRV_ACCEL_PHASE]                  = (int(attr_axes[axis].driveStatus) >> 27) & 1U; //AccelPhase
+        attr_axes[axis].attr_DriveStatus_read[DRV_DECEL_PHASE]                  = (int(attr_axes[axis].driveStatus) >> 28) & 1U; //DecelPhase
+        attr_axes[axis].attr_DriveStatus_read[DRV_ENCODER_CLIPPING]             = (int(attr_axes[axis].driveStatus) >> 29) & 1U; //EncoderClipping
+        attr_axes[axis].attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]             = (int(attr_axes[axis].driveStatus) >> 30) & 1U; //DualLoopActive
 
         attr_axes[axis].attr_Enabled_read    = attr_axes[axis].attr_DriveStatus_read[DRV_ENABLED];
         attr_axes[axis].attr_InPosition_read = attr_axes[axis].attr_DriveStatus_read[DRV_IN_POSITION];
 
         // Axis fault
-        attr_axes[axis].attr_AxisFault_read[AX_F_POSITION_ERROR]     = (int(attr_axes[axis].axisFault) >> 0 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_OVER_CURRENT]       = (int(attr_axes[axis].axisFault) >> 1 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_CW_EOT_LIMIT]       = (int(attr_axes[axis].axisFault) >> 2 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_CCW_EOT_LIMIT]      = (int(attr_axes[axis].axisFault) >> 3 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_CW_SOFT_LIMIT]      = (int(attr_axes[axis].axisFault) >> 4 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_CCW_SOFT_LIMIT]     = (int(attr_axes[axis].axisFault) >> 5 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_AMPLIFIER_FAULT]    = (int(attr_axes[axis].axisFault) >> 6 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_FBK_INPUT0]         = (int(attr_axes[axis].axisFault) >> 7 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_FBK_INPUT1]         = (int(attr_axes[axis].axisFault) >> 8 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_HALL_FAULT]         = (int(attr_axes[axis].axisFault) >> 9 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_MAX_VELOCITY]       = (int(attr_axes[axis].axisFault) >> 10 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_E_STOP_FAULT]       = (int(attr_axes[axis].axisFault) >> 11 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_VELOCITY_ERROR]     = (int(attr_axes[axis].axisFault) >> 12 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_EXTERNAL_FAULT]     = (int(attr_axes[axis].axisFault) >> 13 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_MOTOR_TEMP]         = (int(attr_axes[axis].axisFault) >> 14 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_AMPLIFIER_TEMP]     = (int(attr_axes[axis].axisFault) >> 15 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_ENCODER_FAULT]      = (int(attr_axes[axis].axisFault) >> 16 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_MISALIGNMENT_FAULT] = (int(attr_axes[axis].axisFault) >> 17 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_FBK_SCALING_FAULT]  = (int(attr_axes[axis].axisFault) >> 18 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_MRK_SEARCH_FAULT]   = (int(attr_axes[axis].axisFault) >> 19 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_SAFE_ZONE_FAULT]    = (int(attr_axes[axis].axisFault) >> 20 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_IN_POS_TIMEOUT]     = (int(attr_axes[axis].axisFault) >> 21 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_VOLTAGE_CLAMP]      = (int(attr_axes[axis].axisFault) >> 22 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_MOTOR_SUPPLY]       = (int(attr_axes[axis].axisFault) >> 23 ) & 1U;
-        attr_axes[axis].attr_AxisFault_read[AX_F_INTERNAL]           = (int(attr_axes[axis].axisFault) >> 24 ) & 1U;
+        attr_axes[axis].attr_AxisFault_read[AX_F_POSITION_ERROR]     = (int(attr_axes[axis].axisFault) >> 0 ) & 1U; //PositionError
+        attr_axes[axis].attr_AxisFault_read[AX_F_OVER_CURRENT]       = (int(attr_axes[axis].axisFault) >> 1 ) & 1U; //OverCurrent
+        attr_axes[axis].attr_AxisFault_read[AX_F_CW_EOT_LIMIT]       = (int(attr_axes[axis].axisFault) >> 2 ) & 1U; //CwEotLimit
+        attr_axes[axis].attr_AxisFault_read[AX_F_CCW_EOT_LIMIT]      = (int(attr_axes[axis].axisFault) >> 3 ) & 1U; //CcwEotLimit
+        attr_axes[axis].attr_AxisFault_read[AX_F_CW_SOFT_LIMIT]      = (int(attr_axes[axis].axisFault) >> 4 ) & 1U; //CwSoftlimit
+        attr_axes[axis].attr_AxisFault_read[AX_F_CCW_SOFT_LIMIT]     = (int(attr_axes[axis].axisFault) >> 5 ) & 1U; //CcwSoftLimit
+        attr_axes[axis].attr_AxisFault_read[AX_F_AMPLIFIER_FAULT]    = (int(attr_axes[axis].axisFault) >> 6 ) & 1U; //AmplifierFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_FBK_INPUT0]         = (int(attr_axes[axis].axisFault) >> 7 ) & 1U; //FbkInput0
+        attr_axes[axis].attr_AxisFault_read[AX_F_FBK_INPUT1]         = (int(attr_axes[axis].axisFault) >> 8 ) & 1U; //FbkInput1
+        attr_axes[axis].attr_AxisFault_read[AX_F_HALL_FAULT]         = (int(attr_axes[axis].axisFault) >> 9 ) & 1U; //HallFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_MAX_VELOCITY]       = (int(attr_axes[axis].axisFault) >> 10 ) & 1U; //MaxVelocity
+        attr_axes[axis].attr_AxisFault_read[AX_F_E_STOP_FAULT]       = (int(attr_axes[axis].axisFault) >> 11 ) & 1U; //EstopFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_VELOCITY_ERROR]     = (int(attr_axes[axis].axisFault) >> 12 ) & 1U; //VelocityError
+        attr_axes[axis].attr_AxisFault_read[AX_F_EXTERNAL_FAULT]     = (int(attr_axes[axis].axisFault) >> 13 ) & 1U; //ExternalFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_MOTOR_TEMP]         = (int(attr_axes[axis].axisFault) >> 14 ) & 1U; //MotorTemp
+        attr_axes[axis].attr_AxisFault_read[AX_F_AMPLIFIER_TEMP]     = (int(attr_axes[axis].axisFault) >> 15 ) & 1U; //AmplifierTemp
+        attr_axes[axis].attr_AxisFault_read[AX_F_ENCODER_FAULT]      = (int(attr_axes[axis].axisFault) >> 16 ) & 1U; //EncoderFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_MISALIGNMENT_FAULT] = (int(attr_axes[axis].axisFault) >> 17 ) & 1U; //MisalignmentFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_FBK_SCALING_FAULT]  = (int(attr_axes[axis].axisFault) >> 18 ) & 1U; //FbkScalaingFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_MRK_SEARCH_FAULT]   = (int(attr_axes[axis].axisFault) >> 19 ) & 1U; //MrkSearchFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_SAFE_ZONE_FAULT]    = (int(attr_axes[axis].axisFault) >> 20 ) & 1U; //SafeZoneFault
+        attr_axes[axis].attr_AxisFault_read[AX_F_IN_POS_TIMEOUT]     = (int(attr_axes[axis].axisFault) >> 21 ) & 1U; //InPosTimeout
+        attr_axes[axis].attr_AxisFault_read[AX_F_VOLTAGE_CLAMP]      = (int(attr_axes[axis].axisFault) >> 22 ) & 1U; //VoltageClamp
+        attr_axes[axis].attr_AxisFault_read[AX_F_MOTOR_SUPPLY]       = (int(attr_axes[axis].axisFault) >> 23 ) & 1U; //MotorSupply
+        attr_axes[axis].attr_AxisFault_read[AX_F_INTERNAL]           = (int(attr_axes[axis].axisFault) >> 24 ) & 1U; //Internal
 
         attr_axes[axis].attr_Error_read = (int(attr_axes[axis].axisFault) & 0xffffff) != 0;
         attr_AxisHealth_read[axis]      = !attr_axes[axis].attr_Error_read; // Healthy if no error
@@ -593,7 +577,6 @@ void A1Communication::readController_impl()
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     readCommon(); 
 
-    // DEBUG_STREAM << "Reading controller-specific data from controller" << std::endl; 
     try
     {
         m_pollManagerController.poll(m_controller);
@@ -607,65 +590,65 @@ void A1Communication::readController_impl()
         throw(e);
     }
     
-    attr_TaskStatus0_read[TSK0_PROGRAM_ASSOCIATED]             = (int(attr_taskStatus0) >> TSK0_PROGRAM_ASSOCIATED) & 1U; 
-    attr_TaskStatus0_read[TSK0_IMMEDIATE_EXECUTING]            = (int(attr_taskStatus0) >> TSK0_IMMEDIATE_EXECUTING) & 1U; 
-    attr_TaskStatus0_read[TSK0_RETURN_MOTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_RETURN_MOTION_EXECUTING) & 1U; 
-    attr_TaskStatus0_read[TSK0_PROGRAM_RESET]                  = (int(attr_taskStatus0) >> TSK0_PROGRAM_RESET) & 1U; 
-    attr_TaskStatus0_read[TSK0_PENDING_AXES_STOP]              = (int(attr_taskStatus0) >> TSK0_PENDING_AXES_STOP) & 1U; 
-    attr_TaskStatus0_read[TSK0_FEEDHOLD_ACTIVE]                = (int(attr_taskStatus0) >> TSK0_FEEDHOLD_ACTIVE) & 1U; 
-    attr_TaskStatus0_read[TSK0_CALLBACK_HOLD_ACTIVE]           = (int(attr_taskStatus0) >> TSK0_CALLBACK_HOLD_ACTIVE) & 1U; 
-    attr_TaskStatus0_read[TSK0_CALLBACK_RESPONDING]            = (int(attr_taskStatus0) >> TSK0_CALLBACK_RESPONDING) & 1U; 
-    attr_TaskStatus0_read[TSK0_SPINDLE_ACTIVE]                 = (int(attr_taskStatus0) >> TSK0_SPINDLE_ACTIVE) & 1U; 
-    attr_TaskStatus0_read[TSK0_RETRACE]                        = (int(attr_taskStatus0) >> TSK0_RETRACE) & 1U; 
-    attr_TaskStatus0_read[TSK0_INTERRUPT_MOTION_ACTIVE]        = (int(attr_taskStatus0) >> TSK0_INTERRUPT_MOTION_ACTIVE) & 1U; 
-    attr_TaskStatus0_read[TSK0_JOYSTICK_ACTIVE]                = (int(attr_taskStatus0) >> TSK0_JOYSTICK_ACTIVE) & 1U; 
-    attr_TaskStatus0_read[TSK0_CORNER_ROUNDING]                = (int(attr_taskStatus0) >> TSK0_CORNER_ROUNDING) & 1U; 
-    attr_TaskStatus0_read[TSK0_JOYSTICK_LOW_SPEED_ACTIVE]      = (int(attr_taskStatus0) >> TSK0_JOYSTICK_LOW_SPEED_ACTIVE) & 1U; 
-    attr_TaskStatus0_read[TSK0_SYNC_FUNCTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_SYNC_FUNCTION_EXECUTING) & 1U; 
-    attr_TaskStatus0_read[TSK0_TASK_CONTROL_RESTRICTED]        = (int(attr_taskStatus0) >> TSK0_TASK_CONTROL_RESTRICTED) & 1U; 
+    attr_TaskStatus0_read[TSK0_PROGRAM_ASSOCIATED]             = (int(attr_taskStatus0) >> TSK0_PROGRAM_ASSOCIATED) & 1U; //ProgramAssociated
+    attr_TaskStatus0_read[TSK0_IMMEDIATE_EXECUTING]            = (int(attr_taskStatus0) >> TSK0_IMMEDIATE_EXECUTING) & 1U; //ImmediateExecuting
+    attr_TaskStatus0_read[TSK0_RETURN_MOTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_RETURN_MOTION_EXECUTING) & 1U; //ReturnMotionExecuting
+    attr_TaskStatus0_read[TSK0_PROGRAM_RESET]                  = (int(attr_taskStatus0) >> TSK0_PROGRAM_RESET) & 1U; //ProgramReset
+    attr_TaskStatus0_read[TSK0_PENDING_AXES_STOP]              = (int(attr_taskStatus0) >> TSK0_PENDING_AXES_STOP) & 1U; //PendingAxesStop
+    attr_TaskStatus0_read[TSK0_FEEDHOLD_ACTIVE]                = (int(attr_taskStatus0) >> TSK0_FEEDHOLD_ACTIVE) & 1U; //FeedholdActive
+    attr_TaskStatus0_read[TSK0_CALLBACK_HOLD_ACTIVE]           = (int(attr_taskStatus0) >> TSK0_CALLBACK_HOLD_ACTIVE) & 1U; //CallbackHoldActive
+    attr_TaskStatus0_read[TSK0_CALLBACK_RESPONDING]            = (int(attr_taskStatus0) >> TSK0_CALLBACK_RESPONDING) & 1U; //CallbackResponding
+    attr_TaskStatus0_read[TSK0_SPINDLE_ACTIVE]                 = (int(attr_taskStatus0) >> TSK0_SPINDLE_ACTIVE) & 1U; //SpindleActive
+    attr_TaskStatus0_read[TSK0_RETRACE]                        = (int(attr_taskStatus0) >> TSK0_RETRACE) & 1U; //Retrace
+    attr_TaskStatus0_read[TSK0_INTERRUPT_MOTION_ACTIVE]        = (int(attr_taskStatus0) >> TSK0_INTERRUPT_MOTION_ACTIVE) & 1U; //InterruptMotionActive
+    attr_TaskStatus0_read[TSK0_JOYSTICK_ACTIVE]                = (int(attr_taskStatus0) >> TSK0_JOYSTICK_ACTIVE) & 1U; //JoystickActive
+    attr_TaskStatus0_read[TSK0_CORNER_ROUNDING]                = (int(attr_taskStatus0) >> TSK0_CORNER_ROUNDING) & 1U; //CornerRounding
+    attr_TaskStatus0_read[TSK0_JOYSTICK_LOW_SPEED_ACTIVE]      = (int(attr_taskStatus0) >> TSK0_JOYSTICK_LOW_SPEED_ACTIVE) & 1U; //JoystickLowSpeedActive
+    attr_TaskStatus0_read[TSK0_SYNC_FUNCTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_SYNC_FUNCTION_EXECUTING) & 1U; //SyncFunctionExecuting
+    attr_TaskStatus0_read[TSK0_TASK_CONTROL_RESTRICTED]        = (int(attr_taskStatus0) >> TSK0_TASK_CONTROL_RESTRICTED) & 1U; //TaskControlRestricted
 
-    attr_TaskStatus1_read[TSK1_ASYNC_SMC_MOTION_ABORT_PENDING] = (int(attr_taskStatus1) >> TSK1_ASYNC_SMC_MOTION_ABORT_PENDING) & 1U; 
-    attr_TaskStatus1_read[TSK1_RETRACE_REQUESTED]              = (int(attr_taskStatus1) >> TSK1_RETRACE_REQUESTED) & 1U; 
-    attr_TaskStatus1_read[TSK1_MSO_CHANGE]                     = (int(attr_taskStatus1) >> TSK1_MSO_CHANGE) & 1U; 
-    attr_TaskStatus1_read[TSK1_SPINDLE_FEEDHOLD]               = (int(attr_taskStatus1) >> TSK1_SPINDLE_FEEDHOLD) & 1U; 
-    attr_TaskStatus1_read[TSK1_FEEDHOLD_AXES_STOPPED]          = (int(attr_taskStatus1) >> TSK1_FEEDHOLD_AXES_STOPPED) & 1U; 
-    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_ENABLING]         = (int(attr_taskStatus1) >> TSK1_CUTTER_RADIUS_ENABLING) & 1U; 
-    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_DISABLING]        = (int(attr_taskStatus1) >> TSK1_CUTTER_RADIUS_DISABLING) & 1U; 
-    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_POS]    = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_ENABLING_POS) & 1U; 
-    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_NEG]    = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_ENABLING_NEG) & 1U; 
-    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_DISABLING]       = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_DISABLING) & 1U; 
-    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_PENDING]       = (int(attr_taskStatus1) >> TSK1_ON_ERROR_HANDLER_PENDING) & 1U; 
-    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_EXECUTING]     = (int(attr_taskStatus1) >> TSK1_ON_ERROR_HANDLER_EXECUTING) & 1U; 
-    attr_TaskStatus1_read[TSK1_PROGRAM_STOP_PENDING]           = (int(attr_taskStatus1) >> TSK1_PROGRAM_STOP_PENDING) & 1U; 
-    attr_TaskStatus1_read[TSK1_SYNC_FUNCTION_PENDING]          = (int(attr_taskStatus1) >> TSK1_SYNC_FUNCTION_PENDING) & 1U; 
-    attr_TaskStatus1_read[TSK1_NO_MFO_FLOOR]                   = (int(attr_taskStatus1) >> TSK1_NO_MFO_FLOOR) & 1U; 
-    attr_TaskStatus1_read[TSK1_INTERRUPTED]                    = (int(attr_taskStatus1) >> TSK1_INTERRUPTED) & 1U; 
-    attr_TaskStatus1_read[TSK1_IFOV_BUFFER_HOLD]               = (int(attr_taskStatus1) >> TSK1_IFOV_BUFFER_HOLD) & 1U; 
+    attr_TaskStatus1_read[TSK1_ASYNC_SMC_MOTION_ABORT_PENDING] = (int(attr_taskStatus1) >> TSK1_ASYNC_SMC_MOTION_ABORT_PENDING) & 1U; //AsyncSmcMotionAbortPending
+    attr_TaskStatus1_read[TSK1_RETRACE_REQUESTED]              = (int(attr_taskStatus1) >> TSK1_RETRACE_REQUESTED) & 1U; //RetraceRequested
+    attr_TaskStatus1_read[TSK1_MSO_CHANGE]                     = (int(attr_taskStatus1) >> TSK1_MSO_CHANGE) & 1U; //MsoChange
+    attr_TaskStatus1_read[TSK1_SPINDLE_FEEDHOLD]               = (int(attr_taskStatus1) >> TSK1_SPINDLE_FEEDHOLD) & 1U; //SpindleFeedhold
+    attr_TaskStatus1_read[TSK1_FEEDHOLD_AXES_STOPPED]          = (int(attr_taskStatus1) >> TSK1_FEEDHOLD_AXES_STOPPED) & 1U; //FeedholdAxesStopped
+    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_ENABLING]         = (int(attr_taskStatus1) >> TSK1_CUTTER_RADIUS_ENABLING) & 1U; //CutterRadiusEnabling
+    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_DISABLING]        = (int(attr_taskStatus1) >> TSK1_CUTTER_RADIUS_DISABLING) & 1U; //CutterRadiusDisabling
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_POS]    = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_ENABLING_POS) & 1U; //CutterOffsetsEnablingPos
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_NEG]    = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_ENABLING_NEG) & 1U; //CutterOffsetsEnablingNeg
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_DISABLING]       = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_DISABLING) & 1U; //CutterOffsetsDisabling
+    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_PENDING]       = (int(attr_taskStatus1) >> TSK1_ON_ERROR_HANDLER_PENDING) & 1U; //OnErrorHandlerPending
+    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_EXECUTING]     = (int(attr_taskStatus1) >> TSK1_ON_ERROR_HANDLER_EXECUTING) & 1U; //OnErrorHandlerExecuting
+    attr_TaskStatus1_read[TSK1_PROGRAM_STOP_PENDING]           = (int(attr_taskStatus1) >> TSK1_PROGRAM_STOP_PENDING) & 1U; //ProgramStopPending
+    attr_TaskStatus1_read[TSK1_SYNC_FUNCTION_PENDING]          = (int(attr_taskStatus1) >> TSK1_SYNC_FUNCTION_PENDING) & 1U; //SyncFunctionPending
+    attr_TaskStatus1_read[TSK1_NO_MFO_FLOOR]                   = (int(attr_taskStatus1) >> TSK1_NO_MFO_FLOOR) & 1U; //NoMfoFloor
+    attr_TaskStatus1_read[TSK1_INTERRUPTED]                    = (int(attr_taskStatus1) >> TSK1_INTERRUPTED) & 1U; //Interrupted
+    attr_TaskStatus1_read[TSK1_IFOV_BUFFER_HOLD]               = (int(attr_taskStatus1) >> TSK1_IFOV_BUFFER_HOLD) & 1U; //IfovBufferHold
 
-    attr_TaskStatus2_read[TSK2_SCALING_ACTIVE]                 = (int(attr_taskStatus2) >> TSK2_SCALING_ACTIVE) & 1U; 
-    attr_TaskStatus2_read[TSK2_OFFSET_FIXTURE_ACTIVE]          = (int(attr_taskStatus2) >> TSK2_OFFSET_FIXTURE_ACTIVE) & 1U; 
-    attr_TaskStatus2_read[TSK2_PROFILE_ACTIVE]                 = (int(attr_taskStatus2) >> TSK2_PROFILE_ACTIVE) & 1U; 
-    attr_TaskStatus2_read[TSK2_MOTION_MODE_RAPID]              = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_RAPID) & 1U; 
-    attr_TaskStatus2_read[TSK2_MOTION_MODE_LINEAR]             = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_LINEAR) & 1U; 
-    attr_TaskStatus2_read[TSK2_MOTION_PVT]                     = (int(attr_taskStatus2) >> TSK2_MOTION_PVT) & 1U; 
-    attr_TaskStatus2_read[TSK2_MOTION_CONTINUOUS_ACTIVE]       = (int(attr_taskStatus2) >> TSK2_MOTION_CONTINUOUS_ACTIVE) & 1U; 
-    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_POS]      = (int(attr_taskStatus2) >> TSK2_CUTTER_OFFSETS_ACTIVE_POS) & 1U; 
-    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_LEFT]      = (int(attr_taskStatus2) >> TSK2_CUTTER_RADIUS_ACTIVE_LEFT) & 1U; 
-    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_RIGHT]     = (int(attr_taskStatus2) >> TSK2_CUTTER_RADIUS_ACTIVE_RIGHT) & 1U; 
-    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_NEG]      = (int(attr_taskStatus2) >> TSK2_CUTTER_OFFSETS_ACTIVE_NEG) & 1U; 
-    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_LEFT]           = (int(attr_taskStatus2) >> TSK2_NORMALCY_ACTIVE_LEFT) & 1U; 
-    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_RIGHT]          = (int(attr_taskStatus2) >> TSK2_NORMALCY_ACTIVE_RIGHT) & 1U; 
-    attr_TaskStatus2_read[TSK2_NORMALCY_ALIGNMENT]             = (int(attr_taskStatus2) >> TSK2_NORMALCY_ALIGNMENT) & 1U; 
-    attr_TaskStatus2_read[TSK2_MOTION_MODE_CW]                 = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_CW) & 1U; 
-    attr_TaskStatus2_read[TSK2_MOTION_MODE_CCW]                = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_CCW) & 1U; 
-    attr_TaskStatus2_read[TSK2_LIMIT_FEEDRATE_ACTIVE]          = (int(attr_taskStatus2) >> TSK2_LIMIT_FEEDRATE_ACTIVE) & 1U; 
-    attr_TaskStatus2_read[TSK2_LIMIT_MFO_ACTIVE]               = (int(attr_taskStatus2) >> TSK2_LIMIT_MFO_ACTIVE) & 1U; 
-    attr_TaskStatus2_read[TSK2_COORD1_PLANE1]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE1) & 1U; 
-    attr_TaskStatus2_read[TSK2_COORD1_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE2) & 1U; 
-    attr_TaskStatus2_read[TSK2_COORD1_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE3) & 1U; 
-    attr_TaskStatus2_read[TSK2_COORD2_PLANE1]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE1) & 1U; 
-    attr_TaskStatus2_read[TSK2_COORD2_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE2) & 1U; 
-    attr_TaskStatus2_read[TSK2_COORD2_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE3) & 1U; 
+    attr_TaskStatus2_read[TSK2_SCALING_ACTIVE]                 = (int(attr_taskStatus2) >> TSK2_SCALING_ACTIVE) & 1U; //ScalingActive
+    attr_TaskStatus2_read[TSK2_OFFSET_FIXTURE_ACTIVE]          = (int(attr_taskStatus2) >> TSK2_OFFSET_FIXTURE_ACTIVE) & 1U; //OffsetFixtureActive
+    attr_TaskStatus2_read[TSK2_PROFILE_ACTIVE]                 = (int(attr_taskStatus2) >> TSK2_PROFILE_ACTIVE) & 1U; //ProfileActive
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_RAPID]              = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_RAPID) & 1U; //MotionModeRapid
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_LINEAR]             = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_LINEAR) & 1U; //MotionModeLinear
+    attr_TaskStatus2_read[TSK2_MOTION_PVT]                     = (int(attr_taskStatus2) >> TSK2_MOTION_PVT) & 1U; //MotionPvt
+    attr_TaskStatus2_read[TSK2_MOTION_CONTINUOUS_ACTIVE]       = (int(attr_taskStatus2) >> TSK2_MOTION_CONTINUOUS_ACTIVE) & 1U; //MotionContinuousActive
+    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_POS]      = (int(attr_taskStatus2) >> TSK2_CUTTER_OFFSETS_ACTIVE_POS) & 1U; //CutterOffsetsActivePos
+    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_LEFT]      = (int(attr_taskStatus2) >> TSK2_CUTTER_RADIUS_ACTIVE_LEFT) & 1U; //CutterOffsetsActiveLeft
+    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_RIGHT]     = (int(attr_taskStatus2) >> TSK2_CUTTER_RADIUS_ACTIVE_RIGHT) & 1U; //CutterOffsetsActiveRight
+    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_NEG]      = (int(attr_taskStatus2) >> TSK2_CUTTER_OFFSETS_ACTIVE_NEG) & 1U; //CutterOffsetsActiveNeg
+    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_LEFT]           = (int(attr_taskStatus2) >> TSK2_NORMALCY_ACTIVE_LEFT) & 1U; //NormalcyActiveLeft
+    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_RIGHT]          = (int(attr_taskStatus2) >> TSK2_NORMALCY_ACTIVE_RIGHT) & 1U; //NormalcyActiveRight
+    attr_TaskStatus2_read[TSK2_NORMALCY_ALIGNMENT]             = (int(attr_taskStatus2) >> TSK2_NORMALCY_ALIGNMENT) & 1U; //NormalcyAlignment
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_CW]                 = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_CW) & 1U; //MotionModeCw
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_CCW]                = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_CCW) & 1U; //MotionModeCcw
+    attr_TaskStatus2_read[TSK2_LIMIT_FEEDRATE_ACTIVE]          = (int(attr_taskStatus2) >> TSK2_LIMIT_FEEDRATE_ACTIVE) & 1U; //LimitFeedrateActive
+    attr_TaskStatus2_read[TSK2_LIMIT_MFO_ACTIVE]               = (int(attr_taskStatus2) >> TSK2_LIMIT_MFO_ACTIVE) & 1U; //LimitMfoActive
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE1]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE1) & 1U; //Coord1Plane1
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE2) & 1U; //Coord1Plane2
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE3) & 1U; //Coord1Plane3
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE1]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE1) & 1U; //Coord2Plane1
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE2) & 1U; //Coord2Plane2
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE3) & 1U; //Coord2Plane3
 
     int32_t fileCount, filenameLength; 
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, NULL, &fileCount, &filenameLength); 
@@ -715,7 +698,6 @@ void A1Communication::readAxis_impl(unsigned axis)
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     readCommon(); 
 
-    // DEBUG_STREAM << "Reading axis " << axis << " data from controller" << std::endl; 
     try
     {
         m_pollManagerAxis[axis].poll(m_controller); 
@@ -829,15 +811,12 @@ void A1Communication::axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type
     switch (type)
 	{
 		case A1Axis_ns::RampTypeEnum::_LINEAR:
-            // DEBUG_STREAM << "Ramp type: LINEAR" << std::endl;
 			typeA1 = Automation1RampType_Linear;
 		    break;
 		case A1Axis_ns::RampTypeEnum::_S_CURVE:
-            // DEBUG_STREAM << "Ramp type: S_CURVE" << std::endl;
 			typeA1 = Automation1RampType_SCurve;
 		    break;
 		case A1Axis_ns::RampTypeEnum::_SINE:
-            // DEBUG_STREAM << "Ramp type: SINE" << std::endl;
 			typeA1 = Automation1RampType_Sine;
 		    break;
 	}
@@ -845,11 +824,9 @@ void A1Communication::axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type
 	switch (mode)
 	{
 		case A1Axis_ns::RampModeEnum::_RATE:
-            // DEBUG_STREAM << "Ramp mode: RATE" << std::endl;
 			modeA1 = Automation1RampMode_Rate;
 		    break;
 		case A1Axis_ns::RampModeEnum::_TIME:
-            // DEBUG_STREAM << "Ramp mode: TIME" << std::endl;
 			modeA1 = Automation1RampMode_Time;
 		    break;
 	}
@@ -874,11 +851,9 @@ void A1Communication::axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType)
     switch (homeType)
     {
         case A1Axis_ns::_HomeTypeEnum::_ASYNCHRONOUS: 
-            // DEBUG_STREAM << "Home type: ASYNCHRONOUS" << std::endl; 
             A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_HomeAsync, *m_controller, attr_Automation1TaskID_read, &axis, 1);
             break; 
         case A1Axis_ns::_HomeTypeEnum::_SYNCHRONOUS: 
-            // DEBUG_STREAM << "Home type: SYNCHRONOUS" << std::endl; 
             A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Home, *m_controller, attr_Automation1TaskID_read, &axis, 1);
             break; 
         default: 
@@ -894,19 +869,15 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
     switch (moveType)
     {
         case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
-            // DEBUG_STREAM << "Move type: ABSOLUTE" << std::endl; 
 			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveAbsolute, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_INCREMENTALMOVE:
-            // DEBUG_STREAM << "Move type: INCREMENTAL" << std::endl; 
 			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveIncremental, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
-            // DEBUG_STREAM << "Move type: LINEAR" << std::endl; 
 			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, velocity);
             break;
         case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
-            // DEBUG_STREAM << "Move type: RAPID" << std::endl; 
 			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         default: 

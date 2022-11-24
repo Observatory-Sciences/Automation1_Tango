@@ -142,7 +142,7 @@ void A1Controller::delete_device()
 	DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
 
-    std::cout << "Waiting for polling threads to exit..." << std::endl; 
+    std::cout << "Waiting for Controller polling thread to exit..." << std::endl; 
     m_stopPollFlag = true;
     m_pollThread.join();
 

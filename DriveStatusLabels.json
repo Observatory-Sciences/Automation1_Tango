@@ -1,0 +1,33 @@
+{
+    "DriveStatus" : {
+        "BooleanLabels" : [
+            "Enabled",
+            "CW EOT Limit",
+            "CCW EOT Limit",
+            "Home Limit",
+            "Marker Input",
+            "Hall A Input",
+            "Hall B Input",
+            "Hall C Input",
+            "Sine Encoder Error",
+            "Cosine Encoder Error",
+            "E-Stop Input",
+            "Brake Output",
+            "Galvo Power Correction",
+            "No Motor Supply",
+            "Current Clamp",
+            "Marker Latch",
+            "Power Limiting",
+            "Galvo Cal. Enabled",
+            "Autofocus Active",
+            "Program Flash",
+            "Servo Control",
+            "In Position",
+            "Move Active",
+            "Accel. Phase",
+            "Decel. Phase",
+            "Encoder Clipping",
+            "Dual Loop Active"
+        ]        
+    }
+}

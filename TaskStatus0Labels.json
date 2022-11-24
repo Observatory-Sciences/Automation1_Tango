@@ -1,0 +1,22 @@
+{
+    "TaskStatus0" : {
+        "BooleanLabels" : [
+            "Program Associated",
+            "Immediate Executing",
+            "Return Motion Executing",
+            "Program Reset",
+            "Pending Axes Stop",
+            "Feedhold Active",
+            "Callback Hold Active",
+            "Callback Responding",
+            "Spindle Active",
+            "Retrace",
+            "Interrupt Motion Active",
+            "Joystick Active",
+            "Corner Rounding",
+            "Joystick Low Speed Active",
+            "Sync Function Executing",
+            "Task Control Restricted"
+        ]
+    }
+}

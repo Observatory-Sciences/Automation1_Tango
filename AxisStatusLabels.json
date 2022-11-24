@@ -1,0 +1,31 @@
+{
+    "AxisStatus" : {
+        "BooleanLabels" : [
+            "Homed",
+            "Profiling",
+            "Wait Done",
+            "Command Valid",
+            "Homing",
+            "Enabling",
+            "Jog Generating",
+            "Jogging",
+            "Drive Pending",
+            "Drive Abort Pending",
+            "Trajectory Filtering",
+            "IFOV Enabled",
+            "Not Virtual",
+            "Cal. Enabled (1D)",
+            "Cal. Enabled (2D)",
+            "Camming Gearing Control",
+            "Joystick Control",
+            "Backlash Active",
+            "Gain Mapping Enabled",
+            "Motion Done",
+            "Motion Clamped",
+            "Gantry Aligned",
+            "Gantry Drive Control Realigning",
+            "Thermo Comp. Enabled"
+        ]
+        
+    }
+}

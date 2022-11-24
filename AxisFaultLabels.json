@@ -1,0 +1,32 @@
+{
+    "AxisFault" : {
+        "BooleanLabels" : [
+            "Position Error",
+            "Over Current",
+            "CW EOT Limit",
+            "CCW EOT Limit",
+            "CW Soft Limit",
+            "CCW Soft Limit",
+            "Amplifier Fault",
+            "FBK Input 0",
+            "FBK Input 1",
+            "Hall Fault",
+            "Max. Velocity",
+            "E-Stop Fault",
+            "Velocity Error",
+            "External Fault",
+            "Motor Temperature",
+            "Amplifier Temperature",
+            "Encoder Fault",
+            "Misalignment Fault",
+            "FBK Scaling Fault",
+            "MRK Search Fault",
+            "Safe Zone Fault",
+            "In Position Timeout",
+            "Voltage Clamp",
+            "Motor Supply",
+            "Internal Fault"
+        ]
+        
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "TaskStatus2" : {
+        "BooleanLabels" : [
+            "Scaling Active",
+            "Offset Fixture Active",
+            "Profile Active",
+            "Motion Mode Rapid",
+            "Motion Mode Linear",
+            "Motion PVT",
+            "Motion Continuous Active",
+            "Cutter Offsets Active (Positive)",
+            "Cutter Offsets Active (Left)",
+            "Cutter Offsets Active (Right)",
+            "Cutter Offsets Active (Negative)",
+            "Normalcy Active (Left)",
+            "Normalcy Active (Right)",
+            "Normalcy Alignment",
+            "Motion Mode CW",
+            "Motion Mode CCW",
+            "Limit Feedrate Active",
+            "Limit MFO Active",
+            "Co-ordinate 1, Plane 1",
+            "Co-ordinate 1, Plane 2",
+            "Co-ordinate 1, Plane 3",
+            "Co-ordinate 2, Plane 1",
+            "Co-ordinate 2, Plane 2",
+            "Co-ordinate 2, Plane 3"
+        ]
+    }
+}

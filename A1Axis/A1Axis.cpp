@@ -152,6 +152,7 @@ void A1Axis::delete_device()
 	DEBUG_STREAM << "A1Axis::delete_device() " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::delete_device) ENABLED START -----*/
 
+	std::cout << "Waiting for Axis polling thread to exit..." << std::endl; 
     m_stopPollFlag = true;
     m_pollThread.join();
 

@@ -51,12 +51,6 @@ A1Bridge::A1Bridge() :
 }
 
 
-A1Bridge::~A1Bridge()
-{
-    // std::cout << "A1Bridge desctructed" << std::endl; 
-}
-
-
 std::shared_ptr<A1Bridge> startInstance(bool simulation) 
 {
     std::lock_guard<std::mutex> instanceLock(instanceMutex);
