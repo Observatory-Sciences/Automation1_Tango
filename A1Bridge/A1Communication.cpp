@@ -245,8 +245,6 @@ void A1Communication::initialiseController_impl()
 
 void A1Communication::initialiseAxis_impl(unsigned axis)
 {
-    printf("Initialise axis %d\n", axis);
-
     // Add all relevant items to the axis polling manager
     if (m_pollManagerAxis[axis].size() > 0)
     {
@@ -295,8 +293,6 @@ void A1Communication::deleteController_impl()
 
 void A1Communication::deleteAxis_impl(unsigned axis)
 {
-    printf("Delete axis %d\n", axis);
-
     // Delete the axis if it is no longer required
     // (but keep the A1Communication instance alive)
     if(attr_axes[axis].attr_FirmwareVersion_read != nullptr)
