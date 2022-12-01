@@ -22,15 +22,16 @@ def get_args():
 
     parser.add_argument("server_name", type=str, help="Name for the Tango device server")
     parser.add_argument("device_name", type=str, help="Part of the device names. The " +\
-        "\"controller\" device name will be \"automation1/<device_name>/controller\"")
-    parser.add_argument("ip", type=str, help="IP address for the motor")
+        "\"controller\" device name will be \"<device_name>/controller\" and the \"axis\" " +\
+        "device names will be  \"<device_name>/axis<n>\", where n is the axis number")
+    parser.add_argument("ip", type=str, help="IP address for the Automation1 Controller")
     parser.add_argument("num_axes", type=int, help="The number of axes to set up on the controller")
     parser.add_argument("--simulation", help="Sets this device to be in simulation",
                         required=False, default=False, action='store_true')
-    parser.add_argument("--username", type=str, help="SSH username for the motor", required=False,
-                        default='')
-    parser.add_argument("--password", type=str, help="SSH password for the motor", required=False,
-                        default='')
+    parser.add_argument("--username", type=str, help="SSH username for connecting to the " +\
+        "Automation1 Controller", required=False, default='')
+    parser.add_argument("--password", type=str, help="SSH password for connecting to the " +\
+        "Automation1 Controller", required=False, default='')
 
     return parser.parse_args()
 
