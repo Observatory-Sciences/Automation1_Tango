@@ -44,7 +44,7 @@ def create_devices(server_name, device_name, ip_address, username, password, sim
     attributes from various JSON files before adding them to the appropriate attributes in the
     database.
     """
-    format_device_name = lambda d: "automation1/{0}/{1}".format(device_name, d)
+    format_device_name = lambda d: "{0}/{1}".format(device_name, d)
 
     # Controller
     device_server = "Automation1/{}".format(server_name)
