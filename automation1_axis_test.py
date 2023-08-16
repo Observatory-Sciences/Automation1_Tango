@@ -62,7 +62,8 @@ def test_move(automation1_proxy):
     stat, status = automation1_proxy.call("Status")
     assert stat == 0 and status == "Axis is jogging"
 
-    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT, "reach requested position")
+    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT,
+                           "reach requested position")
 
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
     assert stat == 0 and abs(pos - target_pos) < tol
@@ -95,7 +96,8 @@ def test_move_reverse(automation1_proxy):
     stat, status = automation1_proxy.call("Status")
     assert stat == 0 and status == "Axis is jogging"
 
-    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT, "reach requested position")
+    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT,
+                           "reach requested position")
 
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
     assert stat == 0 and abs(pos - target_pos) < tol
@@ -139,7 +141,6 @@ def test_free_run(automation1_proxy):
 
     time.sleep(0.5)
 
-    stat, home = automation1_proxy.call("get", "Homed")
     check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
     target_pos = 0.5
@@ -265,8 +266,6 @@ def test_move_from_limit(automation1_proxy):
     automation1_proxy.call("set", "PositionFeedback", target_pos)
     automation1_proxy.call("set", "VelocityFeedback", target_vel)
 
-    start_time = time.time()
-    timeout_time = start_time + MOVE_TIMEOUT
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
 
@@ -277,7 +276,8 @@ def test_move_from_limit(automation1_proxy):
 
     time.sleep(0.5)
 
-    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT, "reach position away from limit")
+    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT,
+                           "reach position away from limit")
 
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
     expected_pos = 51.0
@@ -310,7 +310,8 @@ def test_acknowledge_faults(automation1_proxy):
 
     time.sleep(0.5)
 
-    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT, "reach position away from limit")
+    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT,
+                           "reach position away from limit")
 
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
     expected_pos = 51.0
@@ -343,6 +344,12 @@ def test_disable(automation1_proxy):
 
 
 def check_cmd_with_timeout(proxy, condition, timeout, verb):
+    """
+    Helper function to read a value from the controller and check if it is true. If it is not, then
+    the function continues to loop over this until a timeout is reached or the value becomes true.
+    If the timeout is reached, then the motor is told to attempt to go home, the provided verb is
+    used to generate a useful error message and the test fails.
+    """
     timeout_time = time.time() + timeout
     _, complete = proxy.call("get", condition)
     while not complete:
