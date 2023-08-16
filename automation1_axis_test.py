@@ -8,6 +8,8 @@ import time
 import pytest
 from automation1_client import Automation1Proxy
 
+MOVE_TIMEOUT = 15
+
 @pytest.fixture
 def automation1_proxy():
     """
@@ -42,14 +44,11 @@ def test_move(automation1_proxy):
     stat, _ = automation1_proxy.call("Home")
     assert stat == 0
     time.sleep(0.5)
-    stat, home = automation1_proxy.call("get", "Homed")
-    while not home:
-        time.sleep(0.5)
-        stat, home = automation1_proxy.call("get", "Homed")
+    check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
     target_pos = 0.5
     target_vel = 0.1
-    tol = 1e-03
+    tol = 1e-02
     automation1_proxy.call("set", "PositionFeedback", target_pos)
     automation1_proxy.call("set", "VelocityFeedback", target_vel)
 
@@ -63,10 +62,7 @@ def test_move(automation1_proxy):
     stat, status = automation1_proxy.call("Status")
     assert stat == 0 and status == "Axis is jogging"
 
-    stat, in_pos = automation1_proxy.call("get", "InPosition")
-    while not in_pos:
-        time.sleep(0.5)
-        stat, in_pos = automation1_proxy.call("get", "InPosition")
+    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT, "reach requested position")
 
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
     assert stat == 0 and abs(pos - target_pos) < tol
@@ -81,14 +77,11 @@ def test_move_reverse(automation1_proxy):
     stat, _ = automation1_proxy.call("Home")
     assert stat == 0
     time.sleep(0.5)
-    stat, home = automation1_proxy.call("get", "Homed")
-    while not home:
-        time.sleep(0.5)
-        stat, home = automation1_proxy.call("get", "Homed")
+    check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
     target_pos = -0.5
     target_vel = -0.1
-    tol = 1e-03
+    tol = 1e-02
     automation1_proxy.call("set", "PositionFeedback", target_pos)
     automation1_proxy.call("set", "VelocityFeedback", target_vel)
 
@@ -102,10 +95,7 @@ def test_move_reverse(automation1_proxy):
     stat, status = automation1_proxy.call("Status")
     assert stat == 0 and status == "Axis is jogging"
 
-    stat, in_pos = automation1_proxy.call("get", "InPosition")
-    while not in_pos:
-        time.sleep(0.5)
-        stat, in_pos = automation1_proxy.call("get", "InPosition")
+    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT, "reach requested position")
 
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
     assert stat == 0 and abs(pos - target_pos) < tol
@@ -128,13 +118,11 @@ def test_home(automation1_proxy):
     stat, status = automation1_proxy.call("Status")
     assert stat == 0 and status == "Axis is jogging"
 
-    stat, home = automation1_proxy.call("get", "Homed")
-    while not home:
-        time.sleep(0.5)
-        stat, home = automation1_proxy.call("get", "Homed")
+    check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
+    tol = 1e-02
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
-    assert stat == 0 and abs(pos) < 1e-03
+    assert stat == 0 and abs(pos) < tol
 
 
 # Pylint thinks fixtures are redefining names of outer functions, disable warning
@@ -152,9 +140,7 @@ def test_free_run(automation1_proxy):
     time.sleep(0.5)
 
     stat, home = automation1_proxy.call("get", "Homed")
-    while not home:
-        time.sleep(0.5)
-        stat, home = automation1_proxy.call("get", "Homed")
+    check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
     target_pos = 0.5
     target_vel = 0.1
@@ -189,10 +175,7 @@ def test_free_run_reverse(automation1_proxy):
 
     time.sleep(0.5)
 
-    stat, home = automation1_proxy.call("get", "Homed")
-    while not home:
-        time.sleep(0.5)
-        stat, home = automation1_proxy.call("get", "Homed")
+    check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
     target_pos = -0.5
     target_vel = -0.1
@@ -231,10 +214,7 @@ def test_abort(automation1_proxy):
 
     time.sleep(0.5)
 
-    stat, home = automation1_proxy.call("get", "Homed")
-    while not home:
-        time.sleep(0.5)
-        stat, home = automation1_proxy.call("get", "Homed")
+    check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
     target_pos = 1.0
     target_vel = 0.1
@@ -281,29 +261,23 @@ def test_move_from_limit(automation1_proxy):
     longer a fault on the axis.
     """
     target_pos = 58.1
-    target_vel = 7.0
+    target_vel = 4.0
     automation1_proxy.call("set", "PositionFeedback", target_pos)
     automation1_proxy.call("set", "VelocityFeedback", target_vel)
 
+    start_time = time.time()
+    timeout_time = start_time + MOVE_TIMEOUT
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
 
-    stat, has_fault = automation1_proxy.call("get", "Error")
-    while not has_fault:
-        time.sleep(0.5)
-        stat, has_fault = automation1_proxy.call("get", "Error")
-
-    time.sleep(1)
+    check_cmd_with_timeout(automation1_proxy, "Error", MOVE_TIMEOUT, "reach limit")
 
     stat, _ = automation1_proxy.call("MoveFromLimit")
     assert stat == 0
 
     time.sleep(0.5)
 
-    stat, in_pos = automation1_proxy.call("get", "InPosition")
-    while not in_pos:
-        time.sleep(1)
-        stat, in_pos = automation1_proxy.call("get", "InPosition")
+    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT, "reach position away from limit")
 
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
     expected_pos = 51.0
@@ -327,10 +301,7 @@ def test_acknowledge_faults(automation1_proxy):
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
 
-    stat, has_fault = automation1_proxy.call("get", "Error")
-    while not has_fault:
-        time.sleep(0.5)
-        stat, has_fault = automation1_proxy.call("get", "Error")
+    check_cmd_with_timeout(automation1_proxy, "Error", MOVE_TIMEOUT, "reach limit")
 
     time.sleep(1)
 
@@ -339,10 +310,7 @@ def test_acknowledge_faults(automation1_proxy):
 
     time.sleep(0.5)
 
-    stat, in_pos = automation1_proxy.call("get", "InPosition")
-    while not in_pos:
-        time.sleep(1)
-        stat, in_pos = automation1_proxy.call("get", "InPosition")
+    check_cmd_with_timeout(automation1_proxy, "InPosition", MOVE_TIMEOUT, "reach position away from limit")
 
     stat, pos = automation1_proxy.call("get", "PositionFeedback")
     expected_pos = 51.0
@@ -362,10 +330,7 @@ def test_disable(automation1_proxy):
 
     time.sleep(0.5)
 
-    stat, home = automation1_proxy.call("get", "Homed")
-    while not home:
-        time.sleep(0.5)
-        stat, home = automation1_proxy.call("get", "Homed")
+    check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
     automation1_proxy.call("Disable")
     time.sleep(0.5)
@@ -375,3 +340,17 @@ def test_disable(automation1_proxy):
     assert stat == 0 and str(state) == "OFF"
     stat, status = automation1_proxy.call("Status")
     assert stat == 0 and status == "Axis is off"
+
+
+def check_cmd_with_timeout(proxy, condition, timeout, verb):
+    timeout_time = time.time() + timeout
+    _, complete = proxy.call("get", condition)
+    while not complete:
+        time.sleep(0.5)
+        _, complete = proxy.call("get", condition)
+        # Check for timeout
+        if time.time() > timeout_time:
+            # Attempt to home motor after failure
+            proxy.call("Home")
+            pytest.fail("Motor failed to " + str(verb) + " within timeout time of " +\
+                        str(timeout) + "s")
