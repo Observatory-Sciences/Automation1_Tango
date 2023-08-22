@@ -1,4 +1,5 @@
 #include "A1Communication.h"
+#include "A1Defines.h"
 #include "tango.h"
 
 
@@ -506,6 +507,8 @@ void A1Communication::readCommon()
         attr_axes[axis].attr_AxisStatus_read[AX_THERMO_COMP_ENABLED]             = (int(attr_axes[axis].axisStatus) >> 27) & 1U; //ThermoCompEnabled
 
         attr_axes[axis].attr_Homed_read = attr_axes[axis].attr_AxisStatus_read[AX_HOMED];
+        // Negated since the axis status item is "NOT_VIRTUAL"
+        attr_axes[axis].attr_VirtualAxis_read = !(attr_axes[axis].attr_AxisStatus_read[AX_NOT_VIRTUAL]);
 
         // Drive status 
         attr_axes[axis].attr_DriveStatus_read[DRV_ENABLED]                      = (int(attr_axes[axis].driveStatus) >> 0 ) & 1U; //Enabled

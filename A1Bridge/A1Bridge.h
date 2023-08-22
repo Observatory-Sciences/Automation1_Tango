@@ -57,6 +57,7 @@ typedef struct A1AxisAttributes
     A1Axis_ns::RampTypeEnum	                attr_RampType_read;
     A1Axis_ns::RampModeEnum	                attr_RampMode_read;
 	Tango::DevDouble	                    attr_RampValue_read;
+        Tango::DevBoolean	                    attr_VirtualAxis_read;
     Tango::DevDouble                        axisStatus; 
 	Tango::DevBoolean	                    attr_AxisStatus_read[24];
     Tango::DevDouble                        axisFault; 

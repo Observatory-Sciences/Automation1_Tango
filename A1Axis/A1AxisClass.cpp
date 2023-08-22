@@ -463,6 +463,7 @@ void A1AxisClass::write_class_property()
 	Tango::DbData	data;
 	std::string	classname = get_name();
 	std::string	header;
+	std::string::size_type	start, end;
 
 	//	Put title
 	Tango::DbDatum	title("ProjectTitle");
@@ -1177,6 +1178,30 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	rampvalue->set_disp_level(Tango::OPERATOR);
 	//	Not Memorized
 	att_list.push_back(rampvalue);
+
+	//	Attribute : VirtualAxis
+	VirtualAxisAttrib	*virtualaxis = new VirtualAxisAttrib();
+	Tango::UserDefaultAttrProp	virtualaxis_prop;
+	//	description	not set for VirtualAxis
+	//	label	not set for VirtualAxis
+	//	unit	not set for VirtualAxis
+	//	standard_unit	not set for VirtualAxis
+	//	display_unit	not set for VirtualAxis
+	//	format	not set for VirtualAxis
+	//	max_value	not set for VirtualAxis
+	//	min_value	not set for VirtualAxis
+	//	max_alarm	not set for VirtualAxis
+	//	min_alarm	not set for VirtualAxis
+	//	max_warning	not set for VirtualAxis
+	//	min_warning	not set for VirtualAxis
+	//	delta_t	not set for VirtualAxis
+	//	delta_val	not set for VirtualAxis
+	
+	virtualaxis->set_default_properties(virtualaxis_prop);
+	//	Not Polled
+	virtualaxis->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	att_list.push_back(virtualaxis);
 
 	//	Attribute : AxisStatus
 	AxisStatusAttrib	*axisstatus = new AxisStatusAttrib();

@@ -401,6 +401,19 @@ public:
 		{return (static_cast<A1Axis *>(dev))->is_RampValue_allowed(ty);}
 };
 
+//	Attribute VirtualAxis class definition
+class VirtualAxisAttrib: public Tango::Attr
+{
+public:
+	VirtualAxisAttrib():Attr("VirtualAxis",
+			Tango::DEV_BOOLEAN, Tango::READ) {};
+	~VirtualAxisAttrib() {};
+	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
+		{(static_cast<A1Axis *>(dev))->read_VirtualAxis(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Axis *>(dev))->is_VirtualAxis_allowed(ty);}
+};
+
 //	Attribute AxisStatus class definition
 class AxisStatusAttrib: public Tango::SpectrumAttr
 {

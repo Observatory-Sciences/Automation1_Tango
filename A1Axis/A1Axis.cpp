@@ -34,6 +34,7 @@
 //=============================================================================
 
 
+#include "A1Bridge.h"
 #include <A1Axis.h>
 #include <A1AxisClass.h>
 
@@ -94,6 +95,7 @@
 //  RampType              |  Tango::DevEnum	Scalar
 //  RampMode              |  Tango::DevEnum	Scalar
 //  RampValue             |  Tango::DevDouble	Scalar
+//  VirtualAxis           |  Tango::DevBoolean	Scalar
 //  AxisStatus            |  Tango::DevBoolean	Spectrum  ( max = 24)
 //  AxisFault             |  Tango::DevBoolean	Spectrum  ( max = 25)
 //  DriveStatus           |  Tango::DevBoolean	Spectrum  ( max = 27)
@@ -200,6 +202,7 @@ void A1Axis::delete_device()
 	delete[] attr_RampType_read;
 	delete[] attr_RampMode_read;
 	delete[] attr_RampValue_read;
+	delete[] attr_VirtualAxis_read;
 	delete[] attr_AxisStatus_read;
 	delete[] attr_AxisFault_read;
 	delete[] attr_DriveStatus_read;
@@ -248,6 +251,7 @@ void A1Axis::init_device()
 	attr_RampType_read = new RampTypeEnum[1];
 	attr_RampMode_read = new RampModeEnum[1];
 	attr_RampValue_read = new Tango::DevDouble[1];
+	attr_VirtualAxis_read = new Tango::DevBoolean[1];
 	attr_AxisStatus_read = new Tango::DevBoolean[24];
 	attr_AxisFault_read = new Tango::DevBoolean[25];
 	attr_DriveStatus_read = new Tango::DevBoolean[27];
@@ -289,6 +293,7 @@ void A1Axis::init_device()
     attr_RampMode_write = _RATE;
 	attr_RampValue_read[0] = 0;
     attr_RampValue_write = 0;
+	attr_VirtualAxis_read[0] = 0;
 	for (int i = 0; i < 24; i++) 
 	{
 		attr_AxisStatus_read[i] = false;
@@ -382,7 +387,7 @@ void A1Axis::check_mandatory_property(Tango::DbDatum &class_prop, Tango::DbDatum
 	if (class_prop.is_empty() && dev_prop.is_empty())
 	{
 		TangoSys_OMemStream	tms;
-		tms << std::endl <<"Property \'" << dev_prop.name;
+		tms << std::endl << "Property \'" << dev_prop.name;
 		if (Tango::Util::instance()->_UseDb==true)
 			tms << "\' is mandatory but not defined in database";
 		else
@@ -468,6 +473,7 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 	*attr_Homed_read                = A1Bridge_ns::getInstance()->attr_axes[axis].attr_Homed_read;
     *attr_Error_read                = A1Bridge_ns::getInstance()->attr_axes[axis].attr_Error_read;
     *attr_LastMoveDuration_read     = A1Bridge_ns::getInstance()->attr_axes[axis].attr_LastMoveDuration_read;
+	*attr_VirtualAxis_read			= A1Bridge_ns::getInstance()->attr_axes[axis].attr_VirtualAxis_read;
     
     Tango::string_free(*attr_FirmwareVersion_read);
     *attr_FirmwareVersion_read      = Tango::string_dup(A1Bridge_ns::getInstance()->attr_axes[axis].attr_FirmwareVersion_read); 
@@ -1115,6 +1121,24 @@ void A1Axis::write_RampValue(Tango::WAttribute &attr)
 	
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampValue
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute VirtualAxis related method
+ *	Description: 
+ *
+ *	Data type:	Tango::DevBoolean
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::read_VirtualAxis(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::read_VirtualAxis(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Axis::read_VirtualAxis) ENABLED START -----*/
+	//	Set the attribute value
+	attr.set_value(attr_VirtualAxis_read);
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_VirtualAxis
 }
 //--------------------------------------------------------
 /**

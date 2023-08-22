@@ -260,7 +260,15 @@ def test_move_from_limit(automation1_proxy):
     Tests the MoveFromLimit command by moving the axis to its soft limit, then calling
     MoveFromLimit to check that the axis moves back a few mm from its limit and that there is no
     longer a fault on the axis.
+
+    Test is skipped for virtual axes.
     """
+
+    _, virtual = automation1_proxy.call("get", "VirtualAxis")
+
+    if virtual:
+        pytest.skip("Cannot run limits tests on virtual axes")
+
     target_pos = 58.1
     target_vel = 4.0
     automation1_proxy.call("set", "PositionFeedback", target_pos)
@@ -292,7 +300,15 @@ def test_acknowledge_faults(automation1_proxy):
     In the case of an axis hitting its limit, the AcknowledgeFaults command should do much the same
     as the  MoveFromLimit command. Therefore, this test does the same as the test_move_from_limit()
     function but with the AcknowledgeFaults command used in place of MoveFromLimit.
+
+    Test is skipped for virtual axes.
     """
+
+    _, virtual = automation1_proxy.call("get", "VirtualAxis")
+
+    if virtual:
+        pytest.skip("Cannot run limits tests on virtual axes")
+
     target_pos = 58.1
     target_vel = 4.0
     automation1_proxy.call("set", "PositionFeedback", target_pos)

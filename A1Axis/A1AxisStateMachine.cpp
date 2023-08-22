@@ -480,6 +480,22 @@ bool A1Axis::is_RampValue_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
+ *	Method      : A1Axis::is_VirtualAxis_allowed()
+ *	Description : Execution allowed for VirtualAxis attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_VirtualAxis_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+
+	//	Not any excluded states for VirtualAxis attribute in read access.
+	/*----- PROTECTED REGION ID(A1Axis::VirtualAxisStateAllowed_READ) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::VirtualAxisStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
  *	Method      : A1Axis::is_AxisStatus_allowed()
  *	Description : Execution allowed for AxisStatus attribute
  */

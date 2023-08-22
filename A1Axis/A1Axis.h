@@ -113,6 +113,7 @@ public:
 	RampTypeEnum	*attr_RampType_read;
 	RampModeEnum	*attr_RampMode_read;
 	Tango::DevDouble	*attr_RampValue_read;
+	Tango::DevBoolean	*attr_VirtualAxis_read;
 	Tango::DevBoolean	*attr_AxisStatus_read;
 	Tango::DevBoolean	*attr_AxisFault_read;
 	Tango::DevBoolean	*attr_DriveStatus_read;
@@ -420,6 +421,15 @@ public:
 	virtual void read_RampValue(Tango::Attribute &attr);
 	virtual void write_RampValue(Tango::WAttribute &attr);
 	virtual bool is_RampValue_allowed(Tango::AttReqType type);
+/**
+ *	Attribute VirtualAxis related methods
+ *	Description: 
+ *
+ *	Data type:	Tango::DevBoolean
+ *	Attr type:	Scalar
+ */
+	virtual void read_VirtualAxis(Tango::Attribute &attr);
+	virtual bool is_VirtualAxis_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisStatus related methods
  *	Description: Bitfield representing the status of this axis.
