@@ -1,6 +1,8 @@
 #include "A1Bridge.h"
 #include "A1Communication.h"
 #include "A1Simulation.h"
+#include "log4tango.h"
+#include <mutex>
 
 
 namespace A1Bridge_ns {
@@ -68,6 +70,11 @@ std::shared_ptr<A1Bridge> startInstance(bool simulation)
         }
     }
 
+    if(instance.get() == nullptr)
+    {
+        std::cout << "Failed to create instance (simulation = " << simulation << ")" << std::endl;
+    }
+
     return instance;
 }
 
@@ -130,21 +137,25 @@ void A1Bridge::disconnect()
 
 void A1Bridge::reconnect()
 {
-    this->disconnect();
-    this->connect(m_username, m_password, m_ip);
+    this->reconnect_impl();
 }
 
 
-void A1Bridge::checkConnection()
+std::unique_lock<std::recursive_mutex> A1Bridge::checkConnection()
 {
-    if (this->isConnected())
+    auto guard = holdConnection_impl();
+    bool connected = this->isConnected();
+    if (connected)
     {
         this->checkConnection_impl();
     }
     else
     {
+        std::cout << "Attempting reconnect..." << std::endl;
         this->reconnect();
     }
+
+    return std::move(guard);
 }
 
 

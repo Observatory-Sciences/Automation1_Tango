@@ -32,8 +32,8 @@
 //=============================================================================
 
 #include <tango.h>
-#include <A1AxisClass.h>
 #include <A1ControllerClass.h>
+#include <A1AxisClass.h>
 
 /**
  *	Create Class singletons and store them in DServer object.
@@ -41,6 +41,6 @@
 
 void Tango::DServer::class_factory()
 {
-	add_class(A1Axis_ns::A1AxisClass::init("A1Axis"));
 	add_class(A1Controller_ns::A1ControllerClass::init("A1Controller"));
+	add_class(A1Axis_ns::A1AxisClass::init("A1Axis"));
 }

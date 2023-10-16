@@ -1,6 +1,10 @@
 #include "A1Communication.h"
 #include "A1Defines.h"
+#include "log4tango.h"
 #include "tango.h"
+#include <mutex>
+#include <thread>
+
 
 
 namespace A1Bridge_ns {
@@ -196,6 +200,7 @@ A1Communication::~A1Communication()
 
 void A1Communication::initialiseCommonPolling()
 {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     // Add all relevant items to the common polling manager
 
     // If already done, return early 
@@ -216,6 +221,8 @@ void A1Communication::initialiseCommonPolling()
 
 void A1Communication::initialiseController_impl()
 {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+
     // Add all relevant items to the controller polling manager
     if (m_pollManagerController.size() > 0)
     {
@@ -246,6 +253,7 @@ void A1Communication::initialiseController_impl()
 
 void A1Communication::initialiseAxis_impl(unsigned axis)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     // Add all relevant items to the axis polling manager
     if (m_pollManagerAxis[axis].size() > 0)
     {
@@ -277,6 +285,7 @@ void A1Communication::initialiseAxis_impl(unsigned axis)
 
 void A1Communication::deleteController_impl()
 {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     // Delete the controller if it is no longer required
     // (but keep the A1Communication instance alive)
     delete[] attr_APIVersion_read;
@@ -295,6 +304,7 @@ void A1Communication::deleteController_impl()
 
 void A1Communication::deleteAxis_impl(unsigned axis)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     // Delete the axis if it is no longer required
     // (but keep the A1Communication instance alive)
     if(attr_axes[axis].attr_FirmwareVersion_read != nullptr)
@@ -319,7 +329,7 @@ bool A1Communication::isConnected()
     // Prevent reading of connection state if another thread is communicating with device
     // This is so that the other thread has the opportunity to update the connection state 
     // before this thread tries to communicate. 
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
     return m_connected; 
 }
 
@@ -332,7 +342,7 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
     {
         return; 
     }
-    
+
     int interval = 5 * std::pow(2, m_connectionRetries); 
     if (!m_lastReconnectionAttempt.checkAndUpdate(std::chrono::milliseconds(interval)))
     {
@@ -410,6 +420,11 @@ void A1Communication::checkConnection_impl()
     }
 }
 
+std::unique_lock<std::recursive_mutex> A1Communication::holdConnection_impl()
+{
+    return std::unique_lock<std::recursive_mutex>(m_connectionLock);
+}
+
 
 void A1Communication::onConnectController()
 {
@@ -453,6 +468,11 @@ void A1Communication::disconnect_impl()
     }
 }
 
+void A1Communication::reconnect_impl()
+{
+    this->disconnect();
+    this->connect(m_username, m_password, m_ip);
+}
 
 void A1Communication::readCommon()
 {
@@ -473,6 +493,7 @@ void A1Communication::readCommon()
     {
         if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
         {
+            std::cout << "Communication error in readCommon(): " << e.errors.get_buffer()->desc << std::endl;
             this->disconnect();
         }
         throw(e);
@@ -588,6 +609,7 @@ void A1Communication::readController_impl()
     {
         if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
         {
+            std::cout << "Communication error in readController()" << std::endl;
             this->disconnect();
         }
         throw(e);
@@ -709,6 +731,7 @@ void A1Communication::readAxis_impl(unsigned axis)
     {
         if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
         {
+            std::cout << "Communication error in readAxis()" << std::endl;
             this->disconnect();
         }
         throw(e);

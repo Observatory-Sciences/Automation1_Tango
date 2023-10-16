@@ -438,7 +438,7 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 
     std::lock_guard<std::recursive_mutex> hw_lock(m_readLock); 
 
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 
     try
     {
@@ -1223,7 +1223,7 @@ void A1Axis::abort()
 	DEBUG_STREAM << "A1Axis::Abort()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::abort) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_Abort(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::abort
@@ -1240,7 +1240,7 @@ void A1Axis::home()
 	DEBUG_STREAM << "A1Axis::Home()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::home) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
     A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
     A1Bridge_ns::getInstance()->axis_Home(this->axis, attr_HomeType_write); 
 	
@@ -1258,7 +1258,7 @@ void A1Axis::move()
 	DEBUG_STREAM << "A1Axis::Move()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::move) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
     A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
 	A1Bridge_ns::getInstance()->axis_Move(this->axis, attr_MoveType_write, attr_PositionFeedback_write, attr_VelocityFeedback_write); 
 	
@@ -1276,7 +1276,7 @@ void A1Axis::enable()
 	DEBUG_STREAM << "A1Axis::Enable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::enable) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_Enable(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::enable
@@ -1293,7 +1293,7 @@ void A1Axis::disable()
 	DEBUG_STREAM << "A1Axis::Disable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::disable) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_Disable(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::disable
@@ -1310,7 +1310,7 @@ void A1Axis::brake_on()
 	DEBUG_STREAM << "A1Axis::BrakeOn()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::brake_on) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_BrakeOn(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::brake_on
@@ -1327,7 +1327,7 @@ void A1Axis::brake_off()
 	DEBUG_STREAM << "A1Axis::BrakeOff()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::brake_off) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_BrakeOff(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::brake_off
@@ -1344,7 +1344,7 @@ void A1Axis::move_from_limit()
 	DEBUG_STREAM << "A1Axis::MoveFromLimit()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::move_from_limit) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_MoveFromLimit(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::move_from_limit
@@ -1361,7 +1361,7 @@ void A1Axis::free_run()
 	DEBUG_STREAM << "A1Axis::FreeRun()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::free_run) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_FreeRun(this->axis, attr_VelocityFeedback_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::free_run
@@ -1378,7 +1378,7 @@ void A1Axis::free_run_stop()
 	DEBUG_STREAM << "A1Axis::FreeRunStop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::free_run_stop) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_FreeRunStop(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::free_run_stop
@@ -1395,7 +1395,7 @@ void A1Axis::throw_all_faults()
 	DEBUG_STREAM << "A1Axis::ThrowAllFaults()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::throw_all_faults) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->axis_ThrowAllFaults(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::throw_all_faults
@@ -1412,7 +1412,7 @@ void A1Axis::acknowledge_faults()
 	DEBUG_STREAM << "A1Axis::AcknowledgeFaults()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::acknowledge_faults) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 	A1Bridge_ns::getInstance()->axis_AcknowledgeFaults(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::acknowledge_faults
@@ -1448,6 +1448,8 @@ void A1Axis::pollThread()
         catch (Tango::DevFailed &e)
         {
             DEBUG_STREAM << "Axis " << this->axis << " polling thread read failed" << std::endl; 
+			DEBUG_STREAM << "Exception was '" << e.errors.get_buffer()->desc << "'" << std::endl; 
+			throw(e);
         }
     }
 }

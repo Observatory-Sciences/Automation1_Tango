@@ -262,6 +262,8 @@ void A1Controller::init_device()
     } 
     catch (Tango::DevFailed &e)
     {
+		DEBUG_STREAM << "Initial connect failed" << std::endl; 
+		DEBUG_STREAM << "Exception was '" << e.errors.get_buffer()->desc << "'" << std::endl;
         // do nothing - we will try to reconnect later
     }
 
@@ -430,7 +432,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     
     std::lock_guard<std::recursive_mutex> hw_lock(m_readLock); 
 
-    A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
 
     try
     {
@@ -859,7 +861,7 @@ void A1Controller::reset()
 	DEBUG_STREAM << "A1Controller::Reset()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::reset) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Reset(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::reset
@@ -876,7 +878,7 @@ void A1Controller::start()
 	DEBUG_STREAM << "A1Controller::Start()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::start) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Start(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::start
@@ -893,7 +895,7 @@ void A1Controller::stop()
 	DEBUG_STREAM << "A1Controller::Stop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::stop) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Stop(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::stop
@@ -910,7 +912,7 @@ void A1Controller::enable()
 	DEBUG_STREAM << "A1Controller::Enable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::enable) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Enable(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::enable
@@ -927,7 +929,7 @@ void A1Controller::disable()
 	DEBUG_STREAM << "A1Controller::Disable()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::disable) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_Disable(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::disable
@@ -944,7 +946,7 @@ void A1Controller::clear_errors()
 	DEBUG_STREAM << "A1Controller::ClearErrors()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::clear_errors) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_ClearErrors(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::clear_errors
@@ -964,7 +966,7 @@ void A1Controller::aero_script_program_run()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramRun()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_run) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramRun(attr_AeroScriptFilePath_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_run
@@ -984,7 +986,7 @@ void A1Controller::aero_script_program_load()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramLoad()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_load) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramLoad(attr_AeroScriptFilePath_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_load
@@ -1003,7 +1005,7 @@ void A1Controller::aero_script_program_start()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramStart()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_start) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramStart(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_start
@@ -1022,7 +1024,7 @@ void A1Controller::aero_script_program_stop()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramStop()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_stop) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramStop(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_stop
@@ -1041,7 +1043,7 @@ void A1Controller::aero_script_program_pause()
 	DEBUG_STREAM << "A1Controller::AeroScriptProgramPause()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_pause) ENABLED START -----*/
 	
-    A1Bridge_ns::getInstance()->checkConnection(); 
+    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_AeroScriptProgramPause(); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_pause
@@ -1059,7 +1061,7 @@ void A1Controller::command_execute(Tango::DevString argin)
 	DEBUG_STREAM << "A1Controller::CommandExecute()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Controller::command_execute) ENABLED START -----*/
 	
-	A1Bridge_ns::getInstance()->checkConnection(); 
+	auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
 	A1Bridge_ns::getInstance()->controller_CommandExecute(argin);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Controller::command_execute

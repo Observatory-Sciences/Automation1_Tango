@@ -112,6 +112,7 @@ LFLAGS_USR+= -lautomation1c -lautomation1compiler
 # -DACE_HAS_EXCEPTIONS -D__ACE_INLINE__ for ACE
 #
 #CXXFLAGS_USR+= -Wall
+CXXFLAGS_USR = -g
 
 
 #=============================================================================
@@ -189,13 +190,13 @@ A1BRIDGE_INCLUDES = \
 # 	cp $(A1BRIDGE_HOME)/Automation1/Lib/libautomation1compiler.so /usr/local/lib 
 
 $(OBJDIR)/A1Bridge.o:  $(A1BRIDGE_HOME)/A1Bridge.cpp $(A1BRIDGE_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Bridge.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Bridge.o
 $(OBJDIR)/A1Communication.o:  $(A1BRIDGE_HOME)/A1Communication.cpp $(A1BRIDGE_INCLUDES) # libautomation1c.so libautomation1compiler.so
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Communication.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Communication.o
 $(OBJDIR)/A1Simulation.o:  $(A1BRIDGE_HOME)/A1Simulation.cpp $(A1BRIDGE_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Simulation.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Simulation.o
 $(OBJDIR)/A1SimulatedAxis.o:  $(A1BRIDGE_HOME)/A1SimulatedAxis.cpp $(A1BRIDGE_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1SimulatedAxis.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1SimulatedAxis.o
 
 #------------  Object files dependencies for A1Axis class  ------------
 A1AXIS_INCLUDES = \
@@ -205,11 +206,11 @@ A1AXIS_INCLUDES = \
 		A1Bridge/A1Bridge.h
 
 $(OBJDIR)/A1Axis.o:  $(A1AXIS_HOME)/A1Axis.cpp $(A1AXIS_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Axis.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Axis.o
 $(OBJDIR)/A1AxisClass.o:  $(A1AXIS_HOME)/A1AxisClass.cpp $(A1AXIS_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1AxisClass.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1AxisClass.o
 $(OBJDIR)/A1AxisStateMachine.o:  $(A1AXIS_HOME)/A1AxisStateMachine.cpp $(A1AXIS_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1AxisStateMachine.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1AxisStateMachine.o
 
 #------------  Object files dependencies for A1Controller class  ------------
 A1CONTROLLER_INCLUDES = \
@@ -219,10 +220,10 @@ A1CONTROLLER_INCLUDES = \
 		A1Bridge/A1Bridge.h
 
 $(OBJDIR)/A1Controller.o:  $(A1CONTROLLER_HOME)/A1Controller.cpp $(A1CONTROLLER_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1Controller.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Controller.o
 $(OBJDIR)/A1ControllerClass.o:  $(A1CONTROLLER_HOME)/A1ControllerClass.cpp $(A1CONTROLLER_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1ControllerClass.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1ControllerClass.o
 $(OBJDIR)/A1ControllerStateMachine.o:  $(A1CONTROLLER_HOME)/A1ControllerStateMachine.cpp $(A1CONTROLLER_INCLUDES)
-	$(CXX) $(CXXFLAGS) -c $< -o $(OBJDIR)/A1ControllerStateMachine.o
+	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1ControllerStateMachine.o
 
 

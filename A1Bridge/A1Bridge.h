@@ -88,7 +88,9 @@ class A1Bridge
     // implementation of connection
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip) {}; 
     virtual void disconnect_impl() {}; 
+    virtual void reconnect_impl() {};
     virtual void checkConnection_impl() {}; 
+    virtual std::unique_lock<std::recursive_mutex> holdConnection_impl() { return std::unique_lock<std::recursive_mutex>(); };
 
     // initialise an axis or controller
     virtual void initialiseController_impl() {};
@@ -131,7 +133,7 @@ class A1Bridge
     void connect(const std::string& username, const std::string& password, const std::string& ip); 
     void disconnect(); 
     void reconnect(); 
-    void checkConnection(); 
+    std::unique_lock<std::recursive_mutex> checkConnection(); 
 
     void initialiseController(); 
     void initialiseAxis(unsigned axis); 
@@ -217,6 +219,7 @@ class A1Bridge
 
 
 static std::mutex instanceMutex;
+static std::recursive_mutex connectionMutex;
 static std::shared_ptr<A1Bridge> instance = nullptr; 
 std::shared_ptr<A1Bridge> startInstance(bool simulation); 
 std::shared_ptr<A1Bridge> getInstance();

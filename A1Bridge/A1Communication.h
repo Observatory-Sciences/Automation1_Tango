@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <iostream>
+#include <mutex>
 #include <string>
 #include <variant>
 #include <map>
@@ -47,6 +48,7 @@ void throwWithLastA1Error_origin(const std::string& reason, const std::string& o
     { \
         if (Automation1_IsControllerCommunicationError(Automation1_GetLastError())) \
         { \
+            std::cout << "Call to "#A1F" failed with error: " << e.errors.get_buffer()->desc << std::endl; \
             this->disconnect(); \
         } \
         throw(e); \
@@ -142,7 +144,9 @@ class A1Communication: public A1Bridge
 
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
+    virtual void reconnect_impl();
     virtual void checkConnection_impl(); 
+    virtual std::unique_lock<std::recursive_mutex> holdConnection_impl();
     virtual bool isConnected(); 
 
     // Methods to set up controller and axis when connection is initiated
