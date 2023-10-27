@@ -1,3 +1,7 @@
+///
+/// Copyright (c) Aerotech, Inc.
+///
+
 #ifndef AUTOMATION1ENUM_H_INCLUDED
 #define AUTOMATION1ENUM_H_INCLUDED
 
@@ -15,281 +19,6 @@
 extern "C"
 {
 #endif
-
-/// @brief Represents a drive supplied item that can be retrieved from the Automation1 controller.
-typedef enum Automation1DriveItem
-{
-	/// @brief The "Current Feedback" drive based data item.
-	Automation1DriveItem_CurrentFeedback = 7,
-	/// @brief The "Current Command" drive based data item.
-	Automation1DriveItem_CurrentCommand = 8,
-	/// @brief The "Analog Input 0" drive based data item.
-	Automation1DriveItem_AnalogInput0 = 10,
-	/// @brief The "Analog Input 1" drive based data item.
-	Automation1DriveItem_AnalogInput1 = 11,
-	/// @brief The "Phase A Current Feedback" drive based data item.
-	Automation1DriveItem_PhaseACurrentFeedback = 19,
-	/// @brief The "Phase B Current Feedback" drive based data item.
-	Automation1DriveItem_PhaseBCurrentFeedback = 20,
-	/// @brief The "Encoder Sine" drive based data item.
-	Automation1DriveItem_EncoderSine = 21,
-	/// @brief The "Encoder Cosine" drive based data item.
-	Automation1DriveItem_EncoderCosine = 22,
-	/// @brief The "Analog Input 2" drive based data item.
-	Automation1DriveItem_AnalogInput2 = 23,
-	/// @brief The "Analog Input 3" drive based data item.
-	Automation1DriveItem_AnalogInput3 = 24,
-	/// @brief The "Loop Transmission Before" drive based data item.
-	Automation1DriveItem_LoopTransmissionBefore = 25,
-	/// @brief The "Loop Transmission After" drive based data item.
-	Automation1DriveItem_LoopTransmissionAfter = 26,
-	/// @brief The "Zhs Difference" drive based data item.
-	Automation1DriveItem_ZhsDifference = 27,
-	/// @brief The "Zhs Sum" drive based data item.
-	Automation1DriveItem_ZhsSum = 28,
-	/// @brief The "Zhs Unfiltered" drive based data item.
-	Automation1DriveItem_ZhsUnfiltered = 29,
-	/// @brief The "Zhs Filtered" drive based data item.
-	Automation1DriveItem_ZhsFiltered = 30,
-	/// @brief The "Analog Output 0" drive based data item.
-	Automation1DriveItem_AnalogOutput0 = 31,
-	/// @brief The "Analog Output 1" drive based data item.
-	Automation1DriveItem_AnalogOutput1 = 32,
-	/// @brief The "Analog Output 2" drive based data item.
-	Automation1DriveItem_AnalogOutput2 = 33,
-	/// @brief The "Analog Output 3" drive based data item.
-	Automation1DriveItem_AnalogOutput3 = 34,
-	/// @brief The "Drive Memory Int32" drive based data item.
-	Automation1DriveItem_DriveMemoryInt32 = 35,
-	/// @brief The "Drive Memory Float" drive based data item.
-	Automation1DriveItem_DriveMemoryFloat = 36,
-	/// @brief The "Drive Memory Double" drive based data item.
-	Automation1DriveItem_DriveMemoryDouble = 37,
-	/// @brief The "Pso Status" drive based data item.
-	Automation1DriveItem_PsoStatus = 38,
-	/// @brief The "Drive Timer Debug" drive based data item.
-	Automation1DriveItem_DriveTimerDebug = 39,
-	/// @brief The "Position Feedback Drive" drive based data item.
-	Automation1DriveItem_PositionFeedbackDrive = 77,
-	/// @brief The "Position Command Drive" drive based data item.
-	Automation1DriveItem_PositionCommandDrive = 84,
-	/// @brief The "Drive Memory Int16" drive based data item.
-	Automation1DriveItem_DriveMemoryInt16 = 125,
-	/// @brief The "Drive Memory Int8" drive based data item.
-	Automation1DriveItem_DriveMemoryInt8 = 126,
-	/// @brief The "Pso Counter 0" drive based data item.
-	Automation1DriveItem_PsoCounter0 = 171,
-	/// @brief The "Pso Counter 1" drive based data item.
-	Automation1DriveItem_PsoCounter1 = 172,
-	/// @brief The "Pso Counter 2" drive based data item.
-	Automation1DriveItem_PsoCounter2 = 173,
-	/// @brief The "Pso Window 0" drive based data item.
-	Automation1DriveItem_PsoWindow0 = 174,
-	/// @brief The "Pso Window 1" drive based data item.
-	Automation1DriveItem_PsoWindow1 = 175,
-	/// @brief The "Drive Data Capture Samples" drive based data item.
-	Automation1DriveItem_DriveDataCaptureSamples = 176,
-	/// @brief The "Position Command Galvo" drive based data item.
-	Automation1DriveItem_PositionCommandGalvo = 178,
-	/// @brief The "Primary EnDat Absolute Position" drive based data item.
-	Automation1DriveItem_PrimaryEnDatAbsolutePosition = 197,
-	/// @brief The "Control Effort" drive based data item.
-	Automation1DriveItem_ControlEffort = 201,
-	/// @brief The "Phase A Voltage Command" drive based data item.
-	Automation1DriveItem_PhaseAVoltageCommand = 208,
-	/// @brief The "Phase B Voltage Command" drive based data item.
-	Automation1DriveItem_PhaseBVoltageCommand = 209,
-	/// @brief The "Phase C Voltage Command" drive based data item.
-	Automation1DriveItem_PhaseCVoltageCommand = 210,
-	/// @brief The "Amplifier Peak Current" drive based data item.
-	Automation1DriveItem_AmplifierPeakCurrent = 211,
-	/// @brief The "Fpga Version" drive based data item.
-	Automation1DriveItem_FpgaVersion = 212,
-	/// @brief The "Drive Type Id" drive based data item.
-	Automation1DriveItem_DriveTypeId = 213,
-	/// @brief The "Pso Window 0 Array Index" drive based data item.
-	Automation1DriveItem_PsoWindow0ArrayIndex = 214,
-	/// @brief The "Pso Window 1 Array Index" drive based data item.
-	Automation1DriveItem_PsoWindow1ArrayIndex = 215,
-	/// @brief The "Pso Distance Array Index" drive based data item.
-	Automation1DriveItem_PsoDistanceArrayIndex = 216,
-	/// @brief The "Amplifier Temperature" drive based data item.
-	Automation1DriveItem_AmplifierTemperature = 217,
-	/// @brief The "Pso Bit Array Index" drive based data item.
-	Automation1DriveItem_PsoBitArrayIndex = 218,
-	/// @brief The "Mx Absolute Position" drive based data item.
-	Automation1DriveItem_MxAbsolutePosition = 219,
-	/// @brief The "Servo Update Rate" drive based data item.
-	Automation1DriveItem_ServoUpdateRate = 220,
-	/// @brief The "Settling Time" drive based data item.
-	Automation1DriveItem_SettlingTime = 221,
-	/// @brief The "Internal Error Code" drive based data item.
-	Automation1DriveItem_InternalErrorCode = 222,
-	/// @brief The "Firmware Version Major" drive based data item.
-	Automation1DriveItem_FirmwareVersionMajor = 223,
-	/// @brief The "Firmware Version Minor" drive based data item.
-	Automation1DriveItem_FirmwareVersionMinor = 224,
-	/// @brief The "Firmware Version Patch" drive based data item.
-	Automation1DriveItem_FirmwareVersionPatch = 225,
-	/// @brief The "Firmware Version Build" drive based data item.
-	Automation1DriveItem_FirmwareVersionBuild = 226,
-	/// @brief The "Drive Timer Debug Max" drive based data item.
-	Automation1DriveItem_DriveTimerDebugMax = 227,
-	/// @brief The "Marker Search Distance" drive based data item.
-	Automation1DriveItem_MarkerSearchDistance = 228,
-	/// @brief The "Position Feedback Galvo" drive based data item.
-	Automation1DriveItem_PositionFeedbackGalvo = 234,
-	/// @brief The "Latched Marker Position" drive based data item.
-	Automation1DriveItem_LatchedMarkerPosition = 236,
-	/// @brief The "Primary Biss Absolute Position" drive based data item.
-	Automation1DriveItem_PrimaryBissAbsolutePosition = 255,
-	/// @brief The "Fault Position Feedback" drive based data item.
-	Automation1DriveItem_FaultPositionFeedback = 258,
-	/// @brief The "Motor Commutation Angle" drive based data item.
-	Automation1DriveItem_MotorCommutationAngle = 259,
-	/// @brief The "Expansion Board Option" drive based data item.
-	Automation1DriveItem_ExpansionBoardOption = 260,
-	/// @brief The "Bus Voltage" drive based data item.
-	Automation1DriveItem_BusVoltage = 261,
-	/// @brief The "Piezo Voltage Command" drive based data item.
-	Automation1DriveItem_PiezoVoltageCommand = 262,
-	/// @brief The "Piezo Voltage Feedback" drive based data item.
-	Automation1DriveItem_PiezoVoltageFeedback = 263,
-	/// @brief The "Time Since Reset" drive based data item.
-	Automation1DriveItem_TimeSinceReset = 273,
-	/// @brief The "Maximum Voltage" drive based data item.
-	Automation1DriveItem_MaximumVoltage = 274,
-	/// @brief The "Command Output Type" drive based data item.
-	Automation1DriveItem_CommandOutputType = 275,
-	/// @brief The "Drive Feedforward Output" drive based data item.
-	Automation1DriveItem_DriveFeedforwardOutput = 290,
-	/// @brief The "Last Tick Counter" drive based data item.
-	Automation1DriveItem_LastTickCounter = 291,
-	/// @brief The "Board Revision" drive based data item.
-	Automation1DriveItem_BoardRevision = 292,
-	/// @brief The "Galvo Laser Output" drive based data item.
-	Automation1DriveItem_GalvoLaserOutput = 294,
-	/// @brief The "Galvo Laser Power Correction Output" drive based data item.
-	Automation1DriveItem_GalvoLaserPowerCorrectionOutput = 299,
-	/// @brief The "Capacitance Sensor Raw Position" drive based data item.
-	Automation1DriveItem_CapacitanceSensorRawPosition = 300,
-	/// @brief The "Position Calibration Galvo" drive based data item.
-	Automation1DriveItem_PositionCalibrationGalvo = 304,
-	/// @brief The "Bus Voltage Negative" drive based data item.
-	Automation1DriveItem_BusVoltageNegative = 325,
-	/// @brief The "Processor Temperature" drive based data item.
-	Automation1DriveItem_ProcessorTemperature = 326,
-	/// @brief The "Internal Error Timestamp" drive based data item.
-	Automation1DriveItem_InternalErrorTimestamp = 328,
-	/// @brief The "Analog Sensor Input" drive based data item.
-	Automation1DriveItem_AnalogSensorInput = 329,
-	/// @brief The "Motor Temperature" drive based data item.
-	Automation1DriveItem_MotorTemperature = 330,
-	/// @brief The "Primary Biss Status" drive based data item.
-	Automation1DriveItem_PrimaryBissStatus = 332,
-	/// @brief The "Pso External Sync Frequency" drive based data item.
-	Automation1DriveItem_PsoExternalSyncFrequency = 337,
-	/// @brief The "Encoder Sine Raw" drive based data item.
-	Automation1DriveItem_EncoderSineRaw = 346,
-	/// @brief The "Encoder Cosine Raw" drive based data item.
-	Automation1DriveItem_EncoderCosineRaw = 347,
-	/// @brief The "Fpga Temperature" drive based data item.
-	Automation1DriveItem_FpgaTemperature = 353,
-	/// @brief The "Primary EnDat Status" drive based data item.
-	Automation1DriveItem_PrimaryEnDatStatus = 355,
-	/// @brief The "Drive Timer High Priority Thread" drive based data item.
-	Automation1DriveItem_DriveTimerHighPriorityThread = 356,
-	/// @brief The "Drive Timer Low Priority Thread" drive based data item.
-	Automation1DriveItem_DriveTimerLowPriorityThread = 357,
-	/// @brief The "Drive Timer Low Priority Packet" drive based data item.
-	Automation1DriveItem_DriveTimerLowPriorityPacket = 358,
-	/// @brief The "Drive Timer Servo Packet" drive based data item.
-	Automation1DriveItem_DriveTimerServoPacket = 359,
-	/// @brief The "Drive Timer Servo Thread" drive based data item.
-	Automation1DriveItem_DriveTimerServoThread = 360,
-	/// @brief The "Drive Timer Current Packet" drive based data item.
-	Automation1DriveItem_DriveTimerCurrentPacket = 361,
-	/// @brief The "Drive Timer Common Core Thread" drive based data item.
-	Automation1DriveItem_DriveTimerCommonCoreThread = 362,
-	/// @brief The "Drive Timer Servo Core Packet 0" drive based data item.
-	Automation1DriveItem_DriveTimerServoCorePacket0 = 363,
-	/// @brief The "Drive Timer Servo Core Packet 1" drive based data item.
-	Automation1DriveItem_DriveTimerServoCorePacket1 = 364,
-	/// @brief The "Multiplier Option" drive based data item.
-	Automation1DriveItem_MultiplierOption = 365,
-	/// @brief The "Primary Feedback" drive based data item.
-	Automation1DriveItem_PrimaryFeedback = 366,
-	/// @brief The "Servo Loop Feedback Input 0" drive based data item.
-	Automation1DriveItem_ServoLoopFeedbackInput0 = 367,
-	/// @brief The "Servo Loop Feedback Input 1" drive based data item.
-	Automation1DriveItem_ServoLoopFeedbackInput1 = 368,
-	/// @brief The "Fault Subcode" drive based data item.
-	Automation1DriveItem_FaultSubcode = 376,
-	/// @brief The "Processor Temperature Max" drive based data item.
-	Automation1DriveItem_ProcessorTemperatureMax = 378,
-	/// @brief The "Drive Timer HyperWire Dma" drive based data item.
-	Automation1DriveItem_DriveTimerHyperWireDma = 381,
-	/// @brief The "Amplifier Temperature Max" drive based data item.
-	Automation1DriveItem_AmplifierTemperatureMax = 382,
-	/// @brief The "Auxiliary EnDat Absolute Position" drive based data item.
-	Automation1DriveItem_AuxiliaryEnDatAbsolutePosition = 383,
-	/// @brief The "Auxiliary EnDat Status" drive based data item.
-	Automation1DriveItem_AuxiliaryEnDatStatus = 384,
-	/// @brief The "Auxiliary Biss Absolute Position" drive based data item.
-	Automation1DriveItem_AuxiliaryBissAbsolutePosition = 385,
-	/// @brief The "Auxiliary Biss Status" drive based data item.
-	Automation1DriveItem_AuxiliaryBissStatus = 386,
-	/// @brief The "Pso Option" drive based data item.
-	Automation1DriveItem_PsoOption = 387,
-	/// @brief The "Drive Array Size" drive based data item.
-	Automation1DriveItem_DriveArraySize = 388,
-	/// @brief The "Rated Motor Supply Voltage Option" drive based data item.
-	Automation1DriveItem_RatedMotorSupplyVoltageOption = 389,
-	/// @brief The "Absolute Encoder Option" drive based data item.
-	Automation1DriveItem_AbsoluteEncoderOption = 391,
-	/// @brief The "Primary Feedback Status" drive based data item.
-	Automation1DriveItem_PrimaryFeedbackStatus = 392,
-	/// @brief The "Auxiliary Feedback Status" drive based data item.
-	Automation1DriveItem_AuxiliaryFeedbackStatus = 393,
-	/// @brief The "Amplifier Status" drive based data item.
-	Automation1DriveItem_AmplifierStatus = 394,
-	/// @brief The "Latched Cw Limit Position" drive based data item.
-	Automation1DriveItem_LatchedCwLimitPosition = 395,
-	/// @brief The "Latched Ccw Limit Position" drive based data item.
-	Automation1DriveItem_LatchedCcwLimitPosition = 396,
-	/// @brief The "Galvo Laser Fpga Transition Delay" drive based data item.
-	Automation1DriveItem_GalvoLaserFpgaTransitionDelay = 397,
-	/// @brief The "Piezo Accumulated Charge" drive based data item.
-	Automation1DriveItem_PiezoAccumulatedCharge = 401,
-	/// @brief The "Piezo Charging Time" drive based data item.
-	Automation1DriveItem_PiezoChargingTime = 402,
-	/// @brief The "Primary Ssi Absolute Position" drive based data item.
-	Automation1DriveItem_PrimarySsiAbsolutePosition = 403,
-	/// @brief The "Primary Ssi Status" drive based data item.
-	Automation1DriveItem_PrimarySsiStatus = 404,
-	/// @brief The "Auxiliary Ssi Absolute Position" drive based data item.
-	Automation1DriveItem_AuxiliarySsiAbsolutePosition = 405,
-	/// @brief The "Auxiliary Ssi Status" drive based data item.
-	Automation1DriveItem_AuxiliarySsiStatus = 406,
-	/// @brief The "Pso Distance Active Distance" drive based data item.
-	Automation1DriveItem_PsoDistanceActiveDistance = 407,
-	/// @brief The "Pso Window 0 Active Lower Bound" drive based data item.
-	Automation1DriveItem_PsoWindow0ActiveLowerBound = 408,
-	/// @brief The "Pso Window 0 Active Upper Bound" drive based data item.
-	Automation1DriveItem_PsoWindow0ActiveUpperBound = 409,
-	/// @brief The "Pso Window 1 Active Lower Bound" drive based data item.
-	Automation1DriveItem_PsoWindow1ActiveLowerBound = 410,
-	/// @brief The "Pso Window 1 Active Upper Bound" drive based data item.
-	Automation1DriveItem_PsoWindow1ActiveUpperBound = 411,
-	/// @brief The "Pso Waveform Active Total Time" drive based data item.
-	Automation1DriveItem_PsoWaveformActiveTotalTime = 412,
-	/// @brief The "Pso Waveform Active On Time" drive based data item.
-	Automation1DriveItem_PsoWaveformActiveOnTime = 413,
-	/// @brief The "Pso Waveform Active Pulse Count" drive based data item.
-	Automation1DriveItem_PsoWaveformActivePulseCount = 414,
-	/// @brief The "Pso Event Active Bit Value" drive based data item.
-	Automation1DriveItem_PsoEventActiveBitValue = 415,
-} Automation1DriveItem;
 
 /// @brief Represents the type of distance units used for motion.
 typedef enum Automation1DistanceUnits
@@ -312,9 +41,9 @@ typedef enum Automation1TimeUnits
 /// @brief Represents a motion target mode.
 typedef enum Automation1TargetMode
 {
-	/// @brief Motion target positions are absolute.
-	Automation1TargetMode_Incremental = 0,
 	/// @brief Motion target positions are relative to the current axis locations.
+	Automation1TargetMode_Incremental = 0,
+	/// @brief Motion target positions are absolute.
 	Automation1TargetMode_Absolute = 1,
 } Automation1TargetMode;
 
@@ -339,6 +68,19 @@ typedef enum Automation1NormalcyAlignment
 	/// @brief Keeps the normalcy axis at a relative angle to the part.
 	Automation1NormalcyAlignment_Relative = 2,
 } Automation1NormalcyAlignment;
+
+/// @brief Represents the animation type of an App Indicator.
+typedef enum Automation1IndicatorAnimationType
+{
+	/// @brief Solid background using $backgroundColor1 and $foregroundColor1.
+	Automation1IndicatorAnimationType_Solid = 0,
+	/// @brief Flashes between $backgroundColor1 and transparent with no transition colors between the two. The foreground color is $foregroundColor1 for the full animation.
+	Automation1IndicatorAnimationType_Flash = 1,
+	/// @brief Flashes between $backgroundColor1 and $backgroundColor2 with no transition colors between the two. Also alternates the $displayText between $foregroundColor1 and $foregroundColor2.
+	Automation1IndicatorAnimationType_TwoColorFlash = 2,
+	/// @brief Transitions smoothly between $backgroundColor1 and $backgroundColor2 with intermediary colors. Also transitions the $displayText between $foregroundColor1 and $foregroundColor2.
+	Automation1IndicatorAnimationType_ColorSweep = 3,
+} Automation1IndicatorAnimationType;
 
 /// @brief Represents the mode for controlling a laser.
 typedef enum Automation1GalvoLaser
@@ -371,6 +113,21 @@ typedef enum Automation1GalvoWobbleType
 	Automation1GalvoWobbleType_Figure8Perpendicular = 2,
 } Automation1GalvoWobbleType;
 
+/// @brief Specifies the conditions that will reset the PSO distance counters.
+typedef enum Automation1PsoDistanceCounterResetMask
+{
+	/// @brief The counters will be held in reset until the first marker is encountered.
+	Automation1PsoDistanceCounterResetMask_ResetUntilMarker = 1,
+	/// @brief The counters will reset when the marker is encountered.
+	Automation1PsoDistanceCounterResetMask_ResetOnMarker = 2,
+	/// @brief The counters will be held in reset when the PSO window output is off.
+	Automation1PsoDistanceCounterResetMask_ResetOutsideWindow = 4,
+	/// @brief The counters will be held in reset when the laser command bit is off.
+	Automation1PsoDistanceCounterResetMask_ResetWhenLaserOff = 8,
+	/// @brief The counters will be held in reset when the PSO output is off.
+	Automation1PsoDistanceCounterResetMask_ResetWhenOutputOff = 16,
+} Automation1PsoDistanceCounterResetMask;
+
 /// @brief Specifies the motion directions that can generate PSO events.
 typedef enum Automation1PsoDistanceAllowedEventDirection
 {
@@ -393,6 +150,15 @@ typedef enum Automation1PsoWindowUpdateDirection
 	Automation1PsoWindowUpdateDirection_Negative = 2,
 } Automation1PsoWindowUpdateDirection;
 
+/// @brief Specifies the conditions that will reset the PSO window counters.
+typedef enum Automation1PsoWindowCounterResetMask
+{
+	/// @brief The counters will be held in reset until the first marker is encountered.
+	Automation1PsoWindowCounterResetMask_ResetUntilMarker = 1,
+	/// @brief The counters will reset when the marker is encountered.
+	Automation1PsoWindowCounterResetMask_ResetOnMarker = 2,
+} Automation1PsoWindowCounterResetMask;
+
 /// @brief Specifies the conditions that will generate a PSO event when entering or exiting the PSO window.
 typedef enum Automation1PsoWindowEventMode
 {
@@ -406,6 +172,19 @@ typedef enum Automation1PsoWindowEventMode
 	Automation1PsoWindowEventMode_Both = 3,
 } Automation1PsoWindowEventMode;
 
+/// @brief Specifies additional conditions to prevent PSO events from occurring.
+typedef enum Automation1PsoEventMask
+{
+	/// @brief PSO events will not occur when the window output is off.
+	Automation1PsoEventMask_WindowMask = 1,
+	/// @brief PSO events will not occur when the window output is on.
+	Automation1PsoEventMask_WindowMaskInvert = 2,
+	/// @brief PSO events will not occur when the laser command bit is off.
+	Automation1PsoEventMask_LaserMask = 4,
+	/// @brief PSO events will not occur when the active PSO bit is 0.
+	Automation1PsoEventMask_BitMask = 8,
+} Automation1PsoEventMask;
+
 /// @brief Selects the output mode of the PSO waveform module.
 typedef enum Automation1PsoWaveformMode
 {
@@ -416,6 +195,43 @@ typedef enum Automation1PsoWaveformMode
 	/// @brief Selects a toggling output as the PSO waveform output.
 	Automation1PsoWaveformMode_Toggle = 2,
 } Automation1PsoWaveformMode;
+
+/// @brief Specifies additional conditions to disable the PSO waveform output in pulse mode.
+typedef enum Automation1PsoWaveformPulseMask
+{
+	/// @brief PSO waveform output will be deactivated when the window output is off.
+	Automation1PsoWaveformPulseMask_WindowMask = 1,
+	/// @brief PSO waveform output will be deactivated when the window output is on.
+	Automation1PsoWaveformPulseMask_WindowMaskInvert = 2,
+	/// @brief PSO waveform output will be deactivated when the laser command bit is off.
+	Automation1PsoWaveformPulseMask_LaserMask = 4,
+} Automation1PsoWaveformPulseMask;
+
+/// @brief Specifies the scaling mode of the PSO waveform module.
+typedef enum Automation1PsoWaveformScalingMode
+{
+	/// @brief Applies waveform scaling to the total time and on time parameters.
+	Automation1PsoWaveformScalingMode_ScaleTotalTimeAndOnTime = 0,
+	/// @brief Applies waveform scaling to the on time parameter only.
+	Automation1PsoWaveformScalingMode_ScaleOnTimeOnly = 1,
+	/// @brief Applies waveform scaling to the total time parameter only.
+	Automation1PsoWaveformScalingMode_ScaleTotalTimeOnly = 2,
+} Automation1PsoWaveformScalingMode;
+
+/// @brief Specifies the scaling input signal of the PSO waveform module.
+typedef enum Automation1PsoWaveformScalingInput
+{
+	/// @brief Uses the velocity from the drive pulse stream to determine the waveform scaling value.
+	Automation1PsoWaveformScalingInput_DrivePulseStreamVelocity = 0,
+	/// @brief Uses analog input 0 to determine the waveform scaling value.
+	Automation1PsoWaveformScalingInput_AnalogInput0 = 1,
+	/// @brief Uses analog input 1 to determine the waveform scaling value.
+	Automation1PsoWaveformScalingInput_AnalogInput1 = 2,
+	/// @brief Uses analog input 2 to determine the waveform scaling value.
+	Automation1PsoWaveformScalingInput_AnalogInput2 = 3,
+	/// @brief Uses analog input 3 to determine the waveform scaling value.
+	Automation1PsoWaveformScalingInput_AnalogInput3 = 4,
+} Automation1PsoWaveformScalingInput;
 
 /// @brief Selects the internal PSO signal to drive onto the active PSO output pin.
 typedef enum Automation1PsoOutputSource
@@ -428,6 +244,8 @@ typedef enum Automation1PsoOutputSource
 	Automation1PsoOutputSource_WindowOutputInvert = 3,
 	/// @brief The PSO output will be active when the active PSO bit is 1.
 	Automation1PsoOutputSource_Bitmap = 4,
+	/// @brief The PSO output will have a rising edge when a data collection sample is taken.
+	Automation1PsoOutputSource_DataCollectionSyncPulse = 5,
 } Automation1PsoOutputSource;
 
 /// @brief Represents a type of safe zone.
@@ -443,16 +261,16 @@ typedef enum Automation1SafeZoneType
 	Automation1SafeZoneType_NoExitAxisFault = 3,
 } Automation1SafeZoneType;
 
-/// @brief Represents the item to configure for IFOV.
-typedef enum Automation1IfovSetupItem
+/// @brief Represents a joystick input.
+typedef enum Automation1JoystickInput
 {
-	/// @brief Specifies the interpolation that the IFOV algorithm uses to generate motion on the galvo axes and additional axes.
-	Automation1IfovSetupItem_InterpolationMode = 0,
-	/// @brief Specifies the ramping behavior that the IFOV algorithm uses to decelerate and accelerate the galvo axes and additional axes.
-	Automation1IfovSetupItem_TimeScaleRampBehavior = 1,
-	/// @brief Specifies the time granularity of the windowing algorithm in milliseconds.
-	Automation1IfovSetupItem_TimeGranularity = 2,
-} Automation1IfovSetupItem;
+	/// @brief The first joystick input.
+	Automation1JoystickInput_Input0 = 0,
+	/// @brief The second joystick input.
+	Automation1JoystickInput_Input1 = 1,
+	/// @brief The third joystick input.
+	Automation1JoystickInput_Input2 = 2,
+} Automation1JoystickInput;
 
 /// @brief Specifies the input data source for gearing motion.
 typedef enum Automation1GearingSource
@@ -559,6 +377,8 @@ typedef enum Automation1FeedforwardGain
 	Automation1FeedforwardGain_GainJff = 2,
 	/// @brief Position.
 	Automation1FeedforwardGain_GainPff = 3,
+	/// @brief Snap.
+	Automation1FeedforwardGain_GainSff = 4,
 } Automation1FeedforwardGain;
 
 /// @brief The source used as the output channel for encoder echoing.
@@ -592,9 +412,31 @@ typedef enum Automation1EncoderInputChannel
 /// @brief The mode used for encoder echoing.
 typedef enum Automation1EncoderOutputMode
 {
-	/// @brief Quadrature mode.
+	/// @brief The controller will use the DriveEncoderOutputConfigureInput() configuration to determine if the output signal is Quadrature or Clock and Direction.
+	Automation1EncoderOutputMode_Default = 0,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to Default. Use Default instead of this enum value.
 	Automation1EncoderOutputMode_Quadrature = 0,
 } Automation1EncoderOutputMode;
+
+/// @brief The signal mode used when DriveEncoderOutputConfigureInput() and DriveEncoderOutputOn() are configured to echo the Pulse Stream signal to an encoder output.
+typedef enum Automation1DrivePulseStreamSignalMode
+{
+	/// @brief Quadrature mode.
+	Automation1DrivePulseStreamSignalMode_Quadrature = 0,
+	/// @brief Clock and Direction mode.
+	Automation1DrivePulseStreamSignalMode_ClockDirection = 1,
+} Automation1DrivePulseStreamSignalMode;
+
+/// @brief Specifies the event which causes a new analog output value to be read from the drive array and sent to the output.
+typedef enum Automation1AnalogOutputUpdateEvent
+{
+	/// @brief Updates will occur at a specific rate.
+	Automation1AnalogOutputUpdateEvent_Time = 0,
+	/// @brief Updates will occur on a PSO event.
+	Automation1AnalogOutputUpdateEvent_PsoEvent = 1,
+	/// @brief Updates will occur on the rising edge of PSO output.
+	Automation1AnalogOutputUpdateEvent_PsoOutput = 2,
+} Automation1AnalogOutputUpdateEvent;
 
 /// @brief Specifies the item that will be stored when the Drive Data Capture trigger occurs.
 typedef enum Automation1DriveDataCaptureInput
@@ -613,6 +455,8 @@ typedef enum Automation1DriveDataCaptureInput
 	Automation1DriveDataCaptureInput_AnalogInput2 = 5,
 	/// @brief Analog Input 3.
 	Automation1DriveDataCaptureInput_AnalogInput3 = 6,
+	/// @brief Position Feedback.
+	Automation1DriveDataCaptureInput_PositionFeedback = 7,
 } Automation1DriveDataCaptureInput;
 
 /// @brief Specifies the event that Drive Data Capture uses to trigger a capture of the configured source signal.
@@ -630,23 +474,15 @@ typedef enum Automation1DriveDataCaptureTrigger
 	Automation1DriveDataCaptureTrigger_HighSpeedInput1RisingEdge = 4,
 	/// @brief High Speed Input 1 falling edge.
 	Automation1DriveDataCaptureTrigger_HighSpeedInput1FallingEdge = 5,
+	/// @brief Auxiliary Marker rising edge.
+	Automation1DriveDataCaptureTrigger_AuxiliaryMarkerRisingEdge = 6,
+	/// @brief Auxiliary Marker falling edge.
+	Automation1DriveDataCaptureTrigger_AuxiliaryMarkerFallingEdge = 7,
 } Automation1DriveDataCaptureTrigger;
 
 /// @brief Specifies the type of drive array feature to use.
 typedef enum Automation1DriveArrayType
 {
-	/// @brief 32-bit floating-point values.
-	Automation1DriveArrayType_Float32 = 0,
-	/// @brief 64-bit floating-point values.
-	Automation1DriveArrayType_Float64 = 1,
-	/// @brief 32-bit unsigned integer values.
-	Automation1DriveArrayType_UInt32 = 2,
-	/// @brief 64-bit unsigned integer values.
-	Automation1DriveArrayType_UInt64 = 3,
-	/// @brief 32-bit signed integer values.
-	Automation1DriveArrayType_Int32 = 4,
-	/// @brief 64-bit signed integer values.
-	Automation1DriveArrayType_Int64 = 5,
 	/// @brief 32-bit floating-point voltages.
 	Automation1DriveArrayType_AnalogOutputVoltages = 6,
 	/// @brief 64-bit floating-point counts.
@@ -667,570 +503,913 @@ typedef enum Automation1DriveArrayType
 typedef enum Automation1PsoDistanceInput
 {
 	/// @brief GL4 Primary Feedback Axis 1.
-	Automation1PsoDistanceInput_GL4PrimaryFeedbackAxis1 = 0,
+	Automation1PsoDistanceInput_GL4PrimaryFeedbackAxis1 = 100,
 	/// @brief GL4 Primary Feedback Axis 2.
-	Automation1PsoDistanceInput_GL4PrimaryFeedbackAxis2 = 1,
+	Automation1PsoDistanceInput_GL4PrimaryFeedbackAxis2 = 101,
 	/// @brief GL4 Primary Feedback Axis 1 with IFOV input.
-	Automation1PsoDistanceInput_GL4IfovFeedbackAxis1 = 2,
+	Automation1PsoDistanceInput_GL4IfovFeedbackAxis1 = 102,
 	/// @brief GL4 Primary Feedback Axis 2 with IFOV input.
-	Automation1PsoDistanceInput_GL4IfovFeedbackAxis2 = 3,
+	Automation1PsoDistanceInput_GL4IfovFeedbackAxis2 = 103,
 	/// @brief GL4 Auxiliary Feedback Axis 1.
-	Automation1PsoDistanceInput_GL4AuxiliaryFeedbackAxis1 = 4,
+	Automation1PsoDistanceInput_GL4AuxiliaryFeedbackAxis1 = 104,
 	/// @brief GL4 Auxiliary Feedback Axis 2.
-	Automation1PsoDistanceInput_GL4AuxiliaryFeedbackAxis2 = 5,
+	Automation1PsoDistanceInput_GL4AuxiliaryFeedbackAxis2 = 105,
 	/// @brief GL4 Sync Port A.
-	Automation1PsoDistanceInput_GL4SyncPortA = 6,
+	Automation1PsoDistanceInput_GL4SyncPortA = 106,
 	/// @brief GL4 Sync Port B.
-	Automation1PsoDistanceInput_GL4SyncPortB = 7,
+	Automation1PsoDistanceInput_GL4SyncPortB = 107,
 	/// @brief GL4 Drive Pulse Stream Axis 1.
-	Automation1PsoDistanceInput_GL4DrivePulseStreamAxis1 = 14,
+	Automation1PsoDistanceInput_GL4DrivePulseStreamAxis1 = 108,
 	/// @brief GL4 Drive Pulse Stream Axis 2.
-	Automation1PsoDistanceInput_GL4DrivePulseStreamAxis2 = 15,
+	Automation1PsoDistanceInput_GL4DrivePulseStreamAxis2 = 109,
 	/// @brief XL4s Primary Feedback.
-	Automation1PsoDistanceInput_XL4sPrimaryFeedback = 0,
+	Automation1PsoDistanceInput_XL4sPrimaryFeedback = 110,
 	/// @brief XL4s Auxiliary Feedback.
-	Automation1PsoDistanceInput_XL4sAuxiliaryFeedback = 4,
+	Automation1PsoDistanceInput_XL4sAuxiliaryFeedback = 111,
 	/// @brief XL4s Sync Port A.
-	Automation1PsoDistanceInput_XL4sSyncPortA = 6,
+	Automation1PsoDistanceInput_XL4sSyncPortA = 112,
 	/// @brief XL4s Sync Port B.
-	Automation1PsoDistanceInput_XL4sSyncPortB = 7,
+	Automation1PsoDistanceInput_XL4sSyncPortB = 113,
 	/// @brief XL4s Drive Pulse Stream.
-	Automation1PsoDistanceInput_XL4sDrivePulseStream = 14,
+	Automation1PsoDistanceInput_XL4sDrivePulseStream = 114,
 	/// @brief XR3 Primary Feedback Axis 1.
-	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis1 = 0,
-	/// @brief XR3 Auxiliary Feedback Axis 1.
-	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis1 = 1,
+	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis1 = 115,
 	/// @brief XR3 Primary Feedback Axis 2.
-	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis2 = 2,
-	/// @brief XR3 Auxiliary Feedback Axis 2.
-	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis2 = 3,
+	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis2 = 116,
 	/// @brief XR3 Primary Feedback Axis 3.
-	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis3 = 4,
-	/// @brief XR3 Auxiliary Feedback Axis 3.
-	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis3 = 5,
+	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis3 = 117,
 	/// @brief XR3 Primary Feedback Axis 4.
-	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis4 = 6,
-	/// @brief XR3 Auxiliary Feedback Axis 4.
-	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis4 = 7,
+	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis4 = 118,
 	/// @brief XR3 Primary Feedback Axis 5.
-	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis5 = 8,
-	/// @brief XR3 Auxiliary Feedback Axis 5.
-	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis5 = 9,
+	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis5 = 119,
 	/// @brief XR3 Primary Feedback Axis 6.
-	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis6 = 10,
+	Automation1PsoDistanceInput_XR3PrimaryFeedbackAxis6 = 120,
+	/// @brief XR3 Auxiliary Feedback Axis 1.
+	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis1 = 121,
+	/// @brief XR3 Auxiliary Feedback Axis 2.
+	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis2 = 122,
+	/// @brief XR3 Auxiliary Feedback Axis 3.
+	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis3 = 123,
+	/// @brief XR3 Auxiliary Feedback Axis 4.
+	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis4 = 124,
+	/// @brief XR3 Auxiliary Feedback Axis 5.
+	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis5 = 125,
 	/// @brief XR3 Auxiliary Feedback Axis 6.
-	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis6 = 11,
+	Automation1PsoDistanceInput_XR3AuxiliaryFeedbackAxis6 = 126,
 	/// @brief XR3 Sync Port A.
-	Automation1PsoDistanceInput_XR3SyncPortA = 12,
+	Automation1PsoDistanceInput_XR3SyncPortA = 127,
 	/// @brief XR3 Sync Port B.
-	Automation1PsoDistanceInput_XR3SyncPortB = 13,
+	Automation1PsoDistanceInput_XR3SyncPortB = 128,
 	/// @brief XR3 Drive Pulse Stream.
-	Automation1PsoDistanceInput_XR3DrivePulseStream = 14,
+	Automation1PsoDistanceInput_XR3DrivePulseStream = 129,
 	/// @brief XC4 Primary Feedback.
-	Automation1PsoDistanceInput_XC4PrimaryFeedback = 0,
+	Automation1PsoDistanceInput_XC4PrimaryFeedback = 130,
 	/// @brief XC4 Auxiliary Feedback.
-	Automation1PsoDistanceInput_XC4AuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_XC4AuxiliaryFeedback = 131,
 	/// @brief XC4 Sync Port A.
-	Automation1PsoDistanceInput_XC4SyncPortA = 2,
+	Automation1PsoDistanceInput_XC4SyncPortA = 132,
 	/// @brief XC4 Sync Port B.
-	Automation1PsoDistanceInput_XC4SyncPortB = 3,
+	Automation1PsoDistanceInput_XC4SyncPortB = 133,
 	/// @brief XC4 Drive Pulse Stream.
-	Automation1PsoDistanceInput_XC4DrivePulseStream = 14,
+	Automation1PsoDistanceInput_XC4DrivePulseStream = 134,
 	/// @brief XC4e Primary Feedback.
-	Automation1PsoDistanceInput_XC4ePrimaryFeedback = 0,
+	Automation1PsoDistanceInput_XC4ePrimaryFeedback = 135,
 	/// @brief XC4e Auxiliary Feedback.
-	Automation1PsoDistanceInput_XC4eAuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_XC4eAuxiliaryFeedback = 136,
 	/// @brief XC4e Sync Port A.
-	Automation1PsoDistanceInput_XC4eSyncPortA = 2,
+	Automation1PsoDistanceInput_XC4eSyncPortA = 137,
 	/// @brief XC4e Sync Port B.
-	Automation1PsoDistanceInput_XC4eSyncPortB = 3,
+	Automation1PsoDistanceInput_XC4eSyncPortB = 138,
 	/// @brief XC4e Drive Pulse Stream.
-	Automation1PsoDistanceInput_XC4eDrivePulseStream = 14,
+	Automation1PsoDistanceInput_XC4eDrivePulseStream = 139,
 	/// @brief XC6e Primary Feedback.
-	Automation1PsoDistanceInput_XC6ePrimaryFeedback = 0,
+	Automation1PsoDistanceInput_XC6ePrimaryFeedback = 140,
 	/// @brief XC6e Auxiliary Feedback.
-	Automation1PsoDistanceInput_XC6eAuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_XC6eAuxiliaryFeedback = 141,
 	/// @brief XC6e Sync Port A.
-	Automation1PsoDistanceInput_XC6eSyncPortA = 2,
+	Automation1PsoDistanceInput_XC6eSyncPortA = 142,
 	/// @brief XC6e Sync Port B.
-	Automation1PsoDistanceInput_XC6eSyncPortB = 3,
+	Automation1PsoDistanceInput_XC6eSyncPortB = 143,
 	/// @brief XC6e Drive Pulse Stream.
-	Automation1PsoDistanceInput_XC6eDrivePulseStream = 14,
+	Automation1PsoDistanceInput_XC6eDrivePulseStream = 144,
 	/// @brief XL5e Primary Feedback.
-	Automation1PsoDistanceInput_XL5ePrimaryFeedback = 0,
+	Automation1PsoDistanceInput_XL5ePrimaryFeedback = 145,
 	/// @brief XL5e Auxiliary Feedback.
-	Automation1PsoDistanceInput_XL5eAuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_XL5eAuxiliaryFeedback = 146,
 	/// @brief XL5e Sync Port A.
-	Automation1PsoDistanceInput_XL5eSyncPortA = 2,
+	Automation1PsoDistanceInput_XL5eSyncPortA = 147,
 	/// @brief XL5e Sync Port B.
-	Automation1PsoDistanceInput_XL5eSyncPortB = 3,
+	Automation1PsoDistanceInput_XL5eSyncPortB = 148,
 	/// @brief XL5e Drive Pulse Stream.
-	Automation1PsoDistanceInput_XL5eDrivePulseStream = 14,
-	/// @brief SI4 Primary Feedback Axis 1.
-	Automation1PsoDistanceInput_SI4PrimaryFeedbackAxis1 = 0,
-	/// @brief SI4 Primary Feedback Axis 2.
-	Automation1PsoDistanceInput_SI4PrimaryFeedbackAxis2 = 1,
-	/// @brief SI4 Primary Feedback Axis 3.
-	Automation1PsoDistanceInput_SI4PrimaryFeedbackAxis3 = 2,
-	/// @brief SI4 Primary Feedback Axis 4.
-	Automation1PsoDistanceInput_SI4PrimaryFeedbackAxis4 = 3,
-	/// @brief SI4 Drive Pulse Stream Axis 1.
-	Automation1PsoDistanceInput_SI4DrivePulseStreamAxis1 = 14,
-	/// @brief SI4 Drive Pulse Stream Axis 2.
-	Automation1PsoDistanceInput_SI4DrivePulseStreamAxis2 = 15,
-	/// @brief SI4 Drive Pulse Stream Axis 3.
-	Automation1PsoDistanceInput_SI4DrivePulseStreamAxis3 = 16,
-	/// @brief SI4 Drive Pulse Stream Axis 4.
-	Automation1PsoDistanceInput_SI4DrivePulseStreamAxis4 = 17,
+	Automation1PsoDistanceInput_XL5eDrivePulseStream = 149,
 	/// @brief XC2 Primary Feedback.
-	Automation1PsoDistanceInput_XC2PrimaryFeedback = 0,
+	Automation1PsoDistanceInput_XC2PrimaryFeedback = 150,
 	/// @brief XC2 Auxiliary Feedback.
-	Automation1PsoDistanceInput_XC2AuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_XC2AuxiliaryFeedback = 151,
 	/// @brief XC2 Drive Pulse Stream.
-	Automation1PsoDistanceInput_XC2DrivePulseStream = 14,
+	Automation1PsoDistanceInput_XC2DrivePulseStream = 152,
 	/// @brief XC2e Primary Feedback.
-	Automation1PsoDistanceInput_XC2ePrimaryFeedback = 0,
+	Automation1PsoDistanceInput_XC2ePrimaryFeedback = 153,
 	/// @brief XC2e Auxiliary Feedback.
-	Automation1PsoDistanceInput_XC2eAuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_XC2eAuxiliaryFeedback = 154,
 	/// @brief XC2e Drive Pulse Stream.
-	Automation1PsoDistanceInput_XC2eDrivePulseStream = 14,
+	Automation1PsoDistanceInput_XC2eDrivePulseStream = 155,
 	/// @brief XL2e Primary Feedback.
-	Automation1PsoDistanceInput_XL2ePrimaryFeedback = 0,
+	Automation1PsoDistanceInput_XL2ePrimaryFeedback = 156,
 	/// @brief XL2e Auxiliary Feedback.
-	Automation1PsoDistanceInput_XL2eAuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_XL2eAuxiliaryFeedback = 157,
 	/// @brief XL2e Sync Port A.
-	Automation1PsoDistanceInput_XL2eSyncPortA = 2,
+	Automation1PsoDistanceInput_XL2eSyncPortA = 158,
 	/// @brief XL2e Sync Port B.
-	Automation1PsoDistanceInput_XL2eSyncPortB = 3,
+	Automation1PsoDistanceInput_XL2eSyncPortB = 159,
 	/// @brief XL2e Drive Pulse Stream.
-	Automation1PsoDistanceInput_XL2eDrivePulseStream = 14,
+	Automation1PsoDistanceInput_XL2eDrivePulseStream = 160,
 	/// @brief XI4 Primary Feedback Axis 1.
-	Automation1PsoDistanceInput_XI4PrimaryFeedbackAxis1 = 0,
+	Automation1PsoDistanceInput_XI4PrimaryFeedbackAxis1 = 161,
 	/// @brief XI4 Primary Feedback Axis 2.
-	Automation1PsoDistanceInput_XI4PrimaryFeedbackAxis2 = 1,
+	Automation1PsoDistanceInput_XI4PrimaryFeedbackAxis2 = 162,
 	/// @brief XI4 Primary Feedback Axis 3.
-	Automation1PsoDistanceInput_XI4PrimaryFeedbackAxis3 = 2,
+	Automation1PsoDistanceInput_XI4PrimaryFeedbackAxis3 = 163,
 	/// @brief XI4 Primary Feedback Axis 4.
-	Automation1PsoDistanceInput_XI4PrimaryFeedbackAxis4 = 3,
+	Automation1PsoDistanceInput_XI4PrimaryFeedbackAxis4 = 164,
 	/// @brief XI4 Auxiliary Feedback Axis 1.
-	Automation1PsoDistanceInput_XI4AuxiliaryFeedback1 = 4,
+	Automation1PsoDistanceInput_XI4AuxiliaryFeedbackAxis1 = 165,
 	/// @brief XI4 Auxiliary Feedback Axis 2.
-	Automation1PsoDistanceInput_XI4AuxiliaryFeedback2 = 5,
+	Automation1PsoDistanceInput_XI4AuxiliaryFeedbackAxis2 = 166,
 	/// @brief XI4 Auxiliary Feedback Axis 3.
-	Automation1PsoDistanceInput_XI4AuxiliaryFeedback3 = 6,
+	Automation1PsoDistanceInput_XI4AuxiliaryFeedbackAxis3 = 167,
 	/// @brief XI4 Auxiliary Feedback Axis 4.
-	Automation1PsoDistanceInput_XI4AuxiliaryFeedback4 = 7,
+	Automation1PsoDistanceInput_XI4AuxiliaryFeedbackAxis4 = 168,
 	/// @brief XI4 Sync Port A.
-	Automation1PsoDistanceInput_XI4SyncPortA = 8,
+	Automation1PsoDistanceInput_XI4SyncPortA = 169,
 	/// @brief XI4 Sync Port B.
-	Automation1PsoDistanceInput_XI4SyncPortB = 9,
+	Automation1PsoDistanceInput_XI4SyncPortB = 170,
 	/// @brief XI4 Drive Pulse Stream Axis 1.
-	Automation1PsoDistanceInput_XI4DrivePulseStreamAxis1 = 14,
+	Automation1PsoDistanceInput_XI4DrivePulseStreamAxis1 = 171,
 	/// @brief XI4 Drive Pulse Stream Axis 2.
-	Automation1PsoDistanceInput_XI4DrivePulseStreamAxis2 = 15,
+	Automation1PsoDistanceInput_XI4DrivePulseStreamAxis2 = 172,
 	/// @brief XI4 Drive Pulse Stream Axis 3.
-	Automation1PsoDistanceInput_XI4DrivePulseStreamAxis3 = 16,
+	Automation1PsoDistanceInput_XI4DrivePulseStreamAxis3 = 173,
 	/// @brief XI4 Drive Pulse Stream Axis 4.
-	Automation1PsoDistanceInput_XI4DrivePulseStreamAxis4 = 17,
+	Automation1PsoDistanceInput_XI4DrivePulseStreamAxis4 = 174,
 	/// @brief iXC4 Primary Feedback.
-	Automation1PsoDistanceInput_iXC4PrimaryFeedback = 0,
+	Automation1PsoDistanceInput_iXC4PrimaryFeedback = 175,
 	/// @brief iXC4 Auxiliary Feedback.
-	Automation1PsoDistanceInput_iXC4AuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_iXC4AuxiliaryFeedback = 176,
 	/// @brief iXC4 Sync Port A.
-	Automation1PsoDistanceInput_iXC4SyncPortA = 2,
+	Automation1PsoDistanceInput_iXC4SyncPortA = 177,
 	/// @brief iXC4 Sync Port B.
-	Automation1PsoDistanceInput_iXC4SyncPortB = 3,
+	Automation1PsoDistanceInput_iXC4SyncPortB = 178,
 	/// @brief iXC4 Drive Pulse Stream.
-	Automation1PsoDistanceInput_iXC4DrivePulseStream = 14,
+	Automation1PsoDistanceInput_iXC4DrivePulseStream = 179,
 	/// @brief iXC4e Primary Feedback.
-	Automation1PsoDistanceInput_iXC4ePrimaryFeedback = 0,
+	Automation1PsoDistanceInput_iXC4ePrimaryFeedback = 180,
 	/// @brief iXC4e Auxiliary Feedback.
-	Automation1PsoDistanceInput_iXC4eAuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_iXC4eAuxiliaryFeedback = 181,
 	/// @brief iXC4e Sync Port A.
-	Automation1PsoDistanceInput_iXC4eSyncPortA = 2,
+	Automation1PsoDistanceInput_iXC4eSyncPortA = 182,
 	/// @brief iXC4e Sync Port B.
-	Automation1PsoDistanceInput_iXC4eSyncPortB = 3,
+	Automation1PsoDistanceInput_iXC4eSyncPortB = 183,
 	/// @brief iXC4e Drive Pulse Stream.
-	Automation1PsoDistanceInput_iXC4eDrivePulseStream = 14,
+	Automation1PsoDistanceInput_iXC4eDrivePulseStream = 184,
 	/// @brief iXC6e Primary Feedback.
-	Automation1PsoDistanceInput_iXC6ePrimaryFeedback = 0,
+	Automation1PsoDistanceInput_iXC6ePrimaryFeedback = 185,
 	/// @brief iXC6e Auxiliary Feedback.
-	Automation1PsoDistanceInput_iXC6eAuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_iXC6eAuxiliaryFeedback = 186,
 	/// @brief iXC6e Sync Port A.
-	Automation1PsoDistanceInput_iXC6eSyncPortA = 2,
+	Automation1PsoDistanceInput_iXC6eSyncPortA = 187,
 	/// @brief iXC6e Sync Port B.
-	Automation1PsoDistanceInput_iXC6eSyncPortB = 3,
+	Automation1PsoDistanceInput_iXC6eSyncPortB = 188,
 	/// @brief iXC6e Drive Pulse Stream.
-	Automation1PsoDistanceInput_iXC6eDrivePulseStream = 14,
+	Automation1PsoDistanceInput_iXC6eDrivePulseStream = 189,
 	/// @brief iXL5e Primary Feedback.
-	Automation1PsoDistanceInput_iXL5ePrimaryFeedback = 0,
+	Automation1PsoDistanceInput_iXL5ePrimaryFeedback = 190,
 	/// @brief iXL5e Auxiliary Feedback.
-	Automation1PsoDistanceInput_iXL5eAuxiliaryFeedback = 1,
+	Automation1PsoDistanceInput_iXL5eAuxiliaryFeedback = 191,
 	/// @brief iXL5e Sync Port A.
-	Automation1PsoDistanceInput_iXL5eSyncPortA = 2,
+	Automation1PsoDistanceInput_iXL5eSyncPortA = 192,
 	/// @brief iXL5e Sync Port B.
-	Automation1PsoDistanceInput_iXL5eSyncPortB = 3,
+	Automation1PsoDistanceInput_iXL5eSyncPortB = 193,
 	/// @brief iXL5e Drive Pulse Stream.
-	Automation1PsoDistanceInput_iXL5eDrivePulseStream = 14,
+	Automation1PsoDistanceInput_iXL5eDrivePulseStream = 194,
 	/// @brief iXR3 Primary Feedback Axis 1.
-	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis1 = 0,
-	/// @brief iXR3 Auxiliary Feedback Axis 1.
-	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis1 = 1,
+	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis1 = 195,
 	/// @brief iXR3 Primary Feedback Axis 2.
-	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis2 = 2,
-	/// @brief iXR3 Auxiliary Feedback Axis 2.
-	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis2 = 3,
+	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis2 = 196,
 	/// @brief iXR3 Primary Feedback Axis 3.
-	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis3 = 4,
-	/// @brief iXR3 Auxiliary Feedback Axis 3.
-	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis3 = 5,
+	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis3 = 197,
 	/// @brief iXR3 Primary Feedback Axis 4.
-	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis4 = 6,
-	/// @brief iXR3 Auxiliary Feedback Axis 4.
-	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis4 = 7,
+	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis4 = 198,
 	/// @brief iXR3 Primary Feedback Axis 5.
-	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis5 = 8,
-	/// @brief iXR3 Auxiliary Feedback Axis 5.
-	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis5 = 9,
+	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis5 = 199,
 	/// @brief iXR3 Primary Feedback Axis 6.
-	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis6 = 10,
+	Automation1PsoDistanceInput_iXR3PrimaryFeedbackAxis6 = 200,
+	/// @brief iXR3 Auxiliary Feedback Axis 1.
+	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis1 = 201,
+	/// @brief iXR3 Auxiliary Feedback Axis 2.
+	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis2 = 202,
+	/// @brief iXR3 Auxiliary Feedback Axis 3.
+	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis3 = 203,
+	/// @brief iXR3 Auxiliary Feedback Axis 4.
+	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis4 = 204,
+	/// @brief iXR3 Auxiliary Feedback Axis 5.
+	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis5 = 205,
 	/// @brief iXR3 Auxiliary Feedback Axis 6.
-	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis6 = 11,
+	Automation1PsoDistanceInput_iXR3AuxiliaryFeedbackAxis6 = 206,
 	/// @brief iXR3 Sync Port A.
-	Automation1PsoDistanceInput_iXR3SyncPortA = 12,
+	Automation1PsoDistanceInput_iXR3SyncPortA = 207,
 	/// @brief iXR3 Sync Port B.
-	Automation1PsoDistanceInput_iXR3SyncPortB = 13,
+	Automation1PsoDistanceInput_iXR3SyncPortB = 208,
 	/// @brief iXR3 Drive Pulse Stream.
-	Automation1PsoDistanceInput_iXR3DrivePulseStream = 14,
+	Automation1PsoDistanceInput_iXR3DrivePulseStream = 209,
+	/// @brief GI4 Drive Pulse Stream Axis 1.
+	Automation1PsoDistanceInput_GI4DrivePulseStreamAxis1 = 210,
+	/// @brief GI4 Drive Pulse Stream Axis 2.
+	Automation1PsoDistanceInput_GI4DrivePulseStreamAxis2 = 211,
+	/// @brief GI4 Drive Pulse Stream Axis 3.
+	Automation1PsoDistanceInput_GI4DrivePulseStreamAxis3 = 212,
+	/// @brief iXC2 Primary Feedback.
+	Automation1PsoDistanceInput_iXC2PrimaryFeedback = 213,
+	/// @brief iXC2 Auxiliary Feedback.
+	Automation1PsoDistanceInput_iXC2AuxiliaryFeedback = 214,
+	/// @brief iXC2 Drive Pulse Stream.
+	Automation1PsoDistanceInput_iXC2DrivePulseStream = 215,
+	/// @brief iXC2e Primary Feedback.
+	Automation1PsoDistanceInput_iXC2ePrimaryFeedback = 216,
+	/// @brief iXC2e Auxiliary Feedback.
+	Automation1PsoDistanceInput_iXC2eAuxiliaryFeedback = 217,
+	/// @brief iXC2e Drive Pulse Stream.
+	Automation1PsoDistanceInput_iXC2eDrivePulseStream = 218,
+	/// @brief iXL2e Primary Feedback.
+	Automation1PsoDistanceInput_iXL2ePrimaryFeedback = 219,
+	/// @brief iXL2e Auxiliary Feedback.
+	Automation1PsoDistanceInput_iXL2eAuxiliaryFeedback = 220,
+	/// @brief iXL2e Sync Port A.
+	Automation1PsoDistanceInput_iXL2eSyncPortA = 221,
+	/// @brief iXL2e Sync Port B.
+	Automation1PsoDistanceInput_iXL2eSyncPortB = 222,
+	/// @brief iXL2e Drive Pulse Stream.
+	Automation1PsoDistanceInput_iXL2eDrivePulseStream = 223,
+	/// @brief iXI4 Primary Feedback Axis 1.
+	Automation1PsoDistanceInput_iXI4PrimaryFeedbackAxis1 = 224,
+	/// @brief iXI4 Primary Feedback Axis 2.
+	Automation1PsoDistanceInput_iXI4PrimaryFeedbackAxis2 = 225,
+	/// @brief iXI4 Primary Feedback Axis 3.
+	Automation1PsoDistanceInput_iXI4PrimaryFeedbackAxis3 = 226,
+	/// @brief iXI4 Primary Feedback Axis 4.
+	Automation1PsoDistanceInput_iXI4PrimaryFeedbackAxis4 = 227,
+	/// @brief iXI4 Auxiliary Feedback Axis 1.
+	Automation1PsoDistanceInput_iXI4AuxiliaryFeedbackAxis1 = 228,
+	/// @brief iXI4 Auxiliary Feedback Axis 2.
+	Automation1PsoDistanceInput_iXI4AuxiliaryFeedbackAxis2 = 229,
+	/// @brief iXI4 Auxiliary Feedback Axis 3.
+	Automation1PsoDistanceInput_iXI4AuxiliaryFeedbackAxis3 = 230,
+	/// @brief iXI4 Auxiliary Feedback Axis 4.
+	Automation1PsoDistanceInput_iXI4AuxiliaryFeedbackAxis4 = 231,
+	/// @brief iXI4 Sync Port A.
+	Automation1PsoDistanceInput_iXI4SyncPortA = 232,
+	/// @brief iXI4 Sync Port B.
+	Automation1PsoDistanceInput_iXI4SyncPortB = 233,
+	/// @brief iXI4 Drive Pulse Stream Axis 1.
+	Automation1PsoDistanceInput_iXI4DrivePulseStreamAxis1 = 234,
+	/// @brief iXI4 Drive Pulse Stream Axis 2.
+	Automation1PsoDistanceInput_iXI4DrivePulseStreamAxis2 = 235,
+	/// @brief iXI4 Drive Pulse Stream Axis 3.
+	Automation1PsoDistanceInput_iXI4DrivePulseStreamAxis3 = 236,
+	/// @brief iXI4 Drive Pulse Stream Axis 4.
+	Automation1PsoDistanceInput_iXI4DrivePulseStreamAxis4 = 237,
+	/// @brief FLEX Primary Feedback Axis 1.
+	Automation1PsoDistanceInput_FLEXPrimaryFeedbackAxis1 = 238,
+	/// @brief FLEX Primary Feedback Axis 2.
+	Automation1PsoDistanceInput_FLEXPrimaryFeedbackAxis2 = 239,
+	/// @brief FLEX Primary Feedback Axis 3.
+	Automation1PsoDistanceInput_FLEXPrimaryFeedbackAxis3 = 240,
+	/// @brief FLEX Primary Feedback Axis 4.
+	Automation1PsoDistanceInput_FLEXPrimaryFeedbackAxis4 = 241,
+	/// @brief FLEX Auxiliary Feedback Axis 1.
+	Automation1PsoDistanceInput_FLEXAuxiliaryFeedbackAxis1 = 242,
+	/// @brief FLEX Auxiliary Feedback Axis 2.
+	Automation1PsoDistanceInput_FLEXAuxiliaryFeedbackAxis2 = 243,
+	/// @brief FLEX Auxiliary Feedback Axis 3.
+	Automation1PsoDistanceInput_FLEXAuxiliaryFeedbackAxis3 = 244,
+	/// @brief FLEX Auxiliary Feedback Axis 4.
+	Automation1PsoDistanceInput_FLEXAuxiliaryFeedbackAxis4 = 245,
+	/// @brief FLEX Sync Port A.
+	Automation1PsoDistanceInput_FLEXSyncPortA = 246,
+	/// @brief FLEX Sync Port B.
+	Automation1PsoDistanceInput_FLEXSyncPortB = 247,
+	/// @brief FLEX Drive Pulse Stream Axis 1.
+	Automation1PsoDistanceInput_FLEXDrivePulseStreamAxis1 = 248,
+	/// @brief FLEX Drive Pulse Stream Axis 2.
+	Automation1PsoDistanceInput_FLEXDrivePulseStreamAxis2 = 249,
+	/// @brief FLEX Drive Pulse Stream Axis 3.
+	Automation1PsoDistanceInput_FLEXDrivePulseStreamAxis3 = 250,
+	/// @brief FLEX Drive Pulse Stream Axis 4.
+	Automation1PsoDistanceInput_FLEXDrivePulseStreamAxis4 = 251,
+	/// @brief iFLEX Primary Feedback Axis 1.
+	Automation1PsoDistanceInput_iFLEXPrimaryFeedbackAxis1 = 252,
+	/// @brief iFLEX Primary Feedback Axis 2.
+	Automation1PsoDistanceInput_iFLEXPrimaryFeedbackAxis2 = 253,
+	/// @brief iFLEX Primary Feedback Axis 3.
+	Automation1PsoDistanceInput_iFLEXPrimaryFeedbackAxis3 = 254,
+	/// @brief iFLEX Primary Feedback Axis 4.
+	Automation1PsoDistanceInput_iFLEXPrimaryFeedbackAxis4 = 255,
+	/// @brief iFLEX Auxiliary Feedback Axis 1.
+	Automation1PsoDistanceInput_iFLEXAuxiliaryFeedbackAxis1 = 256,
+	/// @brief iFLEX Auxiliary Feedback Axis 2.
+	Automation1PsoDistanceInput_iFLEXAuxiliaryFeedbackAxis2 = 257,
+	/// @brief iFLEX Auxiliary Feedback Axis 3.
+	Automation1PsoDistanceInput_iFLEXAuxiliaryFeedbackAxis3 = 258,
+	/// @brief iFLEX Auxiliary Feedback Axis 4.
+	Automation1PsoDistanceInput_iFLEXAuxiliaryFeedbackAxis4 = 259,
+	/// @brief iFLEX Sync Port A.
+	Automation1PsoDistanceInput_iFLEXSyncPortA = 260,
+	/// @brief iFLEX Sync Port B.
+	Automation1PsoDistanceInput_iFLEXSyncPortB = 261,
+	/// @brief iFLEX Drive Pulse Stream Axis 1.
+	Automation1PsoDistanceInput_iFLEXDrivePulseStreamAxis1 = 262,
+	/// @brief iFLEX Drive Pulse Stream Axis 2.
+	Automation1PsoDistanceInput_iFLEXDrivePulseStreamAxis2 = 263,
+	/// @brief iFLEX Drive Pulse Stream Axis 3.
+	Automation1PsoDistanceInput_iFLEXDrivePulseStreamAxis3 = 264,
+	/// @brief iFLEX Drive Pulse Stream Axis 4.
+	Automation1PsoDistanceInput_iFLEXDrivePulseStreamAxis4 = 265,
+	/// @brief XA4 Primary Feedback Axis 1.
+	Automation1PsoDistanceInput_XA4PrimaryFeedbackAxis1 = 266,
+	/// @brief XA4 Primary Feedback Axis 2.
+	Automation1PsoDistanceInput_XA4PrimaryFeedbackAxis2 = 267,
+	/// @brief XA4 Drive Pulse Stream Axis 1.
+	Automation1PsoDistanceInput_XA4DrivePulseStreamAxis1 = 268,
+	/// @brief XA4 Drive Pulse Stream Axis 2.
+	Automation1PsoDistanceInput_XA4DrivePulseStreamAxis2 = 269,
+	/// @brief iXA4 Primary Feedback Axis 1.
+	Automation1PsoDistanceInput_iXA4PrimaryFeedbackAxis1 = 270,
+	/// @brief iXA4 Primary Feedback Axis 2.
+	Automation1PsoDistanceInput_iXA4PrimaryFeedbackAxis2 = 271,
+	/// @brief iXA4 Drive Pulse Stream Axis 1.
+	Automation1PsoDistanceInput_iXA4DrivePulseStreamAxis1 = 272,
+	/// @brief iXA4 Drive Pulse Stream Axis 2.
+	Automation1PsoDistanceInput_iXA4DrivePulseStreamAxis2 = 273,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to XI4AuxiliaryFeedbackAxis1. Use XI4AuxiliaryFeedbackAxis1 instead of this enum value.
+	Automation1PsoDistanceInput_XI4AuxiliaryFeedback1 = 165,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to XI4AuxiliaryFeedbackAxis2. Use XI4AuxiliaryFeedbackAxis2 instead of this enum value.
+	Automation1PsoDistanceInput_XI4AuxiliaryFeedback2 = 166,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to XI4AuxiliaryFeedbackAxis3. Use XI4AuxiliaryFeedbackAxis3 instead of this enum value.
+	Automation1PsoDistanceInput_XI4AuxiliaryFeedback3 = 167,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to XI4AuxiliaryFeedbackAxis4. Use XI4AuxiliaryFeedbackAxis4 instead of this enum value.
+	Automation1PsoDistanceInput_XI4AuxiliaryFeedback4 = 168,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to iXI4AuxiliaryFeedbackAxis1. Use iXI4AuxiliaryFeedbackAxis1 instead of this enum value.
+	Automation1PsoDistanceInput_iXI4AuxiliaryFeedback1 = 228,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to iXI4AuxiliaryFeedbackAxis2. Use iXI4AuxiliaryFeedbackAxis2 instead of this enum value.
+	Automation1PsoDistanceInput_iXI4AuxiliaryFeedback2 = 229,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to iXI4AuxiliaryFeedbackAxis3. Use iXI4AuxiliaryFeedbackAxis3 instead of this enum value.
+	Automation1PsoDistanceInput_iXI4AuxiliaryFeedback3 = 230,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to iXI4AuxiliaryFeedbackAxis4. Use iXI4AuxiliaryFeedbackAxis4 instead of this enum value.
+	Automation1PsoDistanceInput_iXI4AuxiliaryFeedback4 = 231,
 } Automation1PsoDistanceInput;
 
 /// @brief Specifies the PSO window input settings for each drive.
 typedef enum Automation1PsoWindowInput
 {
 	/// @brief GL4 Primary Feedback Axis 1.
-	Automation1PsoWindowInput_GL4PrimaryFeedbackAxis1 = 0,
+	Automation1PsoWindowInput_GL4PrimaryFeedbackAxis1 = 100,
 	/// @brief GL4 Primary Feedback Axis 2.
-	Automation1PsoWindowInput_GL4PrimaryFeedbackAxis2 = 1,
+	Automation1PsoWindowInput_GL4PrimaryFeedbackAxis2 = 101,
 	/// @brief GL4 Primary Feedback Axis 1 with IFOV input.
-	Automation1PsoWindowInput_GL4IfovFeedbackAxis1 = 2,
+	Automation1PsoWindowInput_GL4IfovFeedbackAxis1 = 102,
 	/// @brief GL4 Primary Feedback Axis 2 with IFOV input.
-	Automation1PsoWindowInput_GL4IfovFeedbackAxis2 = 3,
+	Automation1PsoWindowInput_GL4IfovFeedbackAxis2 = 103,
 	/// @brief GL4 Auxiliary Feedback Axis 1.
-	Automation1PsoWindowInput_GL4AuxiliaryFeedbackAxis1 = 4,
+	Automation1PsoWindowInput_GL4AuxiliaryFeedbackAxis1 = 104,
 	/// @brief GL4 Auxiliary Feedback Axis 2.
-	Automation1PsoWindowInput_GL4AuxiliaryFeedbackAxis2 = 5,
+	Automation1PsoWindowInput_GL4AuxiliaryFeedbackAxis2 = 105,
 	/// @brief GL4 Sync Port A.
-	Automation1PsoWindowInput_GL4SyncPortA = 6,
+	Automation1PsoWindowInput_GL4SyncPortA = 106,
 	/// @brief GL4 Sync Port B.
-	Automation1PsoWindowInput_GL4SyncPortB = 7,
+	Automation1PsoWindowInput_GL4SyncPortB = 107,
 	/// @brief GL4 Drive Pulse Stream Axis 1.
-	Automation1PsoWindowInput_GL4DrivePulseStreamAxis1 = 14,
+	Automation1PsoWindowInput_GL4DrivePulseStreamAxis1 = 108,
 	/// @brief GL4 Drive Pulse Stream Axis 2.
-	Automation1PsoWindowInput_GL4DrivePulseStreamAxis2 = 15,
+	Automation1PsoWindowInput_GL4DrivePulseStreamAxis2 = 109,
 	/// @brief XL4s Primary Feedback.
-	Automation1PsoWindowInput_XL4sPrimaryFeedback = 0,
+	Automation1PsoWindowInput_XL4sPrimaryFeedback = 110,
 	/// @brief XL4s Auxiliary Feedback.
-	Automation1PsoWindowInput_XL4sAuxiliaryFeedback = 4,
+	Automation1PsoWindowInput_XL4sAuxiliaryFeedback = 111,
 	/// @brief XL4s Sync Port A.
-	Automation1PsoWindowInput_XL4sSyncPortA = 6,
+	Automation1PsoWindowInput_XL4sSyncPortA = 112,
 	/// @brief XL4s Sync Port B.
-	Automation1PsoWindowInput_XL4sSyncPortB = 7,
+	Automation1PsoWindowInput_XL4sSyncPortB = 113,
 	/// @brief XL4s Drive Pulse Stream.
-	Automation1PsoWindowInput_XL4sDrivePulseStream = 14,
+	Automation1PsoWindowInput_XL4sDrivePulseStream = 114,
 	/// @brief XR3 Primary Feedback Axis 1.
-	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis1 = 0,
-	/// @brief XR3 Auxiliary Feedback Axis 1.
-	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis1 = 1,
+	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis1 = 115,
 	/// @brief XR3 Primary Feedback Axis 2.
-	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis2 = 2,
-	/// @brief XR3 Auxiliary Feedback Axis 2.
-	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis2 = 3,
+	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis2 = 116,
 	/// @brief XR3 Primary Feedback Axis 3.
-	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis3 = 4,
-	/// @brief XR3 Auxiliary Feedback Axis 3.
-	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis3 = 5,
+	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis3 = 117,
 	/// @brief XR3 Primary Feedback Axis 4.
-	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis4 = 6,
-	/// @brief XR3 Auxiliary Feedback Axis 4.
-	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis4 = 7,
+	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis4 = 118,
 	/// @brief XR3 Primary Feedback Axis 5.
-	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis5 = 8,
-	/// @brief XR3 Auxiliary Feedback Axis 5.
-	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis5 = 9,
+	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis5 = 119,
 	/// @brief XR3 Primary Feedback Axis 6.
-	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis6 = 10,
+	Automation1PsoWindowInput_XR3PrimaryFeedbackAxis6 = 120,
+	/// @brief XR3 Auxiliary Feedback Axis 1.
+	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis1 = 121,
+	/// @brief XR3 Auxiliary Feedback Axis 2.
+	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis2 = 122,
+	/// @brief XR3 Auxiliary Feedback Axis 3.
+	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis3 = 123,
+	/// @brief XR3 Auxiliary Feedback Axis 4.
+	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis4 = 124,
+	/// @brief XR3 Auxiliary Feedback Axis 5.
+	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis5 = 125,
 	/// @brief XR3 Auxiliary Feedback Axis 6.
-	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis6 = 11,
+	Automation1PsoWindowInput_XR3AuxiliaryFeedbackAxis6 = 126,
 	/// @brief XR3 Sync Port A.
-	Automation1PsoWindowInput_XR3SyncPortA = 12,
+	Automation1PsoWindowInput_XR3SyncPortA = 127,
 	/// @brief XR3 Sync Port B.
-	Automation1PsoWindowInput_XR3SyncPortB = 13,
+	Automation1PsoWindowInput_XR3SyncPortB = 128,
 	/// @brief XR3 Drive Pulse Stream.
-	Automation1PsoWindowInput_XR3DrivePulseStream = 14,
+	Automation1PsoWindowInput_XR3DrivePulseStream = 129,
 	/// @brief XC4 Primary Feedback.
-	Automation1PsoWindowInput_XC4PrimaryFeedback = 0,
+	Automation1PsoWindowInput_XC4PrimaryFeedback = 130,
 	/// @brief XC4 Auxiliary Feedback.
-	Automation1PsoWindowInput_XC4AuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_XC4AuxiliaryFeedback = 131,
 	/// @brief XC4 Sync Port A.
-	Automation1PsoWindowInput_XC4SyncPortA = 2,
+	Automation1PsoWindowInput_XC4SyncPortA = 132,
 	/// @brief XC4 Sync Port B.
-	Automation1PsoWindowInput_XC4SyncPortB = 3,
+	Automation1PsoWindowInput_XC4SyncPortB = 133,
 	/// @brief XC4 Drive Pulse Stream.
-	Automation1PsoWindowInput_XC4DrivePulseStream = 14,
+	Automation1PsoWindowInput_XC4DrivePulseStream = 134,
 	/// @brief XC4e Primary Feedback.
-	Automation1PsoWindowInput_XC4ePrimaryFeedback = 0,
+	Automation1PsoWindowInput_XC4ePrimaryFeedback = 135,
 	/// @brief XC4e Auxiliary Feedback.
-	Automation1PsoWindowInput_XC4eAuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_XC4eAuxiliaryFeedback = 136,
 	/// @brief XC4e Sync Port A.
-	Automation1PsoWindowInput_XC4eSyncPortA = 2,
+	Automation1PsoWindowInput_XC4eSyncPortA = 137,
 	/// @brief XC4e Sync Port B.
-	Automation1PsoWindowInput_XC4eSyncPortB = 3,
+	Automation1PsoWindowInput_XC4eSyncPortB = 138,
 	/// @brief XC4e Drive Pulse Stream.
-	Automation1PsoWindowInput_XC4eDrivePulseStream = 14,
+	Automation1PsoWindowInput_XC4eDrivePulseStream = 139,
 	/// @brief XC6e Primary Feedback.
-	Automation1PsoWindowInput_XC6ePrimaryFeedback = 0,
+	Automation1PsoWindowInput_XC6ePrimaryFeedback = 140,
 	/// @brief XC6e Auxiliary Feedback.
-	Automation1PsoWindowInput_XC6eAuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_XC6eAuxiliaryFeedback = 141,
 	/// @brief XC6e Sync Port A.
-	Automation1PsoWindowInput_XC6eSyncPortA = 2,
+	Automation1PsoWindowInput_XC6eSyncPortA = 142,
 	/// @brief XC6e Sync Port B.
-	Automation1PsoWindowInput_XC6eSyncPortB = 3,
+	Automation1PsoWindowInput_XC6eSyncPortB = 143,
 	/// @brief XC6e Drive Pulse Stream.
-	Automation1PsoWindowInput_XC6eDrivePulseStream = 14,
+	Automation1PsoWindowInput_XC6eDrivePulseStream = 144,
 	/// @brief XL5e Primary Feedback.
-	Automation1PsoWindowInput_XL5ePrimaryFeedback = 0,
+	Automation1PsoWindowInput_XL5ePrimaryFeedback = 145,
 	/// @brief XL5e Auxiliary Feedback.
-	Automation1PsoWindowInput_XL5eAuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_XL5eAuxiliaryFeedback = 146,
 	/// @brief XL5e Sync Port A.
-	Automation1PsoWindowInput_XL5eSyncPortA = 2,
+	Automation1PsoWindowInput_XL5eSyncPortA = 147,
 	/// @brief XL5e Sync Port B.
-	Automation1PsoWindowInput_XL5eSyncPortB = 3,
+	Automation1PsoWindowInput_XL5eSyncPortB = 148,
 	/// @brief XL5e Drive Pulse Stream.
-	Automation1PsoWindowInput_XL5eDrivePulseStream = 14,
-	/// @brief SI4 Primary Feedback Axis 1.
-	Automation1PsoWindowInput_SI4PrimaryFeedbackAxis1 = 0,
-	/// @brief SI4 Primary Feedback Axis 2.
-	Automation1PsoWindowInput_SI4PrimaryFeedbackAxis2 = 1,
-	/// @brief SI4 Primary Feedback Axis 3.
-	Automation1PsoWindowInput_SI4PrimaryFeedbackAxis3 = 2,
-	/// @brief SI4 Primary Feedback Axis 4.
-	Automation1PsoWindowInput_SI4PrimaryFeedbackAxis4 = 3,
-	/// @brief SI4 Drive Pulse Stream Axis 1.
-	Automation1PsoWindowInput_SI4DrivePulseStreamAxis1 = 14,
-	/// @brief SI4 Drive Pulse Stream Axis 2.
-	Automation1PsoWindowInput_SI4DrivePulseStreamAxis2 = 15,
-	/// @brief SI4 Drive Pulse Stream Axis 3.
-	Automation1PsoWindowInput_SI4DrivePulseStreamAxis3 = 16,
-	/// @brief SI4 Drive Pulse Stream Axis 4.
-	Automation1PsoWindowInput_SI4DrivePulseStreamAxis4 = 17,
+	Automation1PsoWindowInput_XL5eDrivePulseStream = 149,
 	/// @brief XC2 Primary Feedback.
-	Automation1PsoWindowInput_XC2PrimaryFeedback = 0,
+	Automation1PsoWindowInput_XC2PrimaryFeedback = 150,
 	/// @brief XC2 Auxiliary Feedback.
-	Automation1PsoWindowInput_XC2AuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_XC2AuxiliaryFeedback = 151,
 	/// @brief XC2 Drive Pulse Stream.
-	Automation1PsoWindowInput_XC2DrivePulseStream = 14,
+	Automation1PsoWindowInput_XC2DrivePulseStream = 152,
 	/// @brief XC2e Primary Feedback.
-	Automation1PsoWindowInput_XC2ePrimaryFeedback = 0,
+	Automation1PsoWindowInput_XC2ePrimaryFeedback = 153,
 	/// @brief XC2e Auxiliary Feedback.
-	Automation1PsoWindowInput_XC2eAuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_XC2eAuxiliaryFeedback = 154,
 	/// @brief XC2e Drive Pulse Stream.
-	Automation1PsoWindowInput_XC2eDrivePulseStream = 14,
+	Automation1PsoWindowInput_XC2eDrivePulseStream = 155,
 	/// @brief XL2e Primary Feedback.
-	Automation1PsoWindowInput_XL2ePrimaryFeedback = 0,
+	Automation1PsoWindowInput_XL2ePrimaryFeedback = 156,
 	/// @brief XL2e Auxiliary Feedback.
-	Automation1PsoWindowInput_XL2eAuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_XL2eAuxiliaryFeedback = 157,
 	/// @brief XL2e Sync Port A.
-	Automation1PsoWindowInput_XL2eSyncPortA = 2,
+	Automation1PsoWindowInput_XL2eSyncPortA = 158,
 	/// @brief XL2e Sync Port B.
-	Automation1PsoWindowInput_XL2eSyncPortB = 3,
+	Automation1PsoWindowInput_XL2eSyncPortB = 159,
 	/// @brief XL2e Drive Pulse Stream.
-	Automation1PsoWindowInput_XL2eDrivePulseStream = 14,
+	Automation1PsoWindowInput_XL2eDrivePulseStream = 160,
 	/// @brief XI4 Primary Feedback Axis 1.
-	Automation1PsoWindowInput_XI4PrimaryFeedbackAxis1 = 0,
+	Automation1PsoWindowInput_XI4PrimaryFeedbackAxis1 = 161,
 	/// @brief XI4 Primary Feedback Axis 2.
-	Automation1PsoWindowInput_XI4PrimaryFeedbackAxis2 = 1,
+	Automation1PsoWindowInput_XI4PrimaryFeedbackAxis2 = 162,
 	/// @brief XI4 Primary Feedback Axis 3.
-	Automation1PsoWindowInput_XI4PrimaryFeedbackAxis3 = 2,
+	Automation1PsoWindowInput_XI4PrimaryFeedbackAxis3 = 163,
 	/// @brief XI4 Primary Feedback Axis 4.
-	Automation1PsoWindowInput_XI4PrimaryFeedbackAxis4 = 3,
+	Automation1PsoWindowInput_XI4PrimaryFeedbackAxis4 = 164,
 	/// @brief XI4 Auxiliary Feedback Axis 1.
-	Automation1PsoWindowInput_XI4AuxiliaryFeedback1 = 4,
+	Automation1PsoWindowInput_XI4AuxiliaryFeedbackAxis1 = 165,
 	/// @brief XI4 Auxiliary Feedback Axis 2.
-	Automation1PsoWindowInput_XI4AuxiliaryFeedback2 = 5,
+	Automation1PsoWindowInput_XI4AuxiliaryFeedbackAxis2 = 166,
 	/// @brief XI4 Auxiliary Feedback Axis 3.
-	Automation1PsoWindowInput_XI4AuxiliaryFeedback3 = 6,
+	Automation1PsoWindowInput_XI4AuxiliaryFeedbackAxis3 = 167,
 	/// @brief XI4 Auxiliary Feedback Axis 4.
-	Automation1PsoWindowInput_XI4AuxiliaryFeedback4 = 7,
+	Automation1PsoWindowInput_XI4AuxiliaryFeedbackAxis4 = 168,
 	/// @brief XI4 Sync Port A.
-	Automation1PsoWindowInput_XI4SyncPortA = 8,
+	Automation1PsoWindowInput_XI4SyncPortA = 169,
 	/// @brief XI4 Sync Port B.
-	Automation1PsoWindowInput_XI4SyncPortB = 9,
+	Automation1PsoWindowInput_XI4SyncPortB = 170,
 	/// @brief XI4 Drive Pulse Stream Axis 1.
-	Automation1PsoWindowInput_XI4DrivePulseStreamAxis1 = 14,
+	Automation1PsoWindowInput_XI4DrivePulseStreamAxis1 = 171,
 	/// @brief XI4 Drive Pulse Stream Axis 2.
-	Automation1PsoWindowInput_XI4DrivePulseStreamAxis2 = 15,
+	Automation1PsoWindowInput_XI4DrivePulseStreamAxis2 = 172,
 	/// @brief XI4 Drive Pulse Stream Axis 3.
-	Automation1PsoWindowInput_XI4DrivePulseStreamAxis3 = 16,
+	Automation1PsoWindowInput_XI4DrivePulseStreamAxis3 = 173,
 	/// @brief XI4 Drive Pulse Stream Axis 4.
-	Automation1PsoWindowInput_XI4DrivePulseStreamAxis4 = 17,
+	Automation1PsoWindowInput_XI4DrivePulseStreamAxis4 = 174,
 	/// @brief iXC4 Primary Feedback.
-	Automation1PsoWindowInput_iXC4PrimaryFeedback = 0,
+	Automation1PsoWindowInput_iXC4PrimaryFeedback = 175,
 	/// @brief iXC4 Auxiliary Feedback.
-	Automation1PsoWindowInput_iXC4AuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_iXC4AuxiliaryFeedback = 176,
 	/// @brief iXC4 Sync Port A.
-	Automation1PsoWindowInput_iXC4SyncPortA = 2,
+	Automation1PsoWindowInput_iXC4SyncPortA = 177,
 	/// @brief iXC4 Sync Port B.
-	Automation1PsoWindowInput_iXC4SyncPortB = 3,
+	Automation1PsoWindowInput_iXC4SyncPortB = 178,
 	/// @brief iXC4 Drive Pulse Stream.
-	Automation1PsoWindowInput_iXC4DrivePulseStream = 14,
+	Automation1PsoWindowInput_iXC4DrivePulseStream = 179,
 	/// @brief iXC4e Primary Feedback.
-	Automation1PsoWindowInput_iXC4ePrimaryFeedback = 0,
+	Automation1PsoWindowInput_iXC4ePrimaryFeedback = 180,
 	/// @brief iXC4e Auxiliary Feedback.
-	Automation1PsoWindowInput_iXC4eAuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_iXC4eAuxiliaryFeedback = 181,
 	/// @brief iXC4e Sync Port A.
-	Automation1PsoWindowInput_iXC4eSyncPortA = 2,
+	Automation1PsoWindowInput_iXC4eSyncPortA = 182,
 	/// @brief iXC4e Sync Port B.
-	Automation1PsoWindowInput_iXC4eSyncPortB = 3,
+	Automation1PsoWindowInput_iXC4eSyncPortB = 183,
 	/// @brief iXC4e Drive Pulse Stream.
-	Automation1PsoWindowInput_iXC4eDrivePulseStream = 14,
+	Automation1PsoWindowInput_iXC4eDrivePulseStream = 184,
 	/// @brief iXC6e Primary Feedback.
-	Automation1PsoWindowInput_iXC6ePrimaryFeedback = 0,
+	Automation1PsoWindowInput_iXC6ePrimaryFeedback = 185,
 	/// @brief iXC6e Auxiliary Feedback.
-	Automation1PsoWindowInput_iXC6eAuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_iXC6eAuxiliaryFeedback = 186,
 	/// @brief iXC6e Sync Port A.
-	Automation1PsoWindowInput_iXC6eSyncPortA = 2,
+	Automation1PsoWindowInput_iXC6eSyncPortA = 187,
 	/// @brief iXC6e Sync Port B.
-	Automation1PsoWindowInput_iXC6eSyncPortB = 3,
+	Automation1PsoWindowInput_iXC6eSyncPortB = 188,
 	/// @brief iXC6e Drive Pulse Stream.
-	Automation1PsoWindowInput_iXC6eDrivePulseStream = 14,
+	Automation1PsoWindowInput_iXC6eDrivePulseStream = 189,
 	/// @brief iXL5e Primary Feedback.
-	Automation1PsoWindowInput_iXL5ePrimaryFeedback = 0,
+	Automation1PsoWindowInput_iXL5ePrimaryFeedback = 190,
 	/// @brief iXL5e Auxiliary Feedback.
-	Automation1PsoWindowInput_iXL5eAuxiliaryFeedback = 1,
+	Automation1PsoWindowInput_iXL5eAuxiliaryFeedback = 191,
 	/// @brief iXL5e Sync Port A.
-	Automation1PsoWindowInput_iXL5eSyncPortA = 2,
+	Automation1PsoWindowInput_iXL5eSyncPortA = 192,
 	/// @brief iXL5e Sync Port B.
-	Automation1PsoWindowInput_iXL5eSyncPortB = 3,
+	Automation1PsoWindowInput_iXL5eSyncPortB = 193,
 	/// @brief iXL5e Drive Pulse Stream.
-	Automation1PsoWindowInput_iXL5eDrivePulseStream = 14,
+	Automation1PsoWindowInput_iXL5eDrivePulseStream = 194,
 	/// @brief iXR3 Primary Feedback Axis 1.
-	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis1 = 0,
-	/// @brief iXR3 Auxiliary Feedback Axis 1.
-	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis1 = 1,
+	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis1 = 195,
 	/// @brief iXR3 Primary Feedback Axis 2.
-	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis2 = 2,
-	/// @brief iXR3 Auxiliary Feedback Axis 2.
-	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis2 = 3,
+	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis2 = 196,
 	/// @brief iXR3 Primary Feedback Axis 3.
-	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis3 = 4,
-	/// @brief iXR3 Auxiliary Feedback Axis 3.
-	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis3 = 5,
+	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis3 = 197,
 	/// @brief iXR3 Primary Feedback Axis 4.
-	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis4 = 6,
-	/// @brief iXR3 Auxiliary Feedback Axis 4.
-	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis4 = 7,
+	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis4 = 198,
 	/// @brief iXR3 Primary Feedback Axis 5.
-	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis5 = 8,
-	/// @brief iXR3 Auxiliary Feedback Axis 5.
-	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis5 = 9,
+	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis5 = 199,
 	/// @brief iXR3 Primary Feedback Axis 6.
-	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis6 = 10,
+	Automation1PsoWindowInput_iXR3PrimaryFeedbackAxis6 = 200,
+	/// @brief iXR3 Auxiliary Feedback Axis 1.
+	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis1 = 201,
+	/// @brief iXR3 Auxiliary Feedback Axis 2.
+	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis2 = 202,
+	/// @brief iXR3 Auxiliary Feedback Axis 3.
+	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis3 = 203,
+	/// @brief iXR3 Auxiliary Feedback Axis 4.
+	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis4 = 204,
+	/// @brief iXR3 Auxiliary Feedback Axis 5.
+	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis5 = 205,
 	/// @brief iXR3 Auxiliary Feedback Axis 6.
-	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis6 = 11,
+	Automation1PsoWindowInput_iXR3AuxiliaryFeedbackAxis6 = 206,
 	/// @brief iXR3 Sync Port A.
-	Automation1PsoWindowInput_iXR3SyncPortA = 12,
+	Automation1PsoWindowInput_iXR3SyncPortA = 207,
 	/// @brief iXR3 Sync Port B.
-	Automation1PsoWindowInput_iXR3SyncPortB = 13,
+	Automation1PsoWindowInput_iXR3SyncPortB = 208,
 	/// @brief iXR3 Drive Pulse Stream.
-	Automation1PsoWindowInput_iXR3DrivePulseStream = 14,
+	Automation1PsoWindowInput_iXR3DrivePulseStream = 209,
+	/// @brief GI4 Drive Pulse Stream Axis 1.
+	Automation1PsoWindowInput_GI4DrivePulseStreamAxis1 = 210,
+	/// @brief GI4 Drive Pulse Stream Axis 2.
+	Automation1PsoWindowInput_GI4DrivePulseStreamAxis2 = 211,
+	/// @brief GI4 Drive Pulse Stream Axis 3.
+	Automation1PsoWindowInput_GI4DrivePulseStreamAxis3 = 212,
+	/// @brief iXC2 Primary Feedback.
+	Automation1PsoWindowInput_iXC2PrimaryFeedback = 213,
+	/// @brief iXC2 Auxiliary Feedback.
+	Automation1PsoWindowInput_iXC2AuxiliaryFeedback = 214,
+	/// @brief iXC2 Drive Pulse Stream.
+	Automation1PsoWindowInput_iXC2DrivePulseStream = 215,
+	/// @brief iXC2e Primary Feedback.
+	Automation1PsoWindowInput_iXC2ePrimaryFeedback = 216,
+	/// @brief iXC2e Auxiliary Feedback.
+	Automation1PsoWindowInput_iXC2eAuxiliaryFeedback = 217,
+	/// @brief iXC2e Drive Pulse Stream.
+	Automation1PsoWindowInput_iXC2eDrivePulseStream = 218,
+	/// @brief iXL2e Primary Feedback.
+	Automation1PsoWindowInput_iXL2ePrimaryFeedback = 219,
+	/// @brief iXL2e Auxiliary Feedback.
+	Automation1PsoWindowInput_iXL2eAuxiliaryFeedback = 220,
+	/// @brief iXL2e Sync Port A.
+	Automation1PsoWindowInput_iXL2eSyncPortA = 221,
+	/// @brief iXL2e Sync Port B.
+	Automation1PsoWindowInput_iXL2eSyncPortB = 222,
+	/// @brief iXL2e Drive Pulse Stream.
+	Automation1PsoWindowInput_iXL2eDrivePulseStream = 223,
+	/// @brief iXI4 Primary Feedback Axis 1.
+	Automation1PsoWindowInput_iXI4PrimaryFeedbackAxis1 = 224,
+	/// @brief iXI4 Primary Feedback Axis 2.
+	Automation1PsoWindowInput_iXI4PrimaryFeedbackAxis2 = 225,
+	/// @brief iXI4 Primary Feedback Axis 3.
+	Automation1PsoWindowInput_iXI4PrimaryFeedbackAxis3 = 226,
+	/// @brief iXI4 Primary Feedback Axis 4.
+	Automation1PsoWindowInput_iXI4PrimaryFeedbackAxis4 = 227,
+	/// @brief iXI4 Auxiliary Feedback Axis 1.
+	Automation1PsoWindowInput_iXI4AuxiliaryFeedbackAxis1 = 228,
+	/// @brief iXI4 Auxiliary Feedback Axis 2.
+	Automation1PsoWindowInput_iXI4AuxiliaryFeedbackAxis2 = 229,
+	/// @brief iXI4 Auxiliary Feedback Axis 3.
+	Automation1PsoWindowInput_iXI4AuxiliaryFeedbackAxis3 = 230,
+	/// @brief iXI4 Auxiliary Feedback Axis 4.
+	Automation1PsoWindowInput_iXI4AuxiliaryFeedbackAxis4 = 231,
+	/// @brief iXI4 Sync Port A.
+	Automation1PsoWindowInput_iXI4SyncPortA = 232,
+	/// @brief iXI4 Sync Port B.
+	Automation1PsoWindowInput_iXI4SyncPortB = 233,
+	/// @brief iXI4 Drive Pulse Stream Axis 1.
+	Automation1PsoWindowInput_iXI4DrivePulseStreamAxis1 = 234,
+	/// @brief iXI4 Drive Pulse Stream Axis 2.
+	Automation1PsoWindowInput_iXI4DrivePulseStreamAxis2 = 235,
+	/// @brief iXI4 Drive Pulse Stream Axis 3.
+	Automation1PsoWindowInput_iXI4DrivePulseStreamAxis3 = 236,
+	/// @brief iXI4 Drive Pulse Stream Axis 4.
+	Automation1PsoWindowInput_iXI4DrivePulseStreamAxis4 = 237,
+	/// @brief FLEX Primary Feedback Axis 1.
+	Automation1PsoWindowInput_FLEXPrimaryFeedbackAxis1 = 238,
+	/// @brief FLEX Primary Feedback Axis 2.
+	Automation1PsoWindowInput_FLEXPrimaryFeedbackAxis2 = 239,
+	/// @brief FLEX Primary Feedback Axis 3.
+	Automation1PsoWindowInput_FLEXPrimaryFeedbackAxis3 = 240,
+	/// @brief FLEX Primary Feedback Axis 4.
+	Automation1PsoWindowInput_FLEXPrimaryFeedbackAxis4 = 241,
+	/// @brief FLEX Auxiliary Feedback Axis 1.
+	Automation1PsoWindowInput_FLEXAuxiliaryFeedbackAxis1 = 242,
+	/// @brief FLEX Auxiliary Feedback Axis 2.
+	Automation1PsoWindowInput_FLEXAuxiliaryFeedbackAxis2 = 243,
+	/// @brief FLEX Auxiliary Feedback Axis 3.
+	Automation1PsoWindowInput_FLEXAuxiliaryFeedbackAxis3 = 244,
+	/// @brief FLEX Auxiliary Feedback Axis 4.
+	Automation1PsoWindowInput_FLEXAuxiliaryFeedbackAxis4 = 245,
+	/// @brief FLEX Sync Port A.
+	Automation1PsoWindowInput_FLEXSyncPortA = 246,
+	/// @brief FLEX Sync Port B.
+	Automation1PsoWindowInput_FLEXSyncPortB = 247,
+	/// @brief FLEX Drive Pulse Stream Axis 1.
+	Automation1PsoWindowInput_FLEXDrivePulseStreamAxis1 = 248,
+	/// @brief FLEX Drive Pulse Stream Axis 2.
+	Automation1PsoWindowInput_FLEXDrivePulseStreamAxis2 = 249,
+	/// @brief FLEX Drive Pulse Stream Axis 3.
+	Automation1PsoWindowInput_FLEXDrivePulseStreamAxis3 = 250,
+	/// @brief FLEX Drive Pulse Stream Axis 4.
+	Automation1PsoWindowInput_FLEXDrivePulseStreamAxis4 = 251,
+	/// @brief iFLEX Primary Feedback Axis 1.
+	Automation1PsoWindowInput_iFLEXPrimaryFeedbackAxis1 = 252,
+	/// @brief iFLEX Primary Feedback Axis 2.
+	Automation1PsoWindowInput_iFLEXPrimaryFeedbackAxis2 = 253,
+	/// @brief iFLEX Primary Feedback Axis 3.
+	Automation1PsoWindowInput_iFLEXPrimaryFeedbackAxis3 = 254,
+	/// @brief iFLEX Primary Feedback Axis 4.
+	Automation1PsoWindowInput_iFLEXPrimaryFeedbackAxis4 = 255,
+	/// @brief iFLEX Auxiliary Feedback Axis 1.
+	Automation1PsoWindowInput_iFLEXAuxiliaryFeedbackAxis1 = 256,
+	/// @brief iFLEX Auxiliary Feedback Axis 2.
+	Automation1PsoWindowInput_iFLEXAuxiliaryFeedbackAxis2 = 257,
+	/// @brief iFLEX Auxiliary Feedback Axis 3.
+	Automation1PsoWindowInput_iFLEXAuxiliaryFeedbackAxis3 = 258,
+	/// @brief iFLEX Auxiliary Feedback Axis 4.
+	Automation1PsoWindowInput_iFLEXAuxiliaryFeedbackAxis4 = 259,
+	/// @brief iFLEX Sync Port A.
+	Automation1PsoWindowInput_iFLEXSyncPortA = 260,
+	/// @brief iFLEX Sync Port B.
+	Automation1PsoWindowInput_iFLEXSyncPortB = 261,
+	/// @brief iFLEX Drive Pulse Stream Axis 1.
+	Automation1PsoWindowInput_iFLEXDrivePulseStreamAxis1 = 262,
+	/// @brief iFLEX Drive Pulse Stream Axis 2.
+	Automation1PsoWindowInput_iFLEXDrivePulseStreamAxis2 = 263,
+	/// @brief iFLEX Drive Pulse Stream Axis 3.
+	Automation1PsoWindowInput_iFLEXDrivePulseStreamAxis3 = 264,
+	/// @brief iFLEX Drive Pulse Stream Axis 4.
+	Automation1PsoWindowInput_iFLEXDrivePulseStreamAxis4 = 265,
+	/// @brief XA4 Primary Feedback Axis 1.
+	Automation1PsoWindowInput_XA4PrimaryFeedbackAxis1 = 266,
+	/// @brief XA4 Primary Feedback Axis 2.
+	Automation1PsoWindowInput_XA4PrimaryFeedbackAxis2 = 267,
+	/// @brief XA4 Drive Pulse Stream Axis 1.
+	Automation1PsoWindowInput_XA4DrivePulseStreamAxis1 = 268,
+	/// @brief XA4 Drive Pulse Stream Axis 2.
+	Automation1PsoWindowInput_XA4DrivePulseStreamAxis2 = 269,
+	/// @brief iXA4 Primary Feedback Axis 1.
+	Automation1PsoWindowInput_iXA4PrimaryFeedbackAxis1 = 270,
+	/// @brief iXA4 Primary Feedback Axis 2.
+	Automation1PsoWindowInput_iXA4PrimaryFeedbackAxis2 = 271,
+	/// @brief iXA4 Drive Pulse Stream Axis 1.
+	Automation1PsoWindowInput_iXA4DrivePulseStreamAxis1 = 272,
+	/// @brief iXA4 Drive Pulse Stream Axis 2.
+	Automation1PsoWindowInput_iXA4DrivePulseStreamAxis2 = 273,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to XI4AuxiliaryFeedbackAxis1. Use XI4AuxiliaryFeedbackAxis1 instead of this enum value.
+	Automation1PsoWindowInput_XI4AuxiliaryFeedback1 = 165,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to XI4AuxiliaryFeedbackAxis2. Use XI4AuxiliaryFeedbackAxis2 instead of this enum value.
+	Automation1PsoWindowInput_XI4AuxiliaryFeedback2 = 166,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to XI4AuxiliaryFeedbackAxis3. Use XI4AuxiliaryFeedbackAxis3 instead of this enum value.
+	Automation1PsoWindowInput_XI4AuxiliaryFeedback3 = 167,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to XI4AuxiliaryFeedbackAxis4. Use XI4AuxiliaryFeedbackAxis4 instead of this enum value.
+	Automation1PsoWindowInput_XI4AuxiliaryFeedback4 = 168,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to iXI4AuxiliaryFeedbackAxis1. Use iXI4AuxiliaryFeedbackAxis1 instead of this enum value.
+	Automation1PsoWindowInput_iXI4AuxiliaryFeedback1 = 228,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to iXI4AuxiliaryFeedbackAxis2. Use iXI4AuxiliaryFeedbackAxis2 instead of this enum value.
+	Automation1PsoWindowInput_iXI4AuxiliaryFeedback2 = 229,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to iXI4AuxiliaryFeedbackAxis3. Use iXI4AuxiliaryFeedbackAxis3 instead of this enum value.
+	Automation1PsoWindowInput_iXI4AuxiliaryFeedback3 = 230,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to iXI4AuxiliaryFeedbackAxis4. Use iXI4AuxiliaryFeedbackAxis4 instead of this enum value.
+	Automation1PsoWindowInput_iXI4AuxiliaryFeedback4 = 231,
 } Automation1PsoWindowInput;
 
 /// @brief Specifies the PSO output pin settings for each drive.
 typedef enum Automation1PsoOutputPin
 {
 	/// @brief GL4 None (default).
-	Automation1PsoOutputPin_GL4None = 0,
+	Automation1PsoOutputPin_GL4None = 100,
 	/// @brief GL4 Laser Output 0.
-	Automation1PsoOutputPin_GL4LaserOutput0 = 1,
+	Automation1PsoOutputPin_GL4LaserOutput0 = 101,
 	/// @brief XL4s None (default).
-	Automation1PsoOutputPin_XL4sNone = 0,
+	Automation1PsoOutputPin_XL4sNone = 102,
 	/// @brief XL4s Laser Output 0.
-	Automation1PsoOutputPin_XL4sLaserOutput0 = 1,
+	Automation1PsoOutputPin_XL4sLaserOutput0 = 103,
 	/// @brief XR3 None (default).
-	Automation1PsoOutputPin_XR3None = 0,
+	Automation1PsoOutputPin_XR3None = 104,
 	/// @brief XR3 PSO Output 1.
-	Automation1PsoOutputPin_XR3PsoOutput1 = 1,
+	Automation1PsoOutputPin_XR3PsoOutput1 = 105,
 	/// @brief XR3 PSO Output 2.
-	Automation1PsoOutputPin_XR3PsoOutput2 = 2,
+	Automation1PsoOutputPin_XR3PsoOutput2 = 106,
 	/// @brief XR3 PSO Output 3.
-	Automation1PsoOutputPin_XR3PsoOutput3 = 3,
+	Automation1PsoOutputPin_XR3PsoOutput3 = 107,
 	/// @brief XC4 Dedicated Output (default).
-	Automation1PsoOutputPin_XC4DedicatedOutput = 0,
+	Automation1PsoOutputPin_XC4DedicatedOutput = 108,
 	/// @brief XC4 Auxiliary Marker (Differential mode).
-	Automation1PsoOutputPin_XC4AuxiliaryMarkerDifferential = 1,
+	Automation1PsoOutputPin_XC4AuxiliaryMarkerDifferential = 109,
 	/// @brief XC4 Auxiliary Marker (Single-ended mode).
-	Automation1PsoOutputPin_XC4AuxiliaryMarkerSingleEnded = 2,
+	Automation1PsoOutputPin_XC4AuxiliaryMarkerSingleEnded = 110,
 	/// @brief XC4e Dedicated Output (default).
-	Automation1PsoOutputPin_XC4eDedicatedOutput = 0,
+	Automation1PsoOutputPin_XC4eDedicatedOutput = 111,
 	/// @brief XC4e Auxiliary Marker (Differential mode).
-	Automation1PsoOutputPin_XC4eAuxiliaryMarkerDifferential = 1,
+	Automation1PsoOutputPin_XC4eAuxiliaryMarkerDifferential = 112,
 	/// @brief XC4e Auxiliary Marker (Single-ended mode).
-	Automation1PsoOutputPin_XC4eAuxiliaryMarkerSingleEnded = 2,
+	Automation1PsoOutputPin_XC4eAuxiliaryMarkerSingleEnded = 113,
 	/// @brief XC6e Dedicated Output (default).
-	Automation1PsoOutputPin_XC6eDedicatedOutput = 0,
+	Automation1PsoOutputPin_XC6eDedicatedOutput = 114,
 	/// @brief XC6e Auxiliary Marker (Differential mode).
-	Automation1PsoOutputPin_XC6eAuxiliaryMarkerDifferential = 1,
+	Automation1PsoOutputPin_XC6eAuxiliaryMarkerDifferential = 115,
 	/// @brief XC6e Auxiliary Marker (Single-ended mode).
-	Automation1PsoOutputPin_XC6eAuxiliaryMarkerSingleEnded = 2,
+	Automation1PsoOutputPin_XC6eAuxiliaryMarkerSingleEnded = 116,
 	/// @brief XL5e Dedicated Output (default).
-	Automation1PsoOutputPin_XL5eDedicatedOutput = 0,
+	Automation1PsoOutputPin_XL5eDedicatedOutput = 117,
 	/// @brief XL5e Auxiliary Marker (Differential mode).
-	Automation1PsoOutputPin_XL5eAuxiliaryMarkerDifferential = 1,
+	Automation1PsoOutputPin_XL5eAuxiliaryMarkerDifferential = 118,
 	/// @brief XL5e Auxiliary Marker (Single-ended mode).
-	Automation1PsoOutputPin_XL5eAuxiliaryMarkerSingleEnded = 2,
-	/// @brief SI4 Dedicated Output (default).
-	Automation1PsoOutputPin_SI4DedicatedOutput = 0,
+	Automation1PsoOutputPin_XL5eAuxiliaryMarkerSingleEnded = 119,
 	/// @brief XC2 Dedicated Output (default).
-	Automation1PsoOutputPin_XC2DedicatedOutput = 0,
+	Automation1PsoOutputPin_XC2DedicatedOutput = 120,
 	/// @brief XC2e Dedicated Output (default).
-	Automation1PsoOutputPin_XC2eDedicatedOutput = 0,
+	Automation1PsoOutputPin_XC2eDedicatedOutput = 121,
 	/// @brief XL2e Dedicated Output (default).
-	Automation1PsoOutputPin_XL2eDedicatedOutput = 0,
+	Automation1PsoOutputPin_XL2eDedicatedOutput = 122,
 	/// @brief XI4 Dedicated Output (default).
-	Automation1PsoOutputPin_XI4DedicatedOutput = 0,
+	Automation1PsoOutputPin_XI4DedicatedOutput = 123,
 	/// @brief iXC4 Dedicated Output (default).
-	Automation1PsoOutputPin_iXC4DedicatedOutput = 0,
+	Automation1PsoOutputPin_iXC4DedicatedOutput = 124,
 	/// @brief iXC4 Auxiliary Marker (Differential mode).
-	Automation1PsoOutputPin_iXC4AuxiliaryMarkerDifferential = 1,
+	Automation1PsoOutputPin_iXC4AuxiliaryMarkerDifferential = 125,
 	/// @brief iXC4 Auxiliary Marker (Single-ended mode).
-	Automation1PsoOutputPin_iXC4AuxiliaryMarkerSingleEnded = 2,
+	Automation1PsoOutputPin_iXC4AuxiliaryMarkerSingleEnded = 126,
 	/// @brief iXC4e Dedicated Output (default).
-	Automation1PsoOutputPin_iXC4eDedicatedOutput = 0,
+	Automation1PsoOutputPin_iXC4eDedicatedOutput = 127,
 	/// @brief iXC4e Auxiliary Marker (Differential mode).
-	Automation1PsoOutputPin_iXC4eAuxiliaryMarkerDifferential = 1,
+	Automation1PsoOutputPin_iXC4eAuxiliaryMarkerDifferential = 128,
 	/// @brief iXC4e Auxiliary Marker (Single-ended mode).
-	Automation1PsoOutputPin_iXC4eAuxiliaryMarkerSingleEnded = 2,
+	Automation1PsoOutputPin_iXC4eAuxiliaryMarkerSingleEnded = 129,
 	/// @brief iXC6e Dedicated Output (default).
-	Automation1PsoOutputPin_iXC6eDedicatedOutput = 0,
+	Automation1PsoOutputPin_iXC6eDedicatedOutput = 130,
 	/// @brief iXC6e Auxiliary Marker (Differential mode).
-	Automation1PsoOutputPin_iXC6eAuxiliaryMarkerDifferential = 1,
+	Automation1PsoOutputPin_iXC6eAuxiliaryMarkerDifferential = 131,
 	/// @brief iXC6e Auxiliary Marker (Single-ended mode).
-	Automation1PsoOutputPin_iXC6eAuxiliaryMarkerSingleEnded = 2,
+	Automation1PsoOutputPin_iXC6eAuxiliaryMarkerSingleEnded = 132,
 	/// @brief iXL5e Dedicated Output (default).
-	Automation1PsoOutputPin_iXL5eDedicatedOutput = 0,
+	Automation1PsoOutputPin_iXL5eDedicatedOutput = 133,
 	/// @brief iXL5e Auxiliary Marker (Differential mode).
-	Automation1PsoOutputPin_iXL5eAuxiliaryMarkerDifferential = 1,
+	Automation1PsoOutputPin_iXL5eAuxiliaryMarkerDifferential = 134,
 	/// @brief iXL5e Auxiliary Marker (Single-ended mode).
-	Automation1PsoOutputPin_iXL5eAuxiliaryMarkerSingleEnded = 2,
+	Automation1PsoOutputPin_iXL5eAuxiliaryMarkerSingleEnded = 135,
 	/// @brief iXR3 None (default).
-	Automation1PsoOutputPin_iXR3None = 0,
+	Automation1PsoOutputPin_iXR3None = 136,
 	/// @brief iXR3 PSO Output 1.
-	Automation1PsoOutputPin_iXR3PsoOutput1 = 1,
+	Automation1PsoOutputPin_iXR3PsoOutput1 = 137,
 	/// @brief iXR3 PSO Output 2.
-	Automation1PsoOutputPin_iXR3PsoOutput2 = 2,
+	Automation1PsoOutputPin_iXR3PsoOutput2 = 138,
 	/// @brief iXR3 PSO Output 3.
-	Automation1PsoOutputPin_iXR3PsoOutput3 = 3,
+	Automation1PsoOutputPin_iXR3PsoOutput3 = 139,
+	/// @brief GI4 None (default).
+	Automation1PsoOutputPin_GI4None = 140,
+	/// @brief GI4 Laser Output 0.
+	Automation1PsoOutputPin_GI4LaserOutput0 = 141,
+	/// @brief iXC2 Dedicated Output (default).
+	Automation1PsoOutputPin_iXC2DedicatedOutput = 142,
+	/// @brief iXC2e Dedicated Output (default).
+	Automation1PsoOutputPin_iXC2eDedicatedOutput = 143,
+	/// @brief iXL2e Dedicated Output (default).
+	Automation1PsoOutputPin_iXL2eDedicatedOutput = 144,
+	/// @brief iXI4 Dedicated Output (default).
+	Automation1PsoOutputPin_iXI4DedicatedOutput = 145,
+	/// @brief FLEX Dedicated Output (default).
+	Automation1PsoOutputPin_FLEXDedicatedOutput = 146,
+	/// @brief iFLEX Dedicated Output (default).
+	Automation1PsoOutputPin_iFLEXDedicatedOutput = 147,
+	/// @brief XA4 Dedicated Output (default).
+	Automation1PsoOutputPin_XA4DedicatedOutput = 148,
+	/// @brief iXA4 Dedicated Output (default).
+	Automation1PsoOutputPin_iXA4DedicatedOutput = 149,
 } Automation1PsoOutputPin;
+
+/// @brief Selects whether autofocus will run in continuous focus mode or single focus mode.
+typedef enum Automation1AutofocusFocusMode
+{
+	/// @brief The autofocus routine runs continuously until you turn off autofocus.
+	Automation1AutofocusFocusMode_Continuous = 0,
+	/// @brief The autofocus routine automatically turns off when the input that is specified by the AutofocusInput parameter is within the specified deadband of the AutofocusDeadband parameter.
+	Automation1AutofocusFocusMode_Single = 1,
+} Automation1AutofocusFocusMode;
+
+/// @brief A controller signal used for analog output axis tracking.
+typedef enum Automation1AnalogOutputAxisTrackingItem
+{
+	/// @brief The analog output will track the Position Command item in user units.
+	Automation1AnalogOutputAxisTrackingItem_PositionCommand = 1,
+	/// @brief The analog output will track the Position Feedback item in user units.
+	Automation1AnalogOutputAxisTrackingItem_PositionFeedback = 2,
+	/// @brief The analog output will track the Velocity Command item in user units per second.
+	Automation1AnalogOutputAxisTrackingItem_VelocityCommand = 3,
+	/// @brief The analog output will track the Velocity Feedback item in user units per second.
+	Automation1AnalogOutputAxisTrackingItem_VelocityFeedback = 4,
+	/// @brief The analog output will track the Current Command item in amps.
+	Automation1AnalogOutputAxisTrackingItem_CurrentCommand = 5,
+	/// @brief The analog output will track the Current Feedback item in amps.
+	Automation1AnalogOutputAxisTrackingItem_CurrentFeedback = 6,
+	/// @brief The analog output will track the Acceleration Command item in user units per second squared.
+	Automation1AnalogOutputAxisTrackingItem_AccelerationCommand = 7,
+	/// @brief The analog output will track the Position Error item in user units.
+	Automation1AnalogOutputAxisTrackingItem_PositionError = 8,
+	/// @brief The analog output will track the Piezo Voltage Command item in volts.
+	Automation1AnalogOutputAxisTrackingItem_PiezoVoltageCommand = 9,
+	/// @brief The analog output will track the vector speed in user units per second.
+	Automation1AnalogOutputAxisTrackingItem_VectorSpeedCommand = 10,
+} Automation1AnalogOutputAxisTrackingItem;
+
+/// @brief A controller signal used for analog output vector tracking.
+typedef enum Automation1AnalogOutputVectorTrackingItem
+{
+	/// @brief The analog output will track the Position Command item in primary units.
+	Automation1AnalogOutputVectorTrackingItem_PositionCommand = 0,
+	/// @brief The analog output will track the Position Feedback item in primary units.
+	Automation1AnalogOutputVectorTrackingItem_PositionFeedback = 1,
+	/// @brief The analog output will track the Velocity Command item in primary units per second.
+	Automation1AnalogOutputVectorTrackingItem_VelocityCommand = 2,
+	/// @brief The analog output will track the Velocity Feedback item in primary units per second.
+	Automation1AnalogOutputVectorTrackingItem_VelocityFeedback = 3,
+} Automation1AnalogOutputVectorTrackingItem;
+
+/// @brief Represents a data collection file type.
+typedef enum Automation1DataCollectionFileType
+{
+	/// @brief The Automation1 Plot file type.
+	Automation1DataCollectionFileType_Plt = 0,
+	/// @brief The CSV file type.
+	Automation1DataCollectionFileType_Csv = 1,
+	/// @brief The JSON file type.
+	Automation1DataCollectionFileType_Json = 2,
+} Automation1DataCollectionFileType;
+
+/// @brief Represents a frequency response file type.
+typedef enum Automation1FrequencyResponseFileType
+{
+	/// @brief The Automation1 Frequency Response file type.
+	Automation1FrequencyResponseFileType_Fr = 0,
+	/// @brief The CSV file type.
+	Automation1FrequencyResponseFileType_Csv = 1,
+	/// @brief The JSON file type.
+	Automation1FrequencyResponseFileType_Json = 2,
+} Automation1FrequencyResponseFileType;
 
 /// @brief This value represents information about the state of this task.
 typedef enum Automation1TaskState
@@ -1253,113 +1432,187 @@ typedef enum Automation1TaskState
 	Automation1TaskState_ProgramComplete = 7,
 	/// @brief A task error occurred on this task.
 	Automation1TaskState_Error = 8,
-	/// @brief This task is operating in queue mode.
-	Automation1TaskState_Queue = 9,
+	/// @brief This task has an active command queue that is currently running.
+	Automation1TaskState_QueueRunning = 9,
+	/// @brief This task has an active command queue that is currently paused.
+	Automation1TaskState_QueuePaused = 10,
 } Automation1TaskState;
 
 /// @brief Represents the motor type
 typedef enum Automation1MotorType
 {
-	/// @brief 
+	/// @brief AC Brushless Linear
 	Automation1MotorType_ACBrushlessLinear = 0,
-	/// @brief 
+	/// @brief AC Brushless Rotary
 	Automation1MotorType_ACBrushlessRotary = 1,
-	/// @brief 
+	/// @brief DC Brush
 	Automation1MotorType_DCBrush = 2,
-	/// @brief 
+	/// @brief Stepper Motor
 	Automation1MotorType_StepperMotor = 3,
-	/// @brief 
+	/// @brief Three Phase Stepper
+	Automation1MotorType_ThreePhaseStepper = 4,
+	/// @brief 2-Phase AC Brushless
 	Automation1MotorType_TwoPhaseACBrushless = 6,
-	/// @brief 
+	/// @brief Piezo Actuator
 	Automation1MotorType_PiezoActuator = 8,
-	/// @brief 
+	/// @brief Galvo
 	Automation1MotorType_Galvo = 9,
 } Automation1MotorType;
 
 /// @brief Represents the home type
 typedef enum Automation1HomeType
 {
-	/// @brief 
+	/// @brief Home Past Limit to Marker
 	Automation1HomeType_PastLimittoMarker = 0,
-	/// @brief 
+	/// @brief Home to Limit and Reverse to Marker
 	Automation1HomeType_ToLimitandReversetoMarker = 1,
-	/// @brief 
+	/// @brief Home to Marker Only
 	Automation1HomeType_ToMarkerOnly = 2,
-	/// @brief 
+	/// @brief Home to Limit Only
 	Automation1HomeType_ToLimitOnly = 3,
-	/// @brief 
+	/// @brief Home at Current Position
 	Automation1HomeType_AtCurrentPosition = 4,
-	/// @brief 
+	/// @brief Home at Current Position Feedback
 	Automation1HomeType_AtCurrentPositionFeedback = 5,
-	/// @brief 
+	/// @brief Home at Current Position Absolute
 	Automation1HomeType_AtCurrentPositionAbsolute = 6,
 } Automation1HomeType;
 
 /// @brief Represents the feedback type on the primary connector
 typedef enum Automation1PrimaryFeedbackType
 {
-	/// @brief 
+	/// @brief None
 	Automation1PrimaryFeedbackType_None = 0,
-	/// @brief 
+	/// @brief Incremental Encoder (Square-Wave)
 	Automation1PrimaryFeedbackType_IncrementalEncoderSquareWave = 1,
-	/// @brief 
+	/// @brief Incremental Encoder (Sine-Wave)
 	Automation1PrimaryFeedbackType_IncrementalEncoderSineWave = 2,
-	/// @brief 
+	/// @brief Absolute Encoder (EnDat with Sine-Wave Incremental)
 	Automation1PrimaryFeedbackType_AbsoluteEncoderEnDatwithSineWaveIncremental = 3,
-	/// @brief 
+	/// @brief Absolute Encoder (EnDat)
 	Automation1PrimaryFeedbackType_AbsoluteEncoderEnDat = 4,
-	/// @brief 
+	/// @brief Hall-Effect Switches
 	Automation1PrimaryFeedbackType_HallEffectSwitches = 5,
-	/// @brief 
+	/// @brief Absolute Encoder (SSI)
 	Automation1PrimaryFeedbackType_AbsoluteEncoderSSI = 6,
-	/// @brief 
+	/// @brief Absolute Encoder (BiSS)
 	Automation1PrimaryFeedbackType_AbsoluteEncoderBiSS = 9,
-	/// @brief 
+	/// @brief Absolute Encoder (BiSS with Sine-Wave Incremental)
+	Automation1PrimaryFeedbackType_AbsoluteEncoderBiSSwithSineWaveIncremental = 10,
+	/// @brief Capacitance Sensor
 	Automation1PrimaryFeedbackType_CapacitanceSensor = 11,
 } Automation1PrimaryFeedbackType;
 
 /// @brief Represents the feedback type on the auxiliary connector
 typedef enum Automation1AuxiliaryFeedbackType
 {
-	/// @brief 
+	/// @brief None
 	Automation1AuxiliaryFeedbackType_None = 0,
-	/// @brief 
+	/// @brief Incremental Encoder (Square-Wave)
 	Automation1AuxiliaryFeedbackType_IncrementalEncoderSquareWave = 1,
-	/// @brief 
+	/// @brief Incremental Encoder (Sine-Wave)
 	Automation1AuxiliaryFeedbackType_IncrementalEncoderSineWave = 2,
-	/// @brief 
+	/// @brief Absolute Encoder (EnDat)
 	Automation1AuxiliaryFeedbackType_AbsoluteEncoderEnDat = 4,
-	/// @brief 
+	/// @brief Absolute Encoder (SSI)
 	Automation1AuxiliaryFeedbackType_AbsoluteEncoderSSI = 6,
-	/// @brief 
+	/// @brief Absolute Encoder (BiSS)
 	Automation1AuxiliaryFeedbackType_AbsoluteEncoderBiSS = 9,
 } Automation1AuxiliaryFeedbackType;
-
-/// @brief Represents a set of queue status
-typedef enum Automation1QueueStatus
-{
-	/// @brief 
-	Automation1QueueStatus_QueueModeActive = 1 << 0,
-	/// @brief The Queue buffer for this task is empty.
-	Automation1QueueStatus_QueueBufferEmpty = 1 << 1,
-	/// @brief The Queue buffer for this task is full.
-	Automation1QueueStatus_QueueBufferFull = 1 << 2,
-	/// @brief The Queue buffer for this task started.
-	Automation1QueueStatus_QueueBufferStarted = 1 << 3,
-	/// @brief The Queue buffer for this task was paused.
-	Automation1QueueStatus_QueueBufferPaused = 1 << 4,
-	/// @brief The given task is executing a large program line-by-line in queue mode.
-	Automation1QueueStatus_QueueLargeProgramExecuting = 1 << 5,
-} Automation1QueueStatus;
 
 /// @brief Represents the piezo default servo state.
 typedef enum Automation1PiezoDefaultServoState
 {
-	/// @brief 
+	/// @brief Servo Off
 	Automation1PiezoDefaultServoState_Off = 0,
-	/// @brief 
+	/// @brief Servo On
 	Automation1PiezoDefaultServoState_On = 1,
 } Automation1PiezoDefaultServoState;
+
+/// @brief Represents PSO status
+typedef enum Automation1PsoStatus
+{
+	/// @brief The Waveform module is actively generating a waveform.
+	Automation1PsoStatus_WaveformActive = 1 << 4,
+	/// @brief The state of the Bit module output.
+	Automation1PsoStatus_BitOutputActive = 1 << 5,
+	/// @brief The state of the Window 1 module output.
+	Automation1PsoStatus_Window1OutputActive = 1 << 6,
+	/// @brief The state of the Window 2 module output.
+	Automation1PsoStatus_Window2OutputActive = 1 << 7,
+	/// @brief The state of the Output module output.
+	Automation1PsoStatus_OutputActive = 1 << 10,
+	/// @brief The state of the external synchronization input that is used with the PsoPulseExternalSyncOn function.
+	Automation1PsoStatus_ExternalSyncInput = 1 << 11,
+	/// @brief The Distance module attempted to load a new array mode distance when no new distance values were available. The distance counters are disabled until new distance values are specified.
+	Automation1PsoStatus_DistanceArrayDepleted = 1 << 12,
+	/// @brief The Window 1 module attempted to load a new array mode window range when no new range values were available. The window output is disabled until new range values are specified.
+	Automation1PsoStatus_Window1ArrayDepleted = 1 << 13,
+	/// @brief The Window 2 module attempted to load a new array mode window range when no new range values were available. The window output is disabled until new range values are specified.
+	Automation1PsoStatus_Window2ArrayDepleted = 1 << 14,
+	/// @brief The Bit module attempted to load a new bit value when no new bit values were available. The bit output is disabled until new range values are specified.
+	Automation1PsoStatus_BitArrayDepleted = 1 << 15,
+	/// @brief The Waveform module attempted to load a new array mode parameter value when no new parameter values were available. The waveform module is disabled until new parameter values are specified.
+	Automation1PsoStatus_WaveformArrayDepleted = 1 << 16,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been obsoleted by DistanceArrayDepleted. Use DistanceArrayDepleted instead of this enum value.
+	Automation1PsoStatus_DistanceFifoEmpty = 1 << 0,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been obsoleted by WaveformArrayDepleted. Use WaveformArrayDepleted instead of this enum value.
+	Automation1PsoStatus_LaserFifoEmpty = 1 << 1,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been obsoleted by Window1ArrayDepleted. Use Window1ArrayDepleted instead of this enum value.
+	Automation1PsoStatus_Window1FifoEmpty = 1 << 2,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been obsoleted by Window2ArrayDepleted. Use Window2ArrayDepleted instead of this enum value.
+	Automation1PsoStatus_Window2FifoEmpty = 1 << 3,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been obsoleted by WaveformActive. Use WaveformActive instead of this enum value.
+	Automation1PsoStatus_FiringActivePulseGen1 = 1 << 4,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been obsoleted by WaveformActive. Use WaveformActive instead of this enum value.
+	Automation1PsoStatus_FiringActivePulseGenerator1 = 1 << 4,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been removed because the feature does not exist in Automation1. This bit is now used for BitOutputActive.
+	Automation1PsoStatus_FiringActivePulseGen2 = 1 << 5,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been removed because the feature does not exist in Automation1. This bit is now used for BitOutputActive.
+	Automation1PsoStatus_FiringActivePulseGenerator2 = 1 << 5,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to Window1OutputActive. Use Window1OutputActive instead of this enum value.
+	Automation1PsoStatus_InsideWindow1 = 1 << 6,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to Window2OutputActive. Use Window2OutputActive instead of this enum value.
+	Automation1PsoStatus_InsideWindow2 = 1 << 7,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been removed because the feature does not exist in Automation1.
+	Automation1PsoStatus_PsoInterlock = 1 << 8,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been obsoleted by OutputActive. Use OutputActive instead of this enum value.
+	Automation1PsoStatus_PsoOutput1Status = 1 << 9,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been removed because the feature does not exist in Automation1. This bit is now used for OutputActive.
+	Automation1PsoStatus_PsoOutput2Status = 1 << 10,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to ExternalSyncInput. Use ExternalSyncInput instead of this enum value.
+	Automation1PsoStatus_PsoExtSync = 1 << 11,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to ExternalSyncInput. Use ExternalSyncInput instead of this enum value.
+	Automation1PsoStatus_PsoExternalSyncInput = 1 << 11,
+} Automation1PsoStatus;
+
+/// @brief Represents the Safe Torque Off (STO) status for an axis.
+typedef enum Automation1StoStatus
+{
+	/// @brief Safe Torque Off (STO) channel 1 hardware is activated and preventing torque.
+	Automation1StoStatus_Sto1Activated = 1 << 0,
+	/// @brief Power has been removed from the Safe Torque Off (STO) channel 1 input. Torque on the motor will be prevented after the hardware time delay.
+	Automation1StoStatus_Sto1Event = 1 << 1,
+	/// @brief Safe Torque Off (STO) channel 2 hardware is activated and preventing torque.
+	Automation1StoStatus_Sto2Activated = 1 << 2,
+	/// @brief Power has been removed from the Safe Torque Off (STO) channel 2 input. Torque on the motor will be prevented after the hardware time delay.
+	Automation1StoStatus_Sto2Event = 1 << 3,
+	/// @brief The Safe Torque Off (STO) diagnostic check has detected a hardware problem on an STO channel and is preventing torque on the motor.
+	Automation1StoStatus_StoCrossCheckFault = 1 << 4,
+} Automation1StoStatus;
+
+/// @brief Represents BiSS status
+typedef enum Automation1BissStatus
+{
+	/// @brief 
+	Automation1BissStatus_CrcError = 1 << 0,
+	/// @brief 
+	Automation1BissStatus_EncoderWarning = 1 << 1,
+	/// @brief 
+	Automation1BissStatus_EncoderError = 1 << 2,
+	/// @brief 
+	Automation1BissStatus_TimeoutError = 1 << 3,
+} Automation1BissStatus;
 
 /// @brief Represents an axis status
 typedef enum Automation1AxisStatus
@@ -1402,6 +1655,10 @@ typedef enum Automation1AxisStatus
 	Automation1AxisStatus_BacklashActive = 1 << 18,
 	/// @brief A Gain Mapping table was specified for this axis.
 	Automation1AxisStatus_GainMappingEnabled = 1 << 19,
+	/// @brief The motion on this axis is the input to a kinematic transformation.
+	Automation1AxisStatus_TransformationInput = 1 << 20,
+	/// @brief The motion on this axis is the output of a kinematic transformation.
+	Automation1AxisStatus_TransformationOutput = 1 << 21,
 	/// @brief Motion on this axis is done, meaning that the velocity command reached zero.
 	Automation1AxisStatus_MotionDone = 1 << 22,
 	/// @brief Motion on this axis is being clamped due to a software limit clamp or safe zone. Refer to the SoftwareLimitSetup parameter, and the Safe zone overview.
@@ -1412,6 +1669,10 @@ typedef enum Automation1AxisStatus
 	Automation1AxisStatus_GantryDriveControlRealigning = 1 << 25,
 	/// @brief The ThermoComp feature is currently turned on.
 	Automation1AxisStatus_ThermoCompEnabled = 1 << 27,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CalibrationEnabled1D. Use CalibrationEnabled1D instead of this enum value.
+	Automation1AxisStatus_CalEnabled1D = 1 << 14,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CalibrationEnabled2D. Use CalibrationEnabled2D instead of this enum value.
+	Automation1AxisStatus_CalEnabled2D = 1 << 15,
 } Automation1AxisStatus;
 
 /// @brief Represents the faults of an axis
@@ -1447,7 +1708,7 @@ typedef enum Automation1AxisFault
 	Automation1AxisFault_ExternalFault = 1 << 15,
 	/// @brief The motor thermistor input was triggered, which indicates that the motor exceeded its maximum recommended operating temperature.
 	Automation1AxisFault_MotorTemperatureFault = 1 << 17,
-	/// @brief The amplifier temperature is not within the operating range. This fault occurs at temperatures less than 0° C or greater than 75° C.
+	/// @brief The amplifier temperature is not within the operating range or the shunt resistor temperature has exceeded the maximum threshold. This fault occurs at amplifier temperatures less than 0° C or greater than 75° C and shunt resistor temperatures greater than 200° C.
 	Automation1AxisFault_AmplifierTemperatureFault = 1 << 18,
 	/// @brief The encoder fault input on the motor feedback connector was triggered.
 	Automation1AxisFault_EncoderFault = 1 << 19,
@@ -1467,6 +1728,48 @@ typedef enum Automation1AxisFault
 	Automation1AxisFault_MotorSupplyFault = 1 << 28,
 	/// @brief The drive encountered an internal error that caused it to disable. Contact Aerotech Global Technical Support.
 	Automation1AxisFault_InternalFault = 1 << 30,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to PositionErrorFault. Use PositionErrorFault instead of this enum value.
+	Automation1AxisFault_PositionError = 1 << 0,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to OverCurrentFault. Use OverCurrentFault instead of this enum value.
+	Automation1AxisFault_OverCurrent = 1 << 1,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CwEndOfTravelLimitFault. Use CwEndOfTravelLimitFault instead of this enum value.
+	Automation1AxisFault_CwEotLimit = 1 << 2,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CcwEndOfTravelLimitFault. Use CcwEndOfTravelLimitFault instead of this enum value.
+	Automation1AxisFault_CcwEotLimit = 1 << 3,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CwSoftwareLimitFault. Use CwSoftwareLimitFault instead of this enum value.
+	Automation1AxisFault_CwSoftLimit = 1 << 4,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CcwSoftwareLimitFault. Use CcwSoftwareLimitFault instead of this enum value.
+	Automation1AxisFault_CcwSoftLimit = 1 << 5,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to FeedbackInput0Fault. Use FeedbackInput0Fault instead of this enum value.
+	Automation1AxisFault_FbkInput0 = 1 << 7,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to FeedbackInput1Fault. Use FeedbackInput1Fault instead of this enum value.
+	Automation1AxisFault_FbkInput1 = 1 << 8,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to HallSensorFault. Use HallSensorFault instead of this enum value.
+	Automation1AxisFault_HallFault = 1 << 9,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to MaxVelocityCommandFault. Use MaxVelocityCommandFault instead of this enum value.
+	Automation1AxisFault_MaxVelocity = 1 << 10,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to EmergencyStopFault. Use EmergencyStopFault instead of this enum value.
+	Automation1AxisFault_EstopFault = 1 << 11,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to VelocityErrorFault. Use VelocityErrorFault instead of this enum value.
+	Automation1AxisFault_VelocityError = 1 << 12,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to MotorTemperatureFault. Use MotorTemperatureFault instead of this enum value.
+	Automation1AxisFault_MotorTemp = 1 << 17,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to AmplifierTemperatureFault. Use AmplifierTemperatureFault instead of this enum value.
+	Automation1AxisFault_AmplifierTemp = 1 << 18,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to GantryMisalignmentFault. Use GantryMisalignmentFault instead of this enum value.
+	Automation1AxisFault_MisalignmentFault = 1 << 22,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to FeedbackScalingFault. Use FeedbackScalingFault instead of this enum value.
+	Automation1AxisFault_FbkScalingFault = 1 << 23,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to MarkerSearchFault. Use MarkerSearchFault instead of this enum value.
+	Automation1AxisFault_MrkSearchFault = 1 << 24,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to InPositionTimeoutFault. Use InPositionTimeoutFault instead of this enum value.
+	Automation1AxisFault_InPosTimeout = 1 << 26,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to VoltageClampFault. Use VoltageClampFault instead of this enum value.
+	Automation1AxisFault_VoltageClamp = 1 << 27,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to MotorSupplyFault. Use MotorSupplyFault instead of this enum value.
+	Automation1AxisFault_MotorSupply = 1 << 28,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to InternalFault. Use InternalFault instead of this enum value.
+	Automation1AxisFault_Internal = 1 << 30,
 } Automation1AxisFault;
 
 /// @brief Represents the drive status bits
@@ -1498,6 +1801,8 @@ typedef enum Automation1DriveStatus
 	Automation1DriveStatus_BrakeOutput = 1 << 11,
 	/// @brief Galvo Power Correction is configured on this axis.
 	Automation1DriveStatus_GalvoPowerCorrection = 1 << 12,
+	/// @brief The amplifier associated with this physical axis is active and outputting current to the attached motor.
+	Automation1DriveStatus_AmplifierActive = 1 << 13,
 	/// @brief The drive detected that no motor supply voltage is present.
 	Automation1DriveStatus_NoMotorSupply = 1 << 14,
 	/// @brief For piezo drives, the controller clamps the motor output to the value of the PiezoVoltageClampLow or the PiezoVoltageClampHigh parameter. For all other drives, the controller clamps the motor output to the value of the MaxCurrentClamp parameter.
@@ -1526,6 +1831,22 @@ typedef enum Automation1DriveStatus
 	Automation1DriveStatus_EncoderClipping = 1 << 29,
 	/// @brief The axis is operating in dual-loop mode using two different feedback devices.
 	Automation1DriveStatus_DualLoopActive = 1 << 30,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CwEndOfTravelLimitInput. Use CwEndOfTravelLimitInput instead of this enum value.
+	Automation1DriveStatus_CwEotLimit = 1 << 1,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CcwEndOfTravelLimitInput. Use CcwEndOfTravelLimitInput instead of this enum value.
+	Automation1DriveStatus_CcwEotLimit = 1 << 2,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to HomeLimitInput. Use HomeLimitInput instead of this enum value.
+	Automation1DriveStatus_HomeLimit = 1 << 3,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to EmergencyStopInput. Use EmergencyStopInput instead of this enum value.
+	Automation1DriveStatus_EstopInput = 1 << 10,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to GalvoCalibrationEnabled. Use GalvoCalibrationEnabled instead of this enum value.
+	Automation1DriveStatus_GalvoCalEnabled = 1 << 20,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to ProgrammingFlash. Use ProgrammingFlash instead of this enum value.
+	Automation1DriveStatus_ProgramFlash = 1 << 22,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to AccelerationPhase. Use AccelerationPhase instead of this enum value.
+	Automation1DriveStatus_AccelPhase = 1 << 27,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to DecelerationPhase. Use DecelerationPhase instead of this enum value.
+	Automation1DriveStatus_DecelPhase = 1 << 28,
 } Automation1DriveStatus;
 
 /// @brief Represents a set of task status
@@ -1563,6 +1884,8 @@ typedef enum Automation1TaskStatus0
 	Automation1TaskStatus0_SynchronizedFunctionExecuting = 1 << 27,
 	/// @brief The task has control restrictions enabled.
 	Automation1TaskStatus0_TaskControlRestricted = 1 << 29,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to SynchronizedFunctionExecuting. Use SynchronizedFunctionExecuting instead of this enum value.
+	Automation1TaskStatus0_SyncFunctionExecuting = 1 << 27,
 } Automation1TaskStatus0;
 
 /// @brief Represents a set of task status
@@ -1602,6 +1925,12 @@ typedef enum Automation1TaskStatus1
 	Automation1TaskStatus1_Interrupted = 1 << 19,
 	/// @brief This bit represents internal status.
 	Automation1TaskStatus1_IfovBufferHold = 1 << 25,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CutterOffsetsEnablingPositive. Use CutterOffsetsEnablingPositive instead of this enum value.
+	Automation1TaskStatus1_CutterOffsetsEnablingPos = 1 << 9,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CutterOffsetsEnablingNegative. Use CutterOffsetsEnablingNegative instead of this enum value.
+	Automation1TaskStatus1_CutterOffsetsEnablingNeg = 1 << 10,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to SynchronizedFunctionPending. Use SynchronizedFunctionPending instead of this enum value.
+	Automation1TaskStatus1_SyncFunctionPending = 1 << 17,
 } Automation1TaskStatus1;
 
 /// @brief Represents a set of task status
@@ -1609,8 +1938,6 @@ typedef enum Automation1TaskStatus2
 {
 	/// @brief Parts scaling is active.
 	Automation1TaskStatus2_ScalingActive = 1 << 3,
-	/// @brief Fixture offsets are active.
-	Automation1TaskStatus2_OffsetFixtureActive = 1 << 4,
 	/// @brief Profile motion is active.
 	Automation1TaskStatus2_ProfileActive = 1 << 5,
 	/// @brief The motion mode is Rapid (G0).
@@ -1702,61 +2029,74 @@ typedef enum Automation1TaskMode
 	Automation1TaskMode_WaitAuto = 1 << 30,
 } Automation1TaskMode;
 
-/// @brief Represents the ramp type in AeroScript
+/// @brief Represents a motion ramping type.
 typedef enum Automation1RampType
 {
-	/// @brief 
+	/// @brief Linear-based acceleration and deceleration.
 	Automation1RampType_Linear = 0,
-	/// @brief 
+	/// @brief S-curve-based acceleration and deceleration.
 	Automation1RampType_SCurve = 1,
-	/// @brief 
+	/// @brief Sine-based acceleration and deceleration.
 	Automation1RampType_Sine = 2,
 } Automation1RampType;
 
-/// @brief Represents the ramp mode in AeroScript
+/// @brief Represents a motion ramping mode.
 typedef enum Automation1RampMode
 {
-	/// @brief 
+	/// @brief Rate-based acceleration and deceleration.
 	Automation1RampMode_Rate = 0,
-	/// @brief 
+	/// @brief Time-based acceleration and deceleration.
 	Automation1RampMode_Time = 1,
 } Automation1RampMode;
+
+/// @brief Specifies the type of calibration that will be performed by a calibration action.
+typedef enum Automation1CalibrationType
+{
+	/// @brief 1D Axis Calibration.
+	Automation1CalibrationType_AxisCalibration1D = 0,
+	/// @brief 2D Axis Calibration.
+	Automation1CalibrationType_AxisCalibration2D = 1,
+	/// @brief Galvo 2D Axis Calibration.
+	Automation1CalibrationType_Galvo2DAxisCalibration = 2,
+	/// @brief Galvo Power Correction.
+	Automation1CalibrationType_GalvoPowerCorrection = 3,
+} Automation1CalibrationType;
 
 /// @brief Represents the first feedback input
 typedef enum Automation1FeedbackInput0
 {
-	/// @brief 
+	/// @brief Position Command
 	Automation1FeedbackInput0_PositionCommand = 0,
-	/// @brief 
+	/// @brief Primary Feedback
 	Automation1FeedbackInput0_PrimaryFeedback = 1,
-	/// @brief 
+	/// @brief Auxiliary Feedback
 	Automation1FeedbackInput0_AuxiliaryFeedback = 2,
-	/// @brief 
+	/// @brief Analog Input 0
 	Automation1FeedbackInput0_AnalogInput0 = 3,
-	/// @brief 
+	/// @brief Analog Input 1
 	Automation1FeedbackInput0_AnalogInput1 = 4,
-	/// @brief 
+	/// @brief Analog Input 2
 	Automation1FeedbackInput0_AnalogInput2 = 5,
-	/// @brief 
+	/// @brief Analog Input 3
 	Automation1FeedbackInput0_AnalogInput3 = 6,
 } Automation1FeedbackInput0;
 
 /// @brief Represents the second feedback input
 typedef enum Automation1FeedbackInput1
 {
-	/// @brief 
+	/// @brief Position Command
 	Automation1FeedbackInput1_PositionCommand = 0,
-	/// @brief 
+	/// @brief Primary Feedback
 	Automation1FeedbackInput1_PrimaryFeedback = 1,
-	/// @brief 
+	/// @brief Auxiliary Feedback
 	Automation1FeedbackInput1_AuxiliaryFeedback = 2,
-	/// @brief 
+	/// @brief Analog Input 0
 	Automation1FeedbackInput1_AnalogInput0 = 3,
-	/// @brief 
+	/// @brief Analog Input 1
 	Automation1FeedbackInput1_AnalogInput1 = 4,
-	/// @brief 
+	/// @brief Analog Input 2
 	Automation1FeedbackInput1_AnalogInput2 = 5,
-	/// @brief 
+	/// @brief Analog Input 3
 	Automation1FeedbackInput1_AnalogInput3 = 6,
 } Automation1FeedbackInput1;
 
@@ -1769,6 +2109,8 @@ typedef enum Automation1TuningDisturbanceType
 	Automation1TuningDisturbanceType_WhiteNoise = 2,
 	/// @brief Use the drive array to define a custom disturbance.
 	Automation1TuningDisturbanceType_DriveArray = 5,
+	/// @brief Use the MultisinePlus disturbance.
+	Automation1TuningDisturbanceType_MultisinePlus = 6,
 } Automation1TuningDisturbanceType;
 
 /// @brief The type of frequency response to measure.
@@ -1781,6 +2123,141 @@ typedef enum Automation1TuningMeasurementType
 	/// @brief Measure the open loop response of the auto-focus loop.
 	Automation1TuningMeasurementType_AutoFocusOpenLoop = 3,
 } Automation1TuningMeasurementType;
+
+/// @brief Represents EnDat status
+typedef enum Automation1EnDatStatus
+{
+	/// @brief 
+	Automation1EnDatStatus_CrcError = 1 << 0,
+	/// @brief 
+	Automation1EnDatStatus_ReceiveError = 1 << 1,
+	/// @brief 
+	Automation1EnDatStatus_TimeoutError = 1 << 2,
+} Automation1EnDatStatus;
+
+/// @brief Represents the primary feedback connector status bits
+typedef enum Automation1PrimaryFeedbackStatus
+{
+	/// @brief This represents the state of the CW end of travel limit input. It is affected by the active polarity, which is configured by the EndOfTravelLimitSetup parameter.
+	Automation1PrimaryFeedbackStatus_CwEndOfTravelLimitInput = 1 << 0,
+	/// @brief This represents the state of the CW end of travel limit input. It is affected by the active polarity, which is configured by the EndOfTravelLimitSetup parameter.
+	Automation1PrimaryFeedbackStatus_CcwEndOfTravelLimitInput = 1 << 1,
+	/// @brief This represents the state of the home limit input. It is affected by the active polarity, which is configured by the EndOfTravelLimitSetup parameter.
+	Automation1PrimaryFeedbackStatus_HomeLimitInput = 1 << 2,
+	/// @brief This represents the state of the marker input.
+	Automation1PrimaryFeedbackStatus_MarkerInput = 1 << 3,
+	/// @brief An error condition is present on the Sine encoder input of the feedback device.
+	Automation1PrimaryFeedbackStatus_SineEncoderError = 1 << 4,
+	/// @brief An error condition is present on the Cosine encoder input of the feedback device.
+	Automation1PrimaryFeedbackStatus_CosineEncoderError = 1 << 5,
+	/// @brief The position of the marker is latched.
+	Automation1PrimaryFeedbackStatus_MarkerLatch = 1 << 6,
+	/// @brief The on-board encoder multiplier detected that the input signals may be exceeding the maximum input range, which results in clipping of the encoder signals.
+	Automation1PrimaryFeedbackStatus_EncoderClipping = 1 << 7,
+	/// @brief This represents the state of the Hall A input.
+	Automation1PrimaryFeedbackStatus_HallAInput = 1 << 8,
+	/// @brief This represents the state of the Hall B input.
+	Automation1PrimaryFeedbackStatus_HallBInput = 1 << 9,
+	/// @brief This represents the state of the Hall C input.
+	Automation1PrimaryFeedbackStatus_HallCInput = 1 << 10,
+	/// @brief This represents the state of the CW end of travel limit input at the primary feedback connector. It is not affected by the active polarity.
+	Automation1PrimaryFeedbackStatus_RawCwEndOfTravelLimitInput = 1 << 11,
+	/// @brief This represents the state of the CW end of travel limit input at the primary feedback connector. It is not affected by the active polarity.
+	Automation1PrimaryFeedbackStatus_RawCcwEndOfTravelLimitInput = 1 << 12,
+	/// @brief This represents the state of the home limit input at the primary feedback connector. It is not affected by the active polarity.
+	Automation1PrimaryFeedbackStatus_RawHomeLimitInput = 1 << 13,
+	/// @brief The on-board encoder multiplier detected that the quadrature generation logic exceeded the maximum rate.
+	Automation1PrimaryFeedbackStatus_MxQuadratureWarning = 1 << 14,
+	/// @brief The on-board encoder multiplier detected that overflow occurred in the quadrature generation logic.
+	Automation1PrimaryFeedbackStatus_MxQuadratureError = 1 << 15,
+	/// @brief This represents the state of the square wave cosine input or the digital interpretation of the sine wave cosine input from the feedback device.
+	Automation1PrimaryFeedbackStatus_DigitalCosineInput = 1 << 16,
+	/// @brief This represents the state of the square wave sine input or the digital interpretation of the sine wave sine input from the feedback device.
+	Automation1PrimaryFeedbackStatus_DigitalSineInput = 1 << 17,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CwEndOfTravelLimitInput. Use CwEndOfTravelLimitInput instead of this enum value.
+	Automation1PrimaryFeedbackStatus_CwEotLimit = 1 << 0,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to CcwEndOfTravelLimitInput. Use CcwEndOfTravelLimitInput instead of this enum value.
+	Automation1PrimaryFeedbackStatus_CcwEotLimit = 1 << 1,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to HomeLimitInput. Use HomeLimitInput instead of this enum value.
+	Automation1PrimaryFeedbackStatus_HomeLimit = 1 << 2,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to RawCwEndOfTravelLimitInput. Use RawCwEndOfTravelLimitInput instead of this enum value.
+	Automation1PrimaryFeedbackStatus_RawCwEotLimit = 1 << 11,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to RawCcwEndOfTravelLimitInput. Use RawCcwEndOfTravelLimitInput instead of this enum value.
+	Automation1PrimaryFeedbackStatus_RawCcwEotLimit = 1 << 12,
+	/// @brief This enum value is deprecated and will be removed in the next major version of Automation1 software. This enum value has been renamed to RawHomeLimitInput. Use RawHomeLimitInput instead of this enum value.
+	Automation1PrimaryFeedbackStatus_RawHomeLimit = 1 << 13,
+} Automation1PrimaryFeedbackStatus;
+
+/// @brief Represents the auxiliary feedback connector status bits
+typedef enum Automation1AuxiliaryFeedbackStatus
+{
+	/// @brief This represents the state of the marker input.
+	Automation1AuxiliaryFeedbackStatus_MarkerInput = 1 << 0,
+	/// @brief An error condition is present on the Sine encoder input of the feedback device.
+	Automation1AuxiliaryFeedbackStatus_SineEncoderError = 1 << 1,
+	/// @brief An error condition is present on the Cosine encoder input of the feedback device.
+	Automation1AuxiliaryFeedbackStatus_CosineEncoderError = 1 << 2,
+	/// @brief The position of the marker is latched.
+	Automation1AuxiliaryFeedbackStatus_MarkerLatch = 1 << 3,
+	/// @brief The on-board encoder multiplier detected that the input signals may be exceeding the maximum input range, which results in clipping of the encoder signals.
+	Automation1AuxiliaryFeedbackStatus_EncoderClipping = 1 << 4,
+	/// @brief The on-board encoder multiplier detected that the maximum quadrature generation rate has been exceeded.
+	Automation1AuxiliaryFeedbackStatus_MxQuadratureWarning = 1 << 5,
+	/// @brief The on-board encoder multiplier detected that the quadrature generation logic has experienced overflow.
+	Automation1AuxiliaryFeedbackStatus_MxQuadratureError = 1 << 6,
+	/// @brief This represents the state of the square wave cosine input or the digital interpretation of the sine wave cosine input from the feedback device.
+	Automation1AuxiliaryFeedbackStatus_DigitalCosineInput = 1 << 7,
+	/// @brief This represents the state of the square wave sine input or the digital interpretation of the sine wave sine input from the feedback device.
+	Automation1AuxiliaryFeedbackStatus_DigitalSineInput = 1 << 8,
+} Automation1AuxiliaryFeedbackStatus;
+
+/// @brief Represents the amplifier status bits
+typedef enum Automation1AmplifierStatus
+{
+	/// @brief The amplifier is active and outputting current to the attached motor.
+	Automation1AmplifierStatus_Active = 1 << 0,
+	/// @brief The amplifier detected that no motor supply voltage is present.
+	Automation1AmplifierStatus_NoMotorSupply = 1 << 2,
+	/// @brief The amplifier output is being clamped because the current command is more than the value of the MaxCurrentClamp parameter.
+	Automation1AmplifierStatus_CurrentClamp = 1 << 3,
+	/// @brief The amplifier power limiting on phase A has been active for an extended period. This causes an amplifier fault.
+	Automation1AmplifierStatus_PowerLimitingA = 1 << 4,
+	/// @brief The amplifier power limiting on phase B has been active for an extended period. This causes an amplifier fault.
+	Automation1AmplifierStatus_PowerLimitingB = 1 << 5,
+	/// @brief The amplifier power limiting on phase C has been active for an extended period. This causes an amplifier fault.
+	Automation1AmplifierStatus_PowerLimitingC = 1 << 6,
+	/// @brief The amplifier output on phase A is being limited to prevent damage to the hardware.
+	Automation1AmplifierStatus_PowerLimitingAUnfiltered = 1 << 7,
+	/// @brief The amplifier output on phase B is being limited to prevent damage to the hardware.
+	Automation1AmplifierStatus_PowerLimitingBUnfiltered = 1 << 8,
+	/// @brief The amplifier output on phase C is being limited to prevent damage to the hardware.
+	Automation1AmplifierStatus_PowerLimitingCUnfiltered = 1 << 9,
+	/// @brief The amplifier bus voltage is more than the maximum rated value.
+	Automation1AmplifierStatus_BusOverVoltage = 1 << 10,
+	/// @brief The amplifier output on one or more phases is being clamped to the minimum or maximum voltage.
+	Automation1AmplifierStatus_VoltageClamped = 1 << 11,
+	/// @brief The amplifier shunt circuit is active to keep the internal bus voltage within safe levels.
+	Automation1AmplifierStatus_ShuntOn = 1 << 12,
+} Automation1AmplifierStatus;
+
+/// @brief Represents SSI status
+typedef enum Automation1SsiStatus
+{
+	/// @brief 
+	Automation1SsiStatus_TimeoutError = 1 << 0,
+	/// @brief 
+	Automation1SsiStatus_ParityError = 1 << 1,
+} Automation1SsiStatus;
+
+/// @brief Specifies the external signal with which to externally synchronize HyperWire.
+typedef enum Automation1HyperWireExternalSynchronizationSignal
+{
+	/// @brief External synchronization is disabled.
+	Automation1HyperWireExternalSynchronizationSignal_None = 0,
+	/// @brief External synchronization is enabled with the EtherCAT SYNC0 signal.
+	Automation1HyperWireExternalSynchronizationSignal_EthercatSync0 = 1,
+} Automation1HyperWireExternalSynchronizationSignal;
+
 
 #if defined(__cplusplus)
 }

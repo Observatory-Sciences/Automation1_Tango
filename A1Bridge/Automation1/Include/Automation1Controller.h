@@ -1,3 +1,7 @@
+///
+/// Copyright (c) Aerotech, Inc.
+///
+
 #ifndef AUTOMATION1CONTROLLER_H_INCLUDED
 #define AUTOMATION1CONTROLLER_H_INCLUDED
 
@@ -37,6 +41,15 @@ AUTOMATION1_CAPI void Automation1_GetApiVersion(int32_t* majorVersionOut, int32_
 /// @return Returns true if the connection was successful otherwise returns false.
 /// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
 AUTOMATION1_CAPI bool Automation1_Connect(Automation1Controller* controllerOut);
+
+/// @brief Connects to an Automation1 drive-based controller that is connected to the same Windows computer over USB.
+/// 	Use this function to connect to a controller when the drive-based controller is connected to the same Windows computer over USB.
+/// 	Make sure to call Automation1_Disconnect() to avoid leaking memory when you are done with the controller.
+/// @param[Out] controllerOut A handle that represents a connection to an Automation1 controller. Only use this if the function
+///		call was successful.
+/// @return Returns true if the connection was successful otherwise returns false.
+/// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
+AUTOMATION1_CAPI bool Automation1_ConnectWithUsb(Automation1Controller* controllerOut);
 
 /// @brief Connects to an Automation1 controller running on the specified host.
 /// 	Use this function to connect to a controller when the controller is installed on a different computer and has access control disabled.
@@ -106,15 +119,80 @@ AUTOMATION1_CAPI bool Automation1_Controller_IsRunning(Automation1Controller con
 
 /// @brief Gets the number of axes that are available on the connected Automation1 controller.
 ///		Different Automation1 controllers will have a different supported axis count.
-/// @param controller The connected controller to query.
+/// @param controller[In] The connected controller to query.
 /// @return Returns the number of axes that are available on the connected Automation1 controller.
 AUTOMATION1_CAPI int32_t Automation1_Controller_AvailableAxisCount(Automation1Controller controller);
 
 /// @brief Gets the number of tasks that are available on the connected Automation1 controller.
 ///		Different Automation1 controllers will have a different supported task count.
-/// @param controller The connected controller to query.
+/// @param controller[In] The connected controller to query.
 /// @return Returns the number of tasks that are available on the connected Autoamtion1 controller.
 AUTOMATION1_CAPI int32_t Automation1_Controller_AvailableTaskCount(Automation1Controller controller);
+
+/// @brief Gets the corresponding axis index of the specified axis name on the connected Automation1 controller.
+///	@param controller[In] The connected controller to query.
+/// @param axisName[In] The null-terminated name of the axis that will have its index retrieved.
+/// @param axisIndexOut[Out] The index of the axis corresponding to the specified axis name. Only use this if the function call was successful.
+///		This argument must have memory preallocated before passing it into this function.
+/// @return Returns true if the function was able to get the axis index corresponding to the specified axis name otherwise returns false.
+///		See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
+AUTOMATION1_CAPI bool Automation1_Controller_GetAxisIndexFromAxisName(Automation1Controller controller, const char* axisName, int32_t* axisIndexOut);
+
+/// @brief Gets the corresponding task index of the specified task name on the connected Automation1 controller.
+///	@param controller[In] The connected controller to query.
+/// @param taskName[In] The null-terminated name of the task that will have its index retrieved.
+/// @param taskIndexOut[Out] The index of the task corresponding to the specified task name. Only use this if the function call was successful.
+///		This argument must have memory preallocated before passing it into this function.
+/// @return Returns true if the function was able to get the task index corresponding to the specified task name otherwise returns false.
+///		See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
+AUTOMATION1_CAPI bool Automation1_Controller_GetTaskIndexFromTaskName(Automation1Controller controller, const char* taskName, int32_t* taskIndexOut);
+
+/// @brief Gets the name of the connected Automation1 controller.
+/// @param controller[In] The connected controller to query.
+/// @param nameOut[Out] A character array to store the controller name in.
+///		This argument must have memory preallocated before passing it into this function.
+/// @param nameLength[Out] The maximum number of elements to copy into the nameOut argument.
+///		This must not be greater than the length of the nameOut array.
+/// @return Returns true if the function was able to get the name of the controller otherwise returns false.
+/// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
+AUTOMATION1_CAPI bool Automation1_Controller_Name(Automation1Controller controller, char* nameOut, int32_t nameLength);
+
+/// @brief Gets the serial number of the connected Automation1 controller.
+/// @param controller[In] The connected controller to query.
+/// @param serialNumberOut[Out] A character array to store the serial number in.
+///		This argument must have memory preallocated before passing it into this function.
+/// @param serialNumberLength[Out] The maximum number of elements to copy into the serialNumberOut argument.
+///		This must not be greater than the length of the serialNumberOut array.
+/// @return Returns true if the function was able to get the serial number of the controller otherwise returns false.
+/// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
+AUTOMATION1_CAPI bool Automation1_Controller_SerialNumber(Automation1Controller controller, char* serialNumberOut, int32_t serialNumberLength);
+
+/// @brief Downloads a machine controller definition (.mcd) file from the controller and saves it to the specified MDK file path. 
+///		A downloaded machine controller definition file can contain both controller configuration and controller files. 
+///		This file can be uploaded to any controller to copy this controller's configuration and files.
+/// 	When using this function, at least one of the parameters shouldIncludeFiles and shouldIncludeConfiguration must be true.
+/// @param controller[In] The controller to get the machine controller definition file from.
+/// @param mdkFilePathToMcd[In] The MDK file path to save the downloaded machine controller definition (.mcd) file.
+/// @param shouldIncludeFiles[In] Whether or not controller files should be included in the download.
+/// @param shouldIncludeConfiguration[In] Whether or not controller configuration should be included in the download.
+/// @return Returns true if the controller operation was successful otherwise returns false.
+/// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
+AUTOMATION1_CAPI bool Automation1_Controller_DownloadMcdToFile(Automation1Controller controller, const char* mdkFilePathToMcd, bool shouldIncludeFiles, bool shouldIncludeConfiguration);
+
+/// @brief Uploads the machine controller definition (.mcd) file to the controller from the specified MDK file path.
+///		When using this function, at least one of the parameters shouldIncludeFiles and shouldIncludeConfiguration must be true.
+///		Before calling this function, make sure there is nothing important on the controller that could be overwritten 
+///		or erased. Consider downloading a machine controller definition file as a backup before uploading a different 
+///		machine controller definition that may overwrite data.
+/// @param controller[In] The controller to upload the machine controller definition file to.
+/// @param mdkFilePathToMcd[In] The MDK file path of the machine controller definition to upload.
+/// @param shouldIncludeFiles[In] Whether or not controller files should be included in the upload.
+/// @param shouldIncludeConfiguration[In] Whether or not controller configuration should be included in the upload.
+/// @param eraseController[In] Whether or not the controller should be erased before uploading the new files.
+///		When set to true, this operation is effectively a restoration of the controller.
+/// @return Returns true if the controller operation was successful otherwise returns false.
+/// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
+AUTOMATION1_CAPI bool Automation1_Controller_UploadMcdToController(Automation1Controller controller, const char* mdkFilePathToMcd, bool shouldIncludeFiles, bool shouldIncludeConfiguration, bool eraseController);
 
 #if defined(__cplusplus)
 }

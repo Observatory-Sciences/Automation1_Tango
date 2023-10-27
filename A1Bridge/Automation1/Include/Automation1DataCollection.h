@@ -1,3 +1,7 @@
+///
+/// Copyright (c) Aerotech, Inc.
+///
+
 #ifndef AUTOMATION1DATACOLLECTION_H_INCLUDED
 #define AUTOMATION1DATACOLLECTION_H_INCLUDED
 
@@ -91,6 +95,15 @@ typedef struct Automation1DataCollectionConfig_T* Automation1DataCollectionConfi
 /// @return Returns true if the configuration was successfully created otherwise returns false.
 /// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
 AUTOMATION1_CAPI bool Automation1_DataCollectionConfig_Create(Automation1DataCollectionFrequency frequency, int32_t numberOfPointsToCollect, Automation1DataCollectionConfig* configOut);
+
+/// @brief Creates a new data collection configuration handle.
+/// 	Make sure to call Automation1_DataCollectionConfig_Destroy() to avoid leaking memory when you are done with the configuration.
+/// @param[In] period The time in milliseconds between each point being collected.
+/// @param[In] numberOfPointsToCollect The number of points to collect for each configured data signal.
+/// @param[Out] configOut The created data collection configuration handle. Only use this if the function call was successful.
+/// @return Returns true if the configuration was successfully created otherwise returns false.
+/// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
+AUTOMATION1_CAPI bool Automation1_DataCollectionConfig_CreateWithPeriod(double period, int32_t numberOfPointsToCollect, Automation1DataCollectionConfig* configOut);
 
 /// @brief Destroys the data collection configuration handle.
 /// @param[In] config The data collection configuration to destroy.

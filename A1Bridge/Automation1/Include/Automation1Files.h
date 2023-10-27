@@ -1,3 +1,7 @@
+///
+/// Copyright (c) Aerotech, Inc.
+///
+
 #ifndef AUTOMATION1FILES_H_INCLUDED
 #define AUTOMATION1FILES_H_INCLUDED
 
@@ -45,7 +49,7 @@ extern "C"
 /// 	See Automation1_GetLastError() and Automation1_GetLastErrorMessage() for more information.
 AUTOMATION1_CAPI bool Automation1_Files_GetAllFiles(Automation1Controller controller, char* fileNamesOut, int32_t* fileNamesLengthOut, int32_t* maxFileNameLengthOut);
 
-/// @brief Writes the content of a controller file on the Automation1 controller. This will overwrite any existing file with the same file name.
+/// @brief Creates a new controller file on the Automation1 controller and writes the specified content to it. This will overwrite any existing file with the same file name.
 /// @param controller[In] The controller to write the file to.
 /// @param controllerFileName[In] The null-terminated name of the controller file to write.
 /// @param fileContent[In] The byte array of content to write to the file.

@@ -1,3 +1,7 @@
+///
+/// Copyright (c) Aerotech, Inc.
+///
+
 #ifndef AUTOMATION1PARAMETERID_H_INCLUDED
 #define AUTOMATION1PARAMETERID_H_INCLUDED
 
@@ -266,32 +270,26 @@ extern "C"
 		Automation1AxisParameterId_HarmonicCancellation0Type = 122,
 		/// @brief The HarmonicCancellation0Period axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation0Period = 123,
-		/// @brief The HarmonicCancellation0Channel axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation0Channel = 124,
+		/// @brief The HarmonicCancellation0Input axis controller parameter.
+		Automation1AxisParameterId_HarmonicCancellation0Input = 124,
 		/// @brief The HarmonicCancellation0Gain axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation0Gain = 125,
-		/// @brief The HarmonicCancellation0Phase axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation0Phase = 126,
 		/// @brief The HarmonicCancellation1Type axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation1Type = 127,
 		/// @brief The HarmonicCancellation1Period axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation1Period = 128,
-		/// @brief The HarmonicCancellation1Channel axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation1Channel = 129,
+		/// @brief The HarmonicCancellation1Input axis controller parameter.
+		Automation1AxisParameterId_HarmonicCancellation1Input = 129,
 		/// @brief The HarmonicCancellation1Gain axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation1Gain = 130,
-		/// @brief The HarmonicCancellation1Phase axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation1Phase = 131,
 		/// @brief The HarmonicCancellation2Type axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation2Type = 132,
 		/// @brief The HarmonicCancellation2Period axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation2Period = 133,
-		/// @brief The HarmonicCancellation2Channel axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation2Channel = 134,
+		/// @brief The HarmonicCancellation2Input axis controller parameter.
+		Automation1AxisParameterId_HarmonicCancellation2Input = 134,
 		/// @brief The HarmonicCancellation2Gain axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation2Gain = 135,
-		/// @brief The HarmonicCancellation2Phase axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation2Phase = 136,
 		/// @brief The SoftwareLimitSetup axis controller parameter.
 		Automation1AxisParameterId_SoftwareLimitSetup = 137,
 		/// @brief The PrimaryEmulatedQuadratureDivider axis controller parameter.
@@ -300,22 +298,18 @@ extern "C"
 		Automation1AxisParameterId_HarmonicCancellation3Type = 139,
 		/// @brief The HarmonicCancellation3Period axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation3Period = 140,
-		/// @brief The HarmonicCancellation3Channel axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation3Channel = 141,
+		/// @brief The HarmonicCancellation3Input axis controller parameter.
+		Automation1AxisParameterId_HarmonicCancellation3Input = 141,
 		/// @brief The HarmonicCancellation3Gain axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation3Gain = 142,
-		/// @brief The HarmonicCancellation3Phase axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation3Phase = 143,
 		/// @brief The HarmonicCancellation4Type axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation4Type = 144,
 		/// @brief The HarmonicCancellation4Period axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation4Period = 145,
-		/// @brief The HarmonicCancellation4Channel axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation4Channel = 146,
+		/// @brief The HarmonicCancellation4Input axis controller parameter.
+		Automation1AxisParameterId_HarmonicCancellation4Input = 146,
 		/// @brief The HarmonicCancellation4Gain axis controller parameter.
 		Automation1AxisParameterId_HarmonicCancellation4Gain = 147,
-		/// @brief The HarmonicCancellation4Phase axis controller parameter.
-		Automation1AxisParameterId_HarmonicCancellation4Phase = 148,
 		/// @brief The EnhancedThroughputChannel axis controller parameter.
 		Automation1AxisParameterId_EnhancedThroughputChannel = 149,
 		/// @brief The EnhancedThroughputGain axis controller parameter.
@@ -890,6 +884,52 @@ extern "C"
 		Automation1AxisParameterId_AuxiliarySsiEncoderSetup = 523,
 		/// @brief The AuxiliarySsiEncoderResolution axis controller parameter.
 		Automation1AxisParameterId_AuxiliarySsiEncoderResolution = 524,
+		/// @brief The CurrentCommandCouplingLeaderAxis axis controller parameter.
+		Automation1AxisParameterId_CurrentCommandCouplingLeaderAxis = 525,
+		/// @brief The GalvoScannerInterface axis controller parameter.
+		Automation1AxisParameterId_GalvoScannerInterface = 526,
+		/// @brief The GantryPhysicalDirection axis controller parameter.
+		Automation1AxisParameterId_GantryPhysicalDirection = 527,
+		/// @brief The LinearAmpVoltageClamp axis controller parameter.
+		Automation1AxisParameterId_LinearAmpVoltageClamp = 528,
+		/// @brief The CurrentCommandCouplingFollowerDirection axis controller parameter.
+		Automation1AxisParameterId_CurrentCommandCouplingFollowerDirection = 529,
+		/// @brief The ShuntNormalizedTemperatureFactor axis controller parameter.
+		Automation1AxisParameterId_ShuntNormalizedTemperatureFactor = 530,
+		/// @brief The ShuntThermalTimeConstant axis controller parameter.
+		Automation1AxisParameterId_ShuntThermalTimeConstant = 531,
+		/// @brief The BusOvervoltageThreshold axis controller parameter.
+		Automation1AxisParameterId_BusOvervoltageThreshold = 532,
+		/// @brief The PrimaryBissEncoderIncrementalResolution axis controller parameter.
+		Automation1AxisParameterId_PrimaryBissEncoderIncrementalResolution = 533,
+		/// @brief The AutofocusGainTff axis controller parameter.
+		Automation1AxisParameterId_AutofocusGainTff = 534,
+		/// @brief The PrimaryBissEncoderTurns axis controller parameter.
+		Automation1AxisParameterId_PrimaryBissEncoderTurns = 535,
+		/// @brief The AuxiliaryBissEncoderTurns axis controller parameter.
+		Automation1AxisParameterId_AuxiliaryBissEncoderTurns = 536,
+		/// @brief The FeedforwardGainSff axis controller parameter.
+		Automation1AxisParameterId_FeedforwardGainSff = 537,
+		/// @brief The CurrentLoopFeedforwardGainRff axis controller parameter.
+		Automation1AxisParameterId_CurrentLoopFeedforwardGainRff = 538,
+		/// @brief The CurrentLoopFeedforwardGainLff axis controller parameter.
+		Automation1AxisParameterId_CurrentLoopFeedforwardGainLff = 539,
+		/// @brief The CurrentLoopFeedforwardBackEmf axis controller parameter.
+		Automation1AxisParameterId_CurrentLoopFeedforwardBackEmf = 540,
+		/// @brief The CurrentLoopFeedforwardBusVoltage axis controller parameter.
+		Automation1AxisParameterId_CurrentLoopFeedforwardBusVoltage = 541,
+		/// @brief The WorkpointCommandFirFilterCoeff0 axis controller parameter.
+		Automation1AxisParameterId_WorkpointCommandFirFilterCoeff0 = 542,
+		/// @brief The WorkpointCommandFirFilterCoeffP1 axis controller parameter.
+		Automation1AxisParameterId_WorkpointCommandFirFilterCoeffP1 = 543,
+		/// @brief The WorkpointCommandFirFilterCoeffP2 axis controller parameter.
+		Automation1AxisParameterId_WorkpointCommandFirFilterCoeffP2 = 544,
+		/// @brief The WorkpointCommandFirFilterCoeffN1 axis controller parameter.
+		Automation1AxisParameterId_WorkpointCommandFirFilterCoeffN1 = 545,
+		/// @brief The WorkpointCommandFirFilterCoeffN2 axis controller parameter.
+		Automation1AxisParameterId_WorkpointCommandFirFilterCoeffN2 = 546,
+		/// @brief The MotorSupplyFaultTime axis controller parameter.
+		Automation1AxisParameterId_MotorSupplyFaultTime = 547,
 	} Automation1AxisParameterId;
 
 	/// @brief Represents a controller parameter in the task parameter category.

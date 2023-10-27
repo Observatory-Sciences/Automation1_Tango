@@ -1,3 +1,7 @@
+///
+/// Copyright (c) Aerotech, Inc.
+///
+
 #ifndef AUTOMATION1STATUS_H_INCLUDED
 #define AUTOMATION1STATUS_H_INCLUDED
 
