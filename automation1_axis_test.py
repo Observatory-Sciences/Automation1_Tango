@@ -110,15 +110,24 @@ def test_home(automation1_proxy):
     Tests the Home command and ensures that the axis moves back to the correct home position
     (0.000mm in this case) and reports that it is homed
     """
+    exp_state = "MOVING"
+    exp_status = "Axis is jogging"
+
+    _, virtual = automation1_proxy.call("get", "VirtualAxis")
+    if virtual:
+        # Virtual axes are homed immediately
+        exp_state = "ON"
+        exp_status = "Axis is enabled"
+
     stat, _ = automation1_proxy.call("Home")
     assert stat == 0
 
     time.sleep(2)
 
     stat, state = automation1_proxy.call("State")
-    assert stat == 0 and str(state) == "MOVING"
+    assert stat == 0 and str(state) == exp_state
     stat, status = automation1_proxy.call("Status")
-    assert stat == 0 and status == "Axis is jogging"
+    assert stat == 0 and status == exp_status
 
     check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
 
