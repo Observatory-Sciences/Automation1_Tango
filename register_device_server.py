@@ -13,6 +13,7 @@ import argparse
 import json
 from pprint import pprint
 import fandango as fn
+from sys import version_info
 
 def get_args():
     """
@@ -99,15 +100,26 @@ def byteify(inpt):
     Converts any unicode text in a dictionary, list or string to standard UTF-8 encoded byte
     strings.
     """
-    if isinstance(inpt, dict):
-        return {byteify(key): byteify(value)
-                for key, value in inpt.iteritems()}
-    elif isinstance(inpt, list):
-        return [byteify(element) for element in inpt]
-    elif isinstance(inpt, unicode):
-        return inpt.encode('utf-8')
+    if version_info[0]==3:
+	    if isinstance(inpt, dict):
+		    return {byteify(key): byteify(value)
+		        for key, value in inpt.items()}
+	    elif isinstance(inpt, list):
+		    return [byteify(element) for element in inpt]
+	    elif isinstance(inpt, str):
+		    return inpt.encode('utf-8')
+	
+	    return inpt
+    else:
+	    if isinstance(inpt, dict):
+		    return {byteify(key): byteify(value)
+		        for key, value in inpt.iteritems()}
+	    elif isinstance(inpt, list):
+		    return [byteify(element) for element in inpt]
+	    elif isinstance(inpt, unicode):
+		    return inpt.encode('utf-8')
 
-    return inpt
+	    return inpt
 
 
 if __name__ == "__main__":
