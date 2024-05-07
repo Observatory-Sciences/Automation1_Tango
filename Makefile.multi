@@ -14,7 +14,7 @@
 #
 # MAKE_ENV is the path to find the common environment to build the project
 #
-MAKE_ENV = /usr/local/share/pogo/preferences
+MAKE_ENV = /usr/local/tango/share/pogo/preferences
 # MAKE_ENV ?= $(TANGO_HOME)
 
 #=============================================================================
@@ -61,6 +61,9 @@ OBJ_DIR = ./obj
 # A1BRIDGE_CLASS = A1Bridge
 A1BRIDGE_HOME  = ./A1Bridge
 
+A1LIB_HOME = /home/vboxuser/Automation1/Lib
+A1HEADER_HOME = /home/vboxuser/Automation1/Include
+
 A1AXIS_CLASS = A1Axis
 A1AXIS_HOME  = ./A1Axis
 
@@ -76,11 +79,9 @@ A1CONTROLLER_HOME  = ./A1Controller
 #
 INC_DIR_USER= -I . \
               -I $(A1BRIDGE_HOME) \
-              -I $(A1BRIDGE_HOME)/Automation1/Include \
+              -I $(A1HEADER_HOME) \
               -I $(A1AXIS_HOME) \
-              -I $(A1CONTROLLER_HOME) \
-              -I /usr/local/include  \
-              -I /usr/local/include/tango 
+              -I $(A1CONTROLLER_HOME)
 
 #=============================================================================
 # LIB_DIR_USER is the list of user library directories
@@ -88,6 +89,7 @@ INC_DIR_USER= -I . \
 #   - '-L ../lib' is automatically appended in all cases
 #
 
+LIB_DIR_USER= -L $(A1LIB_HOME)
 #LIB_DIR_USER= -L $(A1BRIDGE_HOME)/Automation1/Lib \
 #			  -L /usr/local/lib 
 
@@ -102,7 +104,7 @@ INC_DIR_USER= -I . \
 # you must use '-lA -lB' in this order as link flags, otherwise you will get
 # 'undefined reference' errors
 #
-LFLAGS_USR+= -lautomation1c -lautomation1compiler 
+LFLAGS_USR+= -lautomation1compiler -lautomation1c 
 
 
 #=============================================================================
@@ -172,7 +174,6 @@ SVC_A1CONTROLLER_OBJS = \
 #
 include $(MAKE_ENV)/common_target.opt
 
-
 #=============================================================================
 # Following are dependancies of the classes used by project
 #
@@ -184,10 +185,10 @@ A1BRIDGE_INCLUDES = \
 		A1Bridge/A1SimulatedAxis.h \
 		A1Bridge/A1Simulation.h
 
-# libautomation1c.so:
-# 	cp $(A1BRIDGE_HOME)/Automation1/Lib/libautomation1c.so /usr/local/lib 
-# libautomation1compiler.so:
-# 	cp $(A1BRIDGE_HOME)/Automation1/Lib/libautomation1compiler.so /usr/local/lib 
+#libautomation1c.so:
+#	cp $(A1LIB_HOME)/libautomation1c.so /usr/local/lib 
+#libautomation1compiler.so:
+#	cp $(A1LIB_HOME)/libautomation1compiler.so /usr/local/lib
 
 $(OBJDIR)/A1Bridge.o:  $(A1BRIDGE_HOME)/A1Bridge.cpp $(A1BRIDGE_INCLUDES)
 	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Bridge.o
@@ -227,3 +228,10 @@ $(OBJDIR)/A1ControllerStateMachine.o:  $(A1CONTROLLER_HOME)/A1ControllerStateMac
 	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1ControllerStateMachine.o
 
 
+
+finalbuild:
+		@echo "Linking TANGO device server $(OUTPUT_DIR)/$(PROJECT_NAME) ..."
+		$(CXX) -Wl,-rpath=$(A1LIB_HOME) $(SVC_OBJS) $(LDFLAGS) -o $(OUTPUT_DIR)/$(PROJECT_NAME)
+		$(POST_PROCESSING)
+
+all:finalbuild
