@@ -11,12 +11,29 @@
 #        (Program Obviously used to Generate tango Object)
 #=============================================================================
 #
+# Paths the user may need to modify:
 #
 # MAKE_ENV is the path to find the common environment to build the project
 #
-MAKE_ENV = /usr/local/share/pogo/preferences
+# The /usr/local/tango/ part of this path depends on where tango is installed.
+# Commonly this will be /usr/local/tango/ or /usr/local/
+#
+MAKE_ENV = /usr/local/tango/share/pogo/preferences
 # MAKE_ENV ?= $(TANGO_HOME)
-
+#
+# The libraries and header files for Automation1 should have been provided with
+# Automation1 controllers.
+#
+# A1LIB_HOME is the path to the Automation1 libraries, such as libautomation1c.so
+# and libautomation1compiler.so
+#
+A1LIB_HOME = /usr/local/lib/
+#
+# A1HEADER_HOME is the path to the Automation1 header files, such as 
+# automation1.h and files of name format automation1____.h
+#
+A1HEADER_HOME = /usr/local/include/Automation1/
+#
 #=============================================================================
 # PACKAGE_NAME is the name of the library/device/exe you want to build
 #
@@ -76,11 +93,9 @@ A1CONTROLLER_HOME  = ./A1Controller
 #
 INC_DIR_USER= -I . \
               -I $(A1BRIDGE_HOME) \
-              -I $(A1BRIDGE_HOME)/Automation1/Include \
+              -I $(A1HEADER_HOME) \
               -I $(A1AXIS_HOME) \
-              -I $(A1CONTROLLER_HOME) \
-              -I /usr/local/include  \
-              -I /usr/local/include/tango 
+              -I $(A1CONTROLLER_HOME)
 
 #=============================================================================
 # LIB_DIR_USER is the list of user library directories
@@ -88,8 +103,7 @@ INC_DIR_USER= -I . \
 #   - '-L ../lib' is automatically appended in all cases
 #
 
-#LIB_DIR_USER= -L $(A1BRIDGE_HOME)/Automation1/Lib \
-#			  -L /usr/local/lib 
+LIB_DIR_USER= -L $(A1LIB_HOME)
 
 #=============================================================================
 # LFLAGS_USR is the list of user link flags
@@ -102,7 +116,7 @@ INC_DIR_USER= -I . \
 # you must use '-lA -lB' in this order as link flags, otherwise you will get
 # 'undefined reference' errors
 #
-LFLAGS_USR+= -lautomation1c -lautomation1compiler 
+LFLAGS_USR+= -lautomation1compiler -lautomation1c 
 
 
 #=============================================================================
@@ -172,7 +186,6 @@ SVC_A1CONTROLLER_OBJS = \
 #
 include $(MAKE_ENV)/common_target.opt
 
-
 #=============================================================================
 # Following are dependancies of the classes used by project
 #
@@ -184,14 +197,9 @@ A1BRIDGE_INCLUDES = \
 		A1Bridge/A1SimulatedAxis.h \
 		A1Bridge/A1Simulation.h
 
-# libautomation1c.so:
-# 	cp $(A1BRIDGE_HOME)/Automation1/Lib/libautomation1c.so /usr/local/lib 
-# libautomation1compiler.so:
-# 	cp $(A1BRIDGE_HOME)/Automation1/Lib/libautomation1compiler.so /usr/local/lib 
-
 $(OBJDIR)/A1Bridge.o:  $(A1BRIDGE_HOME)/A1Bridge.cpp $(A1BRIDGE_INCLUDES)
 	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Bridge.o
-$(OBJDIR)/A1Communication.o:  $(A1BRIDGE_HOME)/A1Communication.cpp $(A1BRIDGE_INCLUDES) # libautomation1c.so libautomation1compiler.so
+$(OBJDIR)/A1Communication.o:  $(A1BRIDGE_HOME)/A1Communication.cpp $(A1BRIDGE_INCLUDES)
 	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Communication.o
 $(OBJDIR)/A1Simulation.o:  $(A1BRIDGE_HOME)/A1Simulation.cpp $(A1BRIDGE_INCLUDES)
 	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1Simulation.o
@@ -227,3 +235,10 @@ $(OBJDIR)/A1ControllerStateMachine.o:  $(A1CONTROLLER_HOME)/A1ControllerStateMac
 	$(CXX) $(CXXFLAGS) $(CXXFLAGS_USR) -c $< -o $(OBJDIR)/A1ControllerStateMachine.o
 
 
+
+finalbuild:
+		@echo "Creating executable $(OUTPUT_DIR)/$(PROJECT_NAME) ..."
+		$(CXX) -Wl,-rpath=$(A1LIB_HOME) $(SVC_OBJS) $(LDFLAGS) -o $(OUTPUT_DIR)/$(PROJECT_NAME)
+		$(POST_PROCESSING)
+
+all:finalbuild
