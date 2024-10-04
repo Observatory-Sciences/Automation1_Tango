@@ -222,7 +222,8 @@ public:
 		{(static_cast<A1Axis *>(dev))->write_HomeType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_HomeType_allowed(ty);}
-	virtual bool same_type(const type_info &in_type) {return typeid(HomeTypeEnum) == in_type;}
+	virtual bool same_type(const std::type_info &in_type) {return typeid
+	(HomeTypeEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("HomeTypeEnum");}
 };
 
@@ -239,7 +240,8 @@ public:
 		{(static_cast<A1Axis *>(dev))->write_MoveType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_MoveType_allowed(ty);}
-	virtual bool same_type(const type_info &in_type) {return typeid(MoveTypeEnum) == in_type;}
+	virtual bool same_type(const std::type_info &in_type) {return typeid
+	(MoveTypeEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("MoveTypeEnum");}
 };
 
@@ -373,7 +375,8 @@ public:
 		{(static_cast<A1Axis *>(dev))->write_RampType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_RampType_allowed(ty);}
-	virtual bool same_type(const type_info &in_type) {return typeid(RampTypeEnum) == in_type;}
+	virtual bool same_type(const std::type_info &in_type) {return typeid
+	(RampTypeEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("RampTypeEnum");}
 };
 
@@ -390,7 +393,8 @@ public:
 		{(static_cast<A1Axis *>(dev))->write_RampMode(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_RampMode_allowed(ty);}
-	virtual bool same_type(const type_info &in_type) {return typeid(RampModeEnum) == in_type;}
+	virtual bool same_type(const std::type_info &in_type) {return typeid
+	(RampModeEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("RampModeEnum");}
 };
 

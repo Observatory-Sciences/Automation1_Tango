@@ -395,7 +395,7 @@ void A1Communication::checkControllerRunning()
 
     if (!attr_ControllerRunning_read)
     {
-        std::cout << "Controller is not running; starting..." << endl;
+        std::cout << "Controller is not running; starting..." << std::endl;
         if (!Automation1_Controller_Start(*m_controller))
         {
             throwWithLastA1Error("Failed to start controller");
@@ -678,9 +678,9 @@ void A1Communication::readController_impl()
     int32_t fileCount, filenameLength; 
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, NULL, &fileCount, &filenameLength); 
 
-    int32_t maxFiles = min(fileCount, MAX_AEROSCRIPTS); 
+    int32_t maxFiles = std::min(fileCount, MAX_AEROSCRIPTS);
     fileCount = maxFiles; 
-    int32_t maxFilenameLength = min(fileCount, 50); 
+    int32_t maxFilenameLength = std::min(fileCount, 50);
 
     char files[maxFiles * maxFilenameLength];
 
@@ -975,7 +975,7 @@ void A1Communication::axis_AcknowledgeFaults(int32_t axis)
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_FaultAcknowledge, *m_controller, attr_Automation1TaskID_read, &axis, 1);
 }
 
-string A1Communication::getFirmwareVersionString(unsigned axis)
+std::string A1Communication::getFirmwareVersionString(unsigned axis)
 {
     double firmware[4]; 
     std::stringstream firmwareS; 
@@ -988,7 +988,7 @@ string A1Communication::getFirmwareVersionString(unsigned axis)
     return firmwareS.str();
 }
 
-string A1Communication::getMotorTypeString(unsigned axis)
+std::string A1Communication::getMotorTypeString(unsigned axis)
 {
     double motorType; 
     std::string motorTypeS; 
