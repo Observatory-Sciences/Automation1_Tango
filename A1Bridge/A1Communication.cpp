@@ -1,7 +1,7 @@
 #include "A1Communication.h"
 #include "A1Defines.h"
-#include "log4tango.h"
-#include "tango.h"
+#include <common/log4tango/Logger.h>
+#include <tango.h>
 #include <mutex>
 #include <thread>
 

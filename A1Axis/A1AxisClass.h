@@ -47,7 +47,15 @@
 namespace A1Axis_ns
 {
 /*----- PROTECTED REGION ID(A1AxisClass::classes for dynamic creation) ENABLED START -----*/
-
+#ifdef TANGO_LOG
+	// cppTango after c934adea (Merge branch 'remove-cout-definition' into 'main', 2022-05-23)
+	// nothing to do
+#else
+	// cppTango 9.3-backports and older
+	#define TANGO_LOG       cout
+	#define TANGO_LOG_INFO  cout2
+	#define TANGO_LOG_DEBUG cout4
+#endif // TANGO_LOG
 
 /*----- PROTECTED REGION END -----*/	//	A1AxisClass::classes for dynamic creation
 

@@ -1,7 +1,7 @@
 #include "A1Bridge.h"
 #include "A1Communication.h"
 #include "A1Simulation.h"
-#include "log4tango.h"
+#include <common/log4tango/Logger.h>
 #include <mutex>
 
 

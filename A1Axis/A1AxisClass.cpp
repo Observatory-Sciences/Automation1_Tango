@@ -73,7 +73,7 @@ A1AxisClass *A1AxisClass::_instance = NULL;
 //--------------------------------------------------------
 A1AxisClass::A1AxisClass(std::string &s):Tango::DeviceClass(s)
 {
-	cout2 << "Entering A1AxisClass constructor" << std::endl;
+	TANGO_LOG_INFO << "Entering A1AxisClass constructor" << std::endl;
 	set_default_property();
 	write_class_property();
 
@@ -81,7 +81,7 @@ A1AxisClass::A1AxisClass(std::string &s):Tango::DeviceClass(s)
 	
 	/*----- PROTECTED REGION END -----*/	//	A1AxisClass::constructor
 
-	cout2 << "Leaving A1AxisClass constructor" << std::endl;
+	TANGO_LOG_INFO << "Leaving A1AxisClass constructor" << std::endl;
 }
 
 //--------------------------------------------------------
@@ -161,7 +161,7 @@ A1AxisClass *A1AxisClass::instance()
 //--------------------------------------------------------
 CORBA::Any *AbortClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "AbortClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "AbortClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->abort());
 	return new CORBA::Any();
 }
@@ -179,7 +179,7 @@ CORBA::Any *AbortClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CO
 //--------------------------------------------------------
 CORBA::Any *HomeClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "HomeClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "HomeClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->home());
 	return new CORBA::Any();
 }
@@ -197,7 +197,7 @@ CORBA::Any *HomeClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const COR
 //--------------------------------------------------------
 CORBA::Any *MoveClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "MoveClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "MoveClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->move());
 	return new CORBA::Any();
 }
@@ -215,7 +215,7 @@ CORBA::Any *MoveClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const COR
 //--------------------------------------------------------
 CORBA::Any *EnableClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "EnableClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "EnableClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->enable());
 	return new CORBA::Any();
 }
@@ -233,7 +233,7 @@ CORBA::Any *EnableClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const C
 //--------------------------------------------------------
 CORBA::Any *DisableClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "DisableClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "DisableClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->disable());
 	return new CORBA::Any();
 }
@@ -251,7 +251,7 @@ CORBA::Any *DisableClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const 
 //--------------------------------------------------------
 CORBA::Any *BrakeOnClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "BrakeOnClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "BrakeOnClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->brake_on());
 	return new CORBA::Any();
 }
@@ -269,7 +269,7 @@ CORBA::Any *BrakeOnClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const 
 //--------------------------------------------------------
 CORBA::Any *BrakeOffClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "BrakeOffClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "BrakeOffClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->brake_off());
 	return new CORBA::Any();
 }
@@ -287,7 +287,7 @@ CORBA::Any *BrakeOffClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const
 //--------------------------------------------------------
 CORBA::Any *MoveFromLimitClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "MoveFromLimitClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "MoveFromLimitClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->move_from_limit());
 	return new CORBA::Any();
 }
@@ -305,7 +305,7 @@ CORBA::Any *MoveFromLimitClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(
 //--------------------------------------------------------
 CORBA::Any *FreeRunClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "FreeRunClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "FreeRunClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->free_run());
 	return new CORBA::Any();
 }
@@ -323,7 +323,7 @@ CORBA::Any *FreeRunClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const 
 //--------------------------------------------------------
 CORBA::Any *FreeRunStopClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "FreeRunStopClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "FreeRunStopClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->free_run_stop());
 	return new CORBA::Any();
 }
@@ -341,7 +341,7 @@ CORBA::Any *FreeRunStopClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(co
 //--------------------------------------------------------
 CORBA::Any *ThrowAllFaultsClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "ThrowAllFaultsClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "ThrowAllFaultsClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->throw_all_faults());
 	return new CORBA::Any();
 }
@@ -359,7 +359,7 @@ CORBA::Any *ThrowAllFaultsClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED
 //--------------------------------------------------------
 CORBA::Any *AcknowledgeFaultsClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	cout2 << "AcknowledgeFaultsClass::execute(): arrived" << std::endl;
+	TANGO_LOG_INFO << "AcknowledgeFaultsClass::execute(): arrived" << std::endl;
 	((static_cast<A1Axis *>(device))->acknowledge_faults());
 	return new CORBA::Any();
 }
@@ -511,7 +511,7 @@ void A1AxisClass::device_factory(const Tango::DevVarStringArray *devlist_ptr)
 	//	Create devices and add it into the device list
 	for (unsigned long i=0 ; i<devlist_ptr->length() ; i++)
 	{
-		cout4 << "Device name : " << (*devlist_ptr)[i].in() << std::endl;
+		TANGO_LOG_DEBUG << "Device name : " << (*devlist_ptr)[i].in() << std::endl;
 		device_list.push_back(new A1Axis(this, (*devlist_ptr)[i]));
 	}
 
@@ -1456,7 +1456,7 @@ void A1AxisClass::create_static_attribute_list(std::vector<Tango::Attr *> &att_l
 		defaultAttList.push_back(att_name);
 	}
 
-	cout2 << defaultAttList.size() << " attributes in default list" << std::endl;
+	TANGO_LOG_INFO << defaultAttList.size() << " attributes in default list" << std::endl;
 
 	/*----- PROTECTED REGION ID(A1AxisClass::create_static_att_list) ENABLED START -----*/
 	
@@ -1492,7 +1492,7 @@ void A1AxisClass::erase_dynamic_attributes(const Tango::DevVarStringArray *devli
 			std::vector<std::string>::iterator ite_str = find(defaultAttList.begin(), defaultAttList.end(), att_name);
 			if (ite_str == defaultAttList.end())
 			{
-				cout2 << att_name << " is a UNWANTED dynamic attribute for device " << (*devlist_ptr)[i] << std::endl;
+				TANGO_LOG_INFO << att_name << " is a UNWANTED dynamic attribute for device " << (*devlist_ptr)[i] << std::endl;
 				Tango::Attribute &att = dev->get_device_attr()->get_attr_by_name(att_name.c_str());
 				dev->remove_attribute(att_list[att.get_attr_idx()], true, false);
 				--ite_att;
