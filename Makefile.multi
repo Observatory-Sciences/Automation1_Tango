@@ -18,8 +18,8 @@
 # The /usr/local/tango/ part of this path depends on where tango is installed.
 # Commonly this will be /usr/local/tango/ or /usr/local/
 #
-MAKE_ENV = /usr/local/tango/share/pogo/preferences
-# MAKE_ENV ?= $(TANGO_HOME)
+#MAKE_ENV = /usr/local/tango
+MAKE_ENV = $(TANGO_HOME)/share/pogo/preferences
 #
 # The libraries and header files for Automation1 should have been provided with
 # Automation1 controllers.
@@ -27,12 +27,12 @@ MAKE_ENV = /usr/local/tango/share/pogo/preferences
 # A1LIB_HOME is the path to the Automation1 libraries, such as libautomation1c.so
 # and libautomation1compiler.so
 #
-A1LIB_HOME = /usr/local/lib/
+A1LIB_HOME ?= /usr/local/lib/
 #
 # A1HEADER_HOME is the path to the Automation1 header files, such as 
 # automation1.h and files of name format automation1____.h
 #
-A1HEADER_HOME = /usr/local/include/Automation1/
+A1HEADER_HOME ?= /usr/local/include/Automation1/
 #
 #=============================================================================
 # PACKAGE_NAME is the name of the library/device/exe you want to build
@@ -125,8 +125,8 @@ LFLAGS_USR+= -lautomation1compiler -lautomation1c
 #
 # -DACE_HAS_EXCEPTIONS -D__ACE_INLINE__ for ACE
 #
-#CXXFLAGS_USR+= -Wall
-CXXFLAGS_USR = -g
+CXXFLAGS_USR+= -Wall
+#CXXFLAGS_USR = -g
 
 
 #=============================================================================
