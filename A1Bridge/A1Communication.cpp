@@ -1,7 +1,14 @@
 #include "A1Communication.h"
 #include "A1Defines.h"
-#include <common/log4tango/Logger.h>
-#include <tango.h>
+#if TANGO_VERSION_MAJOR < 10 && TANGO_VERSION_MINOR < 4
+    // Maintain compatibility with cppTango 9.3-backports
+    #include "log4tango.h"
+    #include "tango.h"
+#else
+    #include <common/log4tango/Logger.h>
+    #include <tango.h>
+#endif
+
 #include <mutex>
 #include <thread>
 
