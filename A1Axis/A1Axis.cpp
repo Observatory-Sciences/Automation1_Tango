@@ -116,7 +116,7 @@ namespace A1Axis_ns
  *                implementing the classA1Axis
  */
 //--------------------------------------------------------
-A1Axis::A1Axis(Tango::DeviceClass *cl, string &s)
+A1Axis::A1Axis(Tango::DeviceClass *cl, std::string &s)
  : TANGO_BASE_CLASS(cl, s.c_str())
 {
 	/*----- PROTECTED REGION ID(A1Axis::constructor_1) ENABLED START -----*/

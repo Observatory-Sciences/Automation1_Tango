@@ -196,8 +196,8 @@ class A1Communication: public A1Bridge
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value);
 
   private:
-    string getFirmwareVersionString(unsigned axis);
-    string getMotorTypeString(unsigned axis);
+    std::string getFirmwareVersionString(unsigned axis);
+    std::string getMotorTypeString(unsigned axis);
 
 
 
