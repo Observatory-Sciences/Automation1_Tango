@@ -1,5 +1,5 @@
 Compilation instruction on conda: 
-1) Create environment: 
+1) Create environment for Tango 9.5:
 
 `conda create -n automation1 -c conda-forge cpptango=9.5 cppzmq omniorb 
   pkg-config pogo make`
