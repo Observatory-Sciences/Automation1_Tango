@@ -6,7 +6,7 @@
 #include <mutex>
 #include <tango.h>
 
-#include "A1AxisEnum.h"
+#include <A1AxisEnum.h>
 #include "A1ControllerEnum.h"
 #include "A1Defines.h"
 
@@ -46,8 +46,6 @@ typedef struct A1AxisAttributes
     A1Axis_ns::HomeTypeEnum 	            attr_HomeType_read;
     A1Axis_ns::MoveTypeEnum 	            attr_MoveType_read;
 	Tango::DevDouble	                    attr_LastMoveDuration_read;
-	Tango::DevDouble	                    attr_PositionTarget_read;
-	Tango::DevDouble	                    attr_VelocityTarget_read;
 	Tango::DevDouble	                    attr_VelocityError_read;
 	Tango::DevDouble	                    attr_AccelerationTarget_read;
 	Tango::DevDouble	                    attr_AccelerationError_read;

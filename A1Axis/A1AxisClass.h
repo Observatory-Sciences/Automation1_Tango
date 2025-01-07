@@ -75,19 +75,43 @@ public:
 		{return (static_cast<A1Axis *>(dev))->is_PositionFeedback_allowed(ty);}
 };
 
+//	Attribute PositionTarget class definition
+class PositionTargetAttrib: public Tango::Attr
+{
+public:
+	PositionTargetAttrib():Attr("PositionTarget",
+			Tango::DEV_DOUBLE, Tango::WRITE) {}
+	~PositionTargetAttrib() {}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_PositionTarget(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Axis *>(dev))->is_PositionTarget_allowed(ty);}
+};
+
 //	Attribute VelocityFeedback class definition
 class VelocityFeedbackAttrib: public Tango::Attr
 {
 public:
 	VelocityFeedbackAttrib():Attr("VelocityFeedback",
-			Tango::DEV_DOUBLE, Tango::READ_WRITE) {}
+			Tango::DEV_DOUBLE, Tango::READ) {}
 	~VelocityFeedbackAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_VelocityFeedback(att);}
-	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
-		{(static_cast<A1Axis *>(dev))->write_VelocityFeedback(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_VelocityFeedback_allowed(ty);}
+};
+
+//	Attribute VelocityTarget class definition
+class VelocityTargetAttrib: public Tango::Attr
+{
+public:
+	VelocityTargetAttrib():Attr("VelocityTarget",
+			Tango::DEV_DOUBLE, Tango::WRITE) {}
+	~VelocityTargetAttrib() {}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_VelocityTarget(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Axis *>(dev))->is_VelocityTarget_allowed(ty);}
 };
 
 //	Attribute AccelerationFeedback class definition
@@ -252,34 +276,6 @@ public:
 		{(static_cast<A1Axis *>(dev))->read_LastMoveDuration(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_LastMoveDuration_allowed(ty);}
-};
-
-//	Attribute PositionTarget class definition
-class PositionTargetAttrib: public Tango::Attr
-{
-public:
-	PositionTargetAttrib():Attr("PositionTarget",
-			Tango::DEV_DOUBLE, Tango::READ_WRITE) {}
-	~PositionTargetAttrib() {}
-	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
-		{(static_cast<A1Axis *>(dev))->read_PositionTarget(att);}
-	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
-		{(static_cast<A1Axis *>(dev))->write_PositionTarget(att);}
-	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
-		{return (static_cast<A1Axis *>(dev))->is_PositionTarget_allowed(ty);}
-};
-
-//	Attribute VelocityTarget class definition
-class VelocityTargetAttrib: public Tango::Attr
-{
-public:
-	VelocityTargetAttrib():Attr("VelocityTarget",
-			Tango::DEV_DOUBLE, Tango::READ) {}
-	~VelocityTargetAttrib() {}
-	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
-		{(static_cast<A1Axis *>(dev))->read_VelocityTarget(att);}
-	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
-		{return (static_cast<A1Axis *>(dev))->is_VelocityTarget_allowed(ty);}
 };
 
 //	Attribute VelocityError class definition

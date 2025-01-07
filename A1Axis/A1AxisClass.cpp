@@ -580,6 +580,29 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Not Memorized
 	att_list.push_back(positionfeedback);
 
+	//	Attribute : PositionTarget
+	PositionTargetAttrib	*positiontarget = new PositionTargetAttrib();
+	Tango::UserDefaultAttrProp	positiontarget_prop;
+	positiontarget_prop.set_description("Position axis was commanded to move to.");
+	positiontarget_prop.set_label("Commanded Position");
+	positiontarget_prop.set_unit("mm");
+	//	standard_unit	not set for PositionTarget
+	positiontarget_prop.set_display_unit("mm");
+	//	format	not set for PositionTarget
+	//	max_value	not set for PositionTarget
+	//	min_value	not set for PositionTarget
+	//	max_alarm	not set for PositionTarget
+	//	min_alarm	not set for PositionTarget
+	//	max_warning	not set for PositionTarget
+	//	min_warning	not set for PositionTarget
+	//	delta_t	not set for PositionTarget
+	//	delta_val	not set for PositionTarget
+	positiontarget->set_default_properties(positiontarget_prop);
+	//	Not Polled
+	positiontarget->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	att_list.push_back(positiontarget);
+
 	//	Attribute : VelocityFeedback
 	VelocityFeedbackAttrib	*velocityfeedback = new VelocityFeedbackAttrib();
 	Tango::UserDefaultAttrProp	velocityfeedback_prop;
@@ -602,6 +625,29 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	velocityfeedback->set_disp_level(Tango::OPERATOR);
 	//	Not Memorized
 	att_list.push_back(velocityfeedback);
+
+	//	Attribute : VelocityTarget
+	VelocityTargetAttrib	*velocitytarget = new VelocityTargetAttrib();
+	Tango::UserDefaultAttrProp	velocitytarget_prop;
+	velocitytarget_prop.set_description("Targeted velocity for this axis.");
+	velocitytarget_prop.set_label("Target Velocity");
+	velocitytarget_prop.set_unit("m/s");
+	//	standard_unit	not set for VelocityTarget
+	velocitytarget_prop.set_display_unit("m/s");
+	//	format	not set for VelocityTarget
+	//	max_value	not set for VelocityTarget
+	//	min_value	not set for VelocityTarget
+	//	max_alarm	not set for VelocityTarget
+	//	min_alarm	not set for VelocityTarget
+	//	max_warning	not set for VelocityTarget
+	//	min_warning	not set for VelocityTarget
+	//	delta_t	not set for VelocityTarget
+	//	delta_val	not set for VelocityTarget
+	velocitytarget->set_default_properties(velocitytarget_prop);
+	//	Not Polled
+	velocitytarget->set_disp_level(Tango::OPERATOR);
+	//	Not Memorized
+	att_list.push_back(velocitytarget);
 
 	//	Attribute : AccelerationFeedback
 	AccelerationFeedbackAttrib	*accelerationfeedback = new AccelerationFeedbackAttrib();
@@ -892,52 +938,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	lastmoveduration->set_disp_level(Tango::OPERATOR);
 	//	Not Memorized
 	att_list.push_back(lastmoveduration);
-
-	//	Attribute : PositionTarget
-	PositionTargetAttrib	*positiontarget = new PositionTargetAttrib();
-	Tango::UserDefaultAttrProp	positiontarget_prop;
-	positiontarget_prop.set_description("Position axis was commanded to move to.");
-	positiontarget_prop.set_label("Commanded Position");
-	positiontarget_prop.set_unit("mm");
-	//	standard_unit	not set for PositionTarget
-	positiontarget_prop.set_display_unit("mm");
-	//	format	not set for PositionTarget
-	//	max_value	not set for PositionTarget
-	//	min_value	not set for PositionTarget
-	//	max_alarm	not set for PositionTarget
-	//	min_alarm	not set for PositionTarget
-	//	max_warning	not set for PositionTarget
-	//	min_warning	not set for PositionTarget
-	//	delta_t	not set for PositionTarget
-	//	delta_val	not set for PositionTarget
-	positiontarget->set_default_properties(positiontarget_prop);
-	//	Not Polled
-	positiontarget->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(positiontarget);
-
-	//	Attribute : VelocityTarget
-	VelocityTargetAttrib	*velocitytarget = new VelocityTargetAttrib();
-	Tango::UserDefaultAttrProp	velocitytarget_prop;
-	velocitytarget_prop.set_description("Targeted velocity for this axis.");
-	velocitytarget_prop.set_label("Target Velocity");
-	velocitytarget_prop.set_unit("m/s");
-	//	standard_unit	not set for VelocityTarget
-	velocitytarget_prop.set_display_unit("m/s");
-	//	format	not set for VelocityTarget
-	//	max_value	not set for VelocityTarget
-	//	min_value	not set for VelocityTarget
-	//	max_alarm	not set for VelocityTarget
-	//	min_alarm	not set for VelocityTarget
-	//	max_warning	not set for VelocityTarget
-	//	min_warning	not set for VelocityTarget
-	//	delta_t	not set for VelocityTarget
-	//	delta_val	not set for VelocityTarget
-	velocitytarget->set_default_properties(velocitytarget_prop);
-	//	Not Polled
-	velocitytarget->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(velocitytarget);
 
 	//	Attribute : VelocityError
 	VelocityErrorAttrib	*velocityerror = new VelocityErrorAttrib();

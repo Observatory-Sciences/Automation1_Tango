@@ -139,7 +139,6 @@ void A1Simulation::readAxis_impl(unsigned axis)
 
     attr_axes[axis].attr_Enabled_read        = attr_axes[axis].attr_DriveStatus_read[SIM_DRV_ENABLED];
     attr_axes[axis].attr_InPosition_read     = attr_axes[axis].attr_DriveStatus_read[SIM_DRV_IN_POSITION];
-    attr_axes[axis].attr_PositionTarget_read = m_axes[axis].m_demand_position;
     // // Axis fault
 
     // attr_axes[axis].attr_AxisFault_read[0]    = (int(attr_axes[axis].axisFault) >> 0 ) & 1U;

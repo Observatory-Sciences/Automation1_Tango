@@ -71,7 +71,9 @@
 //  Attributes managed are:
 //================================================================
 //  PositionFeedback      |  Tango::DevDouble	Scalar
+//  PositionTarget        |  Tango::DevDouble	Scalar
 //  VelocityFeedback      |  Tango::DevDouble	Scalar
+//  VelocityTarget        |  Tango::DevDouble	Scalar
 //  AccelerationFeedback  |  Tango::DevDouble	Scalar
 //  InPosition            |  Tango::DevBoolean	Scalar
 //  Enabled               |  Tango::DevBoolean	Scalar
@@ -84,8 +86,6 @@
 //  HomeType              |  Tango::DevEnum	Scalar
 //  MoveType              |  Tango::DevEnum	Scalar
 //  LastMoveDuration      |  Tango::DevDouble	Scalar
-//  PositionTarget        |  Tango::DevDouble	Scalar
-//  VelocityTarget        |  Tango::DevDouble	Scalar
 //  VelocityError         |  Tango::DevDouble	Scalar
 //  AccelerationTarget    |  Tango::DevDouble	Scalar
 //  AccelerationError     |  Tango::DevDouble	Scalar
@@ -196,8 +196,6 @@ void A1Axis::delete_device()
 	delete[] attr_HomeType_read;
 	delete[] attr_MoveType_read;
 	delete[] attr_LastMoveDuration_read;
-	delete[] attr_PositionTarget_read;
-	delete[] attr_VelocityTarget_read;
 	delete[] attr_VelocityError_read;
 	delete[] attr_AccelerationTarget_read;
 	delete[] attr_AccelerationError_read;
@@ -245,8 +243,6 @@ void A1Axis::init_device()
 	attr_HomeType_read = new HomeTypeEnum[1];
 	attr_MoveType_read = new MoveTypeEnum[1];
 	attr_LastMoveDuration_read = new Tango::DevDouble[1];
-	attr_PositionTarget_read = new Tango::DevDouble[1];
-	attr_VelocityTarget_read = new Tango::DevDouble[1];
 	attr_VelocityError_read = new Tango::DevDouble[1];
 	attr_AccelerationTarget_read = new Tango::DevDouble[1];
 	attr_AccelerationError_read = new Tango::DevDouble[1];
@@ -267,9 +263,8 @@ void A1Axis::init_device()
 	/*----- PROTECTED REGION ID(A1Axis::init_device) ENABLED START -----*/
 	
 	attr_PositionFeedback_read[0] = 0;
-    attr_PositionFeedback_write = 0; 
 	attr_VelocityFeedback_read[0] = 0;
-    attr_VelocityFeedback_write = 0; 
+    attr_VelocityTarget_write = 0; 
 	attr_AccelerationFeedback_read[0] = 0;
 	attr_InPosition_read[0] = 0;
 	attr_Enabled_read[0] = 0;
@@ -284,8 +279,7 @@ void A1Axis::init_device()
     attr_MoveType_read[0] = _ABSOLUTEMOVE;
     attr_MoveType_write = _ABSOLUTEMOVE; 
 	attr_LastMoveDuration_read[0] = 0;
-	attr_PositionTarget_read[0] = 0;
-	attr_VelocityTarget_read[0] = 0;
+    attr_PositionTarget_write = 0;
 	attr_VelocityError_read[0] = 0;
 	attr_AccelerationTarget_read[0] = 0;
 	attr_AccelerationError_read[0] = 0;
@@ -462,10 +456,8 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 
     *attr_PositionFeedback_read     = A1Bridge_ns::getInstance()->attr_axes[axis].attr_PositionFeedback_read; 
 	*attr_PositionError_read        = A1Bridge_ns::getInstance()->attr_axes[axis].attr_PositionError_read; 
-	*attr_PositionTarget_read       = A1Bridge_ns::getInstance()->attr_axes[axis].attr_PositionTarget_read; 
 	*attr_VelocityFeedback_read     = A1Bridge_ns::getInstance()->attr_axes[axis].attr_VelocityFeedback_read; 
 	*attr_VelocityError_read        = A1Bridge_ns::getInstance()->attr_axes[axis].attr_VelocityError_read; 
-	*attr_VelocityTarget_read       = A1Bridge_ns::getInstance()->attr_axes[axis].attr_VelocityTarget_read; 
 	*attr_AccelerationFeedback_read = A1Bridge_ns::getInstance()->attr_axes[axis].attr_AccelerationFeedback_read; 
 	*attr_AccelerationError_read    = A1Bridge_ns::getInstance()->attr_axes[axis].attr_AccelerationError_read; 
 	*attr_AccelerationTarget_read   = A1Bridge_ns::getInstance()->attr_axes[axis].attr_AccelerationTarget_read; 
@@ -547,6 +539,25 @@ void A1Axis::read_PositionFeedback(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
+ *	Write attribute PositionTarget related method
+ *	Description: Position axis was commanded to move to.
+ *
+ *	Data type:	Tango::DevDouble
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Axis::write_PositionTarget(Tango::WAttribute &attr)
+{
+	DEBUG_STREAM << "A1Axis::write_PositionTarget(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	Tango::DevDouble	w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Axis::write_PositionTarget) ENABLED START -----*/
+	attr_PositionTarget_write = w_val;
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_PositionTarget
+}
+//--------------------------------------------------------
+/**
  *	Read attribute VelocityFeedback related method
  *	Description: Velocity of the axis.
  *
@@ -565,23 +576,22 @@ void A1Axis::read_VelocityFeedback(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
- *	Write attribute VelocityFeedback related method
- *	Description: Velocity of the axis.
+ *	Write attribute VelocityTarget related method
+ *	Description: Targeted velocity for this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
  */
 //--------------------------------------------------------
-void A1Axis::write_VelocityFeedback(Tango::WAttribute &attr)
+void A1Axis::write_VelocityTarget(Tango::WAttribute &attr)
 {
-	DEBUG_STREAM << "A1Axis::write_VelocityFeedback(Tango::WAttribute &attr) entering... " << std::endl;
+	DEBUG_STREAM << "A1Axis::write_VelocityTarget(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
 	Tango::DevDouble	w_val;
 	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(A1Axis::write_VelocityFeedback) ENABLED START -----*/
-	attr_VelocityFeedback_write = w_val; 
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_VelocityFeedback
+	/*----- PROTECTED REGION ID(A1Axis::write_VelocityTarget) ENABLED START -----*/
+	attr_VelocityTarget_write = w_val;
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_VelocityTarget
 }
 //--------------------------------------------------------
 /**
@@ -842,63 +852,6 @@ void A1Axis::read_LastMoveDuration(Tango::Attribute &attr)
 	attr.set_value(attr_LastMoveDuration_read);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_LastMoveDuration
-}
-//--------------------------------------------------------
-/**
- *	Read attribute PositionTarget related method
- *	Description: Position axis was commanded to move to.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::read_PositionTarget(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::read_PositionTarget(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::read_PositionTarget) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_PositionTarget_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_PositionTarget
-}
-//--------------------------------------------------------
-/**
- *	Write attribute PositionTarget related method
- *	Description: Position axis was commanded to move to.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::write_PositionTarget(Tango::WAttribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::write_PositionTarget(Tango::WAttribute &attr) entering... " << std::endl;
-	//	Retrieve write value
-	Tango::DevDouble	w_val;
-	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(A1Axis::write_PositionTarget) ENABLED START -----*/
-	/* clang-format on */
-	//	Add your own code
-	/* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_PositionTarget
-}
-//--------------------------------------------------------
-/**
- *	Read attribute VelocityTarget related method
- *	Description: Targeted velocity for this axis.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::read_VelocityTarget(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::read_VelocityTarget(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::read_VelocityTarget) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_VelocityTarget_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_VelocityTarget
 }
 //--------------------------------------------------------
 /**
@@ -1266,7 +1219,7 @@ void A1Axis::move()
 	
     auto guard = A1Bridge_ns::getInstance()->checkConnection();
     A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
-	A1Bridge_ns::getInstance()->axis_Move(this->axis, attr_MoveType_write, attr_PositionFeedback_write, attr_VelocityFeedback_write); 
+	A1Bridge_ns::getInstance()->axis_Move(this->axis, attr_MoveType_write, attr_PositionTarget_write, attr_VelocityTarget_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::move
 }
@@ -1368,7 +1321,7 @@ void A1Axis::free_run()
 	/*----- PROTECTED REGION ID(A1Axis::free_run) ENABLED START -----*/
 	
     auto guard = A1Bridge_ns::getInstance()->checkConnection();
-	A1Bridge_ns::getInstance()->axis_FreeRun(this->axis, attr_VelocityFeedback_write); 
+	A1Bridge_ns::getInstance()->axis_FreeRun(this->axis, attr_VelocityTarget_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::free_run
 }

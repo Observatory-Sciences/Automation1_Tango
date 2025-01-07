@@ -40,7 +40,6 @@
 
 #include <A1Defines.h>
 #include <A1Bridge.h>
-#include <A1AxisEnum.h>
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis.h
 
@@ -62,9 +61,34 @@
 
 namespace A1Axis_ns
 {
+/*
+enum class _HomeTypeEnum : short {
+	_ASYNCHRONOUS,
+	_SYNCHRONOUS,
+} ;
+typedef _HomeTypeEnum HomeTypeEnum;
 
+enum class _MoveTypeEnum : short {
+	_ABSOLUTEMOVE,
+	_INCREMENTALMOVE,
+	_LINEARMOVE,
+	_RAPIDMOVE,
+} ;
+typedef _MoveTypeEnum MoveTypeEnum;
 
+enum class _RampTypeEnum : short {
+	_LINEAR,
+	_S_CURVE,
+	_SINE,
+} ;
+typedef _RampTypeEnum RampTypeEnum;
 
+enum class _RampModeEnum : short {
+	_RATE,
+	_TIME,
+} ;
+typedef _RampModeEnum RampModeEnum;
+*/
 /*----- PROTECTED REGION ID(A1Axis::Additional Class Declarations) ENABLED START -----*/
 
 //	Additional Class Declarations
@@ -83,8 +107,8 @@ private:
     
     HomeTypeEnum	            attr_HomeType_write;
     MoveTypeEnum	            attr_MoveType_write;
-	Tango::DevDouble	        attr_PositionFeedback_write;
-	Tango::DevDouble	        attr_VelocityFeedback_write;
+	Tango::DevDouble	        attr_PositionTarget_write;
+	Tango::DevDouble	        attr_VelocityTarget_write;
     RampTypeEnum	            attr_RampType_write;
 	RampModeEnum	            attr_RampMode_write;
 	Tango::DevDouble	        attr_RampValue_write;
@@ -115,8 +139,6 @@ public:
 	HomeTypeEnum	*attr_HomeType_read;
 	MoveTypeEnum	*attr_MoveType_read;
 	Tango::DevDouble	*attr_LastMoveDuration_read;
-	Tango::DevDouble	*attr_PositionTarget_read;
-	Tango::DevDouble	*attr_VelocityTarget_read;
 	Tango::DevDouble	*attr_VelocityError_read;
 	Tango::DevDouble	*attr_AccelerationTarget_read;
 	Tango::DevDouble	*attr_AccelerationError_read;
@@ -212,6 +234,15 @@ public:
 	virtual void read_PositionFeedback(Tango::Attribute &attr);
 	virtual bool is_PositionFeedback_allowed(Tango::AttReqType type);
 /**
+ *	Attribute PositionTarget related methods
+ *	Description: Position axis was commanded to move to.
+ *
+ *	Data type:	Tango::DevDouble
+ *	Attr type:	Scalar
+ */
+	virtual void write_PositionTarget(Tango::WAttribute &attr);
+	virtual bool is_PositionTarget_allowed(Tango::AttReqType type);
+/**
  *	Attribute VelocityFeedback related methods
  *	Description: Velocity of the axis.
  *
@@ -219,8 +250,16 @@ public:
  *	Attr type:	Scalar
  */
 	virtual void read_VelocityFeedback(Tango::Attribute &attr);
-	virtual void write_VelocityFeedback(Tango::WAttribute &attr);
 	virtual bool is_VelocityFeedback_allowed(Tango::AttReqType type);
+/**
+ *	Attribute VelocityTarget related methods
+ *	Description: Targeted velocity for this axis.
+ *
+ *	Data type:	Tango::DevDouble
+ *	Attr type:	Scalar
+ */
+	virtual void write_VelocityTarget(Tango::WAttribute &attr);
+	virtual bool is_VelocityTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute AccelerationFeedback related methods
  *	Description: Acceleration of the axis.
@@ -331,25 +370,6 @@ public:
  */
 	virtual void read_LastMoveDuration(Tango::Attribute &attr);
 	virtual bool is_LastMoveDuration_allowed(Tango::AttReqType type);
-/**
- *	Attribute PositionTarget related methods
- *	Description: Position axis was commanded to move to.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-	virtual void read_PositionTarget(Tango::Attribute &attr);
-	virtual void write_PositionTarget(Tango::WAttribute &attr);
-	virtual bool is_PositionTarget_allowed(Tango::AttReqType type);
-/**
- *	Attribute VelocityTarget related methods
- *	Description: Targeted velocity for this axis.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-	virtual void read_VelocityTarget(Tango::Attribute &attr);
-	virtual bool is_VelocityTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute VelocityError related methods
  *	Description: Error in the velocity of this axis.

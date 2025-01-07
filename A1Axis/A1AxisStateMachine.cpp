@@ -68,21 +68,51 @@ bool A1Axis::is_PositionFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
+ *	Method     : A1Axis::is_PositionTarget_allowed()
+ *	Description: Execution allowed for PositionTarget attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_PositionTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+	//	Not any excluded states for PositionTarget attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::PositionTargetStateAllowed_WRITE) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::PositionTargetStateAllowed_WRITE
+
+	return true;
+}
+
+//--------------------------------------------------------
+/**
  *	Method     : A1Axis::is_VelocityFeedback_allowed()
  *	Description: Execution allowed for VelocityFeedback attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_VelocityFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
-	//	Not any excluded states for VelocityFeedback attribute in Write access.
-	/*----- PROTECTED REGION ID(A1Axis::VelocityFeedbackStateAllowed_WRITE) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::VelocityFeedbackStateAllowed_WRITE
 
 	//	Not any excluded states for VelocityFeedback attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::VelocityFeedbackStateAllowed_READ) ENABLED START -----*/
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::VelocityFeedbackStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method     : A1Axis::is_VelocityTarget_allowed()
+ *	Description: Execution allowed for VelocityTarget attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_VelocityTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+	//	Not any excluded states for VelocityTarget attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::VelocityTargetStateAllowed_WRITE) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::VelocityTargetStateAllowed_WRITE
+
 	return true;
 }
 
@@ -283,43 +313,6 @@ bool A1Axis::is_LastMoveDuration_allowed(TANGO_UNUSED(Tango::AttReqType type))
 	/*----- PROTECTED REGION ID(A1Axis::LastMoveDurationStateAllowed_READ) ENABLED START -----*/
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::LastMoveDurationStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method     : A1Axis::is_PositionTarget_allowed()
- *	Description: Execution allowed for PositionTarget attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_PositionTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-	//	Not any excluded states for PositionTarget attribute in Write access.
-	/*----- PROTECTED REGION ID(A1Axis::PositionTargetStateAllowed_WRITE) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::PositionTargetStateAllowed_WRITE
-
-	//	Not any excluded states for PositionTarget attribute in read access.
-	/*----- PROTECTED REGION ID(A1Axis::PositionTargetStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::PositionTargetStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
- *	Method     : A1Axis::is_VelocityTarget_allowed()
- *	Description: Execution allowed for VelocityTarget attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_VelocityTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-
-	//	Not any excluded states for VelocityTarget attribute in read access.
-	/*----- PROTECTED REGION ID(A1Axis::VelocityTargetStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::VelocityTargetStateAllowed_READ
 	return true;
 }
 
