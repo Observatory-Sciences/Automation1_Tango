@@ -49,8 +49,8 @@ def test_move(automation1_proxy):
     target_pos = 0.5
     target_vel = 0.1
     tol = 1e-02
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
@@ -83,8 +83,8 @@ def test_move_reverse(automation1_proxy):
     target_pos = -0.5
     target_vel = -0.1
     tol = 1e-02
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
@@ -156,8 +156,8 @@ def test_free_run(automation1_proxy):
     target_vel = 0.1
     tol = target_pos / 10.0
 
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("FreeRun")
     time.sleep(3)
@@ -191,8 +191,8 @@ def test_free_run_reverse(automation1_proxy):
     target_vel = -0.1
     tol = -target_pos / 10.0
 
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("FreeRun")
     time.sleep(3)
@@ -230,8 +230,8 @@ def test_abort(automation1_proxy):
     target_vel = 0.1
     tol = target_pos / 10.0
 
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("FreeRun")
     time.sleep(3)
@@ -280,8 +280,8 @@ def test_move_from_limit(automation1_proxy):
 
     target_pos = 58.1
     target_vel = 4.0
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
@@ -320,8 +320,8 @@ def test_acknowledge_faults(automation1_proxy):
 
     target_pos = 58.1
     target_vel = 4.0
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
