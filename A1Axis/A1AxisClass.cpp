@@ -63,6 +63,12 @@ namespace A1Axis_ns
 //===================================================================
 A1AxisClass *A1AxisClass::_instance = NULL;
 
+//===================================================================
+//	Class constants
+//===================================================================
+constexpr long AxisStatusAttrib::X_DATA_SIZE;
+constexpr long AxisFaultAttrib::X_DATA_SIZE;
+constexpr long DriveStatusAttrib::X_DATA_SIZE;
 //--------------------------------------------------------
 /**
  * method : 		A1AxisClass::A1AxisClass(std::string &s)
@@ -137,7 +143,7 @@ A1AxisClass *A1AxisClass::instance()
 {
 	if (_instance == NULL)
 	{
-		std::cerr << "Class is not initialised !!" << std::endl;
+		std::cerr << "Class is not initialized !!" << std::endl;
 		exit(-1);
 	}
 	return _instance;
@@ -370,8 +376,8 @@ CORBA::Any *AcknowledgeFaultsClass::execute(Tango::DeviceImpl *device, TANGO_UNU
 //===================================================================
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::get_class_property()
- *	Description : Get the class property for specified name.
+ *	Method     : A1AxisClass::get_class_property()
+ *	Description: Get the class property for specified name.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1AxisClass::get_class_property(std::string &prop_name)
@@ -385,8 +391,8 @@ Tango::DbDatum A1AxisClass::get_class_property(std::string &prop_name)
 
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::get_default_device_property()
- *	Description : Return the default value for device property.
+ *	Method     : A1AxisClass::get_default_device_property()
+ *	Description: Return the default value for device property.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1AxisClass::get_default_device_property(std::string &prop_name)
@@ -400,8 +406,8 @@ Tango::DbDatum A1AxisClass::get_default_device_property(std::string &prop_name)
 
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::get_default_class_property()
- *	Description : Return the default value for class property.
+ *	Method     : A1AxisClass::get_default_class_property()
+ *	Description: Return the default value for class property.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1AxisClass::get_default_class_property(std::string &prop_name)
@@ -416,8 +422,8 @@ Tango::DbDatum A1AxisClass::get_default_class_property(std::string &prop_name)
 
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::set_default_property()
- *	Description : Set default property (class and device) for wizard.
+ *	Method     : A1AxisClass::set_default_property()
+ *	Description: Set default property (class and device) for wizard.
  *                For each property, add to wizard property name and description.
  *                If default value has been set, add it to wizard property and
  *                store it in a DbDatum.
@@ -450,8 +456,8 @@ void A1AxisClass::set_default_property()
 
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::write_class_property()
- *	Description : Set class description fields as property in database
+ *	Method     : A1AxisClass::write_class_property()
+ *	Description: Set class description fields as property in database
  */
 //--------------------------------------------------------
 void A1AxisClass::write_class_property()
@@ -463,7 +469,6 @@ void A1AxisClass::write_class_property()
 	Tango::DbData	data;
 	std::string	classname = get_name();
 	std::string	header;
-	std::string::size_type	start, end;
 
 	//	Put title
 	Tango::DbDatum	title("ProjectTitle");
@@ -495,8 +500,8 @@ void A1AxisClass::write_class_property()
 
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::device_factory()
- *	Description : Create the device object(s)
+ *	Method     : A1AxisClass::device_factory()
+ *	Description: Create the device object(s)
  *                and store them in the device list
  */
 //--------------------------------------------------------
@@ -540,8 +545,8 @@ void A1AxisClass::device_factory(const Tango::DevVarStringArray *devlist_ptr)
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::attribute_factory()
- *	Description : Create the attribute object(s)
+ *	Method     : A1AxisClass::attribute_factory()
+ *	Description: Create the attribute object(s)
  *                and store them in the attribute list
  */
 //--------------------------------------------------------
@@ -569,7 +574,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for PositionFeedback
 	//	delta_t	not set for PositionFeedback
 	//	delta_val	not set for PositionFeedback
-	
 	positionfeedback->set_default_properties(positionfeedback_prop);
 	//	Not Polled
 	positionfeedback->set_disp_level(Tango::OPERATOR);
@@ -593,7 +597,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for VelocityFeedback
 	//	delta_t	not set for VelocityFeedback
 	//	delta_val	not set for VelocityFeedback
-	
 	velocityfeedback->set_default_properties(velocityfeedback_prop);
 	//	Not Polled
 	velocityfeedback->set_disp_level(Tango::OPERATOR);
@@ -617,7 +620,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for AccelerationFeedback
 	//	delta_t	not set for AccelerationFeedback
 	//	delta_val	not set for AccelerationFeedback
-	
 	accelerationfeedback->set_default_properties(accelerationfeedback_prop);
 	//	Not Polled
 	accelerationfeedback->set_disp_level(Tango::OPERATOR);
@@ -641,7 +643,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for InPosition
 	//	delta_t	not set for InPosition
 	//	delta_val	not set for InPosition
-	
 	inposition->set_default_properties(inposition_prop);
 	//	Not Polled
 	inposition->set_disp_level(Tango::OPERATOR);
@@ -665,7 +666,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for Enabled
 	//	delta_t	not set for Enabled
 	//	delta_val	not set for Enabled
-	
 	enabled->set_default_properties(enabled_prop);
 	//	Not Polled
 	enabled->set_disp_level(Tango::OPERATOR);
@@ -689,7 +689,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for Homed
 	//	delta_t	not set for Homed
 	//	delta_val	not set for Homed
-	
 	homed->set_default_properties(homed_prop);
 	//	Not Polled
 	homed->set_disp_level(Tango::OPERATOR);
@@ -713,7 +712,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for Error
 	//	delta_t	not set for Error
 	//	delta_val	not set for Error
-	
 	error->set_default_properties(error_prop);
 	//	Not Polled
 	error->set_disp_level(Tango::OPERATOR);
@@ -737,7 +735,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for FirmwareVersion
 	//	delta_t	not set for FirmwareVersion
 	//	delta_val	not set for FirmwareVersion
-	
 	firmwareversion->set_default_properties(firmwareversion_prop);
 	//	Not Polled
 	firmwareversion->set_disp_level(Tango::OPERATOR);
@@ -761,7 +758,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for PositionError
 	//	delta_t	not set for PositionError
 	//	delta_val	not set for PositionError
-	
 	positionerror->set_default_properties(positionerror_prop);
 	//	Not Polled
 	positionerror->set_disp_level(Tango::OPERATOR);
@@ -785,7 +781,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for CurrentFeedback
 	//	delta_t	not set for CurrentFeedback
 	//	delta_val	not set for CurrentFeedback
-	
 	currentfeedback->set_default_properties(currentfeedback_prop);
 	//	Not Polled
 	currentfeedback->set_disp_level(Tango::OPERATOR);
@@ -809,7 +804,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for MotorType
 	//	delta_t	not set for MotorType
 	//	delta_val	not set for MotorType
-	
 	motortype->set_default_properties(motortype_prop);
 	//	Not Polled
 	motortype->set_disp_level(Tango::OPERATOR);
@@ -833,7 +827,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for HomeType
 	//	delta_t	not set for HomeType
 	//	delta_val	not set for HomeType
-	
 	{
 		std::vector<std::string> labels;
 		labels.push_back("Asynchronous");
@@ -863,7 +856,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for MoveType
 	//	delta_t	not set for MoveType
 	//	delta_val	not set for MoveType
-	
 	{
 		std::vector<std::string> labels;
 		labels.push_back("AbsoluteMove");
@@ -895,7 +887,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for LastMoveDuration
 	//	delta_t	not set for LastMoveDuration
 	//	delta_val	not set for LastMoveDuration
-	
 	lastmoveduration->set_default_properties(lastmoveduration_prop);
 	//	Not Polled
 	lastmoveduration->set_disp_level(Tango::OPERATOR);
@@ -919,7 +910,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for PositionTarget
 	//	delta_t	not set for PositionTarget
 	//	delta_val	not set for PositionTarget
-	
 	positiontarget->set_default_properties(positiontarget_prop);
 	//	Not Polled
 	positiontarget->set_disp_level(Tango::OPERATOR);
@@ -943,7 +933,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for VelocityTarget
 	//	delta_t	not set for VelocityTarget
 	//	delta_val	not set for VelocityTarget
-	
 	velocitytarget->set_default_properties(velocitytarget_prop);
 	//	Not Polled
 	velocitytarget->set_disp_level(Tango::OPERATOR);
@@ -967,7 +956,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for VelocityError
 	//	delta_t	not set for VelocityError
 	//	delta_val	not set for VelocityError
-	
 	velocityerror->set_default_properties(velocityerror_prop);
 	//	Not Polled
 	velocityerror->set_disp_level(Tango::OPERATOR);
@@ -991,7 +979,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for AccelerationTarget
 	//	delta_t	not set for AccelerationTarget
 	//	delta_val	not set for AccelerationTarget
-	
 	accelerationtarget->set_default_properties(accelerationtarget_prop);
 	//	Not Polled
 	accelerationtarget->set_disp_level(Tango::OPERATOR);
@@ -1015,7 +1002,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for AccelerationError
 	//	delta_t	not set for AccelerationError
 	//	delta_val	not set for AccelerationError
-	
 	accelerationerror->set_default_properties(accelerationerror_prop);
 	//	Not Polled
 	accelerationerror->set_disp_level(Tango::OPERATOR);
@@ -1039,7 +1025,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for CurrentTarget
 	//	delta_t	not set for CurrentTarget
 	//	delta_val	not set for CurrentTarget
-	
 	currenttarget->set_default_properties(currenttarget_prop);
 	//	Not Polled
 	currenttarget->set_disp_level(Tango::OPERATOR);
@@ -1063,7 +1048,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for CurrentError
 	//	delta_t	not set for CurrentError
 	//	delta_val	not set for CurrentError
-	
 	currenterror->set_default_properties(currenterror_prop);
 	//	Not Polled
 	currenterror->set_disp_level(Tango::OPERATOR);
@@ -1087,7 +1071,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for ServoUpdateRate
 	//	delta_t	not set for ServoUpdateRate
 	//	delta_val	not set for ServoUpdateRate
-	
 	servoupdaterate->set_default_properties(servoupdaterate_prop);
 	//	Not Polled
 	servoupdaterate->set_disp_level(Tango::OPERATOR);
@@ -1111,7 +1094,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for RampType
 	//	delta_t	not set for RampType
 	//	delta_val	not set for RampType
-	
 	{
 		std::vector<std::string> labels;
 		labels.push_back("Linear");
@@ -1142,7 +1124,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for RampMode
 	//	delta_t	not set for RampMode
 	//	delta_val	not set for RampMode
-	
 	{
 		std::vector<std::string> labels;
 		labels.push_back("Rate");
@@ -1172,7 +1153,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for RampValue
 	//	delta_t	not set for RampValue
 	//	delta_val	not set for RampValue
-	
 	rampvalue->set_default_properties(rampvalue_prop);
 	//	Not Polled
 	rampvalue->set_disp_level(Tango::OPERATOR);
@@ -1196,7 +1176,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for VirtualAxis
 	//	delta_t	not set for VirtualAxis
 	//	delta_val	not set for VirtualAxis
-	
 	virtualaxis->set_default_properties(virtualaxis_prop);
 	//	Not Polled
 	virtualaxis->set_disp_level(Tango::OPERATOR);
@@ -1220,7 +1199,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for AxisStatus
 	//	delta_t	not set for AxisStatus
 	//	delta_val	not set for AxisStatus
-	
 	axisstatus->set_default_properties(axisstatus_prop);
 	//	Not Polled
 	axisstatus->set_disp_level(Tango::OPERATOR);
@@ -1244,7 +1222,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for AxisFault
 	//	delta_t	not set for AxisFault
 	//	delta_val	not set for AxisFault
-	
 	axisfault->set_default_properties(axisfault_prop);
 	//	Not Polled
 	axisfault->set_disp_level(Tango::OPERATOR);
@@ -1268,7 +1245,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	min_warning	not set for DriveStatus
 	//	delta_t	not set for DriveStatus
 	//	delta_val	not set for DriveStatus
-	
 	drivestatus->set_default_properties(drivestatus_prop);
 	//	Not Polled
 	drivestatus->set_disp_level(Tango::OPERATOR);
@@ -1286,8 +1262,8 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::pipe_factory()
- *	Description : Create the pipe object(s)
+ *	Method     : A1AxisClass::pipe_factory()
+ *	Description: Create the pipe object(s)
  *                and store them in the pipe list
  */
 //--------------------------------------------------------
@@ -1306,8 +1282,8 @@ void A1AxisClass::pipe_factory()
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::command_factory()
- *	Description : Create the command object(s)
+ *	Method     : A1AxisClass::command_factory()
+ *	Description: Create the command object(s)
  *                and store them in the command list
  */
 //--------------------------------------------------------
@@ -1444,7 +1420,7 @@ void A1AxisClass::command_factory()
  * method : 		A1AxisClass::create_static_attribute_list
  * description : 	Create the a list of static attributes
  *
- * @param	att_list	the ceated attribute list
+ * @param	att_list	the created attribute list
  */
 //--------------------------------------------------------
 void A1AxisClass::create_static_attribute_list(std::vector<Tango::Attr *> &att_list)
@@ -1452,7 +1428,7 @@ void A1AxisClass::create_static_attribute_list(std::vector<Tango::Attr *> &att_l
 	for (unsigned long i=0 ; i<att_list.size() ; i++)
 	{
 		std::string att_name(att_list[i]->get_name());
-		transform(att_name.begin(), att_name.end(), att_name.begin(), ::tolower);
+		std::transform(att_name.begin(), att_name.end(), att_name.begin(), ::tolower);
 		defaultAttList.push_back(att_name);
 	}
 
@@ -1506,8 +1482,8 @@ void A1AxisClass::erase_dynamic_attributes(const Tango::DevVarStringArray *devli
 
 //--------------------------------------------------------
 /**
- *	Method      : A1AxisClass::get_attr_object_by_name()
- *	Description : returns Tango::Attr * object found by name
+ *	Method     : A1AxisClass::get_attr_object_by_name()
+ *	Description: returns Tango::Attr * object found by name
  */
 //--------------------------------------------------------
 Tango::Attr *A1AxisClass::get_attr_object_by_name(std::vector<Tango::Attr *> &att_list, std::string attname)

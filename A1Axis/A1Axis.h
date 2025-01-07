@@ -44,13 +44,26 @@
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis.h
 
+#ifdef TANGO_LOG
+	// cppTango after c934adea (Merge branch 'remove-cout-definition' into 'main', 2022-05-23)
+	// nothing to do
+#else
+	// cppTango 9.3-backports and older
+	#define TANGO_LOG       cout
+	#define TANGO_LOG_INFO  cout2
+	#define TANGO_LOG_DEBUG cout3
+#endif // TANGO_LOG
+
 /**
  *  A1Axis class description:
  *    Axis class for the Aerotech Automation 1 device server
  */
 
+
 namespace A1Axis_ns
 {
+
+
 
 /*----- PROTECTED REGION ID(A1Axis::Additional Class Declarations) ENABLED START -----*/
 
@@ -145,7 +158,7 @@ public:
 	/**
 	 * The device object destructor.
 	 */
-	~A1Axis() {delete_device();};
+	~A1Axis();
 
 
 //	Miscellaneous methods
@@ -176,15 +189,15 @@ public:
 public:
 	//--------------------------------------------------------
 	/*
-	 *	Method      : A1Axis::read_attr_hardware()
-	 *	Description : Hardware acquisition for attributes.
+	 *	Method     : A1Axis::read_attr_hardware()
+	 *	Description: Hardware acquisition for attributes.
 	 */
 	//--------------------------------------------------------
 	virtual void read_attr_hardware(std::vector<long> &attr_list);
 	//--------------------------------------------------------
 	/*
-	 *	Method      : A1Axis::write_attr_hardware()
-	 *	Description : Hardware writing for attributes.
+	 *	Method     : A1Axis::write_attr_hardware()
+	 *	Description: Hardware writing for attributes.
 	 */
 	//--------------------------------------------------------
 	virtual void write_attr_hardware(std::vector<long> &attr_list);
@@ -197,7 +210,6 @@ public:
  *	Attr type:	Scalar
  */
 	virtual void read_PositionFeedback(Tango::Attribute &attr);
-	virtual void write_PositionFeedback(Tango::WAttribute &attr);
 	virtual bool is_PositionFeedback_allowed(Tango::AttReqType type);
 /**
  *	Attribute VelocityFeedback related methods
@@ -220,7 +232,7 @@ public:
 	virtual bool is_AccelerationFeedback_allowed(Tango::AttReqType type);
 /**
  *	Attribute InPosition related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -229,7 +241,7 @@ public:
 	virtual bool is_InPosition_allowed(Tango::AttReqType type);
 /**
  *	Attribute Enabled related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -238,7 +250,7 @@ public:
 	virtual bool is_Enabled_allowed(Tango::AttReqType type);
 /**
  *	Attribute Homed related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -247,7 +259,7 @@ public:
 	virtual bool is_Homed_allowed(Tango::AttReqType type);
 /**
  *	Attribute Error related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -327,6 +339,7 @@ public:
  *	Attr type:	Scalar
  */
 	virtual void read_PositionTarget(Tango::Attribute &attr);
+	virtual void write_PositionTarget(Tango::WAttribute &attr);
 	virtual bool is_PositionTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute VelocityTarget related methods
@@ -403,7 +416,7 @@ public:
 	virtual bool is_RampType_allowed(Tango::AttReqType type);
 /**
  *	Attribute RampMode related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevEnum
  *	Attr type:	Scalar
@@ -423,7 +436,7 @@ public:
 	virtual bool is_RampValue_allowed(Tango::AttReqType type);
 /**
  *	Attribute VirtualAxis related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -461,8 +474,8 @@ public:
 
 	//--------------------------------------------------------
 	/**
-	 *	Method      : A1Axis::add_dynamic_attributes()
-	 *	Description : Add dynamic attributes if any.
+	 *	Method     : A1Axis::add_dynamic_attributes()
+	 *	Description: Add dynamic attributes if any.
 	 */
 	//--------------------------------------------------------
 	void add_dynamic_attributes();
@@ -560,8 +573,8 @@ public:
 
 	//--------------------------------------------------------
 	/**
-	 *	Method      : A1Axis::add_dynamic_commands()
-	 *	Description : Add dynamic commands if any.
+	 *	Method     : A1Axis::add_dynamic_commands()
+	 *	Description: Add dynamic commands if any.
 	 */
 	//--------------------------------------------------------
 	void add_dynamic_commands();

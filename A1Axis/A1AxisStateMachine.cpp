@@ -52,16 +52,12 @@ namespace A1Axis_ns
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_PositionFeedback_allowed()
- *	Description : Execution allowed for PositionFeedback attribute
+ *	Method     : A1Axis::is_PositionFeedback_allowed()
+ *	Description: Execution allowed for PositionFeedback attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_PositionFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
-	//	Not any excluded states for PositionFeedback attribute in Write access.
-	/*----- PROTECTED REGION ID(A1Axis::PositionFeedbackStateAllowed_WRITE) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::PositionFeedbackStateAllowed_WRITE
 
 	//	Not any excluded states for PositionFeedback attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::PositionFeedbackStateAllowed_READ) ENABLED START -----*/
@@ -72,8 +68,8 @@ bool A1Axis::is_PositionFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_VelocityFeedback_allowed()
- *	Description : Execution allowed for VelocityFeedback attribute
+ *	Method     : A1Axis::is_VelocityFeedback_allowed()
+ *	Description: Execution allowed for VelocityFeedback attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_VelocityFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -92,8 +88,8 @@ bool A1Axis::is_VelocityFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_AccelerationFeedback_allowed()
- *	Description : Execution allowed for AccelerationFeedback attribute
+ *	Method     : A1Axis::is_AccelerationFeedback_allowed()
+ *	Description: Execution allowed for AccelerationFeedback attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_AccelerationFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -108,8 +104,8 @@ bool A1Axis::is_AccelerationFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_InPosition_allowed()
- *	Description : Execution allowed for InPosition attribute
+ *	Method     : A1Axis::is_InPosition_allowed()
+ *	Description: Execution allowed for InPosition attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_InPosition_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -124,8 +120,8 @@ bool A1Axis::is_InPosition_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_Enabled_allowed()
- *	Description : Execution allowed for Enabled attribute
+ *	Method     : A1Axis::is_Enabled_allowed()
+ *	Description: Execution allowed for Enabled attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_Enabled_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -140,8 +136,8 @@ bool A1Axis::is_Enabled_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_Homed_allowed()
- *	Description : Execution allowed for Homed attribute
+ *	Method     : A1Axis::is_Homed_allowed()
+ *	Description: Execution allowed for Homed attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_Homed_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -156,8 +152,8 @@ bool A1Axis::is_Homed_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_Error_allowed()
- *	Description : Execution allowed for Error attribute
+ *	Method     : A1Axis::is_Error_allowed()
+ *	Description: Execution allowed for Error attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_Error_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -172,8 +168,8 @@ bool A1Axis::is_Error_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_FirmwareVersion_allowed()
- *	Description : Execution allowed for FirmwareVersion attribute
+ *	Method     : A1Axis::is_FirmwareVersion_allowed()
+ *	Description: Execution allowed for FirmwareVersion attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_FirmwareVersion_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -188,8 +184,8 @@ bool A1Axis::is_FirmwareVersion_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_PositionError_allowed()
- *	Description : Execution allowed for PositionError attribute
+ *	Method     : A1Axis::is_PositionError_allowed()
+ *	Description: Execution allowed for PositionError attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_PositionError_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -204,8 +200,8 @@ bool A1Axis::is_PositionError_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_CurrentFeedback_allowed()
- *	Description : Execution allowed for CurrentFeedback attribute
+ *	Method     : A1Axis::is_CurrentFeedback_allowed()
+ *	Description: Execution allowed for CurrentFeedback attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_CurrentFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -220,8 +216,8 @@ bool A1Axis::is_CurrentFeedback_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_MotorType_allowed()
- *	Description : Execution allowed for MotorType attribute
+ *	Method     : A1Axis::is_MotorType_allowed()
+ *	Description: Execution allowed for MotorType attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_MotorType_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -236,8 +232,8 @@ bool A1Axis::is_MotorType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_HomeType_allowed()
- *	Description : Execution allowed for HomeType attribute
+ *	Method     : A1Axis::is_HomeType_allowed()
+ *	Description: Execution allowed for HomeType attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_HomeType_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -256,8 +252,8 @@ bool A1Axis::is_HomeType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_MoveType_allowed()
- *	Description : Execution allowed for MoveType attribute
+ *	Method     : A1Axis::is_MoveType_allowed()
+ *	Description: Execution allowed for MoveType attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_MoveType_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -276,8 +272,8 @@ bool A1Axis::is_MoveType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_LastMoveDuration_allowed()
- *	Description : Execution allowed for LastMoveDuration attribute
+ *	Method     : A1Axis::is_LastMoveDuration_allowed()
+ *	Description: Execution allowed for LastMoveDuration attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_LastMoveDuration_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -292,12 +288,17 @@ bool A1Axis::is_LastMoveDuration_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_PositionTarget_allowed()
- *	Description : Execution allowed for PositionTarget attribute
+ *	Method     : A1Axis::is_PositionTarget_allowed()
+ *	Description: Execution allowed for PositionTarget attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_PositionTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
+	//	Not any excluded states for PositionTarget attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Axis::PositionTargetStateAllowed_WRITE) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::PositionTargetStateAllowed_WRITE
 
 	//	Not any excluded states for PositionTarget attribute in read access.
 	/*----- PROTECTED REGION ID(A1Axis::PositionTargetStateAllowed_READ) ENABLED START -----*/
@@ -308,8 +309,8 @@ bool A1Axis::is_PositionTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_VelocityTarget_allowed()
- *	Description : Execution allowed for VelocityTarget attribute
+ *	Method     : A1Axis::is_VelocityTarget_allowed()
+ *	Description: Execution allowed for VelocityTarget attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_VelocityTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -324,8 +325,8 @@ bool A1Axis::is_VelocityTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_VelocityError_allowed()
- *	Description : Execution allowed for VelocityError attribute
+ *	Method     : A1Axis::is_VelocityError_allowed()
+ *	Description: Execution allowed for VelocityError attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_VelocityError_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -340,8 +341,8 @@ bool A1Axis::is_VelocityError_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_AccelerationTarget_allowed()
- *	Description : Execution allowed for AccelerationTarget attribute
+ *	Method     : A1Axis::is_AccelerationTarget_allowed()
+ *	Description: Execution allowed for AccelerationTarget attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_AccelerationTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -356,8 +357,8 @@ bool A1Axis::is_AccelerationTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_AccelerationError_allowed()
- *	Description : Execution allowed for AccelerationError attribute
+ *	Method     : A1Axis::is_AccelerationError_allowed()
+ *	Description: Execution allowed for AccelerationError attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_AccelerationError_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -372,8 +373,8 @@ bool A1Axis::is_AccelerationError_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_CurrentTarget_allowed()
- *	Description : Execution allowed for CurrentTarget attribute
+ *	Method     : A1Axis::is_CurrentTarget_allowed()
+ *	Description: Execution allowed for CurrentTarget attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_CurrentTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -388,8 +389,8 @@ bool A1Axis::is_CurrentTarget_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_CurrentError_allowed()
- *	Description : Execution allowed for CurrentError attribute
+ *	Method     : A1Axis::is_CurrentError_allowed()
+ *	Description: Execution allowed for CurrentError attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_CurrentError_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -404,8 +405,8 @@ bool A1Axis::is_CurrentError_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_ServoUpdateRate_allowed()
- *	Description : Execution allowed for ServoUpdateRate attribute
+ *	Method     : A1Axis::is_ServoUpdateRate_allowed()
+ *	Description: Execution allowed for ServoUpdateRate attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_ServoUpdateRate_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -420,8 +421,8 @@ bool A1Axis::is_ServoUpdateRate_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_RampType_allowed()
- *	Description : Execution allowed for RampType attribute
+ *	Method     : A1Axis::is_RampType_allowed()
+ *	Description: Execution allowed for RampType attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_RampType_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -440,8 +441,8 @@ bool A1Axis::is_RampType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_RampMode_allowed()
- *	Description : Execution allowed for RampMode attribute
+ *	Method     : A1Axis::is_RampMode_allowed()
+ *	Description: Execution allowed for RampMode attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_RampMode_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -460,8 +461,8 @@ bool A1Axis::is_RampMode_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_RampValue_allowed()
- *	Description : Execution allowed for RampValue attribute
+ *	Method     : A1Axis::is_RampValue_allowed()
+ *	Description: Execution allowed for RampValue attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_RampValue_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -480,8 +481,8 @@ bool A1Axis::is_RampValue_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_VirtualAxis_allowed()
- *	Description : Execution allowed for VirtualAxis attribute
+ *	Method     : A1Axis::is_VirtualAxis_allowed()
+ *	Description: Execution allowed for VirtualAxis attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_VirtualAxis_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -496,8 +497,8 @@ bool A1Axis::is_VirtualAxis_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_AxisStatus_allowed()
- *	Description : Execution allowed for AxisStatus attribute
+ *	Method     : A1Axis::is_AxisStatus_allowed()
+ *	Description: Execution allowed for AxisStatus attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_AxisStatus_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -512,8 +513,8 @@ bool A1Axis::is_AxisStatus_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_AxisFault_allowed()
- *	Description : Execution allowed for AxisFault attribute
+ *	Method     : A1Axis::is_AxisFault_allowed()
+ *	Description: Execution allowed for AxisFault attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_AxisFault_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -528,8 +529,8 @@ bool A1Axis::is_AxisFault_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_DriveStatus_allowed()
- *	Description : Execution allowed for DriveStatus attribute
+ *	Method     : A1Axis::is_DriveStatus_allowed()
+ *	Description: Execution allowed for DriveStatus attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_DriveStatus_allowed(TANGO_UNUSED(Tango::AttReqType type))
@@ -549,8 +550,8 @@ bool A1Axis::is_DriveStatus_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_Abort_allowed()
- *	Description : Execution allowed for Abort attribute
+ *	Method     : A1Axis::is_Abort_allowed()
+ *	Description: Execution allowed for Abort attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_Abort_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -564,8 +565,8 @@ bool A1Axis::is_Abort_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_Home_allowed()
- *	Description : Execution allowed for Home attribute
+ *	Method     : A1Axis::is_Home_allowed()
+ *	Description: Execution allowed for Home attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_Home_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -579,8 +580,8 @@ bool A1Axis::is_Home_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_Move_allowed()
- *	Description : Execution allowed for Move attribute
+ *	Method     : A1Axis::is_Move_allowed()
+ *	Description: Execution allowed for Move attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_Move_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -594,8 +595,8 @@ bool A1Axis::is_Move_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_Enable_allowed()
- *	Description : Execution allowed for Enable attribute
+ *	Method     : A1Axis::is_Enable_allowed()
+ *	Description: Execution allowed for Enable attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_Enable_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -609,8 +610,8 @@ bool A1Axis::is_Enable_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_Disable_allowed()
- *	Description : Execution allowed for Disable attribute
+ *	Method     : A1Axis::is_Disable_allowed()
+ *	Description: Execution allowed for Disable attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_Disable_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -624,8 +625,8 @@ bool A1Axis::is_Disable_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_BrakeOn_allowed()
- *	Description : Execution allowed for BrakeOn attribute
+ *	Method     : A1Axis::is_BrakeOn_allowed()
+ *	Description: Execution allowed for BrakeOn attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_BrakeOn_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -639,8 +640,8 @@ bool A1Axis::is_BrakeOn_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_BrakeOff_allowed()
- *	Description : Execution allowed for BrakeOff attribute
+ *	Method     : A1Axis::is_BrakeOff_allowed()
+ *	Description: Execution allowed for BrakeOff attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_BrakeOff_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -654,8 +655,8 @@ bool A1Axis::is_BrakeOff_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_MoveFromLimit_allowed()
- *	Description : Execution allowed for MoveFromLimit attribute
+ *	Method     : A1Axis::is_MoveFromLimit_allowed()
+ *	Description: Execution allowed for MoveFromLimit attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_MoveFromLimit_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -669,8 +670,8 @@ bool A1Axis::is_MoveFromLimit_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_FreeRun_allowed()
- *	Description : Execution allowed for FreeRun attribute
+ *	Method     : A1Axis::is_FreeRun_allowed()
+ *	Description: Execution allowed for FreeRun attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_FreeRun_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -684,8 +685,8 @@ bool A1Axis::is_FreeRun_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_FreeRunStop_allowed()
- *	Description : Execution allowed for FreeRunStop attribute
+ *	Method     : A1Axis::is_FreeRunStop_allowed()
+ *	Description: Execution allowed for FreeRunStop attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_FreeRunStop_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -699,8 +700,8 @@ bool A1Axis::is_FreeRunStop_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_ThrowAllFaults_allowed()
- *	Description : Execution allowed for ThrowAllFaults attribute
+ *	Method     : A1Axis::is_ThrowAllFaults_allowed()
+ *	Description: Execution allowed for ThrowAllFaults attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_ThrowAllFaults_allowed(TANGO_UNUSED(const CORBA::Any &any))
@@ -714,8 +715,8 @@ bool A1Axis::is_ThrowAllFaults_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::is_AcknowledgeFaults_allowed()
- *	Description : Execution allowed for AcknowledgeFaults attribute
+ *	Method     : A1Axis::is_AcknowledgeFaults_allowed()
+ *	Description: Execution allowed for AcknowledgeFaults attribute
  */
 //--------------------------------------------------------
 bool A1Axis::is_AcknowledgeFaults_allowed(TANGO_UNUSED(const CORBA::Any &any))
