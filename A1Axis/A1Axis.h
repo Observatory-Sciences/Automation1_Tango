@@ -468,7 +468,7 @@ public:
  *	Description: Bitfield representing the status of this axis.
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 24
+ *	Attr type:	Spectrum max = 32
  */
 	virtual void read_AxisStatus(Tango::Attribute &attr);
 	virtual bool is_AxisStatus_allowed(Tango::AttReqType type);
@@ -477,7 +477,7 @@ public:
  *	Description: Bitfield corresponding to specific faults
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 25
+ *	Attr type:	Spectrum max = 32
  */
 	virtual void read_AxisFault(Tango::Attribute &attr);
 	virtual bool is_AxisFault_allowed(Tango::AttReqType type);
@@ -486,7 +486,7 @@ public:
  *	Description: Bitfield representing the status of the connected drive.
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 27
+ *	Attr type:	Spectrum max = 32
  */
 	virtual void read_DriveStatus(Tango::Attribute &attr);
 	virtual bool is_DriveStatus_allowed(Tango::AttReqType type);

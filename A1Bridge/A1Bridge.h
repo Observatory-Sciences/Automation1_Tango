@@ -57,11 +57,11 @@ typedef struct A1AxisAttributes
 	Tango::DevDouble	                    attr_RampValue_read;
         Tango::DevBoolean	                    attr_VirtualAxis_read;
     Tango::DevDouble                        axisStatus; 
-	Tango::DevBoolean	                    attr_AxisStatus_read[24];
+	Tango::DevBoolean	                    attr_AxisStatus_read[32];
     Tango::DevDouble                        axisFault; 
-	Tango::DevBoolean	                    attr_AxisFault_read[25];
+	Tango::DevBoolean	                    attr_AxisFault_read[32];
     Tango::DevDouble                        driveStatus; 
-	Tango::DevBoolean	                    attr_DriveStatus_read[27];
+	Tango::DevBoolean	                    attr_DriveStatus_read[32];
 } A1AxisAttributes; 
 
 

@@ -423,7 +423,7 @@ class AxisStatusAttrib: public Tango::SpectrumAttr
 {
 public:
 	// Constants for AxisStatus attribute
-	constexpr static long X_DATA_SIZE = 24;
+	constexpr static long X_DATA_SIZE = 32;
 	AxisStatusAttrib():SpectrumAttr("AxisStatus",
 			Tango::DEV_BOOLEAN, Tango::READ, AxisStatusAttrib::X_DATA_SIZE) {}
 	~AxisStatusAttrib() {}
@@ -438,7 +438,7 @@ class AxisFaultAttrib: public Tango::SpectrumAttr
 {
 public:
 	// Constants for AxisFault attribute
-	constexpr static long X_DATA_SIZE = 25;
+	constexpr static long X_DATA_SIZE = 32;
 	AxisFaultAttrib():SpectrumAttr("AxisFault",
 			Tango::DEV_BOOLEAN, Tango::READ, AxisFaultAttrib::X_DATA_SIZE) {}
 	~AxisFaultAttrib() {}
@@ -453,7 +453,7 @@ class DriveStatusAttrib: public Tango::SpectrumAttr
 {
 public:
 	// Constants for DriveStatus attribute
-	constexpr static long X_DATA_SIZE = 27;
+	constexpr static long X_DATA_SIZE = 32;
 	DriveStatusAttrib():SpectrumAttr("DriveStatus",
 			Tango::DEV_BOOLEAN, Tango::READ, DriveStatusAttrib::X_DATA_SIZE) {}
 	~DriveStatusAttrib() {}

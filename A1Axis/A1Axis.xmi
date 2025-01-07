@@ -354,7 +354,7 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <properties description="" label="" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
-    <attributes name="AxisStatus" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="24" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="AxisStatus" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="32" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
@@ -362,7 +362,7 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <properties description="Bitfield representing the status of this axis." label="Axis Status" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
-    <attributes name="AxisFault" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="25" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="AxisFault" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="32" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>
@@ -370,7 +370,7 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <properties description="Bitfield corresponding to specific faults" label="Axis Fault" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
     </attributes>
-    <attributes name="DriveStatus" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="27" maxY="" allocReadMember="true" isDynamic="false">
+    <attributes name="DriveStatus" attType="Spectrum" rwType="READ" displayLevel="OPERATOR" polledPeriod="0" maxX="32" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:BooleanType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>
       <archiveEvent fire="false" libCheckCriteria="false"/>

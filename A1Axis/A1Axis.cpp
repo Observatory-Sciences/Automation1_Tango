@@ -96,9 +96,9 @@
 //  RampMode              |  Tango::DevEnum	Scalar
 //  RampValue             |  Tango::DevDouble	Scalar
 //  VirtualAxis           |  Tango::DevBoolean	Scalar
-//  AxisStatus            |  Tango::DevBoolean	Spectrum  ( max = 24)
-//  AxisFault             |  Tango::DevBoolean	Spectrum  ( max = 25)
-//  DriveStatus           |  Tango::DevBoolean	Spectrum  ( max = 27)
+//  AxisStatus            |  Tango::DevBoolean	Spectrum  ( max = 32)
+//  AxisFault             |  Tango::DevBoolean	Spectrum  ( max = 32)
+//  DriveStatus           |  Tango::DevBoolean	Spectrum  ( max = 32)
 //================================================================
 
 namespace A1Axis_ns
@@ -253,9 +253,9 @@ void A1Axis::init_device()
 	attr_RampMode_read = new RampModeEnum[1];
 	attr_RampValue_read = new Tango::DevDouble[1];
 	attr_VirtualAxis_read = new Tango::DevBoolean[1];
-	attr_AxisStatus_read = new Tango::DevBoolean[24];
-	attr_AxisFault_read = new Tango::DevBoolean[25];
-	attr_DriveStatus_read = new Tango::DevBoolean[27];
+	attr_AxisStatus_read = new Tango::DevBoolean[32];
+	attr_AxisFault_read = new Tango::DevBoolean[32];
+	attr_DriveStatus_read = new Tango::DevBoolean[32];
 	//	No longer if mandatory property not set.
 	if (mandatoryNotDefined)
 		return;
@@ -293,15 +293,15 @@ void A1Axis::init_device()
 	attr_RampValue_read[0] = 0;
     attr_RampValue_write = 0;
 	attr_VirtualAxis_read[0] = 0;
-	for (int i = 0; i < 24; i++) 
+	for (int i = 0; i < 32; i++) 
 	{
 		attr_AxisStatus_read[i] = false;
 	}
-	for (int i = 0; i < 25; i++) 
+	for (int i = 0; i < 32; i++) 
 	{
 		attr_AxisFault_read[i] = false;
 	}
-	for (int i = 0; i < 27; i++) 
+	for (int i = 0; i < 32; i++) 
 	{
 		attr_DriveStatus_read[i] = false;
 	}
@@ -450,9 +450,9 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
         return; 
     }
 
-    memcpy(attr_AxisStatus_read,  A1Bridge_ns::getInstance()->attr_axes[axis].attr_AxisStatus_read,  24); 
-    memcpy(attr_AxisFault_read,   A1Bridge_ns::getInstance()->attr_axes[axis].attr_AxisFault_read,   25); 
-    memcpy(attr_DriveStatus_read, A1Bridge_ns::getInstance()->attr_axes[axis].attr_DriveStatus_read, 27); 
+    memcpy(attr_AxisStatus_read,  A1Bridge_ns::getInstance()->attr_axes[axis].attr_AxisStatus_read,  32); 
+    memcpy(attr_AxisFault_read,   A1Bridge_ns::getInstance()->attr_axes[axis].attr_AxisFault_read,   32); 
+    memcpy(attr_DriveStatus_read, A1Bridge_ns::getInstance()->attr_axes[axis].attr_DriveStatus_read, 32); 
 
     *attr_PositionFeedback_read     = A1Bridge_ns::getInstance()->attr_axes[axis].attr_PositionFeedback_read; 
 	*attr_PositionError_read        = A1Bridge_ns::getInstance()->attr_axes[axis].attr_PositionError_read; 
@@ -1105,7 +1105,7 @@ void A1Axis::read_VirtualAxis(Tango::Attribute &attr)
  *	Description: Bitfield representing the status of this axis.
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 24
+ *	Attr type:	Spectrum max = 32
  */
 //--------------------------------------------------------
 void A1Axis::read_AxisStatus(Tango::Attribute &attr)
@@ -1113,7 +1113,7 @@ void A1Axis::read_AxisStatus(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Axis::read_AxisStatus(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_AxisStatus) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_AxisStatus_read, 24);
+	attr.set_value(attr_AxisStatus_read, 32);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_AxisStatus
 }
@@ -1123,7 +1123,7 @@ void A1Axis::read_AxisStatus(Tango::Attribute &attr)
  *	Description: Bitfield corresponding to specific faults
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 25
+ *	Attr type:	Spectrum max = 32
  */
 //--------------------------------------------------------
 void A1Axis::read_AxisFault(Tango::Attribute &attr)
@@ -1131,7 +1131,7 @@ void A1Axis::read_AxisFault(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Axis::read_AxisFault(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_AxisFault) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_AxisFault_read, 25);
+	attr.set_value(attr_AxisFault_read, 32);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_AxisFault
 }
@@ -1141,7 +1141,7 @@ void A1Axis::read_AxisFault(Tango::Attribute &attr)
  *	Description: Bitfield representing the status of the connected drive.
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 27
+ *	Attr type:	Spectrum max = 32
  */
 //--------------------------------------------------------
 void A1Axis::read_DriveStatus(Tango::Attribute &attr)
@@ -1149,7 +1149,7 @@ void A1Axis::read_DriveStatus(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Axis::read_DriveStatus(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_DriveStatus) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_DriveStatus_read, 27);
+	attr.set_value(attr_DriveStatus_read, 32);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_DriveStatus
 }
