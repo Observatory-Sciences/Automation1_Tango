@@ -876,20 +876,17 @@ void A1Communication::axis_Abort(int32_t axis)
 }
 
 
-void A1Communication::axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType) 
+void A1Communication::axis_HomeAsync(int32_t axis) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    switch (homeType)
-    {
-        case A1Axis_ns::_HomeTypeEnum::_ASYNCHRONOUS: 
-            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_HomeAsync, *m_controller, attr_Automation1TaskID_read, &axis, 1);
-            break; 
-        case A1Axis_ns::_HomeTypeEnum::_SYNCHRONOUS: 
-            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Home, *m_controller, attr_Automation1TaskID_read, &axis, 1);
-            break; 
-        default: 
-            Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown home type", __func__);
-    }
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_HomeAsync, *m_controller, attr_Automation1TaskID_read, &axis, 1);
+}
+
+
+void A1Communication::axis_Home(int32_t axis) 
+{
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Home, *m_controller, attr_Automation1TaskID_read, &axis, 1);
 } 
 
 

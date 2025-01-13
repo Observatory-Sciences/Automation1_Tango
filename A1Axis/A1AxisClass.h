@@ -231,23 +231,6 @@ public:
 		{return (static_cast<A1Axis *>(dev))->is_MotorType_allowed(ty);}
 };
 
-//	Attribute HomeType class definition
-class HomeTypeAttrib: public Tango::Attr
-{
-public:
-	HomeTypeAttrib():Attr("HomeType",
-			Tango::DEV_ENUM, Tango::READ_WRITE) {}
-	~HomeTypeAttrib() {}
-	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
-		{(static_cast<A1Axis *>(dev))->read_HomeType(att);}
-	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
-		{(static_cast<A1Axis *>(dev))->write_HomeType(att);}
-	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
-		{return (static_cast<A1Axis *>(dev))->is_HomeType_allowed(ty);}
-	virtual bool same_type(const std::type_info &in_type) {return typeid(HomeTypeEnum) == in_type;}
-	virtual std::string get_enum_type() {return std::string("HomeTypeEnum");}
-};
-
 //	Attribute MoveType class definition
 class MoveTypeAttrib: public Tango::Attr
 {
@@ -511,6 +494,29 @@ public:
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_Home_allowed(any);}
+};
+
+//	Command HomeAsync class definition
+class HomeAsyncClass : public Tango::Command
+{
+public:
+	HomeAsyncClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	HomeAsyncClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~HomeAsyncClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Axis *>(dev))->is_HomeAsync_allowed(any);}
 };
 
 //	Command Move class definition

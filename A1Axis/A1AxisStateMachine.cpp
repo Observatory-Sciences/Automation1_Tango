@@ -262,26 +262,6 @@ bool A1Axis::is_MotorType_allowed(TANGO_UNUSED(Tango::AttReqType type))
 
 //--------------------------------------------------------
 /**
- *	Method     : A1Axis::is_HomeType_allowed()
- *	Description: Execution allowed for HomeType attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_HomeType_allowed(TANGO_UNUSED(Tango::AttReqType type))
-{
-	//	Not any excluded states for HomeType attribute in Write access.
-	/*----- PROTECTED REGION ID(A1Axis::HomeTypeStateAllowed_WRITE) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::HomeTypeStateAllowed_WRITE
-
-	//	Not any excluded states for HomeType attribute in read access.
-	/*----- PROTECTED REGION ID(A1Axis::HomeTypeStateAllowed_READ) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::HomeTypeStateAllowed_READ
-	return true;
-}
-
-//--------------------------------------------------------
-/**
  *	Method     : A1Axis::is_MoveType_allowed()
  *	Description: Execution allowed for MoveType attribute
  */
@@ -566,8 +546,25 @@ bool A1Axis::is_Home_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
 	//	Not any excluded states for Home command.
 	/*----- PROTECTED REGION ID(A1Axis::HomeStateAllowed) ENABLED START -----*/
-	
+	/* clang-format on */
+	/* clang-format off */
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::HomeStateAllowed
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method     : A1Axis::is_HomeAsync_allowed()
+ *	Description: Execution allowed for HomeAsync attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_HomeAsync_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for HomeAsync command.
+	/*----- PROTECTED REGION ID(A1Axis::HomeAsyncStateAllowed) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::HomeAsyncStateAllowed
 	return true;
 }
 

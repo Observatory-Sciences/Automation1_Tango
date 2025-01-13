@@ -182,7 +182,8 @@ class A1Communication: public A1Bridge
     virtual void controller_AeroScriptProgramPause();
     virtual void controller_CommandExecute(const std::string& aeroScriptText);
     virtual void axis_Abort(int32_t axis);
-    virtual void axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType);
+    virtual void axis_HomeAsync(int32_t axis);
+    virtual void axis_Home(int32_t axis);
     virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity); 
     virtual void axis_Enable(int32_t axis);
     virtual void axis_Disable(int32_t axis);

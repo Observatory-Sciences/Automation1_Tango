@@ -41,7 +41,7 @@ def test_move(automation1_proxy):
     it is in position once completed. Also checks that the state and status update as appropriate
     during the move.
     """
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
     time.sleep(0.5)
     check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
@@ -75,7 +75,7 @@ def test_move_reverse(automation1_proxy):
     """
     Does the same as test_move() but moves the axis in the opposite direction.
     """
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
     time.sleep(0.5)
     check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
@@ -119,7 +119,7 @@ def test_home(automation1_proxy):
         exp_state = "ON"
         exp_status = "Axis is enabled"
 
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
 
     time.sleep(2)
@@ -145,7 +145,7 @@ def test_free_run(automation1_proxy):
     it run for some time, calls FreeRunStop and ensures that the axis moves the correct distance
     based on the provided velocity and the time it is allowed to move.
     """
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
 
     time.sleep(0.5)
@@ -351,7 +351,7 @@ def test_disable(automation1_proxy):
     Tests the Disable successfully disables an axis and sets the state and status correctly. The
     axis is also homed so that is it in a known state for next use.
     """
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
 
     time.sleep(0.5)
@@ -383,6 +383,6 @@ def check_cmd_with_timeout(proxy, condition, timeout, verb):
         # Check for timeout
         if time.time() > timeout_time:
             # Attempt to home motor after failure
-            proxy.call("Home")
+            proxy.call("HomeAsync")
             pytest.fail("Motor failed to " + str(verb) + " within timeout time of " +\
                         str(timeout) + "s")

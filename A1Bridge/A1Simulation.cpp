@@ -171,6 +171,27 @@ void A1Simulation::readAxis_impl(unsigned axis)
     // attr_axes[axis].attr_AxisFault_read[27]   = (int(attr_axes[axis].axisFault) >> 27 ) & 1U;
 }
 
+void A1Simulation::axis_HomeAsync(int32_t axis) 
+{
+    // Check the axis number is within index limits
+    if (axis < 0 || axis > MAX_AXES)
+    {
+        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
+                                       "Automation1_Command_HomeAsync failed - axis out of range", 
+                                       "A1Simulation::axis_HomeAsync");
+    }
+    // Check the axis is enabled
+    if (!m_axes[axis].m_enabled)
+    {
+        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
+                                       "Automation1_Command_HomeAsync failed - axis not enabled", 
+                                       "A1Simulation::axis_HomeAsync");
+    }
+
+    // Set the homed flag for the particular axis
+    m_axes[axis].m_homed = true;
+} 
+
 void A1Simulation::axis_Home(int32_t axis) 
 {
     // Check the axis number is within index limits

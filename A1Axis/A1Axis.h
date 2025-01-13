@@ -61,34 +61,7 @@
 
 namespace A1Axis_ns
 {
-/*
-enum class _HomeTypeEnum : short {
-	_ASYNCHRONOUS,
-	_SYNCHRONOUS,
-} ;
-typedef _HomeTypeEnum HomeTypeEnum;
 
-enum class _MoveTypeEnum : short {
-	_ABSOLUTEMOVE,
-	_INCREMENTALMOVE,
-	_LINEARMOVE,
-	_RAPIDMOVE,
-} ;
-typedef _MoveTypeEnum MoveTypeEnum;
-
-enum class _RampTypeEnum : short {
-	_LINEAR,
-	_S_CURVE,
-	_SINE,
-} ;
-typedef _RampTypeEnum RampTypeEnum;
-
-enum class _RampModeEnum : short {
-	_RATE,
-	_TIME,
-} ;
-typedef _RampModeEnum RampModeEnum;
-*/
 /*----- PROTECTED REGION ID(A1Axis::Additional Class Declarations) ENABLED START -----*/
 
 //	Additional Class Declarations
@@ -105,7 +78,6 @@ private:
     std::thread            m_pollThread; 
     std::recursive_mutex   m_readLock;
     
-    HomeTypeEnum	            attr_HomeType_write;
     MoveTypeEnum	            attr_MoveType_write;
 	Tango::DevDouble	        attr_PositionTarget_write;
 	Tango::DevDouble	        attr_VelocityTarget_write;
@@ -136,7 +108,6 @@ public:
 	Tango::DevDouble	*attr_PositionError_read;
 	Tango::DevDouble	*attr_CurrentFeedback_read;
 	Tango::DevString	*attr_MotorType_read;
-	HomeTypeEnum	*attr_HomeType_read;
 	MoveTypeEnum	*attr_MoveType_read;
 	Tango::DevDouble	*attr_LastMoveDuration_read;
 	Tango::DevDouble	*attr_VelocityError_read;
@@ -342,16 +313,6 @@ public:
 	virtual void read_MotorType(Tango::Attribute &attr);
 	virtual bool is_MotorType_allowed(Tango::AttReqType type);
 /**
- *	Attribute HomeType related methods
- *	Description: Homes the axis using the specified homing function.
- *
- *	Data type:	Tango::DevEnum
- *	Attr type:	Scalar
- */
-	virtual void read_HomeType(Tango::Attribute &attr);
-	virtual void write_HomeType(Tango::WAttribute &attr);
-	virtual bool is_HomeType_allowed(Tango::AttReqType type);
-/**
  *	Attribute MoveType related methods
  *	Description: The type of move to perform when executing the ``Move`` command.
  *
@@ -514,11 +475,18 @@ public:
 	virtual bool is_Abort_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Home related method
-	 *	Description: Homes this axis according to the method selected in HomeType.
+	 *	Description: Homes this axis sychronously.
 	 *
 	 */
 	virtual void home();
 	virtual bool is_Home_allowed(const CORBA::Any &any);
+	/**
+	 *	Command HomeAsync related method
+	 *	Description: Homes this axis asychronously.
+	 *
+	 */
+	virtual void home_async();
+	virtual bool is_HomeAsync_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Move related method
 	 *	Description: Executes the specific move command specified by the MoveType attribute.

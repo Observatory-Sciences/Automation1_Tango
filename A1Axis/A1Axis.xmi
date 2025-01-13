@@ -36,7 +36,16 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Home" description="Homes this axis according to the method selected in HomeType." execMethod="home" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Home" description="Homes this axis sychronously." execMethod="home" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argin>
+      <argout description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+    </commands>
+    <commands name="HomeAsync" description="Homes this axis asychronously." execMethod="home_async" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -238,16 +247,6 @@
       <dataReadyEvent fire="false" libCheckCriteria="true"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <properties description="The type of drive connected." label="Motor Type" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
-    </attributes>
-    <attributes name="HomeType" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
-      <dataType xsi:type="pogoDsl:EnumType"/>
-      <changeEvent fire="false" libCheckCriteria="false"/>
-      <archiveEvent fire="false" libCheckCriteria="false"/>
-      <dataReadyEvent fire="false" libCheckCriteria="true"/>
-      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-      <properties description="Homes the axis using the specified homing function." label="Home Type" unit="" standardUnit="" displayUnit="" format="" maxValue="" minValue="" maxAlarm="" minAlarm="" maxWarning="" minWarning="" deltaTime="" deltaValue=""/>
-      <enumLabels>Asynchronous</enumLabels>
-      <enumLabels>Synchronous</enumLabels>
     </attributes>
     <attributes name="MoveType" attType="Scalar" rwType="READ_WRITE" displayLevel="OPERATOR" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:EnumType"/>

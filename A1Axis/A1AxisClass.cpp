@@ -192,6 +192,24 @@ CORBA::Any *HomeClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const COR
 
 //--------------------------------------------------------
 /**
+ * method : 		HomeAsyncClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *HomeAsyncClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
+{
+	TANGO_LOG_INFO << "HomeAsyncClass::execute(): arrived" << std::endl;
+	((static_cast<A1Axis *>(device))->home_async());
+	return new CORBA::Any();
+}
+
+//--------------------------------------------------------
+/**
  * method : 		MoveClass::execute()
  * description : 	method to trigger the execution of the command.
  *
@@ -856,35 +874,6 @@ void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 	//	Not Memorized
 	att_list.push_back(motortype);
 
-	//	Attribute : HomeType
-	HomeTypeAttrib	*hometype = new HomeTypeAttrib();
-	Tango::UserDefaultAttrProp	hometype_prop;
-	hometype_prop.set_description("Homes the axis using the specified homing function.");
-	hometype_prop.set_label("Home Type");
-	//	unit	not set for HomeType
-	//	standard_unit	not set for HomeType
-	//	display_unit	not set for HomeType
-	//	format	not set for HomeType
-	//	max_value	not set for HomeType
-	//	min_value	not set for HomeType
-	//	max_alarm	not set for HomeType
-	//	min_alarm	not set for HomeType
-	//	max_warning	not set for HomeType
-	//	min_warning	not set for HomeType
-	//	delta_t	not set for HomeType
-	//	delta_val	not set for HomeType
-	{
-		std::vector<std::string> labels;
-		labels.push_back("Asynchronous");
-		labels.push_back("Synchronous");
-		hometype_prop.set_enum_labels(labels);
-	}
-	hometype->set_default_properties(hometype_prop);
-	//	Not Polled
-	hometype->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(hometype);
-
 	//	Attribute : MoveType
 	MoveTypeAttrib	*movetype = new MoveTypeAttrib();
 	Tango::UserDefaultAttrProp	movetype_prop;
@@ -1313,6 +1302,15 @@ void A1AxisClass::command_factory()
 			"",
 			Tango::OPERATOR);
 	command_list.push_back(pHomeCmd);
+
+	//	Command HomeAsync
+	HomeAsyncClass	*pHomeAsyncCmd =
+		new HomeAsyncClass("HomeAsync",
+			Tango::DEV_VOID, Tango::DEV_VOID,
+			"",
+			"",
+			Tango::OPERATOR);
+	command_list.push_back(pHomeAsyncCmd);
 
 	//	Command Move
 	MoveClass	*pMoveCmd =
