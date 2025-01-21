@@ -36,8 +36,8 @@ def axis_move_loop(automation1_proxy):
         targetVel = random.uniform(vel_lo, vel_hi)
         tol = 1e-01
         
-        automation1_proxy.call("set", "PositionFeedback", targetPos)
-        automation1_proxy.call("set", "VelocityFeedback", targetVel)
+        automation1_proxy.call("set", "PositionTarget", targetPos)
+        automation1_proxy.call("set", "VelocityTarget", targetVel)
         stat, out = automation1_proxy.call("Move")
         assert(stat == 0)
         time.sleep(1)

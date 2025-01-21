@@ -41,7 +41,7 @@ def test_move(automation1_proxy):
     it is in position once completed. Also checks that the state and status update as appropriate
     during the move.
     """
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
     time.sleep(0.5)
     check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
@@ -49,8 +49,8 @@ def test_move(automation1_proxy):
     target_pos = 0.5
     target_vel = 0.1
     tol = 1e-02
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
@@ -75,7 +75,7 @@ def test_move_reverse(automation1_proxy):
     """
     Does the same as test_move() but moves the axis in the opposite direction.
     """
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
     time.sleep(0.5)
     check_cmd_with_timeout(automation1_proxy, "Homed", MOVE_TIMEOUT, "reach home")
@@ -83,8 +83,8 @@ def test_move_reverse(automation1_proxy):
     target_pos = -0.5
     target_vel = -0.1
     tol = 1e-02
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
@@ -119,7 +119,7 @@ def test_home(automation1_proxy):
         exp_state = "ON"
         exp_status = "Axis is enabled"
 
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
 
     time.sleep(2)
@@ -145,7 +145,7 @@ def test_free_run(automation1_proxy):
     it run for some time, calls FreeRunStop and ensures that the axis moves the correct distance
     based on the provided velocity and the time it is allowed to move.
     """
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
 
     time.sleep(0.5)
@@ -156,8 +156,8 @@ def test_free_run(automation1_proxy):
     target_vel = 0.1
     tol = target_pos / 10.0
 
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("FreeRun")
     time.sleep(3)
@@ -191,8 +191,8 @@ def test_free_run_reverse(automation1_proxy):
     target_vel = -0.1
     tol = -target_pos / 10.0
 
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("FreeRun")
     time.sleep(3)
@@ -230,8 +230,8 @@ def test_abort(automation1_proxy):
     target_vel = 0.1
     tol = target_pos / 10.0
 
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("FreeRun")
     time.sleep(3)
@@ -280,8 +280,8 @@ def test_move_from_limit(automation1_proxy):
 
     target_pos = 58.1
     target_vel = 4.0
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
@@ -320,8 +320,8 @@ def test_acknowledge_faults(automation1_proxy):
 
     target_pos = 58.1
     target_vel = 4.0
-    automation1_proxy.call("set", "PositionFeedback", target_pos)
-    automation1_proxy.call("set", "VelocityFeedback", target_vel)
+    automation1_proxy.call("set", "PositionTarget", target_pos)
+    automation1_proxy.call("set", "VelocityTarget", target_vel)
 
     stat, _ = automation1_proxy.call("Move")
     assert stat == 0
@@ -351,7 +351,7 @@ def test_disable(automation1_proxy):
     Tests the Disable successfully disables an axis and sets the state and status correctly. The
     axis is also homed so that is it in a known state for next use.
     """
-    stat, _ = automation1_proxy.call("Home")
+    stat, _ = automation1_proxy.call("HomeAsync")
     assert stat == 0
 
     time.sleep(0.5)
@@ -383,6 +383,6 @@ def check_cmd_with_timeout(proxy, condition, timeout, verb):
         # Check for timeout
         if time.time() > timeout_time:
             # Attempt to home motor after failure
-            proxy.call("Home")
+            proxy.call("HomeAsync")
             pytest.fail("Motor failed to " + str(verb) + " within timeout time of " +\
                         str(timeout) + "s")

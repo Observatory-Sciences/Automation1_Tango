@@ -273,10 +273,8 @@ void A1Communication::initialiseAxis_impl(unsigned axis)
 
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_PositionFeedback_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback);
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_PositionError_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_PositionTarget_read,       axis, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionCommand);
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_VelocityFeedback_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback);
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_VelocityError_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_VelocityTarget_read,       axis, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityCommand);
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_AccelerationFeedback_read, axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback);
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_AccelerationError_read,    axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError);
     m_pollManagerAxis[axis].push(&attr_axes[axis].attr_AccelerationTarget_read,   axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand);
@@ -878,20 +876,17 @@ void A1Communication::axis_Abort(int32_t axis)
 }
 
 
-void A1Communication::axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType) 
+void A1Communication::axis_HomeAsync(int32_t axis) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    switch (homeType)
-    {
-        case A1Axis_ns::_HomeTypeEnum::_ASYNCHRONOUS: 
-            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_HomeAsync, *m_controller, attr_Automation1TaskID_read, &axis, 1);
-            break; 
-        case A1Axis_ns::_HomeTypeEnum::_SYNCHRONOUS: 
-            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Home, *m_controller, attr_Automation1TaskID_read, &axis, 1);
-            break; 
-        default: 
-            Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown home type", __func__);
-    }
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_HomeAsync, *m_controller, attr_Automation1TaskID_read, &axis, 1);
+}
+
+
+void A1Communication::axis_Home(int32_t axis) 
+{
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Home, *m_controller, attr_Automation1TaskID_read, &axis, 1);
 } 
 
 

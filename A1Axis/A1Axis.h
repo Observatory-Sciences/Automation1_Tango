@@ -40,14 +40,24 @@
 
 #include <A1Defines.h>
 #include <A1Bridge.h>
-#include <A1AxisEnum.h>
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis.h
+
+#ifdef TANGO_LOG
+	// cppTango after c934adea (Merge branch 'remove-cout-definition' into 'main', 2022-05-23)
+	// nothing to do
+#else
+	// cppTango 9.3-backports and older
+	#define TANGO_LOG       cout
+	#define TANGO_LOG_INFO  cout2
+	#define TANGO_LOG_DEBUG cout3
+#endif // TANGO_LOG
 
 /**
  *  A1Axis class description:
  *    Axis class for the Aerotech Automation 1 device server
  */
+
 
 namespace A1Axis_ns
 {
@@ -68,10 +78,9 @@ private:
     std::thread            m_pollThread; 
     std::recursive_mutex   m_readLock;
     
-    HomeTypeEnum	            attr_HomeType_write;
     MoveTypeEnum	            attr_MoveType_write;
-	Tango::DevDouble	        attr_PositionFeedback_write;
-	Tango::DevDouble	        attr_VelocityFeedback_write;
+	Tango::DevDouble	        attr_PositionTarget_write;
+	Tango::DevDouble	        attr_VelocityTarget_write;
     RampTypeEnum	            attr_RampType_write;
 	RampModeEnum	            attr_RampMode_write;
 	Tango::DevDouble	        attr_RampValue_write;
@@ -99,11 +108,8 @@ public:
 	Tango::DevDouble	*attr_PositionError_read;
 	Tango::DevDouble	*attr_CurrentFeedback_read;
 	Tango::DevString	*attr_MotorType_read;
-	HomeTypeEnum	*attr_HomeType_read;
 	MoveTypeEnum	*attr_MoveType_read;
 	Tango::DevDouble	*attr_LastMoveDuration_read;
-	Tango::DevDouble	*attr_PositionTarget_read;
-	Tango::DevDouble	*attr_VelocityTarget_read;
 	Tango::DevDouble	*attr_VelocityError_read;
 	Tango::DevDouble	*attr_AccelerationTarget_read;
 	Tango::DevDouble	*attr_AccelerationError_read;
@@ -145,7 +151,7 @@ public:
 	/**
 	 * The device object destructor.
 	 */
-	~A1Axis() {delete_device();};
+	~A1Axis();
 
 
 //	Miscellaneous methods
@@ -176,15 +182,15 @@ public:
 public:
 	//--------------------------------------------------------
 	/*
-	 *	Method      : A1Axis::read_attr_hardware()
-	 *	Description : Hardware acquisition for attributes.
+	 *	Method     : A1Axis::read_attr_hardware()
+	 *	Description: Hardware acquisition for attributes.
 	 */
 	//--------------------------------------------------------
 	virtual void read_attr_hardware(std::vector<long> &attr_list);
 	//--------------------------------------------------------
 	/*
-	 *	Method      : A1Axis::write_attr_hardware()
-	 *	Description : Hardware writing for attributes.
+	 *	Method     : A1Axis::write_attr_hardware()
+	 *	Description: Hardware writing for attributes.
 	 */
 	//--------------------------------------------------------
 	virtual void write_attr_hardware(std::vector<long> &attr_list);
@@ -197,8 +203,16 @@ public:
  *	Attr type:	Scalar
  */
 	virtual void read_PositionFeedback(Tango::Attribute &attr);
-	virtual void write_PositionFeedback(Tango::WAttribute &attr);
 	virtual bool is_PositionFeedback_allowed(Tango::AttReqType type);
+/**
+ *	Attribute PositionTarget related methods
+ *	Description: Position axis was commanded to move to.
+ *
+ *	Data type:	Tango::DevDouble
+ *	Attr type:	Scalar
+ */
+	virtual void write_PositionTarget(Tango::WAttribute &attr);
+	virtual bool is_PositionTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute VelocityFeedback related methods
  *	Description: Velocity of the axis.
@@ -207,8 +221,16 @@ public:
  *	Attr type:	Scalar
  */
 	virtual void read_VelocityFeedback(Tango::Attribute &attr);
-	virtual void write_VelocityFeedback(Tango::WAttribute &attr);
 	virtual bool is_VelocityFeedback_allowed(Tango::AttReqType type);
+/**
+ *	Attribute VelocityTarget related methods
+ *	Description: Targeted velocity for this axis.
+ *
+ *	Data type:	Tango::DevDouble
+ *	Attr type:	Scalar
+ */
+	virtual void write_VelocityTarget(Tango::WAttribute &attr);
+	virtual bool is_VelocityTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute AccelerationFeedback related methods
  *	Description: Acceleration of the axis.
@@ -220,7 +242,7 @@ public:
 	virtual bool is_AccelerationFeedback_allowed(Tango::AttReqType type);
 /**
  *	Attribute InPosition related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -229,7 +251,7 @@ public:
 	virtual bool is_InPosition_allowed(Tango::AttReqType type);
 /**
  *	Attribute Enabled related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -238,7 +260,7 @@ public:
 	virtual bool is_Enabled_allowed(Tango::AttReqType type);
 /**
  *	Attribute Homed related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -247,7 +269,7 @@ public:
 	virtual bool is_Homed_allowed(Tango::AttReqType type);
 /**
  *	Attribute Error related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -291,16 +313,6 @@ public:
 	virtual void read_MotorType(Tango::Attribute &attr);
 	virtual bool is_MotorType_allowed(Tango::AttReqType type);
 /**
- *	Attribute HomeType related methods
- *	Description: Homes the axis using the specified homing function.
- *
- *	Data type:	Tango::DevEnum
- *	Attr type:	Scalar
- */
-	virtual void read_HomeType(Tango::Attribute &attr);
-	virtual void write_HomeType(Tango::WAttribute &attr);
-	virtual bool is_HomeType_allowed(Tango::AttReqType type);
-/**
  *	Attribute MoveType related methods
  *	Description: The type of move to perform when executing the ``Move`` command.
  *
@@ -319,24 +331,6 @@ public:
  */
 	virtual void read_LastMoveDuration(Tango::Attribute &attr);
 	virtual bool is_LastMoveDuration_allowed(Tango::AttReqType type);
-/**
- *	Attribute PositionTarget related methods
- *	Description: Position axis was commanded to move to.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-	virtual void read_PositionTarget(Tango::Attribute &attr);
-	virtual bool is_PositionTarget_allowed(Tango::AttReqType type);
-/**
- *	Attribute VelocityTarget related methods
- *	Description: Targeted velocity for this axis.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-	virtual void read_VelocityTarget(Tango::Attribute &attr);
-	virtual bool is_VelocityTarget_allowed(Tango::AttReqType type);
 /**
  *	Attribute VelocityError related methods
  *	Description: Error in the velocity of this axis.
@@ -403,7 +397,7 @@ public:
 	virtual bool is_RampType_allowed(Tango::AttReqType type);
 /**
  *	Attribute RampMode related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevEnum
  *	Attr type:	Scalar
@@ -423,7 +417,7 @@ public:
 	virtual bool is_RampValue_allowed(Tango::AttReqType type);
 /**
  *	Attribute VirtualAxis related methods
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -435,7 +429,7 @@ public:
  *	Description: Bitfield representing the status of this axis.
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 24
+ *	Attr type:	Spectrum max = 32
  */
 	virtual void read_AxisStatus(Tango::Attribute &attr);
 	virtual bool is_AxisStatus_allowed(Tango::AttReqType type);
@@ -444,7 +438,7 @@ public:
  *	Description: Bitfield corresponding to specific faults
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 25
+ *	Attr type:	Spectrum max = 32
  */
 	virtual void read_AxisFault(Tango::Attribute &attr);
 	virtual bool is_AxisFault_allowed(Tango::AttReqType type);
@@ -453,7 +447,7 @@ public:
  *	Description: Bitfield representing the status of the connected drive.
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 27
+ *	Attr type:	Spectrum max = 32
  */
 	virtual void read_DriveStatus(Tango::Attribute &attr);
 	virtual bool is_DriveStatus_allowed(Tango::AttReqType type);
@@ -461,8 +455,8 @@ public:
 
 	//--------------------------------------------------------
 	/**
-	 *	Method      : A1Axis::add_dynamic_attributes()
-	 *	Description : Add dynamic attributes if any.
+	 *	Method     : A1Axis::add_dynamic_attributes()
+	 *	Description: Add dynamic attributes if any.
 	 */
 	//--------------------------------------------------------
 	void add_dynamic_attributes();
@@ -481,11 +475,18 @@ public:
 	virtual bool is_Abort_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Home related method
-	 *	Description: Homes this axis according to the method selected in HomeType.
+	 *	Description: Homes this axis sychronously.
 	 *
 	 */
 	virtual void home();
 	virtual bool is_Home_allowed(const CORBA::Any &any);
+	/**
+	 *	Command HomeAsync related method
+	 *	Description: Homes this axis asychronously.
+	 *
+	 */
+	virtual void home_async();
+	virtual bool is_HomeAsync_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Move related method
 	 *	Description: Executes the specific move command specified by the MoveType attribute.
@@ -560,8 +561,8 @@ public:
 
 	//--------------------------------------------------------
 	/**
-	 *	Method      : A1Axis::add_dynamic_commands()
-	 *	Description : Add dynamic commands if any.
+	 *	Method     : A1Axis::add_dynamic_commands()
+	 *	Description: Add dynamic commands if any.
 	 */
 	//--------------------------------------------------------
 	void add_dynamic_commands();

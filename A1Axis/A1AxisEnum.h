@@ -5,12 +5,6 @@
 namespace A1Axis_ns
 {
 
-enum _HomeTypeEnum {
-    _ASYNCHRONOUS,
-    _SYNCHRONOUS,
-} ;
-typedef _HomeTypeEnum HomeTypeEnum;
-
 enum _MoveTypeEnum {
     _ABSOLUTEMOVE,
     _INCREMENTALMOVE,

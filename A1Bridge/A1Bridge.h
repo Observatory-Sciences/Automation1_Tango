@@ -6,7 +6,7 @@
 #include <mutex>
 #include <tango.h>
 
-#include "A1AxisEnum.h"
+#include <A1AxisEnum.h>
 #include "A1ControllerEnum.h"
 #include "A1Defines.h"
 
@@ -43,11 +43,8 @@ typedef struct A1AxisAttributes
 	Tango::DevDouble	                    attr_PositionError_read;
 	Tango::DevDouble	                    attr_CurrentFeedback_read;
 	Tango::DevString	                    attr_MotorType_read;
-    A1Axis_ns::HomeTypeEnum 	            attr_HomeType_read;
     A1Axis_ns::MoveTypeEnum 	            attr_MoveType_read;
 	Tango::DevDouble	                    attr_LastMoveDuration_read;
-	Tango::DevDouble	                    attr_PositionTarget_read;
-	Tango::DevDouble	                    attr_VelocityTarget_read;
 	Tango::DevDouble	                    attr_VelocityError_read;
 	Tango::DevDouble	                    attr_AccelerationTarget_read;
 	Tango::DevDouble	                    attr_AccelerationError_read;
@@ -59,11 +56,11 @@ typedef struct A1AxisAttributes
 	Tango::DevDouble	                    attr_RampValue_read;
         Tango::DevBoolean	                    attr_VirtualAxis_read;
     Tango::DevDouble                        axisStatus; 
-	Tango::DevBoolean	                    attr_AxisStatus_read[24];
+	Tango::DevBoolean	                    attr_AxisStatus_read[32];
     Tango::DevDouble                        axisFault; 
-	Tango::DevBoolean	                    attr_AxisFault_read[25];
+	Tango::DevBoolean	                    attr_AxisFault_read[32];
     Tango::DevDouble                        driveStatus; 
-	Tango::DevBoolean	                    attr_DriveStatus_read[27];
+	Tango::DevBoolean	                    attr_DriveStatus_read[32];
 } A1AxisAttributes; 
 
 
@@ -190,7 +187,9 @@ class A1Bridge
             {NotImplemented(__func__);}; 
     virtual void axis_Abort(int32_t axis) 
             {NotImplemented(__func__);}; 
-    virtual void axis_Home(int32_t axis, A1Axis_ns::_HomeTypeEnum homeType) 
+    virtual void axis_HomeAsync(int32_t axis) 
+            {NotImplemented(__func__);};
+    virtual void axis_Home(int32_t axis) 
             {NotImplemented(__func__);}; 
     virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) 
             {NotImplemented(__func__);}; 

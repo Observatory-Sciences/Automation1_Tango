@@ -55,6 +55,7 @@
 //  Status             |  Inherited (no method)
 //  Abort              |  abort
 //  Home               |  home
+//  HomeAsync          |  home_async
 //  Move               |  move
 //  Enable             |  enable
 //  Disable            |  disable
@@ -71,7 +72,9 @@
 //  Attributes managed are:
 //================================================================
 //  PositionFeedback      |  Tango::DevDouble	Scalar
+//  PositionTarget        |  Tango::DevDouble	Scalar
 //  VelocityFeedback      |  Tango::DevDouble	Scalar
+//  VelocityTarget        |  Tango::DevDouble	Scalar
 //  AccelerationFeedback  |  Tango::DevDouble	Scalar
 //  InPosition            |  Tango::DevBoolean	Scalar
 //  Enabled               |  Tango::DevBoolean	Scalar
@@ -81,11 +84,8 @@
 //  PositionError         |  Tango::DevDouble	Scalar
 //  CurrentFeedback       |  Tango::DevDouble	Scalar
 //  MotorType             |  Tango::DevString	Scalar
-//  HomeType              |  Tango::DevEnum	Scalar
 //  MoveType              |  Tango::DevEnum	Scalar
 //  LastMoveDuration      |  Tango::DevDouble	Scalar
-//  PositionTarget        |  Tango::DevDouble	Scalar
-//  VelocityTarget        |  Tango::DevDouble	Scalar
 //  VelocityError         |  Tango::DevDouble	Scalar
 //  AccelerationTarget    |  Tango::DevDouble	Scalar
 //  AccelerationError     |  Tango::DevDouble	Scalar
@@ -96,9 +96,9 @@
 //  RampMode              |  Tango::DevEnum	Scalar
 //  RampValue             |  Tango::DevDouble	Scalar
 //  VirtualAxis           |  Tango::DevBoolean	Scalar
-//  AxisStatus            |  Tango::DevBoolean	Spectrum  ( max = 24)
-//  AxisFault             |  Tango::DevBoolean	Spectrum  ( max = 25)
-//  DriveStatus           |  Tango::DevBoolean	Spectrum  ( max = 27)
+//  AxisStatus            |  Tango::DevBoolean	Spectrum  ( max = 32)
+//  AxisFault             |  Tango::DevBoolean	Spectrum  ( max = 32)
+//  DriveStatus           |  Tango::DevBoolean	Spectrum  ( max = 32)
 //================================================================
 
 namespace A1Axis_ns
@@ -111,8 +111,8 @@ namespace A1Axis_ns
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::A1Axis()
- *	Description : Constructors for a Tango device
+ *	Method     : A1Axis::A1Axis()
+ *	Description: Constructors for a Tango device
  *                implementing the classA1Axis
  */
 //--------------------------------------------------------
@@ -142,11 +142,16 @@ A1Axis::A1Axis(Tango::DeviceClass *cl, const char *s, const char *d)
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::constructor_3
 }
+//--------------------------------------------------------
+A1Axis::~A1Axis()
+{
+	delete_device();
+}
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::delete_device()
- *	Description : will be called at device destruction or at init command
+ *	Method     : A1Axis::delete_device()
+ *	Description: will be called at device destruction or at init command
  */
 //--------------------------------------------------------
 void A1Axis::delete_device()
@@ -188,11 +193,8 @@ void A1Axis::delete_device()
 	delete[] attr_PositionError_read;
 	delete[] attr_CurrentFeedback_read;
 	delete[] attr_MotorType_read;
-	delete[] attr_HomeType_read;
 	delete[] attr_MoveType_read;
 	delete[] attr_LastMoveDuration_read;
-	delete[] attr_PositionTarget_read;
-	delete[] attr_VelocityTarget_read;
 	delete[] attr_VelocityError_read;
 	delete[] attr_AccelerationTarget_read;
 	delete[] attr_AccelerationError_read;
@@ -210,8 +212,8 @@ void A1Axis::delete_device()
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::init_device()
- *	Description : will be called at device initialization.
+ *	Method     : A1Axis::init_device()
+ *	Description: will be called at device initialization.
  */
 //--------------------------------------------------------
 void A1Axis::init_device()
@@ -221,11 +223,11 @@ void A1Axis::init_device()
 	
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::init_device_before
-	
+
 
 	//	Get the device properties from database
 	get_device_property();
-	
+
 	attr_PositionFeedback_read = new Tango::DevDouble[1];
 	attr_VelocityFeedback_read = new Tango::DevDouble[1];
 	attr_AccelerationFeedback_read = new Tango::DevDouble[1];
@@ -237,11 +239,8 @@ void A1Axis::init_device()
 	attr_PositionError_read = new Tango::DevDouble[1];
 	attr_CurrentFeedback_read = new Tango::DevDouble[1];
 	attr_MotorType_read = new Tango::DevString[1];
-	attr_HomeType_read = new HomeTypeEnum[1];
 	attr_MoveType_read = new MoveTypeEnum[1];
 	attr_LastMoveDuration_read = new Tango::DevDouble[1];
-	attr_PositionTarget_read = new Tango::DevDouble[1];
-	attr_VelocityTarget_read = new Tango::DevDouble[1];
 	attr_VelocityError_read = new Tango::DevDouble[1];
 	attr_AccelerationTarget_read = new Tango::DevDouble[1];
 	attr_AccelerationError_read = new Tango::DevDouble[1];
@@ -252,19 +251,18 @@ void A1Axis::init_device()
 	attr_RampMode_read = new RampModeEnum[1];
 	attr_RampValue_read = new Tango::DevDouble[1];
 	attr_VirtualAxis_read = new Tango::DevBoolean[1];
-	attr_AxisStatus_read = new Tango::DevBoolean[24];
-	attr_AxisFault_read = new Tango::DevBoolean[25];
-	attr_DriveStatus_read = new Tango::DevBoolean[27];
-	//	No longer if mandatory property not set. 
+	attr_AxisStatus_read = new Tango::DevBoolean[32];
+	attr_AxisFault_read = new Tango::DevBoolean[32];
+	attr_DriveStatus_read = new Tango::DevBoolean[32];
+	//	No longer if mandatory property not set.
 	if (mandatoryNotDefined)
 		return;
 
 	/*----- PROTECTED REGION ID(A1Axis::init_device) ENABLED START -----*/
 	
 	attr_PositionFeedback_read[0] = 0;
-    attr_PositionFeedback_write = 0; 
 	attr_VelocityFeedback_read[0] = 0;
-    attr_VelocityFeedback_write = 0; 
+    attr_VelocityTarget_write = 0; 
 	attr_AccelerationFeedback_read[0] = 0;
 	attr_InPosition_read[0] = 0;
 	attr_Enabled_read[0] = 0;
@@ -274,13 +272,10 @@ void A1Axis::init_device()
 	attr_PositionError_read[0] = 0;
 	attr_CurrentFeedback_read[0] = 0;
 	attr_MotorType_read[0] = Tango::string_dup("");
-    attr_HomeType_read[0] = _ASYNCHRONOUS;
-    attr_HomeType_write = _ASYNCHRONOUS; 
     attr_MoveType_read[0] = _ABSOLUTEMOVE;
     attr_MoveType_write = _ABSOLUTEMOVE; 
 	attr_LastMoveDuration_read[0] = 0;
-	attr_PositionTarget_read[0] = 0;
-	attr_VelocityTarget_read[0] = 0;
+    attr_PositionTarget_write = 0;
 	attr_VelocityError_read[0] = 0;
 	attr_AccelerationTarget_read[0] = 0;
 	attr_AccelerationError_read[0] = 0;
@@ -294,15 +289,15 @@ void A1Axis::init_device()
 	attr_RampValue_read[0] = 0;
     attr_RampValue_write = 0;
 	attr_VirtualAxis_read[0] = 0;
-	for (int i = 0; i < 24; i++) 
+	for (int i = 0; i < 32; i++) 
 	{
 		attr_AxisStatus_read[i] = false;
 	}
-	for (int i = 0; i < 25; i++) 
+	for (int i = 0; i < 32; i++) 
 	{
 		attr_AxisFault_read[i] = false;
 	}
-	for (int i = 0; i < 27; i++) 
+	for (int i = 0; i < 32; i++) 
 	{
 		attr_DriveStatus_read[i] = false;
 	}
@@ -323,8 +318,8 @@ void A1Axis::init_device()
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::get_device_property()
- *	Description : Read database to initialize property data members.
+ *	Method     : A1Axis::get_device_property()
+ *	Description: Read database to initialize property data members.
  */
 //--------------------------------------------------------
 void A1Axis::get_device_property()
@@ -347,7 +342,7 @@ void A1Axis::get_device_property()
 		//	Call database and extract values
 		if (Tango::Util::instance()->_UseDb==true)
 			get_db_device()->get_property(dev_prop);
-	
+
 		//	get instance on A1AxisClass to get class property
 		Tango::DbDatum	def_prop, cl_prop;
 		A1AxisClass	*ds_class =
@@ -377,8 +372,8 @@ void A1Axis::get_device_property()
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::check_mandatory_property()
- *	Description : For mandatory properties check if defined in database.
+ *	Method     : A1Axis::check_mandatory_property()
+ *	Description: For mandatory properties check if defined in database.
  */
 //--------------------------------------------------------
 void A1Axis::check_mandatory_property(Tango::DbDatum &class_prop, Tango::DbDatum &dev_prop)
@@ -387,7 +382,7 @@ void A1Axis::check_mandatory_property(Tango::DbDatum &class_prop, Tango::DbDatum
 	if (class_prop.is_empty() && dev_prop.is_empty())
 	{
 		TangoSys_OMemStream	tms;
-		tms << std::endl << "Property \'" << dev_prop.name;
+		tms << std::endl <<"Property \'" << dev_prop.name;
 		if (Tango::Util::instance()->_UseDb==true)
 			tms << "\' is mandatory but not defined in database";
 		else
@@ -404,8 +399,8 @@ void A1Axis::check_mandatory_property(Tango::DbDatum &class_prop, Tango::DbDatum
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::always_executed_hook()
- *	Description : method always executed before any command is executed
+ *	Method     : A1Axis::always_executed_hook()
+ *	Description: method always executed before any command is executed
  */
 //--------------------------------------------------------
 void A1Axis::always_executed_hook()
@@ -427,8 +422,8 @@ void A1Axis::always_executed_hook()
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::read_attr_hardware()
- *	Description : Hardware acquisition for attributes
+ *	Method     : A1Axis::read_attr_hardware()
+ *	Description: Hardware acquisition for attributes
  */
 //--------------------------------------------------------
 void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
@@ -451,16 +446,14 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
         return; 
     }
 
-    memcpy(attr_AxisStatus_read,  A1Bridge_ns::getInstance()->attr_axes[axis].attr_AxisStatus_read,  24); 
-    memcpy(attr_AxisFault_read,   A1Bridge_ns::getInstance()->attr_axes[axis].attr_AxisFault_read,   25); 
-    memcpy(attr_DriveStatus_read, A1Bridge_ns::getInstance()->attr_axes[axis].attr_DriveStatus_read, 27); 
+    memcpy(attr_AxisStatus_read,  A1Bridge_ns::getInstance()->attr_axes[axis].attr_AxisStatus_read,  32); 
+    memcpy(attr_AxisFault_read,   A1Bridge_ns::getInstance()->attr_axes[axis].attr_AxisFault_read,   32); 
+    memcpy(attr_DriveStatus_read, A1Bridge_ns::getInstance()->attr_axes[axis].attr_DriveStatus_read, 32); 
 
     *attr_PositionFeedback_read     = A1Bridge_ns::getInstance()->attr_axes[axis].attr_PositionFeedback_read; 
 	*attr_PositionError_read        = A1Bridge_ns::getInstance()->attr_axes[axis].attr_PositionError_read; 
-	*attr_PositionTarget_read       = A1Bridge_ns::getInstance()->attr_axes[axis].attr_PositionTarget_read; 
 	*attr_VelocityFeedback_read     = A1Bridge_ns::getInstance()->attr_axes[axis].attr_VelocityFeedback_read; 
 	*attr_VelocityError_read        = A1Bridge_ns::getInstance()->attr_axes[axis].attr_VelocityError_read; 
-	*attr_VelocityTarget_read       = A1Bridge_ns::getInstance()->attr_axes[axis].attr_VelocityTarget_read; 
 	*attr_AccelerationFeedback_read = A1Bridge_ns::getInstance()->attr_axes[axis].attr_AccelerationFeedback_read; 
 	*attr_AccelerationError_read    = A1Bridge_ns::getInstance()->attr_axes[axis].attr_AccelerationError_read; 
 	*attr_AccelerationTarget_read   = A1Bridge_ns::getInstance()->attr_axes[axis].attr_AccelerationTarget_read; 
@@ -508,8 +501,8 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::write_attr_hardware()
- *	Description : Hardware writing for attributes
+ *	Method     : A1Axis::write_attr_hardware()
+ *	Description: Hardware writing for attributes
  */
 //--------------------------------------------------------
 void A1Axis::write_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
@@ -542,23 +535,22 @@ void A1Axis::read_PositionFeedback(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
- *	Write attribute PositionFeedback related method
- *	Description: Position of this axis.
+ *	Write attribute PositionTarget related method
+ *	Description: Position axis was commanded to move to.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
  */
 //--------------------------------------------------------
-void A1Axis::write_PositionFeedback(Tango::WAttribute &attr)
+void A1Axis::write_PositionTarget(Tango::WAttribute &attr)
 {
-	DEBUG_STREAM << "A1Axis::write_PositionFeedback(Tango::WAttribute &attr) entering... " << std::endl;
+	DEBUG_STREAM << "A1Axis::write_PositionTarget(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
 	Tango::DevDouble	w_val;
 	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(A1Axis::write_PositionFeedback) ENABLED START -----*/
-	attr_PositionFeedback_write = w_val; 
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_PositionFeedback
+	/*----- PROTECTED REGION ID(A1Axis::write_PositionTarget) ENABLED START -----*/
+	attr_PositionTarget_write = w_val;
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_PositionTarget
 }
 //--------------------------------------------------------
 /**
@@ -580,23 +572,22 @@ void A1Axis::read_VelocityFeedback(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
- *	Write attribute VelocityFeedback related method
- *	Description: Velocity of the axis.
+ *	Write attribute VelocityTarget related method
+ *	Description: Targeted velocity for this axis.
  *
  *	Data type:	Tango::DevDouble
  *	Attr type:	Scalar
  */
 //--------------------------------------------------------
-void A1Axis::write_VelocityFeedback(Tango::WAttribute &attr)
+void A1Axis::write_VelocityTarget(Tango::WAttribute &attr)
 {
-	DEBUG_STREAM << "A1Axis::write_VelocityFeedback(Tango::WAttribute &attr) entering... " << std::endl;
+	DEBUG_STREAM << "A1Axis::write_VelocityTarget(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
 	Tango::DevDouble	w_val;
 	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(A1Axis::write_VelocityFeedback) ENABLED START -----*/
-	attr_VelocityFeedback_write = w_val; 
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_VelocityFeedback
+	/*----- PROTECTED REGION ID(A1Axis::write_VelocityTarget) ENABLED START -----*/
+	attr_VelocityTarget_write = w_val;
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_VelocityTarget
 }
 //--------------------------------------------------------
 /**
@@ -619,7 +610,7 @@ void A1Axis::read_AccelerationFeedback(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute InPosition related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -637,7 +628,7 @@ void A1Axis::read_InPosition(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute Enabled related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -655,7 +646,7 @@ void A1Axis::read_Enabled(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute Homed related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -673,7 +664,7 @@ void A1Axis::read_Homed(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute Error related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -762,46 +753,6 @@ void A1Axis::read_MotorType(Tango::Attribute &attr)
 }
 //--------------------------------------------------------
 /**
- *	Read attribute HomeType related method
- *	Description: Homes the axis using the specified homing function.
- *
- *	Data type:	Tango::DevEnum (HomeTypeEnum)
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::read_HomeType(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::read_HomeType(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::read_HomeType) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_HomeType_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_HomeType
-}
-//--------------------------------------------------------
-/**
- *	Write attribute HomeType related method
- *	Description: Homes the axis using the specified homing function.
- *
- *	Data type:	Tango::DevEnum (HomeTypeEnum)
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::write_HomeType(Tango::WAttribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::write_HomeType(Tango::WAttribute &attr) entering... " << std::endl;
-	//	Retrieve write value
-	HomeTypeEnum	w_val;
-	attr.get_write_value(w_val);
-	/*----- PROTECTED REGION ID(A1Axis::write_HomeType) ENABLED START -----*/
-    attr_HomeType_write = w_val; 
-    *attr_HomeType_read = w_val; 
-	
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_HomeType
-}
-//--------------------------------------------------------
-/**
  *	Read attribute MoveType related method
  *	Description: The type of move to perform when executing the ``Move`` command.
  *
@@ -857,42 +808,6 @@ void A1Axis::read_LastMoveDuration(Tango::Attribute &attr)
 	attr.set_value(attr_LastMoveDuration_read);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_LastMoveDuration
-}
-//--------------------------------------------------------
-/**
- *	Read attribute PositionTarget related method
- *	Description: Position axis was commanded to move to.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::read_PositionTarget(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::read_PositionTarget(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::read_PositionTarget) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_PositionTarget_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_PositionTarget
-}
-//--------------------------------------------------------
-/**
- *	Read attribute VelocityTarget related method
- *	Description: Targeted velocity for this axis.
- *
- *	Data type:	Tango::DevDouble
- *	Attr type:	Scalar
- */
-//--------------------------------------------------------
-void A1Axis::read_VelocityTarget(Tango::Attribute &attr)
-{
-	DEBUG_STREAM << "A1Axis::read_VelocityTarget(Tango::Attribute &attr) entering... " << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::read_VelocityTarget) ENABLED START -----*/
-	//	Set the attribute value
-	attr.set_value(attr_VelocityTarget_read);
-	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_VelocityTarget
 }
 //--------------------------------------------------------
 /**
@@ -1045,7 +960,7 @@ void A1Axis::write_RampType(Tango::WAttribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute RampMode related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevEnum (RampModeEnum)
  *	Attr type:	Scalar
@@ -1063,7 +978,7 @@ void A1Axis::read_RampMode(Tango::Attribute &attr)
 //--------------------------------------------------------
 /**
  *	Write attribute RampMode related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevEnum (RampModeEnum)
  *	Attr type:	Scalar
@@ -1125,7 +1040,7 @@ void A1Axis::write_RampValue(Tango::WAttribute &attr)
 //--------------------------------------------------------
 /**
  *	Read attribute VirtualAxis related method
- *	Description: 
+ *
  *
  *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
@@ -1146,7 +1061,7 @@ void A1Axis::read_VirtualAxis(Tango::Attribute &attr)
  *	Description: Bitfield representing the status of this axis.
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 24
+ *	Attr type:	Spectrum max = 32
  */
 //--------------------------------------------------------
 void A1Axis::read_AxisStatus(Tango::Attribute &attr)
@@ -1154,7 +1069,7 @@ void A1Axis::read_AxisStatus(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Axis::read_AxisStatus(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_AxisStatus) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_AxisStatus_read, 24);
+	attr.set_value(attr_AxisStatus_read, 32);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_AxisStatus
 }
@@ -1164,7 +1079,7 @@ void A1Axis::read_AxisStatus(Tango::Attribute &attr)
  *	Description: Bitfield corresponding to specific faults
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 25
+ *	Attr type:	Spectrum max = 32
  */
 //--------------------------------------------------------
 void A1Axis::read_AxisFault(Tango::Attribute &attr)
@@ -1172,7 +1087,7 @@ void A1Axis::read_AxisFault(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Axis::read_AxisFault(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_AxisFault) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_AxisFault_read, 25);
+	attr.set_value(attr_AxisFault_read, 32);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_AxisFault
 }
@@ -1182,7 +1097,7 @@ void A1Axis::read_AxisFault(Tango::Attribute &attr)
  *	Description: Bitfield representing the status of the connected drive.
  *
  *	Data type:	Tango::DevBoolean
- *	Attr type:	Spectrum max = 27
+ *	Attr type:	Spectrum max = 32
  */
 //--------------------------------------------------------
 void A1Axis::read_DriveStatus(Tango::Attribute &attr)
@@ -1190,15 +1105,15 @@ void A1Axis::read_DriveStatus(Tango::Attribute &attr)
 	DEBUG_STREAM << "A1Axis::read_DriveStatus(Tango::Attribute &attr) entering... " << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::read_DriveStatus) ENABLED START -----*/
 	//	Set the attribute value
-	attr.set_value(attr_DriveStatus_read, 27);
+	attr.set_value(attr_DriveStatus_read, 32);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::read_DriveStatus
 }
 
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::add_dynamic_attributes()
- *	Description : Create the dynamic attributes if any
+ *	Method     : A1Axis::add_dynamic_attributes()
+ *	Description: Create the dynamic attributes if any
  *                for specified device.
  */
 //--------------------------------------------------------
@@ -1231,7 +1146,7 @@ void A1Axis::abort()
 //--------------------------------------------------------
 /**
  *	Command Home related method
- *	Description: Homes this axis according to the method selected in HomeType.
+ *	Description: Homes this axis sychronously.
  *
  */
 //--------------------------------------------------------
@@ -1239,12 +1154,30 @@ void A1Axis::home()
 {
 	DEBUG_STREAM << "A1Axis::Home()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::home) ENABLED START -----*/
+
+	auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
+    A1Bridge_ns::getInstance()->axis_Home(this->axis); 
+
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::home
+}
+//--------------------------------------------------------
+/**
+ *	Command HomeAsync related method
+ *	Description: Homes this axis asychronously.
+ *
+ */
+//--------------------------------------------------------
+void A1Axis::home_async()
+{
+	DEBUG_STREAM << "A1Axis::HomeAsync()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Axis::home_async) ENABLED START -----*/
 	
     auto guard = A1Bridge_ns::getInstance()->checkConnection();
     A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
-    A1Bridge_ns::getInstance()->axis_Home(this->axis, attr_HomeType_write); 
+    A1Bridge_ns::getInstance()->axis_HomeAsync(this->axis); 
 	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::home
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::home_async
 }
 //--------------------------------------------------------
 /**
@@ -1260,7 +1193,7 @@ void A1Axis::move()
 	
     auto guard = A1Bridge_ns::getInstance()->checkConnection();
     A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
-	A1Bridge_ns::getInstance()->axis_Move(this->axis, attr_MoveType_write, attr_PositionFeedback_write, attr_VelocityFeedback_write); 
+	A1Bridge_ns::getInstance()->axis_Move(this->axis, attr_MoveType_write, attr_PositionTarget_write, attr_VelocityTarget_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::move
 }
@@ -1362,7 +1295,7 @@ void A1Axis::free_run()
 	/*----- PROTECTED REGION ID(A1Axis::free_run) ENABLED START -----*/
 	
     auto guard = A1Bridge_ns::getInstance()->checkConnection();
-	A1Bridge_ns::getInstance()->axis_FreeRun(this->axis, attr_VelocityFeedback_write); 
+	A1Bridge_ns::getInstance()->axis_FreeRun(this->axis, attr_VelocityTarget_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::free_run
 }
@@ -1419,8 +1352,8 @@ void A1Axis::acknowledge_faults()
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1Axis::add_dynamic_commands()
- *	Description : Create the dynamic commands if any
+ *	Method     : A1Axis::add_dynamic_commands()
+ *	Description: Create the dynamic commands if any
  *                for specified device.
  */
 //--------------------------------------------------------
@@ -1453,7 +1386,6 @@ void A1Axis::pollThread()
         }
     }
 }
-
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis::namespace_ending
 } //	namespace

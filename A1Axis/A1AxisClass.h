@@ -67,14 +67,25 @@ class PositionFeedbackAttrib: public Tango::Attr
 {
 public:
 	PositionFeedbackAttrib():Attr("PositionFeedback",
-			Tango::DEV_DOUBLE, Tango::READ_WRITE) {};
-	~PositionFeedbackAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~PositionFeedbackAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_PositionFeedback(att);}
-	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
-		{(static_cast<A1Axis *>(dev))->write_PositionFeedback(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_PositionFeedback_allowed(ty);}
+};
+
+//	Attribute PositionTarget class definition
+class PositionTargetAttrib: public Tango::Attr
+{
+public:
+	PositionTargetAttrib():Attr("PositionTarget",
+			Tango::DEV_DOUBLE, Tango::WRITE) {}
+	~PositionTargetAttrib() {}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_PositionTarget(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Axis *>(dev))->is_PositionTarget_allowed(ty);}
 };
 
 //	Attribute VelocityFeedback class definition
@@ -82,14 +93,25 @@ class VelocityFeedbackAttrib: public Tango::Attr
 {
 public:
 	VelocityFeedbackAttrib():Attr("VelocityFeedback",
-			Tango::DEV_DOUBLE, Tango::READ_WRITE) {};
-	~VelocityFeedbackAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~VelocityFeedbackAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_VelocityFeedback(att);}
-	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
-		{(static_cast<A1Axis *>(dev))->write_VelocityFeedback(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_VelocityFeedback_allowed(ty);}
+};
+
+//	Attribute VelocityTarget class definition
+class VelocityTargetAttrib: public Tango::Attr
+{
+public:
+	VelocityTargetAttrib():Attr("VelocityTarget",
+			Tango::DEV_DOUBLE, Tango::WRITE) {}
+	~VelocityTargetAttrib() {}
+	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
+		{(static_cast<A1Axis *>(dev))->write_VelocityTarget(att);}
+	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
+		{return (static_cast<A1Axis *>(dev))->is_VelocityTarget_allowed(ty);}
 };
 
 //	Attribute AccelerationFeedback class definition
@@ -97,8 +119,8 @@ class AccelerationFeedbackAttrib: public Tango::Attr
 {
 public:
 	AccelerationFeedbackAttrib():Attr("AccelerationFeedback",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~AccelerationFeedbackAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~AccelerationFeedbackAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_AccelerationFeedback(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -110,8 +132,8 @@ class InPositionAttrib: public Tango::Attr
 {
 public:
 	InPositionAttrib():Attr("InPosition",
-			Tango::DEV_BOOLEAN, Tango::READ) {};
-	~InPositionAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ) {}
+	~InPositionAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_InPosition(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -123,8 +145,8 @@ class EnabledAttrib: public Tango::Attr
 {
 public:
 	EnabledAttrib():Attr("Enabled",
-			Tango::DEV_BOOLEAN, Tango::READ) {};
-	~EnabledAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ) {}
+	~EnabledAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_Enabled(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -136,8 +158,8 @@ class HomedAttrib: public Tango::Attr
 {
 public:
 	HomedAttrib():Attr("Homed",
-			Tango::DEV_BOOLEAN, Tango::READ) {};
-	~HomedAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ) {}
+	~HomedAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_Homed(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -149,8 +171,8 @@ class ErrorAttrib: public Tango::Attr
 {
 public:
 	ErrorAttrib():Attr("Error",
-			Tango::DEV_BOOLEAN, Tango::READ) {};
-	~ErrorAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ) {}
+	~ErrorAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_Error(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -162,8 +184,8 @@ class FirmwareVersionAttrib: public Tango::Attr
 {
 public:
 	FirmwareVersionAttrib():Attr("FirmwareVersion",
-			Tango::DEV_STRING, Tango::READ) {};
-	~FirmwareVersionAttrib() {};
+			Tango::DEV_STRING, Tango::READ) {}
+	~FirmwareVersionAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_FirmwareVersion(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -175,8 +197,8 @@ class PositionErrorAttrib: public Tango::Attr
 {
 public:
 	PositionErrorAttrib():Attr("PositionError",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~PositionErrorAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~PositionErrorAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_PositionError(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -188,8 +210,8 @@ class CurrentFeedbackAttrib: public Tango::Attr
 {
 public:
 	CurrentFeedbackAttrib():Attr("CurrentFeedback",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~CurrentFeedbackAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~CurrentFeedbackAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_CurrentFeedback(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -201,30 +223,12 @@ class MotorTypeAttrib: public Tango::Attr
 {
 public:
 	MotorTypeAttrib():Attr("MotorType",
-			Tango::DEV_STRING, Tango::READ) {};
-	~MotorTypeAttrib() {};
+			Tango::DEV_STRING, Tango::READ) {}
+	~MotorTypeAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_MotorType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_MotorType_allowed(ty);}
-};
-
-//	Attribute HomeType class definition
-class HomeTypeAttrib: public Tango::Attr
-{
-public:
-	HomeTypeAttrib():Attr("HomeType",
-			Tango::DEV_ENUM, Tango::READ_WRITE) {};
-	~HomeTypeAttrib() {};
-	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
-		{(static_cast<A1Axis *>(dev))->read_HomeType(att);}
-	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
-		{(static_cast<A1Axis *>(dev))->write_HomeType(att);}
-	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
-		{return (static_cast<A1Axis *>(dev))->is_HomeType_allowed(ty);}
-	virtual bool same_type(const std::type_info &in_type) {return typeid
-	(HomeTypeEnum) == in_type;}
-	virtual std::string get_enum_type() {return std::string("HomeTypeEnum");}
 };
 
 //	Attribute MoveType class definition
@@ -232,16 +236,15 @@ class MoveTypeAttrib: public Tango::Attr
 {
 public:
 	MoveTypeAttrib():Attr("MoveType",
-			Tango::DEV_ENUM, Tango::READ_WRITE) {};
-	~MoveTypeAttrib() {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {}
+	~MoveTypeAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_MoveType(att);}
 	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
 		{(static_cast<A1Axis *>(dev))->write_MoveType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_MoveType_allowed(ty);}
-	virtual bool same_type(const std::type_info &in_type) {return typeid
-	(MoveTypeEnum) == in_type;}
+	virtual bool same_type(const std::type_info &in_type) {return typeid(MoveTypeEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("MoveTypeEnum");}
 };
 
@@ -250,38 +253,12 @@ class LastMoveDurationAttrib: public Tango::Attr
 {
 public:
 	LastMoveDurationAttrib():Attr("LastMoveDuration",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~LastMoveDurationAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~LastMoveDurationAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_LastMoveDuration(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_LastMoveDuration_allowed(ty);}
-};
-
-//	Attribute PositionTarget class definition
-class PositionTargetAttrib: public Tango::Attr
-{
-public:
-	PositionTargetAttrib():Attr("PositionTarget",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~PositionTargetAttrib() {};
-	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
-		{(static_cast<A1Axis *>(dev))->read_PositionTarget(att);}
-	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
-		{return (static_cast<A1Axis *>(dev))->is_PositionTarget_allowed(ty);}
-};
-
-//	Attribute VelocityTarget class definition
-class VelocityTargetAttrib: public Tango::Attr
-{
-public:
-	VelocityTargetAttrib():Attr("VelocityTarget",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~VelocityTargetAttrib() {};
-	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
-		{(static_cast<A1Axis *>(dev))->read_VelocityTarget(att);}
-	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
-		{return (static_cast<A1Axis *>(dev))->is_VelocityTarget_allowed(ty);}
 };
 
 //	Attribute VelocityError class definition
@@ -289,8 +266,8 @@ class VelocityErrorAttrib: public Tango::Attr
 {
 public:
 	VelocityErrorAttrib():Attr("VelocityError",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~VelocityErrorAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~VelocityErrorAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_VelocityError(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -302,8 +279,8 @@ class AccelerationTargetAttrib: public Tango::Attr
 {
 public:
 	AccelerationTargetAttrib():Attr("AccelerationTarget",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~AccelerationTargetAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~AccelerationTargetAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_AccelerationTarget(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -315,8 +292,8 @@ class AccelerationErrorAttrib: public Tango::Attr
 {
 public:
 	AccelerationErrorAttrib():Attr("AccelerationError",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~AccelerationErrorAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~AccelerationErrorAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_AccelerationError(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -328,8 +305,8 @@ class CurrentTargetAttrib: public Tango::Attr
 {
 public:
 	CurrentTargetAttrib():Attr("CurrentTarget",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~CurrentTargetAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~CurrentTargetAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_CurrentTarget(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -341,8 +318,8 @@ class CurrentErrorAttrib: public Tango::Attr
 {
 public:
 	CurrentErrorAttrib():Attr("CurrentError",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~CurrentErrorAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~CurrentErrorAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_CurrentError(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -354,8 +331,8 @@ class ServoUpdateRateAttrib: public Tango::Attr
 {
 public:
 	ServoUpdateRateAttrib():Attr("ServoUpdateRate",
-			Tango::DEV_DOUBLE, Tango::READ) {};
-	~ServoUpdateRateAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ) {}
+	~ServoUpdateRateAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_ServoUpdateRate(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -367,16 +344,15 @@ class RampTypeAttrib: public Tango::Attr
 {
 public:
 	RampTypeAttrib():Attr("RampType",
-			Tango::DEV_ENUM, Tango::READ_WRITE) {};
-	~RampTypeAttrib() {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {}
+	~RampTypeAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_RampType(att);}
 	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
 		{(static_cast<A1Axis *>(dev))->write_RampType(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_RampType_allowed(ty);}
-	virtual bool same_type(const std::type_info &in_type) {return typeid
-	(RampTypeEnum) == in_type;}
+	virtual bool same_type(const std::type_info &in_type) {return typeid(RampTypeEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("RampTypeEnum");}
 };
 
@@ -385,16 +361,15 @@ class RampModeAttrib: public Tango::Attr
 {
 public:
 	RampModeAttrib():Attr("RampMode",
-			Tango::DEV_ENUM, Tango::READ_WRITE) {};
-	~RampModeAttrib() {};
+			Tango::DEV_ENUM, Tango::READ_WRITE) {}
+	~RampModeAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_RampMode(att);}
 	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
 		{(static_cast<A1Axis *>(dev))->write_RampMode(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
 		{return (static_cast<A1Axis *>(dev))->is_RampMode_allowed(ty);}
-	virtual bool same_type(const std::type_info &in_type) {return typeid
-	(RampModeEnum) == in_type;}
+	virtual bool same_type(const std::type_info &in_type) {return typeid(RampModeEnum) == in_type;}
 	virtual std::string get_enum_type() {return std::string("RampModeEnum");}
 };
 
@@ -403,8 +378,8 @@ class RampValueAttrib: public Tango::Attr
 {
 public:
 	RampValueAttrib():Attr("RampValue",
-			Tango::DEV_DOUBLE, Tango::READ_WRITE) {};
-	~RampValueAttrib() {};
+			Tango::DEV_DOUBLE, Tango::READ_WRITE) {}
+	~RampValueAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_RampValue(att);}
 	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
@@ -418,8 +393,8 @@ class VirtualAxisAttrib: public Tango::Attr
 {
 public:
 	VirtualAxisAttrib():Attr("VirtualAxis",
-			Tango::DEV_BOOLEAN, Tango::READ) {};
-	~VirtualAxisAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ) {}
+	~VirtualAxisAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_VirtualAxis(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -430,9 +405,11 @@ public:
 class AxisStatusAttrib: public Tango::SpectrumAttr
 {
 public:
+	// Constants for AxisStatus attribute
+	constexpr static long X_DATA_SIZE = 32;
 	AxisStatusAttrib():SpectrumAttr("AxisStatus",
-			Tango::DEV_BOOLEAN, Tango::READ, 24) {};
-	~AxisStatusAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ, AxisStatusAttrib::X_DATA_SIZE) {}
+	~AxisStatusAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_AxisStatus(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -443,9 +420,11 @@ public:
 class AxisFaultAttrib: public Tango::SpectrumAttr
 {
 public:
+	// Constants for AxisFault attribute
+	constexpr static long X_DATA_SIZE = 32;
 	AxisFaultAttrib():SpectrumAttr("AxisFault",
-			Tango::DEV_BOOLEAN, Tango::READ, 25) {};
-	~AxisFaultAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ, AxisFaultAttrib::X_DATA_SIZE) {}
+	~AxisFaultAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_AxisFault(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -456,9 +435,11 @@ public:
 class DriveStatusAttrib: public Tango::SpectrumAttr
 {
 public:
+	// Constants for DriveStatus attribute
+	constexpr static long X_DATA_SIZE = 32;
 	DriveStatusAttrib():SpectrumAttr("DriveStatus",
-			Tango::DEV_BOOLEAN, Tango::READ, 27) {};
-	~DriveStatusAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ, DriveStatusAttrib::X_DATA_SIZE) {}
+	~DriveStatusAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Axis *>(dev))->read_DriveStatus(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -473,20 +454,20 @@ public:
 class AbortClass : public Tango::Command
 {
 public:
-	AbortClass(const char   *name,
+	AbortClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	AbortClass(const char   *name,
+	AbortClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~AbortClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~AbortClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_Abort_allowed(any);}
@@ -496,43 +477,66 @@ public:
 class HomeClass : public Tango::Command
 {
 public:
-	HomeClass(const char   *name,
+	HomeClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	HomeClass(const char   *name,
+	HomeClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~HomeClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~HomeClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_Home_allowed(any);}
+};
+
+//	Command HomeAsync class definition
+class HomeAsyncClass : public Tango::Command
+{
+public:
+	HomeAsyncClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	HomeAsyncClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~HomeAsyncClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Axis *>(dev))->is_HomeAsync_allowed(any);}
 };
 
 //	Command Move class definition
 class MoveClass : public Tango::Command
 {
 public:
-	MoveClass(const char   *name,
+	MoveClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	MoveClass(const char   *name,
+	MoveClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~MoveClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~MoveClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_Move_allowed(any);}
@@ -542,20 +546,20 @@ public:
 class EnableClass : public Tango::Command
 {
 public:
-	EnableClass(const char   *name,
+	EnableClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	EnableClass(const char   *name,
+	EnableClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~EnableClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~EnableClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_Enable_allowed(any);}
@@ -565,20 +569,20 @@ public:
 class DisableClass : public Tango::Command
 {
 public:
-	DisableClass(const char   *name,
+	DisableClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	DisableClass(const char   *name,
+	DisableClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~DisableClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~DisableClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_Disable_allowed(any);}
@@ -588,20 +592,20 @@ public:
 class BrakeOnClass : public Tango::Command
 {
 public:
-	BrakeOnClass(const char   *name,
+	BrakeOnClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	BrakeOnClass(const char   *name,
+	BrakeOnClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~BrakeOnClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~BrakeOnClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_BrakeOn_allowed(any);}
@@ -611,20 +615,20 @@ public:
 class BrakeOffClass : public Tango::Command
 {
 public:
-	BrakeOffClass(const char   *name,
+	BrakeOffClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	BrakeOffClass(const char   *name,
+	BrakeOffClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~BrakeOffClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~BrakeOffClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_BrakeOff_allowed(any);}
@@ -634,20 +638,20 @@ public:
 class MoveFromLimitClass : public Tango::Command
 {
 public:
-	MoveFromLimitClass(const char   *name,
+	MoveFromLimitClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	MoveFromLimitClass(const char   *name,
+	MoveFromLimitClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~MoveFromLimitClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~MoveFromLimitClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_MoveFromLimit_allowed(any);}
@@ -657,20 +661,20 @@ public:
 class FreeRunClass : public Tango::Command
 {
 public:
-	FreeRunClass(const char   *name,
+	FreeRunClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	FreeRunClass(const char   *name,
+	FreeRunClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~FreeRunClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~FreeRunClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_FreeRun_allowed(any);}
@@ -680,20 +684,20 @@ public:
 class FreeRunStopClass : public Tango::Command
 {
 public:
-	FreeRunStopClass(const char   *name,
+	FreeRunStopClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	FreeRunStopClass(const char   *name,
+	FreeRunStopClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~FreeRunStopClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~FreeRunStopClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_FreeRunStop_allowed(any);}
@@ -703,20 +707,20 @@ public:
 class ThrowAllFaultsClass : public Tango::Command
 {
 public:
-	ThrowAllFaultsClass(const char   *name,
+	ThrowAllFaultsClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	ThrowAllFaultsClass(const char   *name,
+	ThrowAllFaultsClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~ThrowAllFaultsClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~ThrowAllFaultsClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_ThrowAllFaults_allowed(any);}
@@ -726,20 +730,20 @@ public:
 class AcknowledgeFaultsClass : public Tango::Command
 {
 public:
-	AcknowledgeFaultsClass(const char   *name,
+	AcknowledgeFaultsClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out,
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
-	AcknowledgeFaultsClass(const char   *name,
+	AcknowledgeFaultsClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(name,in,out)	{};
-	~AcknowledgeFaultsClass() {};
-	
+	:Command(cmd_name,in,out)	{}
+	~AcknowledgeFaultsClass() {}
+
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Axis *>(dev))->is_AcknowledgeFaults_allowed(any);}
@@ -756,17 +760,16 @@ class __declspec(dllexport)  A1AxisClass : public Tango::DeviceClass
 class A1AxisClass : public Tango::DeviceClass
 #endif
 {
-	/*----- PROTECTED REGION ID(A1AxisClass::Additionnal DServer data members) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1AxisClass::Additional DServer data members) ENABLED START -----*/
 	
 	
-	/*----- PROTECTED REGION END -----*/	//	A1AxisClass::Additionnal DServer data members
+	/*----- PROTECTED REGION END -----*/	//	A1AxisClass::Additional DServer data members
 
 	public:
 		//	write class properties data members
 		Tango::DbData	cl_prop;
 		Tango::DbData	cl_def_prop;
 		Tango::DbData	dev_def_prop;
-	
 		//	Method prototypes
 		static A1AxisClass *init(const char *);
 		static A1AxisClass *instance();
@@ -774,7 +777,7 @@ class A1AxisClass : public Tango::DeviceClass
 		Tango::DbDatum	get_class_property(std::string &);
 		Tango::DbDatum	get_default_device_property(std::string &);
 		Tango::DbDatum	get_default_class_property(std::string &);
-	
+
 	protected:
 		A1AxisClass(std::string &);
 		static A1AxisClass *_instance;
@@ -786,9 +789,9 @@ class A1AxisClass : public Tango::DeviceClass
 		void get_class_property();
 		std::string get_cvstag();
 		std::string get_cvsroot();
-	
+
 	private:
-		void device_factory(const Tango::DevVarStringArray *);
+		void device_factory(TANGO_UNUSED(const Tango::DevVarStringArray *));
 		void create_static_attribute_list(std::vector<Tango::Attr *> &);
 		void erase_dynamic_attributes(const Tango::DevVarStringArray *,std::vector<Tango::Attr *> &);
 		std::vector<std::string>	defaultAttList;

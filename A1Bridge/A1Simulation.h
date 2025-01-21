@@ -53,6 +53,7 @@ class A1Simulation: public A1Bridge
     A1Simulation(); 
     virtual ~A1Simulation();
     void run();
+    virtual void axis_HomeAsync(int32_t axis);
     virtual void axis_Home(int32_t axis);
     virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity);
     virtual void axis_Enable(int32_t axis);
