@@ -1,18 +1,19 @@
 Compilation instruction on conda: 
 1) Create environment for Tango 9.5:
 
-`conda create -n automation1 -c conda-forge cpptango=9.5 cppzmq omniorb 
-  pkg-config pogo make`
+   `conda create -n automation1 -c conda-forge python=3.10.12 cpptango=9.5 cppzmq omniorb pkg-config pogo make jive`
  
 2) Activate environment: 
 
-`conda activate automation1`
+   `conda activate automation1`
 
 3) Export environment variables:
 
    `export TANGO_HOME=$CONDA_PREFIX`
 
-4) If you have local copy of Automation1 Library and Headers:
+   `export LD_LIBRARY_PATH=$TANGO_HOME/lib`
+
+5) If you have local copy of Automation1 Library and Headers:
    
    `export A1LIB_HOME=<path>`
 
