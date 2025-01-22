@@ -36,9 +36,9 @@ A1Bridge::A1Bridge() :
     m_connected(false),
     m_simulation(false),
     m_verbose(false),
-    attr_Automation1ProgramStopTimeout_read(100), 
-    attr_Automation1TaskID_read(1),
-    m_pollInterval_ms(std::chrono::milliseconds(-1)) 
+    m_pollInterval_ms(std::chrono::milliseconds(-1)),
+    attr_Automation1ProgramStopTimeout_read(100),
+    attr_Automation1TaskID_read(1) 
 {
     attr_APIVersion_read         = Tango::string_dup("");
     attr_AeroScriptFilePath_read = Tango::string_dup("");
@@ -160,7 +160,7 @@ std::unique_lock<std::recursive_mutex> A1Bridge::checkConnection()
         this->reconnect();
     }
 
-    return std::move(guard);
+    return guard;
 }
 
 

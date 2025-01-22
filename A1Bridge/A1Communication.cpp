@@ -296,7 +296,7 @@ void A1Communication::deleteController_impl()
     delete[] attr_APIVersion_read;
     attr_APIVersion_read = nullptr;
 
-    for (unsigned i = 0; i++; MAX_AEROSCRIPTS)
+    for (unsigned i = 0; i < MAX_AEROSCRIPTS; i++)
     {
         delete[] attr_AeroScriptFiles_read[i];
     }
@@ -893,7 +893,6 @@ void A1Communication::axis_Home(int32_t axis)
 void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) 
 {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    bool status; 
     switch (moveType)
     {
         case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
