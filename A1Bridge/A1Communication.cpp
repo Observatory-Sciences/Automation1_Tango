@@ -1025,4 +1025,61 @@ std::string A1Communication::getMotorTypeString(unsigned axis)
     return motorTypeS;
 }
 
+std::string A1Communication::axis_GetA1ParameterString(int32_t axis,int parameterID) {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    char parameter[255];
+    A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_GetAxisStringValue, *m_controller, axis, (Automation1AxisParameterId)parameterID, parameter, 255);
+    return std::string{parameter};
+}
+
+double A1Communication::axis_GetA1ParameterValue(int32_t axis,int parameterID) {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    double value;
+    A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_GetAxisValue, *m_controller, axis, (Automation1AxisParameterId)parameterID, &value);
+    return value;
+}
+
+void A1Communication::axis_SetA1ParameterValue(int32_t axis,int parameterID, double value) {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_SetAxisValue, *m_controller, axis, (Automation1AxisParameterId)parameterID, value);
+}
+
+void A1Communication::axis_SetA1ParameterString(int32_t axis,int parameterID, std::string value) {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_SetAxisStringValue, *m_controller, axis, (Automation1AxisParameterId)parameterID, value.c_str());
+}
+
+void A1Communication::axis_SetA1ConfigValue(int32_t axis,int parameterID, double value) {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    bool isSet;
+
+    A1_GENERIC_CALL_AND_THROW( Automation1_Configuration_IsConfiguredParametersSet, *m_controller, &isSet);
+    if(!isSet) {
+        std::cout << "Automation1 Configuration is not set" << std::endl;
+        return;
+    }
+    Automation1ConfiguredParameters configuredParameters;
+    A1_GENERIC_CALL_AND_THROW(Automation1_ConfiguredParameters_Create, &configuredParameters);
+    A1_GENERIC_CALL_AND_THROW(Automation1_ConfiguredParameters_SetAxisValue,configuredParameters,axis,(Automation1AxisParameterId)parameterID,value);
+    A1_GENERIC_CALL_AND_THROW(Automation1_Configuration_SetConfiguredParameters, *m_controller, configuredParameters);
+    A1_GENERIC_CALL_AND_THROW(Automation1_ConfiguredParameters_Destroy, configuredParameters);
+}
+
+void A1Communication::axis_SetA1ConfigString(int32_t axis,int parameterID, std::string value) {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    bool isSet;
+
+    A1_GENERIC_CALL_AND_THROW( Automation1_Configuration_IsConfiguredParametersSet, *m_controller, &isSet);
+    if(!isSet) {
+        std::cout << "Automation1 Configuration is not set" << std::endl;
+        return;
+    }
+    Automation1ConfiguredParameters configuredParameters;
+    A1_GENERIC_CALL_AND_THROW(Automation1_ConfiguredParameters_Create, &configuredParameters);
+    A1_GENERIC_CALL_AND_THROW(Automation1_ConfiguredParameters_SetAxisStringValue,configuredParameters,axis,(Automation1AxisParameterId)parameterID,value.c_str());
+    A1_GENERIC_CALL_AND_THROW(Automation1_Configuration_SetConfiguredParameters, *m_controller, configuredParameters);
+    A1_GENERIC_CALL_AND_THROW(Automation1_ConfiguredParameters_Destroy, configuredParameters);
+}
+
+
 } // A1Bridge_ns

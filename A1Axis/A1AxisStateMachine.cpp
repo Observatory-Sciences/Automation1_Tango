@@ -718,6 +718,83 @@ bool A1Axis::is_AcknowledgeFaults_allowed(TANGO_UNUSED(const CORBA::Any &any))
 	return true;
 }
 
+//--------------------------------------------------------
+/**
+ *	Method     : A1Axis::is_SetA1ParameterValue_allowed()
+ *	Description: Execution allowed for SetA1ParameterValue attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_SetA1ParameterValue_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for SetA1ParameterValue command.
+	/*----- PROTECTED REGION ID(A1Axis::SetA1ParameterValueStateAllowed) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::SetA1ParameterValueStateAllowed
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method     : A1Axis::is_SetA1ConfigValue_allowed()
+ *	Description: Execution allowed for SetA1ConfigValue attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_SetA1ConfigValue_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for SetA1ConfigValue command.
+	/*----- PROTECTED REGION ID(A1Axis::SetA1ConfigValueStateAllowed) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::SetA1ConfigValueStateAllowed
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method     : A1Axis::is_GetA1ParameterValue_allowed()
+ *	Description: Execution allowed for GetA1ParameterValue attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_GetA1ParameterValue_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for GetA1ParameterValue command.
+	/*----- PROTECTED REGION ID(A1Axis::GetA1ParameterValueStateAllowed) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::GetA1ParameterValueStateAllowed
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method     : A1Axis::is_GetA1ParameterString_allowed()
+ *	Description: Execution allowed for GetA1ParameterString attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_GetA1ParameterString_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for GetA1ParameterString command.
+	/*----- PROTECTED REGION ID(A1Axis::GetA1ParameterStringStateAllowed) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::GetA1ParameterStringStateAllowed
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method     : A1Axis::is_SetA1ParameterString_allowed()
+ *	Description: Execution allowed for SetA1ParameterString attribute
+ */
+//--------------------------------------------------------
+bool A1Axis::is_SetA1ParameterString_allowed(TANGO_UNUSED(const CORBA::Any &any))
+{
+	//	Not any excluded states for SetA1ParameterString command.
+	/*----- PROTECTED REGION ID(A1Axis::SetA1ParameterStringStateAllowed) ENABLED START -----*/
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::SetA1ParameterStringStateAllowed
+	return true;
+}
+
 
 /*----- PROTECTED REGION ID(A1Axis::A1AxisStateAllowed.AdditionalMethods) ENABLED START -----*/
 

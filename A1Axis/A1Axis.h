@@ -40,7 +40,9 @@
 
 #include <A1Defines.h>
 #include <A1Bridge.h>
+#include <A1AxisEnum.h>
 
+#ifndef A1AxisEnum_H
 /*----- PROTECTED REGION END -----*/	//	A1Axis.h
 
 #ifdef TANGO_LOG
@@ -61,8 +63,33 @@
 
 namespace A1Axis_ns
 {
+enum class _MoveTypeEnum : short {
+	_ABSOLUTEMOVE,
+	_INCREMENTALMOVE,
+	_LINEARMOVE,
+	_RAPIDMOVE,
+} ;
+typedef _MoveTypeEnum MoveTypeEnum;
+
+enum class _RampTypeEnum : short {
+	_LINEAR,
+	_S_CURVE,
+	_SINE,
+} ;
+typedef _RampTypeEnum RampTypeEnum;
+
+enum class _RampModeEnum : short {
+	_RATE,
+	_TIME,
+} ;
+typedef _RampModeEnum RampModeEnum;
 
 /*----- PROTECTED REGION ID(A1Axis::Additional Class Declarations) ENABLED START -----*/
+#else
+namespace A1Axis_ns
+{
+#endif
+
 
 //	Additional Class Declarations
 
@@ -557,6 +584,48 @@ public:
 	 */
 	virtual void acknowledge_faults();
 	virtual bool is_AcknowledgeFaults_allowed(const CORBA::Any &any);
+	/**
+	 *	Command SetA1ParameterValue related method
+	 *	Description: Set a numeric parameter value for the A1 Axis
+	 *
+	 *	@param argin
+	 */
+	virtual void set_a1_parameter_value(const Tango::DevVarDoubleArray *argin);
+	virtual bool is_SetA1ParameterValue_allowed(const CORBA::Any &any);
+	/**
+	 *	Command SetA1ConfigValue related method
+	 *	Description: Set a numeric persistent parameter value for the A1 Axis
+	 *
+	 *	@param argin
+	 */
+	virtual void set_a1_config_value(const Tango::DevVarDoubleArray *argin);
+	virtual bool is_SetA1ConfigValue_allowed(const CORBA::Any &any);
+	/**
+	 *	Command GetA1ParameterValue related method
+	 *
+	 *
+	 *	@param argin
+	 *	@returns
+	 */
+	virtual Tango::DevDouble get_a1_parameter_value(Tango::DevShort argin);
+	virtual bool is_GetA1ParameterValue_allowed(const CORBA::Any &any);
+	/**
+	 *	Command GetA1ParameterString related method
+	 *
+	 *
+	 *	@param argin
+	 *	@returns
+	 */
+	virtual Tango::DevString get_a1_parameter_string(Tango::DevShort argin);
+	virtual bool is_GetA1ParameterString_allowed(const CORBA::Any &any);
+	/**
+	 *	Command SetA1ParameterString related method
+	 *
+	 *
+	 *	@param argin
+	 */
+	virtual void set_a1_parameter_string(const Tango::DevVarLongStringArray *argin);
+	virtual bool is_SetA1ParameterString_allowed(const CORBA::Any &any);
 
 
 	//--------------------------------------------------------

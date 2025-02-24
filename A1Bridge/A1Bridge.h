@@ -211,6 +211,22 @@ class A1Bridge
             {NotImplemented(__func__);}; 
     virtual void axis_AcknowledgeFaults(int32_t axis) 
             {NotImplemented(__func__);}; 
+    virtual std::string axis_GetA1ParameterString(int32_t axis,int parID) {
+            NotImplemented(__func__);
+            return "";
+    }
+    virtual double axis_GetA1ParameterValue(int32_t axis,int parID) {
+            NotImplemented(__func__);
+            return 0;
+    }
+    virtual void axis_SetA1ParameterValue(int32_t axis,int parID,double val)
+            {NotImplemented(__func__);};
+    virtual void axis_SetA1ConfigValue(int32_t axis,int parID,double val)
+            {NotImplemented(__func__);};
+    virtual void axis_SetA1ParameterString(int32_t axis,int parID,std::string val)
+            {NotImplemented(__func__);};
+    virtual void axis_SetA1ConfigString(int32_t axis,int parID,std::string val)
+            {NotImplemented(__func__);};
 
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value)
             {};

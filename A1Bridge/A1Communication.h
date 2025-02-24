@@ -195,6 +195,12 @@ class A1Communication: public A1Bridge
     virtual void axis_ThrowAllFaults(int32_t axis);
     virtual void axis_AcknowledgeFaults(int32_t axis);
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value);
+    virtual std::string axis_GetA1ParameterString(int32_t axis,int parameterID);
+    virtual double axis_GetA1ParameterValue(int32_t axis,int parameterID);
+    virtual void axis_SetA1ParameterValue(int32_t axis,int parameterID,double value);
+    virtual void axis_SetA1ConfigValue(int32_t axis,int parameterID,double value);
+    virtual void axis_SetA1ParameterString(int32_t axis,int parameterID,std::string value);
+    virtual void axis_SetA1ConfigString(int32_t axis,int parameterID,std::string value);
 
   private:
     std::string getFirmwareVersionString(unsigned axis);

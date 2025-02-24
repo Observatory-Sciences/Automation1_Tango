@@ -388,6 +388,104 @@ CORBA::Any *AcknowledgeFaultsClass::execute(Tango::DeviceImpl *device, TANGO_UNU
 	return new CORBA::Any();
 }
 
+//--------------------------------------------------------
+/**
+ * method : 		SetA1ParameterValueClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *SetA1ParameterValueClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "SetA1ParameterValueClass::execute(): arrived" << std::endl;
+	const Tango::DevVarDoubleArray *argin;
+	extract(in_any, argin);
+	((static_cast<A1Axis *>(device))->set_a1_parameter_value(argin));
+	return new CORBA::Any();
+}
+
+//--------------------------------------------------------
+/**
+ * method : 		SetA1ConfigValueClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *SetA1ConfigValueClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "SetA1ConfigValueClass::execute(): arrived" << std::endl;
+	const Tango::DevVarDoubleArray *argin;
+	extract(in_any, argin);
+	((static_cast<A1Axis *>(device))->set_a1_config_value(argin));
+	return new CORBA::Any();
+}
+
+//--------------------------------------------------------
+/**
+ * method : 		GetA1ParameterValueClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *GetA1ParameterValueClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "GetA1ParameterValueClass::execute(): arrived" << std::endl;
+	Tango::DevShort argin;
+	extract(in_any, argin);
+	return insert((static_cast<A1Axis *>(device))->get_a1_parameter_value(argin));
+}
+
+//--------------------------------------------------------
+/**
+ * method : 		GetA1ParameterStringClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *GetA1ParameterStringClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "GetA1ParameterStringClass::execute(): arrived" << std::endl;
+	Tango::DevShort argin;
+	extract(in_any, argin);
+	return insert((static_cast<A1Axis *>(device))->get_a1_parameter_string(argin));
+}
+
+//--------------------------------------------------------
+/**
+ * method : 		SetA1ParameterStringClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *SetA1ParameterStringClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "SetA1ParameterStringClass::execute(): arrived" << std::endl;
+	const Tango::DevVarLongStringArray *argin;
+	extract(in_any, argin);
+	((static_cast<A1Axis *>(device))->set_a1_parameter_string(argin));
+	return new CORBA::Any();
+}
+
 
 //===================================================================
 //	Properties management
@@ -1401,6 +1499,51 @@ void A1AxisClass::command_factory()
 			"",
 			Tango::OPERATOR);
 	command_list.push_back(pAcknowledgeFaultsCmd);
+
+	//	Command SetA1ParameterValue
+	SetA1ParameterValueClass	*pSetA1ParameterValueCmd =
+		new SetA1ParameterValueClass("SetA1ParameterValue",
+			Tango::DEVVAR_DOUBLEARRAY, Tango::DEV_VOID,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pSetA1ParameterValueCmd);
+
+	//	Command SetA1ConfigValue
+	SetA1ConfigValueClass	*pSetA1ConfigValueCmd =
+		new SetA1ConfigValueClass("SetA1ConfigValue",
+			Tango::DEVVAR_DOUBLEARRAY, Tango::DEV_VOID,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pSetA1ConfigValueCmd);
+
+	//	Command GetA1ParameterValue
+	GetA1ParameterValueClass	*pGetA1ParameterValueCmd =
+		new GetA1ParameterValueClass("GetA1ParameterValue",
+			Tango::DEV_SHORT, Tango::DEV_DOUBLE,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pGetA1ParameterValueCmd);
+
+	//	Command GetA1ParameterString
+	GetA1ParameterStringClass	*pGetA1ParameterStringCmd =
+		new GetA1ParameterStringClass("GetA1ParameterString",
+			Tango::DEV_SHORT, Tango::DEV_STRING,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pGetA1ParameterStringCmd);
+
+	//	Command SetA1ParameterString
+	SetA1ParameterStringClass	*pSetA1ParameterStringCmd =
+		new SetA1ParameterStringClass("SetA1ParameterString",
+			Tango::DEVVAR_LONGSTRINGARRAY, Tango::DEV_VOID,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pSetA1ParameterStringCmd);
 
 	/*----- PROTECTED REGION ID(A1AxisClass::command_factory_after) ENABLED START -----*/
 	

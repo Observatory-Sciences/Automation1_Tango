@@ -49,23 +49,28 @@
 //  The following table gives the correspondence
 //  between command and method names.
 //
-//  Command name       |  Method name
+//  Command name          |  Method name
 //================================================================
-//  State              |  Inherited (no method)
-//  Status             |  Inherited (no method)
-//  Abort              |  abort
-//  Home               |  home
-//  HomeAsync          |  home_async
-//  Move               |  move
-//  Enable             |  enable
-//  Disable            |  disable
-//  BrakeOn            |  brake_on
-//  BrakeOff           |  brake_off
-//  MoveFromLimit      |  move_from_limit
-//  FreeRun            |  free_run
-//  FreeRunStop        |  free_run_stop
-//  ThrowAllFaults     |  throw_all_faults
-//  AcknowledgeFaults  |  acknowledge_faults
+//  State                 |  Inherited (no method)
+//  Status                |  Inherited (no method)
+//  Abort                 |  abort
+//  Home                  |  home
+//  HomeAsync             |  home_async
+//  Move                  |  move
+//  Enable                |  enable
+//  Disable               |  disable
+//  BrakeOn               |  brake_on
+//  BrakeOff              |  brake_off
+//  MoveFromLimit         |  move_from_limit
+//  FreeRun               |  free_run
+//  FreeRunStop           |  free_run_stop
+//  ThrowAllFaults        |  throw_all_faults
+//  AcknowledgeFaults     |  acknowledge_faults
+//  SetA1ParameterValue   |  set_a1_parameter_value
+//  SetA1ConfigValue      |  set_a1_config_value
+//  GetA1ParameterValue   |  get_a1_parameter_value
+//  GetA1ParameterString  |  get_a1_parameter_string
+//  SetA1ParameterString  |  set_a1_parameter_string
 //================================================================
 
 //================================================================
@@ -1349,6 +1354,109 @@ void A1Axis::acknowledge_faults()
 	A1Bridge_ns::getInstance()->axis_AcknowledgeFaults(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::acknowledge_faults
+}
+//--------------------------------------------------------
+/**
+ *	Command SetA1ParameterValue related method
+ *	Description: Set a numeric parameter value for the A1 Axis
+ *
+ *	@param argin
+ */
+//--------------------------------------------------------
+void A1Axis::set_a1_parameter_value(const Tango::DevVarDoubleArray *argin)
+{
+	DEBUG_STREAM << "A1Axis::SetA1ParameterValue()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Axis::set_a1_parameter_value) ENABLED START -----*/
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    int32_t parID = (int32_t)(*argin)[0];
+    double value = (*argin)[1];
+    A1Bridge_ns::getInstance()->axis_SetA1ParameterValue(this->axis,parID,value);
+
+    /*----- PROTECTED REGION END -----*/	//	A1Axis::set_a1_parameter_value
+}
+//--------------------------------------------------------
+/**
+ *	Command SetA1ConfigValue related method
+ *	Description: Set a numeric persistent parameter value for the A1 Axis
+ *
+ *	@param argin
+ */
+//--------------------------------------------------------
+void A1Axis::set_a1_config_value(const Tango::DevVarDoubleArray *argin)
+{
+	DEBUG_STREAM << "A1Axis::SetA1ConfigValue()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Axis::set_a1_config_value) ENABLED START -----*/
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    int32_t parID = (int32_t)(*argin)[0];
+    double value = (*argin)[1];
+    A1Bridge_ns::getInstance()->axis_SetA1ConfigValue(this->axis,parID,value);
+
+    /*----- PROTECTED REGION END -----*/	//	A1Axis::set_a1_config_value
+}
+//--------------------------------------------------------
+/**
+ *	Command GetA1ParameterValue related method
+ *
+ *
+ *	@param argin
+ *	@returns
+ */
+//--------------------------------------------------------
+Tango::DevDouble A1Axis::get_a1_parameter_value(Tango::DevShort argin)
+{
+	Tango::DevDouble argout;
+	DEBUG_STREAM << "A1Axis::GetA1ParameterValue()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Axis::get_a1_parameter_value) ENABLED START -----*/
+
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    int32_t parID = argin;
+    return A1Bridge_ns::getInstance()->axis_GetA1ParameterValue(this->axis,parID);
+
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::get_a1_parameter_value
+	return argout;
+}
+//--------------------------------------------------------
+/**
+ *	Command GetA1ParameterString related method
+ *
+ *
+ *	@param argin
+ *	@returns
+ */
+//--------------------------------------------------------
+Tango::DevString A1Axis::get_a1_parameter_string(Tango::DevShort argin)
+{
+	Tango::DevString argout;
+	DEBUG_STREAM << "A1Axis::GetA1ParameterString()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Axis::get_a1_parameter_string) ENABLED START -----*/
+	
+	auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    int32_t parID = argin;
+    std::string value = A1Bridge_ns::getInstance()->axis_GetA1ParameterString(this->axis,parID);
+    argout = Tango::string_dup(value.c_str());
+
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::get_a1_parameter_string
+	return argout;
+}
+//--------------------------------------------------------
+/**
+ *	Command SetA1ParameterString related method
+ *
+ *
+ *	@param argin
+ */
+//--------------------------------------------------------
+void A1Axis::set_a1_parameter_string(const Tango::DevVarLongStringArray *argin)
+{
+	DEBUG_STREAM << "A1Axis::SetA1ParameterString()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Axis::set_a1_parameter_string) ENABLED START -----*/
+    auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    int32_t parID = argin->lvalue[0];
+    std::string value = Tango::string_dup(argin->svalue[0]);
+    A1Bridge_ns::getInstance()->axis_SetA1ParameterString(this->axis,parID,value);    
+	
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::set_a1_parameter_string
 }
 //--------------------------------------------------------
 /**

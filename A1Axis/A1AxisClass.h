@@ -749,6 +749,121 @@ public:
 	{return (static_cast<A1Axis *>(dev))->is_AcknowledgeFaults_allowed(any);}
 };
 
+//	Command SetA1ParameterValue class definition
+class SetA1ParameterValueClass : public Tango::Command
+{
+public:
+	SetA1ParameterValueClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	SetA1ParameterValueClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~SetA1ParameterValueClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Axis *>(dev))->is_SetA1ParameterValue_allowed(any);}
+};
+
+//	Command SetA1ConfigValue class definition
+class SetA1ConfigValueClass : public Tango::Command
+{
+public:
+	SetA1ConfigValueClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	SetA1ConfigValueClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~SetA1ConfigValueClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Axis *>(dev))->is_SetA1ConfigValue_allowed(any);}
+};
+
+//	Command GetA1ParameterValue class definition
+class GetA1ParameterValueClass : public Tango::Command
+{
+public:
+	GetA1ParameterValueClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	GetA1ParameterValueClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~GetA1ParameterValueClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Axis *>(dev))->is_GetA1ParameterValue_allowed(any);}
+};
+
+//	Command GetA1ParameterString class definition
+class GetA1ParameterStringClass : public Tango::Command
+{
+public:
+	GetA1ParameterStringClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	GetA1ParameterStringClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~GetA1ParameterStringClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Axis *>(dev))->is_GetA1ParameterString_allowed(any);}
+};
+
+//	Command SetA1ParameterString class definition
+class SetA1ParameterStringClass : public Tango::Command
+{
+public:
+	SetA1ParameterStringClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	SetA1ParameterStringClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~SetA1ParameterStringClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Axis *>(dev))->is_SetA1ParameterString_allowed(any);}
+};
+
 
 /**
  *	The A1AxisClass singleton definition
