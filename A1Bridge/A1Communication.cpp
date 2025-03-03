@@ -530,6 +530,8 @@ void A1Communication::readCommon()
         attr_axes[axis].attr_AxisStatus_read[AX_GANTRY_ALIGNED]                  = statusBits & Automation1AxisStatus::Automation1AxisStatus_GantryAligned;
         attr_axes[axis].attr_AxisStatus_read[AX_GANTRY_DRIVE_CONTROL_REALIGNING] = statusBits & Automation1AxisStatus::Automation1AxisStatus_GantryDriveControlRealigning;
         attr_axes[axis].attr_AxisStatus_read[AX_THERMO_COMP_ENABLED]             = statusBits & Automation1AxisStatus::Automation1AxisStatus_ThermoCompEnabled;
+        attr_axes[axis].attr_AxisStatus_read[AX_TRANSFORMATION_INPUT]            = statusBits & Automation1AxisStatus::Automation1AxisStatus_TransformationInput;
+        attr_axes[axis].attr_AxisStatus_read[AX_TRANSFORMATION_OUTPUT]           = statusBits & Automation1AxisStatus::Automation1AxisStatus_TransformationOutput;
 
         attr_axes[axis].attr_Homed_read = attr_axes[axis].attr_AxisStatus_read[AX_HOMED];
         // Negated since the axis status item is "NOT_VIRTUAL"
@@ -564,6 +566,7 @@ void A1Communication::readCommon()
         attr_axes[axis].attr_DriveStatus_read[DRV_DECEL_PHASE]                  = statusBits & Automation1DriveStatus::Automation1DriveStatus_DecelPhase;
         attr_axes[axis].attr_DriveStatus_read[DRV_ENCODER_CLIPPING]             = statusBits & Automation1DriveStatus::Automation1DriveStatus_EncoderClipping;
         attr_axes[axis].attr_DriveStatus_read[DRV_DUAL_LOOP_ACTIVE]             = statusBits & Automation1DriveStatus::Automation1DriveStatus_DualLoopActive;
+        attr_axes[axis].attr_DriveStatus_read[DRV_AMPLIFIER_ACTIVE]             = statusBits & Automation1DriveStatus::Automation1DriveStatus_AmplifierActive;
 
         attr_axes[axis].attr_Enabled_read    = attr_axes[axis].attr_DriveStatus_read[DRV_ENABLED];
         attr_axes[axis].attr_InPosition_read = attr_axes[axis].attr_DriveStatus_read[DRV_IN_POSITION];

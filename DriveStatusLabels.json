@@ -27,7 +27,8 @@
             "Accel. Phase",
             "Decel. Phase",
             "Encoder Clipping",
-            "Dual Loop Active"
+            "Dual Loop Active",
+            "Amplifier Active"
         ]        
     }
 }
