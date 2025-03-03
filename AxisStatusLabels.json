@@ -24,7 +24,9 @@
             "Motion Clamped",
             "Gantry Aligned",
             "Gantry Drive Control Realigning",
-            "Thermo Comp. Enabled"
+            "Thermo Comp. Enabled",
+            "Transformation Input",
+            "Transformation Output"
         ]
         
     }

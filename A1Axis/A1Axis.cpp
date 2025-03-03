@@ -1410,7 +1410,7 @@ Tango::DevDouble A1Axis::get_a1_parameter_value(Tango::DevShort argin)
 
     auto guard = A1Bridge_ns::getInstance()->checkConnection();
     int32_t parID = argin;
-    return A1Bridge_ns::getInstance()->axis_GetA1ParameterValue(this->axis,parID);
+    argout = A1Bridge_ns::getInstance()->axis_GetA1ParameterValue(this->axis,parID);
 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::get_a1_parameter_value

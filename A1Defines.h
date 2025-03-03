@@ -26,6 +26,8 @@
 #define AX_GANTRY_ALIGNED                       21
 #define AX_GANTRY_DRIVE_CONTROL_REALIGNING      22
 #define AX_THERMO_COMP_ENABLED                  23
+#define AX_TRANSFORMATION_INPUT                 24
+#define AX_TRANSFORMATION_OUTPUT                25
 
 
 //Axis faults
@@ -83,6 +85,7 @@
 #define DRV_DECEL_PHASE             24
 #define DRV_ENCODER_CLIPPING        25
 #define DRV_DUAL_LOOP_ACTIVE        26
+#define DRV_AMPLIFIER_ACTIVE        27
 
 //Task Statuses 0,1,2
 
