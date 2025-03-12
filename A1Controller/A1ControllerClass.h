@@ -59,8 +59,8 @@ class ControllerRunningAttrib: public Tango::Attr
 {
 public:
 	ControllerRunningAttrib():Attr("ControllerRunning",
-			Tango::DEV_BOOLEAN, Tango::READ) {};
-	~ControllerRunningAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ) {}
+	~ControllerRunningAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_ControllerRunning(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -72,8 +72,8 @@ class AxisCountAttrib: public Tango::Attr
 {
 public:
 	AxisCountAttrib():Attr("AxisCount",
-			Tango::DEV_USHORT, Tango::READ) {};
-	~AxisCountAttrib() {};
+			Tango::DEV_USHORT, Tango::READ) {}
+	~AxisCountAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_AxisCount(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -85,8 +85,8 @@ class TaskCountAttrib: public Tango::Attr
 {
 public:
 	TaskCountAttrib():Attr("TaskCount",
-			Tango::DEV_USHORT, Tango::READ) {};
-	~TaskCountAttrib() {};
+			Tango::DEV_USHORT, Tango::READ) {}
+	~TaskCountAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_TaskCount(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -98,8 +98,8 @@ class APIVersionAttrib: public Tango::Attr
 {
 public:
 	APIVersionAttrib():Attr("APIVersion",
-			Tango::DEV_STRING, Tango::READ) {};
-	~APIVersionAttrib() {};
+			Tango::DEV_STRING, Tango::READ) {}
+	~APIVersionAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_APIVersion(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -111,8 +111,8 @@ class AeroScriptFilePathAttrib: public Tango::Attr
 {
 public:
 	AeroScriptFilePathAttrib():Attr("AeroScriptFilePath",
-			Tango::DEV_STRING, Tango::READ_WRITE) {};
-	~AeroScriptFilePathAttrib() {};
+			Tango::DEV_STRING, Tango::READ_WRITE) {}
+	~AeroScriptFilePathAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_AeroScriptFilePath(att);}
 	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
@@ -126,8 +126,8 @@ class Automation1ProgramStopTimeoutAttrib: public Tango::Attr
 {
 public:
 	Automation1ProgramStopTimeoutAttrib():Attr("Automation1ProgramStopTimeout",
-			Tango::DEV_USHORT, Tango::READ_WRITE) {};
-	~Automation1ProgramStopTimeoutAttrib() {};
+			Tango::DEV_USHORT, Tango::READ_WRITE) {}
+	~Automation1ProgramStopTimeoutAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_Automation1ProgramStopTimeout(att);}
 	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
@@ -141,8 +141,8 @@ class Automation1TaskIDAttrib: public Tango::Attr
 {
 public:
 	Automation1TaskIDAttrib():Attr("Automation1TaskID",
-			Tango::DEV_USHORT, Tango::READ_WRITE) {};
-	~Automation1TaskIDAttrib() {};
+			Tango::DEV_USHORT, Tango::READ_WRITE) {}
+	~Automation1TaskIDAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_Automation1TaskID(att);}
 	virtual void write(Tango::DeviceImpl *dev,Tango::WAttribute &att)
@@ -156,8 +156,8 @@ class Automation1TaskStatusAttrib: public Tango::Attr
 {
 public:
 	Automation1TaskStatusAttrib():Attr("Automation1TaskStatus",
-			Tango::DEV_ENUM, Tango::READ) {};
-	~Automation1TaskStatusAttrib() {};
+			Tango::DEV_ENUM, Tango::READ) {}
+	~Automation1TaskStatusAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_Automation1TaskStatus(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -173,8 +173,8 @@ public:
 	// Constants for AxisHealth attribute
 	constexpr static long X_DATA_SIZE = 32;
 	AxisHealthAttrib():SpectrumAttr("AxisHealth",
-			Tango::DEV_BOOLEAN, Tango::READ, AxisHealthAttrib::X_DATA_SIZE) {};
-	~AxisHealthAttrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ, AxisHealthAttrib::X_DATA_SIZE) {}
+	~AxisHealthAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_AxisHealth(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -188,8 +188,8 @@ public:
 	// Constants for TaskStatus0 attribute
 	constexpr static long X_DATA_SIZE = 16;
 	TaskStatus0Attrib():SpectrumAttr("TaskStatus0",
-			Tango::DEV_BOOLEAN, Tango::READ, TaskStatus0Attrib::X_DATA_SIZE) {};
-	~TaskStatus0Attrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ, TaskStatus0Attrib::X_DATA_SIZE) {}
+	~TaskStatus0Attrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_TaskStatus0(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -203,8 +203,8 @@ public:
 	// Constants for TaskStatus1 attribute
 	constexpr static long X_DATA_SIZE = 17;
 	TaskStatus1Attrib():SpectrumAttr("TaskStatus1",
-			Tango::DEV_BOOLEAN, Tango::READ, TaskStatus1Attrib::X_DATA_SIZE) {};
-	~TaskStatus1Attrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ, TaskStatus1Attrib::X_DATA_SIZE) {}
+	~TaskStatus1Attrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_TaskStatus1(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -218,8 +218,8 @@ public:
 	// Constants for TaskStatus2 attribute
 	constexpr static long X_DATA_SIZE = 24;
 	TaskStatus2Attrib():SpectrumAttr("TaskStatus2",
-			Tango::DEV_BOOLEAN, Tango::READ, TaskStatus2Attrib::X_DATA_SIZE) {};
-	~TaskStatus2Attrib() {};
+			Tango::DEV_BOOLEAN, Tango::READ, TaskStatus2Attrib::X_DATA_SIZE) {}
+	~TaskStatus2Attrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_TaskStatus2(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -233,8 +233,8 @@ public:
 	// Constants for AeroScriptFiles attribute
 	constexpr static long X_DATA_SIZE = 1024;
 	AeroScriptFilesAttrib():SpectrumAttr("AeroScriptFiles",
-			Tango::DEV_STRING, Tango::READ, AeroScriptFilesAttrib::X_DATA_SIZE) {};
-	~AeroScriptFilesAttrib() {};
+			Tango::DEV_STRING, Tango::READ, AeroScriptFilesAttrib::X_DATA_SIZE) {}
+	~AeroScriptFilesAttrib() {}
 	virtual void read(Tango::DeviceImpl *dev,Tango::Attribute &att)
 		{(static_cast<A1Controller *>(dev))->read_AeroScriptFiles(att);}
 	virtual bool is_allowed(Tango::DeviceImpl *dev,Tango::AttReqType ty)
@@ -255,13 +255,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	ResetClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~ResetClass() {};
+	:Command(cmd_name,in,out)	{}
+	~ResetClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -278,13 +278,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	StartClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~StartClass() {};
+	:Command(cmd_name,in,out)	{}
+	~StartClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -301,13 +301,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	StopClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~StopClass() {};
+	:Command(cmd_name,in,out)	{}
+	~StopClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -324,13 +324,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	EnableClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~EnableClass() {};
+	:Command(cmd_name,in,out)	{}
+	~EnableClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -347,13 +347,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	DisableClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~DisableClass() {};
+	:Command(cmd_name,in,out)	{}
+	~DisableClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -370,13 +370,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	ClearErrorsClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~ClearErrorsClass() {};
+	:Command(cmd_name,in,out)	{}
+	~ClearErrorsClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -393,13 +393,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	AeroScriptProgramRunClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~AeroScriptProgramRunClass() {};
+	:Command(cmd_name,in,out)	{}
+	~AeroScriptProgramRunClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -416,13 +416,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	AeroScriptProgramLoadClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~AeroScriptProgramLoadClass() {};
+	:Command(cmd_name,in,out)	{}
+	~AeroScriptProgramLoadClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -439,13 +439,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	AeroScriptProgramStartClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~AeroScriptProgramStartClass() {};
+	:Command(cmd_name,in,out)	{}
+	~AeroScriptProgramStartClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -462,13 +462,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	AeroScriptProgramStopClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~AeroScriptProgramStopClass() {};
+	:Command(cmd_name,in,out)	{}
+	~AeroScriptProgramStopClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -485,13 +485,13 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	AeroScriptProgramPauseClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~AeroScriptProgramPauseClass() {};
+	:Command(cmd_name,in,out)	{}
+	~AeroScriptProgramPauseClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
@@ -508,17 +508,86 @@ public:
 				   const char        *in_desc,
 				   const char        *out_desc,
 				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{};
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
 
 	CommandExecuteClass(const char   *cmd_name,
 	               Tango::CmdArgType in,
 				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{};
-	~CommandExecuteClass() {};
+	:Command(cmd_name,in,out)	{}
+	~CommandExecuteClass() {}
 
 	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
 	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
 	{return (static_cast<A1Controller *>(dev))->is_CommandExecute_allowed(any);}
+};
+
+//	Command CommandExecuteReturnDouble class definition
+class CommandExecuteReturnDoubleClass : public Tango::Command
+{
+public:
+	CommandExecuteReturnDoubleClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	CommandExecuteReturnDoubleClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~CommandExecuteReturnDoubleClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Controller *>(dev))->is_CommandExecuteReturnDouble_allowed(any);}
+};
+
+//	Command CommandExecuteReturnInt class definition
+class CommandExecuteReturnIntClass : public Tango::Command
+{
+public:
+	CommandExecuteReturnIntClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	CommandExecuteReturnIntClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~CommandExecuteReturnIntClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Controller *>(dev))->is_CommandExecuteReturnInt_allowed(any);}
+};
+
+//	Command CommandExecuteReturnString class definition
+class CommandExecuteReturnStringClass : public Tango::Command
+{
+public:
+	CommandExecuteReturnStringClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out,
+				   const char        *in_desc,
+				   const char        *out_desc,
+				   Tango::DispLevel  level)
+	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
+
+	CommandExecuteReturnStringClass(const char   *cmd_name,
+	               Tango::CmdArgType in,
+				   Tango::CmdArgType out)
+	:Command(cmd_name,in,out)	{}
+	~CommandExecuteReturnStringClass() {}
+
+	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
+	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
+	{return (static_cast<A1Controller *>(dev))->is_CommandExecuteReturnString_allowed(any);}
 };
 
 

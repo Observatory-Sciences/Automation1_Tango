@@ -145,7 +145,7 @@ A1ControllerClass *A1ControllerClass::instance()
 {
 	if (_instance == NULL)
 	{
-		std::cerr << "Class is not initialised !!" << std::endl;
+		std::cerr << "Class is not initialized !!" << std::endl;
 		exit(-1);
 	}
 	return _instance;
@@ -374,14 +374,71 @@ CORBA::Any *CommandExecuteClass::execute(Tango::DeviceImpl *device, const CORBA:
 	return new CORBA::Any();
 }
 
+//--------------------------------------------------------
+/**
+ * method : 		CommandExecuteReturnDoubleClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *CommandExecuteReturnDoubleClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "CommandExecuteReturnDoubleClass::execute(): arrived" << std::endl;
+	Tango::DevString argin;
+	extract(in_any, argin);
+	return insert((static_cast<A1Controller *>(device))->command_execute_return_double(argin));
+}
+
+//--------------------------------------------------------
+/**
+ * method : 		CommandExecuteReturnIntClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *CommandExecuteReturnIntClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "CommandExecuteReturnIntClass::execute(): arrived" << std::endl;
+	Tango::DevString argin;
+	extract(in_any, argin);
+	return insert((static_cast<A1Controller *>(device))->command_execute_return_int(argin));
+}
+
+//--------------------------------------------------------
+/**
+ * method : 		CommandExecuteReturnStringClass::execute()
+ * description : 	method to trigger the execution of the command.
+ *
+ * @param	device	The device on which the command must be executed
+ * @param	in_any	The command input data
+ *
+ *	returns The command output data (packed in the Any object)
+ */
+//--------------------------------------------------------
+CORBA::Any *CommandExecuteReturnStringClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
+{
+	TANGO_LOG_INFO << "CommandExecuteReturnStringClass::execute(): arrived" << std::endl;
+	Tango::DevString argin;
+	extract(in_any, argin);
+	return insert((static_cast<A1Controller *>(device))->command_execute_return_string(argin));
+}
+
 
 //===================================================================
 //	Properties management
 //===================================================================
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::get_class_property()
- * Description:  Get the class property for specified name.
+ *	Method     : A1ControllerClass::get_class_property()
+ *	Description: Get the class property for specified name.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1ControllerClass::get_class_property(std::string &prop_name)
@@ -395,8 +452,8 @@ Tango::DbDatum A1ControllerClass::get_class_property(std::string &prop_name)
 
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::get_default_device_property()
- * Description:  Return the default value for device property.
+ *	Method     : A1ControllerClass::get_default_device_property()
+ *	Description: Return the default value for device property.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1ControllerClass::get_default_device_property(std::string &prop_name)
@@ -410,8 +467,8 @@ Tango::DbDatum A1ControllerClass::get_default_device_property(std::string &prop_
 
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::get_default_class_property()
- * Description:  Return the default value for class property.
+ *	Method     : A1ControllerClass::get_default_class_property()
+ *	Description: Return the default value for class property.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1ControllerClass::get_default_class_property(std::string &prop_name)
@@ -426,8 +483,8 @@ Tango::DbDatum A1ControllerClass::get_default_class_property(std::string &prop_n
 
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::set_default_property()
- * Description:  Set default property (class and device) for wizard.
+ *	Method     : A1ControllerClass::set_default_property()
+ *	Description: Set default property (class and device) for wizard.
  *                For each property, add to wizard property name and description.
  *                If default value has been set, add it to wizard property and
  *                store it in a DbDatum.
@@ -500,42 +557,42 @@ void A1ControllerClass::set_default_property()
 
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::write_class_property()
- * Description:  Set class description fields as property in database
+ *	Method     : A1ControllerClass::write_class_property()
+ *	Description: Set class description fields as property in database
  */
 //--------------------------------------------------------
 void A1ControllerClass::write_class_property()
 {
-//	First time, check if database used
-if (Tango::Util::_UseDb == false)
-	return;
+	//	First time, check if database used
+	if (Tango::Util::_UseDb == false)
+		return;
 
-Tango::DbData	data;
-std::string	classname = get_name();
-std::string	header;
+	Tango::DbData	data;
+	std::string	classname = get_name();
+	std::string	header;
 
-//	Put title
-Tango::DbDatum	title("ProjectTitle");
-std::string	str_title("");
-title << str_title;
-data.push_back(title);
+	//	Put title
+	Tango::DbDatum	title("ProjectTitle");
+	std::string	str_title("");
+	title << str_title;
+	data.push_back(title);
 
-//	Put Description
-Tango::DbDatum	description("Description");
-std::vector<std::string>	str_desc;
-str_desc.push_back("Controller class for the Aerotech Automation 1 device server");
-description << str_desc;
-data.push_back(description);
+	//	Put Description
+	Tango::DbDatum	description("Description");
+	std::vector<std::string>	str_desc;
+	str_desc.push_back("Controller class for the Aerotech Automation 1 device server");
+	description << str_desc;
+	data.push_back(description);
 
-//  Put inheritance
-Tango::DbDatum	inher_datum("InheritedFrom");
-std::vector<std::string> inheritance;
-inheritance.push_back("TANGO_BASE_CLASS");
-inher_datum << inheritance;
-data.push_back(inher_datum);
+	//  Put inheritance
+	Tango::DbDatum	inher_datum("InheritedFrom");
+	std::vector<std::string> inheritance;
+	inheritance.push_back("TANGO_BASE_CLASS");
+	inher_datum << inheritance;
+	data.push_back(inher_datum);
 
-//	Call database and and values
-get_db_class()->put_property(data);
+	//	Call database and and values
+	get_db_class()->put_property(data);
 }
 
 //===================================================================
@@ -544,44 +601,44 @@ get_db_class()->put_property(data);
 
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::device_factory()
- * Description:  Create the device object(s)
+ *	Method     : A1ControllerClass::device_factory()
+ *	Description: Create the device object(s)
  *                and store them in the device list
  */
 //--------------------------------------------------------
 void A1ControllerClass::device_factory(const Tango::DevVarStringArray *devlist_ptr)
 {
-/*----- PROTECTED REGION ID(A1ControllerClass::device_factory_before) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1ControllerClass::device_factory_before) ENABLED START -----*/
 	
 	//	Add your own code
 	
 	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::device_factory_before
 
-//	Create devices and add it into the device list
-for (unsigned long i=0 ; i<devlist_ptr->length() ; i++)
-{
-	TANGO_LOG_DEBUG << "Device name : " << (*devlist_ptr)[i].in() << std::endl;
-	device_list.push_back(new A1Controller(this, (*devlist_ptr)[i]));
-}
+	//	Create devices and add it into the device list
+	for (unsigned long i=0 ; i<devlist_ptr->length() ; i++)
+	{
+		TANGO_LOG_DEBUG << "Device name : " << (*devlist_ptr)[i].in() << std::endl;
+		device_list.push_back(new A1Controller(this, (*devlist_ptr)[i]));
+	}
 
-//	Manage dynamic attributes if any
-erase_dynamic_attributes(devlist_ptr, get_class_attr()->get_attr_list());
+	//	Manage dynamic attributes if any
+	erase_dynamic_attributes(devlist_ptr, get_class_attr()->get_attr_list());
 
-//	Export devices to the outside world
-for (unsigned long i=1 ; i<=devlist_ptr->length() ; i++)
-{
-	//	Add dynamic attributes if any
-	A1Controller *dev = static_cast<A1Controller *>(device_list[device_list.size()-i]);
-	dev->add_dynamic_attributes();
+	//	Export devices to the outside world
+	for (unsigned long i=1 ; i<=devlist_ptr->length() ; i++)
+	{
+		//	Add dynamic attributes if any
+		A1Controller *dev = static_cast<A1Controller *>(device_list[device_list.size()-i]);
+		dev->add_dynamic_attributes();
 
-	//	Check before if database used.
-	if ((Tango::Util::_UseDb == true) && (Tango::Util::_FileDb == false))
-		export_device(dev);
-	else
-		export_device(dev, dev->get_name().c_str());
-}
+		//	Check before if database used.
+		if ((Tango::Util::_UseDb == true) && (Tango::Util::_FileDb == false))
+			export_device(dev);
+		else
+			export_device(dev, dev->get_name().c_str());
+	}
 
-/*----- PROTECTED REGION ID(A1ControllerClass::device_factory_after) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1ControllerClass::device_factory_after) ENABLED START -----*/
 	
 	//	Add your own code
 	
@@ -589,8 +646,8 @@ for (unsigned long i=1 ; i<=devlist_ptr->length() ; i++)
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::attribute_factory()
- * Description:  Create the attribute object(s)
+ *	Method     : A1ControllerClass::attribute_factory()
+ *	Description: Create the attribute object(s)
  *                and store them in the attribute list
  */
 //--------------------------------------------------------
@@ -926,8 +983,8 @@ void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::pipe_factory()
- * Description:  Create the pipe object(s)
+ *	Method     : A1ControllerClass::pipe_factory()
+ *	Description: Create the pipe object(s)
  *                and store them in the pipe list
  */
 //--------------------------------------------------------
@@ -946,8 +1003,8 @@ void A1ControllerClass::pipe_factory()
 }
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::command_factory()
- * Description:  Create the command object(s)
+ *	Method     : A1ControllerClass::command_factory()
+ *	Description: Create the command object(s)
  *                and store them in the command list
  */
 //--------------------------------------------------------
@@ -1068,6 +1125,33 @@ void A1ControllerClass::command_factory()
 			Tango::OPERATOR);
 	command_list.push_back(pCommandExecuteCmd);
 
+	//	Command CommandExecuteReturnDouble
+	CommandExecuteReturnDoubleClass	*pCommandExecuteReturnDoubleCmd =
+		new CommandExecuteReturnDoubleClass("CommandExecuteReturnDouble",
+			Tango::DEV_STRING, Tango::DEV_DOUBLE,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pCommandExecuteReturnDoubleCmd);
+
+	//	Command CommandExecuteReturnInt
+	CommandExecuteReturnIntClass	*pCommandExecuteReturnIntCmd =
+		new CommandExecuteReturnIntClass("CommandExecuteReturnInt",
+			Tango::DEV_STRING, Tango::DEV_LONG,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pCommandExecuteReturnIntCmd);
+
+	//	Command CommandExecuteReturnString
+	CommandExecuteReturnStringClass	*pCommandExecuteReturnStringCmd =
+		new CommandExecuteReturnStringClass("CommandExecuteReturnString",
+			Tango::DEV_STRING, Tango::DEV_STRING,
+			"",
+			"",
+			Tango::EXPERT);
+	command_list.push_back(pCommandExecuteReturnStringCmd);
+
 	/*----- PROTECTED REGION ID(A1ControllerClass::command_factory_after) ENABLED START -----*/
 	
 	//	Add your own code
@@ -1092,7 +1176,7 @@ void A1ControllerClass::create_static_attribute_list(std::vector<Tango::Attr *> 
 	for (unsigned long i=0 ; i<att_list.size() ; i++)
 	{
 		std::string att_name(att_list[i]->get_name());
-		transform(att_name.begin(), att_name.end(), att_name.begin(), ::tolower);
+		std::transform(att_name.begin(), att_name.end(), att_name.begin(), ::tolower);
 		defaultAttList.push_back(att_name);
 	}
 
@@ -1146,8 +1230,8 @@ void A1ControllerClass::erase_dynamic_attributes(const Tango::DevVarStringArray 
 
 //--------------------------------------------------------
 /**
- *	Method      : A1ControllerClass::get_attr_object_by_name()
- * Description:  returns Tango::Attr * object found by name
+ *	Method     : A1ControllerClass::get_attr_object_by_name()
+ *	Description: returns Tango::Attr * object found by name
  */
 //--------------------------------------------------------
 Tango::Attr *A1ControllerClass::get_attr_object_by_name(std::vector<Tango::Attr *> &att_list, std::string attname)

@@ -228,6 +228,14 @@ class A1Bridge
     virtual void axis_SetA1ConfigString(int32_t axis,int parID,std::string val)
             {NotImplemented(__func__);};
 
+    virtual double controller_CommandExecuteDouble(const std::string& aeroScriptText)
+            {return 0.;};
+    virtual int controller_CommandExecuteInt(const std::string& aeroScriptText)
+            {return 0;};
+    virtual std::string controller_CommandExecuteString(const std::string& aeroScriptText)
+            {return "";};
+
+
     virtual void axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value)
             {};
 };

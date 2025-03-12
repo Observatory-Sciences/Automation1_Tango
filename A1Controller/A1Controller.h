@@ -42,6 +42,7 @@
 #include <A1Bridge.h>
 #include <A1ControllerEnum.h>
 
+#ifndef A1ControllerEnum_H
 /*----- PROTECTED REGION END -----*/	//	A1Controller.h
 
 #ifdef TANGO_LOG
@@ -62,8 +63,37 @@
 
 namespace A1Controller_ns
 {
-/*----- PROTECTED REGION ID(A1Controller::Additional Class Declarations) ENABLED START -----*/
+enum class _Automation1TaskStatusEnum : short {
+	_UNAVAILABLE,
+	_INACTIVE,
+	_IDLE,
+	_PROGRAM_READY,
+	_PROGRAM_RUNNING,
+	_PROGRAM_FEEDHOLD,
+	_PROGRAM_PAUSED,
+	_PROGRAM_COMPLETE,
+	_ERROR,
+	_QUEUE_RUNNING,
+	_QUEUE_PAUSED,
+} ;
+typedef _Automation1TaskStatusEnum Automation1TaskStatusEnum;
 
+/*----- PROTECTED REGION ID(A1Controller::Additional Class Declarations) ENABLED START -----*/
+#else
+
+#ifdef TANGO_LOG
+    // cppTango after c934adea (Merge branch 'remove-cout-definition' into 'main', 2022-05-23)
+    // nothing to do
+#else
+    // cppTango 9.3-backports and older
+    #define TANGO_LOG       cout
+    #define TANGO_LOG_INFO  cout2
+    #define TANGO_LOG_DEBUG cout3
+#endif // TANGO_LOG
+
+namespace A1Controller_ns
+{
+#endif
 //	Additional Class Declarations
 
 /*----- PROTECTED REGION END -----*/	//	A1Controller::Additional Class Declarations
@@ -168,62 +198,62 @@ public:
 public:
 	//--------------------------------------------------------
 	/*
-	 *	Method      : A1Controller::read_attr_hardware()
-	 * Description:  Hardware acquisition for attributes.
+	 *	Method     : A1Controller::read_attr_hardware()
+	 *	Description: Hardware acquisition for attributes.
 	 */
 	//--------------------------------------------------------
 	virtual void read_attr_hardware(std::vector<long> &attr_list);
 	//--------------------------------------------------------
 	/*
-	 *	Method      : A1Controller::write_attr_hardware()
-	 * Description:  Hardware writing for attributes.
+	 *	Method     : A1Controller::write_attr_hardware()
+	 *	Description: Hardware writing for attributes.
 	 */
 	//--------------------------------------------------------
 	virtual void write_attr_hardware(std::vector<long> &attr_list);
 
 /**
  *	Attribute ControllerRunning related methods
- * Description:  True if the controller has been started otherwise false.
+ *	Description: True if the controller has been started otherwise false.
  *
- *	Data type:  Tango::DevBoolean
+ *	Data type:	Tango::DevBoolean
  *	Attr type:	Scalar
  */
 	virtual void read_ControllerRunning(Tango::Attribute &attr);
 	virtual bool is_ControllerRunning_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisCount related methods
- * Description:  The maximum number of axis slots available on this controller, not the number of drives connected.
+ *	Description: The maximum number of axis slots available on this controller, not the number of drives connected.
  *
- *	Data type:  Tango::DevUShort
+ *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
  */
 	virtual void read_AxisCount(Tango::Attribute &attr);
 	virtual bool is_AxisCount_allowed(Tango::AttReqType type);
 /**
  *	Attribute TaskCount related methods
- * Description:  The maximum number of task slots available on this controller.
+ *	Description: The maximum number of task slots available on this controller.
  *
- *	Data type:  Tango::DevUShort
+ *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
  */
 	virtual void read_TaskCount(Tango::Attribute &attr);
 	virtual bool is_TaskCount_allowed(Tango::AttReqType type);
 /**
  *	Attribute APIVersion related methods
- * Description:  The version of the C API in use.
+ *	Description: The version of the C API in use.
  *
- *	Data type:  Tango::DevString
+ *	Data type:	Tango::DevString
  *	Attr type:	Scalar
  */
 	virtual void read_APIVersion(Tango::Attribute &attr);
 	virtual bool is_APIVersion_allowed(Tango::AttReqType type);
 /**
  *	Attribute AeroScriptFilePath related methods
- * Description:  Attempts to load the file path entered into the write attribute as an AeroScript on the
+ *	Description: Attempts to load the file path entered into the write attribute as an AeroScript on the
  *               controller. The read attribute shows the currently loaded file path. Full file paths must be
  *               used.
  *
- *	Data type:  Tango::DevString
+ *	Data type:	Tango::DevString
  *	Attr type:	Scalar
  */
 	virtual void read_AeroScriptFilePath(Tango::Attribute &attr);
@@ -231,10 +261,10 @@ public:
 	virtual bool is_AeroScriptFilePath_allowed(Tango::AttReqType type);
 /**
  *	Attribute Automation1ProgramStopTimeout related methods
- * Description:  Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
+ *	Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
  *               than the timeout, the controller returns an error.
  *
- *	Data type:  Tango::DevUShort
+ *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
  */
 	virtual void read_Automation1ProgramStopTimeout(Tango::Attribute &attr);
@@ -242,9 +272,9 @@ public:
 	virtual bool is_Automation1ProgramStopTimeout_allowed(Tango::AttReqType type);
 /**
  *	Attribute Automation1TaskID related methods
- * Description:  Automation1 task index number. Automation1 commands are run under this task.
+ *	Description: Automation1 task index number. Automation1 commands are run under this task.
  *
- *	Data type:  Tango::DevUShort
+ *	Data type:	Tango::DevUShort
  *	Attr type:	Scalar
  */
 	virtual void read_Automation1TaskID(Tango::Attribute &attr);
@@ -252,18 +282,18 @@ public:
 	virtual bool is_Automation1TaskID_allowed(Tango::AttReqType type);
 /**
  *	Attribute Automation1TaskStatus related methods
- * Description:  Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
+ *	Description: Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
  *
- *	Data type:  Tango::DevEnum
+ *	Data type:	Tango::DevEnum
  *	Attr type:	Scalar
  */
 	virtual void read_Automation1TaskStatus(Tango::Attribute &attr);
 	virtual bool is_Automation1TaskStatus_allowed(Tango::AttReqType type);
 /**
  *	Attribute AxisHealth related methods
- * Description:  Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
+ *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
  *
- *	Data type:  Tango::DevBoolean
+ *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 32
  */
 	virtual void read_AxisHealth(Tango::Attribute &attr);
@@ -272,7 +302,7 @@ public:
  *	Attribute TaskStatus0 related methods
  *
  *
- *	Data type:  Tango::DevBoolean
+ *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 16
  */
 	virtual void read_TaskStatus0(Tango::Attribute &attr);
@@ -281,7 +311,7 @@ public:
  *	Attribute TaskStatus1 related methods
  *
  *
- *	Data type:  Tango::DevBoolean
+ *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 17
  */
 	virtual void read_TaskStatus1(Tango::Attribute &attr);
@@ -290,16 +320,16 @@ public:
  *	Attribute TaskStatus2 related methods
  *
  *
- *	Data type:  Tango::DevBoolean
+ *	Data type:	Tango::DevBoolean
  *	Attr type:	Spectrum max = 24
  */
 	virtual void read_TaskStatus2(Tango::Attribute &attr);
 	virtual bool is_TaskStatus2_allowed(Tango::AttReqType type);
 /**
  *	Attribute AeroScriptFiles related methods
- * Description:  A list of the files present on the Automation1 controller.
+ *	Description: A list of the files present on the Automation1 controller.
  *
- *	Data type:  Tango::DevString
+ *	Data type:	Tango::DevString
  *	Attr type:	Spectrum max = 1024
  */
 	virtual void read_AeroScriptFiles(Tango::Attribute &attr);
@@ -308,8 +338,8 @@ public:
 
 	//--------------------------------------------------------
 	/**
-	 *	Method      : A1Controller::add_dynamic_attributes()
-	 * Description:  Add dynamic attributes if any.
+	 *	Method     : A1Controller::add_dynamic_attributes()
+	 *	Description: Add dynamic attributes if any.
 	 */
 	//--------------------------------------------------------
 	void add_dynamic_attributes();
@@ -321,49 +351,49 @@ public:
 public:
 	/**
 	 *	Command Reset related method
-	 * Description:  Reboots the Automation1 motion controller.
+	 *	Description: Reboots the Automation1 motion controller.
 	 *
 	 */
 	virtual void reset();
 	virtual bool is_Reset_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Start related method
-	 * Description:  Starts the Automation1 motion controller.
+	 *	Description: Starts the Automation1 motion controller.
 	 *
 	 */
 	virtual void start();
 	virtual bool is_Start_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Stop related method
-	 * Description:  Stops the Automation1 motion controller.
+	 *	Description: Stops the Automation1 motion controller.
 	 *
 	 */
 	virtual void stop();
 	virtual bool is_Stop_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Enable related method
-	 * Description:  Enables all active axes connected to the controller.
+	 *	Description: Enables all active axes connected to the controller.
 	 *
 	 */
 	virtual void enable();
 	virtual bool is_Enable_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Disable related method
-	 * Description:  Disables all active axes connected to the controller.
+	 *	Description: Disables all active axes connected to the controller.
 	 *
 	 */
 	virtual void disable();
 	virtual bool is_Disable_allowed(const CORBA::Any &any);
 	/**
 	 *	Command ClearErrors related method
-	 * Description:  Acknowledges all axis faults and clears all task errors.
+	 *	Description: Acknowledges all axis faults and clears all task errors.
 	 *
 	 */
 	virtual void clear_errors();
 	virtual bool is_ClearErrors_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramRun related method
-	 * Description:  Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.
+	 *	Description: Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.
 	 *               Running a program will automatically load the program and begin program execution. This function waits for the program to load and start but it does not wait for the program to complete.
 	 *               The AeroScript program must exist as a controller file on the Automation1 controller.
 	 *               AeroScript libraries cannot be run, the controller file must be an AeroScript program (either a source program file or a compiled program file).
@@ -373,7 +403,7 @@ public:
 	virtual bool is_AeroScriptProgramRun_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramLoad related method
-	 * Description:  Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.
+	 *	Description: Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.
 	 *               Loading does not start the program, you must call AeroScriptProgramStart to begin program execution.
 	 *               The AeroScript program must exist as a controller file on the Automation1 controller.
 	 *               AeroScript libraries cannot be loaded on a task, the controller file must be an AeroScript program (either a source program file or a compiled program file).
@@ -383,7 +413,7 @@ public:
 	virtual bool is_AeroScriptProgramLoad_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramStart related method
-	 * Description:  Starts or resumes the currently loaded AeroScript program, beginning program execution.
+	 *	Description: Starts or resumes the currently loaded AeroScript program, beginning program execution.
 	 *               A program must be loaded to be able to start or resume it. To load a program, call AeroScriptProgramLoad.
 	 *               This function waits for the loaded program to start but it does not wait for the program to complete.
 	 *
@@ -392,7 +422,7 @@ public:
 	virtual bool is_AeroScriptProgramStart_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramStop related method
-	 * Description:  Stops the currently running AeroScript program, terminating program execution.
+	 *	Description: Stops the currently running AeroScript program, terminating program execution.
 	 *               This function will wait for the specified amount of time for the loaded program to stop. If the timeout is set to -1, this function will wait indefinitely.
 	 *               This function will also stop queue mode and buffered run mode. After a program is stopped it is unloaded.
 	 *
@@ -401,7 +431,7 @@ public:
 	virtual bool is_AeroScriptProgramStop_allowed(const CORBA::Any &any);
 	/**
 	 *	Command AeroScriptProgramPause related method
-	 * Description:  Pauses the currently running AeroScript program, suspending program execution.
+	 *	Description: Pauses the currently running AeroScript program, suspending program execution.
 	 *               This function will wait for the specified amount of time for the loaded program to pause. If the timeout is set to -1, this function will wait indefinitely.
 	 *               To resume program execution, call AeroScriptProgramStart.
 	 *
@@ -410,18 +440,45 @@ public:
 	virtual bool is_AeroScriptProgramPause_allowed(const CORBA::Any &any);
 	/**
 	 *	Command CommandExecute related method
-	 * Description:  Execute an arbitrary command on the Automation1 controller
+	 *	Description: Execute an arbitrary command on the Automation1 controller
 	 *
 	 *	@param argin input
 	 */
 	virtual void command_execute(Tango::DevString argin);
 	virtual bool is_CommandExecute_allowed(const CORBA::Any &any);
+	/**
+	 *	Command CommandExecuteReturnDouble related method
+	 *	Description: Execute an Aeroscript command that returns a floating point value
+	 *
+	 *	@param argin
+	 *	@returns
+	 */
+	virtual Tango::DevDouble command_execute_return_double(Tango::DevString argin);
+	virtual bool is_CommandExecuteReturnDouble_allowed(const CORBA::Any &any);
+	/**
+	 *	Command CommandExecuteReturnInt related method
+	 *	Description: Execute an Aeroscript command that returns an integer value
+	 *
+	 *	@param argin
+	 *	@returns
+	 */
+	virtual Tango::DevLong command_execute_return_int(Tango::DevString argin);
+	virtual bool is_CommandExecuteReturnInt_allowed(const CORBA::Any &any);
+	/**
+	 *	Command CommandExecuteReturnString related method
+	 *	Description: Execute an Aeroscript command that returns a string value
+	 *
+	 *	@param argin
+	 *	@returns
+	 */
+	virtual Tango::DevString command_execute_return_string(Tango::DevString argin);
+	virtual bool is_CommandExecuteReturnString_allowed(const CORBA::Any &any);
 
 
 	//--------------------------------------------------------
 	/**
-	 *	Method      : A1Controller::add_dynamic_commands()
-	 * Description:  Add dynamic commands if any.
+	 *	Method     : A1Controller::add_dynamic_commands()
+	 *	Description: Add dynamic commands if any.
 	 */
 	//--------------------------------------------------------
 	void add_dynamic_commands();
