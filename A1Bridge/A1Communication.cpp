@@ -842,35 +842,35 @@ void A1Communication::controller_CommandExecute(const std::string& aeroScriptTex
 
 void A1Communication::axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value)
 {
-	Automation1RampType typeA1;
-	Automation1RampMode modeA1;
+    Automation1RampType typeA1;
+    Automation1RampMode modeA1;
 
     switch (type)
-	{
-		case A1Axis_ns::RampTypeEnum::_LINEAR:
-			typeA1 = Automation1RampType_Linear;
-		    break;
-		case A1Axis_ns::RampTypeEnum::_S_CURVE:
-			typeA1 = Automation1RampType_SCurve;
-		    break;
-		case A1Axis_ns::RampTypeEnum::_SINE:
-			typeA1 = Automation1RampType_Sine;
-		    break;
-	}
+    {
+        case A1Axis_ns::RampTypeEnum::_LINEAR:
+            typeA1 = Automation1RampType_Linear;
+            break;
+        case A1Axis_ns::RampTypeEnum::_S_CURVE:
+            typeA1 = Automation1RampType_SCurve;
+            break;
+        case A1Axis_ns::RampTypeEnum::_SINE:
+            typeA1 = Automation1RampType_Sine;
+            break;
+    }
 
-	switch (mode)
-	{
-		case A1Axis_ns::RampModeEnum::_RATE:
-			modeA1 = Automation1RampMode_Rate;
-		    break;
-		case A1Axis_ns::RampModeEnum::_TIME:
-			modeA1 = Automation1RampMode_Time;
-		    break;
-	}
+    switch (mode)
+    {
+        case A1Axis_ns::RampModeEnum::_RATE:
+            modeA1 = Automation1RampMode_Rate;
+            break;
+        case A1Axis_ns::RampModeEnum::_TIME:
+            modeA1 = Automation1RampMode_Time;
+            break;
+    }
     
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-	A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampType,  *m_controller, attr_Automation1TaskID_read, axis, typeA1, 0.5, typeA1, 0.5);
-	A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampValue, *m_controller, attr_Automation1TaskID_read, axis, modeA1, value, modeA1, value);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampType,  *m_controller, attr_Automation1TaskID_read, axis, typeA1, 0.5, typeA1, 0.5);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampValue, *m_controller, attr_Automation1TaskID_read, axis, modeA1, value, modeA1, value);
 
 }
 
@@ -902,16 +902,16 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
     switch (moveType)
     {
         case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveAbsolute, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveAbsolute, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_INCREMENTALMOVE:
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveIncremental, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveIncremental, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, velocity);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, velocity);
             break;
         case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown move type", __func__);

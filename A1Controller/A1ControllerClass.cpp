@@ -36,12 +36,12 @@
 
 #include <A1ControllerClass.h>
 
-/*----- PROTECTED REGION END -----*/	//	A1ControllerClass.cpp
+/*----- PROTECTED REGION END -----*/    //  A1ControllerClass.cpp
 
 //-------------------------------------------------------------------
 /**
- *	Create A1ControllerClass singleton and
- *	return it in a C function for Python usage
+ *  Create A1ControllerClass singleton and
+ *  return it in a C function for Python usage
  */
 //-------------------------------------------------------------------
 extern "C" {
@@ -51,20 +51,20 @@ __declspec(dllexport)
 
 #endif
 
-	Tango::DeviceClass *_create_A1Controller_class(const char *name) {
-		return A1Controller_ns::A1ControllerClass::init(name);
-	}
+    Tango::DeviceClass *_create_A1Controller_class(const char *name) {
+        return A1Controller_ns::A1ControllerClass::init(name);
+    }
 }
 
 namespace A1Controller_ns
 {
 //===================================================================
-//	Initialize pointer for singleton pattern
+//  Initialize pointer for singleton pattern
 //===================================================================
 A1ControllerClass *A1ControllerClass::_instance = NULL;
 
 //===================================================================
-//	Class constants
+//  Class constants
 //===================================================================
 constexpr long AxisHealthAttrib::X_DATA_SIZE;
 constexpr long TaskStatus0Attrib::X_DATA_SIZE;
@@ -73,418 +73,418 @@ constexpr long TaskStatus2Attrib::X_DATA_SIZE;
 constexpr long AeroScriptFilesAttrib::X_DATA_SIZE;
 //--------------------------------------------------------
 /**
- * method : 		A1ControllerClass::A1ControllerClass(std::string &s)
- * description : 	constructor for the A1ControllerClass
+ * method :         A1ControllerClass::A1ControllerClass(std::string &s)
+ * description :    constructor for the A1ControllerClass
  *
- * @param s	The class name
+ * @param s The class name
  */
 //--------------------------------------------------------
 A1ControllerClass::A1ControllerClass(std::string &s):Tango::DeviceClass(s)
 {
-	TANGO_LOG_INFO << "Entering A1ControllerClass constructor" << std::endl;
-	set_default_property();
-	write_class_property();
+    TANGO_LOG_INFO << "Entering A1ControllerClass constructor" << std::endl;
+    set_default_property();
+    write_class_property();
 
-	/*----- PROTECTED REGION ID(A1ControllerClass::constructor) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::constructor
+    /*----- PROTECTED REGION ID(A1ControllerClass::constructor) ENABLED START -----*/
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::constructor
 
-	TANGO_LOG_INFO << "Leaving A1ControllerClass constructor" << std::endl;
+    TANGO_LOG_INFO << "Leaving A1ControllerClass constructor" << std::endl;
 }
 
 //--------------------------------------------------------
 /**
- * method : 		A1ControllerClass::~A1ControllerClass()
- * description : 	destructor for the A1ControllerClass
+ * method :         A1ControllerClass::~A1ControllerClass()
+ * description :    destructor for the A1ControllerClass
  */
 //--------------------------------------------------------
 A1ControllerClass::~A1ControllerClass()
 {
-	/*----- PROTECTED REGION ID(A1ControllerClass::destructor) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::destructor
+    /*----- PROTECTED REGION ID(A1ControllerClass::destructor) ENABLED START -----*/
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::destructor
 
-	_instance = NULL;
+    _instance = NULL;
 }
 
 
 //--------------------------------------------------------
 /**
- * method : 		A1ControllerClass::init
- * description : 	Create the object if not already done.
+ * method :         A1ControllerClass::init
+ * description :    Create the object if not already done.
  *                  Otherwise, just return a pointer to the object
  *
- * @param	name	The class name
+ * @param   name    The class name
  */
 //--------------------------------------------------------
 A1ControllerClass *A1ControllerClass::init(const char *name)
 {
-	if (_instance == NULL)
-	{
-		try
-		{
-			std::string s(name);
-			_instance = new A1ControllerClass(s);
-		}
-		catch (std::bad_alloc &)
-		{
-			throw;
-		}
-	}
-	return _instance;
+    if (_instance == NULL)
+    {
+        try
+        {
+            std::string s(name);
+            _instance = new A1ControllerClass(s);
+        }
+        catch (std::bad_alloc &)
+        {
+            throw;
+        }
+    }
+    return _instance;
 }
 
 //--------------------------------------------------------
 /**
- * method : 		A1ControllerClass::instance
- * description : 	Check if object already created,
+ * method :         A1ControllerClass::instance
+ * description :    Check if object already created,
  *                  and return a pointer to the object
  */
 //--------------------------------------------------------
 A1ControllerClass *A1ControllerClass::instance()
 {
-	if (_instance == NULL)
-	{
-		std::cerr << "Class is not initialized !!" << std::endl;
-		exit(-1);
-	}
-	return _instance;
+    if (_instance == NULL)
+    {
+        std::cerr << "Class is not initialized !!" << std::endl;
+        exit(-1);
+    }
+    return _instance;
 }
 
 
 
 //===================================================================
-//	Command execution method calls
+//  Command execution method calls
 //===================================================================
 //--------------------------------------------------------
 /**
- * method : 		ResetClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         ResetClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *ResetClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "ResetClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->reset());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "ResetClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->reset());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		StartClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         StartClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *StartClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "StartClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->start());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "StartClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->start());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		StopClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         StopClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *StopClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "StopClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->stop());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "StopClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->stop());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		EnableClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         EnableClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *EnableClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "EnableClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->enable());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "EnableClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->enable());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		DisableClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         DisableClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *DisableClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "DisableClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->disable());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "DisableClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->disable());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		ClearErrorsClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         ClearErrorsClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *ClearErrorsClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "ClearErrorsClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->clear_errors());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "ClearErrorsClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->clear_errors());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		AeroScriptProgramRunClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         AeroScriptProgramRunClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *AeroScriptProgramRunClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "AeroScriptProgramRunClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->aero_script_program_run());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "AeroScriptProgramRunClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->aero_script_program_run());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		AeroScriptProgramLoadClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         AeroScriptProgramLoadClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *AeroScriptProgramLoadClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "AeroScriptProgramLoadClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->aero_script_program_load());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "AeroScriptProgramLoadClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->aero_script_program_load());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		AeroScriptProgramStartClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         AeroScriptProgramStartClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *AeroScriptProgramStartClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "AeroScriptProgramStartClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->aero_script_program_start());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "AeroScriptProgramStartClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->aero_script_program_start());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		AeroScriptProgramStopClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         AeroScriptProgramStopClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *AeroScriptProgramStopClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "AeroScriptProgramStopClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->aero_script_program_stop());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "AeroScriptProgramStopClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->aero_script_program_stop());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		AeroScriptProgramPauseClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         AeroScriptProgramPauseClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *AeroScriptProgramPauseClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
 {
-	TANGO_LOG_INFO << "AeroScriptProgramPauseClass::execute(): arrived" << std::endl;
-	((static_cast<A1Controller *>(device))->aero_script_program_pause());
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "AeroScriptProgramPauseClass::execute(): arrived" << std::endl;
+    ((static_cast<A1Controller *>(device))->aero_script_program_pause());
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		CommandExecuteClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         CommandExecuteClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *CommandExecuteClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
 {
-	TANGO_LOG_INFO << "CommandExecuteClass::execute(): arrived" << std::endl;
-	Tango::DevString argin;
-	extract(in_any, argin);
-	((static_cast<A1Controller *>(device))->command_execute(argin));
-	return new CORBA::Any();
+    TANGO_LOG_INFO << "CommandExecuteClass::execute(): arrived" << std::endl;
+    Tango::DevString argin;
+    extract(in_any, argin);
+    ((static_cast<A1Controller *>(device))->command_execute(argin));
+    return new CORBA::Any();
 }
 
 //--------------------------------------------------------
 /**
- * method : 		CommandExecuteReturnDoubleClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         CommandExecuteReturnDoubleClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *CommandExecuteReturnDoubleClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
 {
-	TANGO_LOG_INFO << "CommandExecuteReturnDoubleClass::execute(): arrived" << std::endl;
-	Tango::DevString argin;
-	extract(in_any, argin);
-	return insert((static_cast<A1Controller *>(device))->command_execute_return_double(argin));
+    TANGO_LOG_INFO << "CommandExecuteReturnDoubleClass::execute(): arrived" << std::endl;
+    Tango::DevString argin;
+    extract(in_any, argin);
+    return insert((static_cast<A1Controller *>(device))->command_execute_return_double(argin));
 }
 
 //--------------------------------------------------------
 /**
- * method : 		CommandExecuteReturnIntClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         CommandExecuteReturnIntClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *CommandExecuteReturnIntClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
 {
-	TANGO_LOG_INFO << "CommandExecuteReturnIntClass::execute(): arrived" << std::endl;
-	Tango::DevString argin;
-	extract(in_any, argin);
-	return insert((static_cast<A1Controller *>(device))->command_execute_return_int(argin));
+    TANGO_LOG_INFO << "CommandExecuteReturnIntClass::execute(): arrived" << std::endl;
+    Tango::DevString argin;
+    extract(in_any, argin);
+    return insert((static_cast<A1Controller *>(device))->command_execute_return_int(argin));
 }
 
 //--------------------------------------------------------
 /**
- * method : 		CommandExecuteReturnStringClass::execute()
- * description : 	method to trigger the execution of the command.
+ * method :         CommandExecuteReturnStringClass::execute()
+ * description :    method to trigger the execution of the command.
  *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
+ * @param   device  The device on which the command must be executed
+ * @param   in_any  The command input data
  *
- *	returns The command output data (packed in the Any object)
+ *  returns The command output data (packed in the Any object)
  */
 //--------------------------------------------------------
 CORBA::Any *CommandExecuteReturnStringClass::execute(Tango::DeviceImpl *device, const CORBA::Any &in_any)
 {
-	TANGO_LOG_INFO << "CommandExecuteReturnStringClass::execute(): arrived" << std::endl;
-	Tango::DevString argin;
-	extract(in_any, argin);
-	return insert((static_cast<A1Controller *>(device))->command_execute_return_string(argin));
+    TANGO_LOG_INFO << "CommandExecuteReturnStringClass::execute(): arrived" << std::endl;
+    Tango::DevString argin;
+    extract(in_any, argin);
+    return insert((static_cast<A1Controller *>(device))->command_execute_return_string(argin));
 }
 
 
 //===================================================================
-//	Properties management
+//  Properties management
 //===================================================================
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::get_class_property()
- *	Description: Get the class property for specified name.
+ *  Method     : A1ControllerClass::get_class_property()
+ *  Description: Get the class property for specified name.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1ControllerClass::get_class_property(std::string &prop_name)
 {
-	for (unsigned int i=0 ; i<cl_prop.size() ; i++)
-		if (cl_prop[i].name == prop_name)
-			return cl_prop[i];
-	//	if not found, returns  an empty DbDatum
-	return Tango::DbDatum(prop_name);
+    for (unsigned int i=0 ; i<cl_prop.size() ; i++)
+        if (cl_prop[i].name == prop_name)
+            return cl_prop[i];
+    //  if not found, returns  an empty DbDatum
+    return Tango::DbDatum(prop_name);
 }
 
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::get_default_device_property()
- *	Description: Return the default value for device property.
+ *  Method     : A1ControllerClass::get_default_device_property()
+ *  Description: Return the default value for device property.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1ControllerClass::get_default_device_property(std::string &prop_name)
 {
-	for (unsigned int i=0 ; i<dev_def_prop.size() ; i++)
-		if (dev_def_prop[i].name == prop_name)
-			return dev_def_prop[i];
-	//	if not found, return  an empty DbDatum
-	return Tango::DbDatum(prop_name);
+    for (unsigned int i=0 ; i<dev_def_prop.size() ; i++)
+        if (dev_def_prop[i].name == prop_name)
+            return dev_def_prop[i];
+    //  if not found, return  an empty DbDatum
+    return Tango::DbDatum(prop_name);
 }
 
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::get_default_class_property()
- *	Description: Return the default value for class property.
+ *  Method     : A1ControllerClass::get_default_class_property()
+ *  Description: Return the default value for class property.
  */
 //--------------------------------------------------------
 Tango::DbDatum A1ControllerClass::get_default_class_property(std::string &prop_name)
 {
-	for (unsigned int i=0 ; i<cl_def_prop.size() ; i++)
-		if (cl_def_prop[i].name == prop_name)
-			return cl_def_prop[i];
-	//	if not found, return  an empty DbDatum
-	return Tango::DbDatum(prop_name);
+    for (unsigned int i=0 ; i<cl_def_prop.size() ; i++)
+        if (cl_def_prop[i].name == prop_name)
+            return cl_def_prop[i];
+    //  if not found, return  an empty DbDatum
+    return Tango::DbDatum(prop_name);
 }
 
 
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::set_default_property()
- *	Description: Set default property (class and device) for wizard.
+ *  Method     : A1ControllerClass::set_default_property()
+ *  Description: Set default property (class and device) for wizard.
  *                For each property, add to wizard property name and description.
  *                If default value has been set, add it to wizard property and
  *                store it in a DbDatum.
@@ -492,760 +492,760 @@ Tango::DbDatum A1ControllerClass::get_default_class_property(std::string &prop_n
 //--------------------------------------------------------
 void A1ControllerClass::set_default_property()
 {
-	std::string	prop_name;
-	std::string	prop_desc;
-	std::string	prop_def;
-	std::vector<std::string>	vect_data;
+    std::string prop_name;
+    std::string prop_desc;
+    std::string prop_def;
+    std::vector<std::string>    vect_data;
 
-	//	Set Default Class Properties
+    //  Set Default Class Properties
 
-	//	Set Default device Properties
-	prop_name = "IpAddress";
-	prop_desc = "IP address of the motion controller";
-	prop_def  = "";
-	vect_data.clear();
-	if (prop_def.length()>0)
-	{
-		Tango::DbDatum	data(prop_name);
-		data << vect_data ;
-		dev_def_prop.push_back(data);
-		add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
-	}
-	else
-		add_wiz_dev_prop(prop_name, prop_desc);
-	prop_name = "Simulate";
-	prop_desc = "Use simulation mode";
-	prop_def  = "0";
-	vect_data.clear();
-	vect_data.push_back("0");
-	if (prop_def.length()>0)
-	{
-		Tango::DbDatum	data(prop_name);
-		data << vect_data ;
-		dev_def_prop.push_back(data);
-		add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
-	}
-	else
-		add_wiz_dev_prop(prop_name, prop_desc);
-	prop_name = "Username";
-	prop_desc = "Username used to connect to Automation1 controller";
-	prop_def  = "";
-	vect_data.clear();
-	if (prop_def.length()>0)
-	{
-		Tango::DbDatum	data(prop_name);
-		data << vect_data ;
-		dev_def_prop.push_back(data);
-		add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
-	}
-	else
-		add_wiz_dev_prop(prop_name, prop_desc);
-	prop_name = "Password";
-	prop_desc = "Password used to connect to Automation1 controller";
-	prop_def  = "";
-	vect_data.clear();
-	if (prop_def.length()>0)
-	{
-		Tango::DbDatum	data(prop_name);
-		data << vect_data ;
-		dev_def_prop.push_back(data);
-		add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
-	}
-	else
-		add_wiz_dev_prop(prop_name, prop_desc);
+    //  Set Default device Properties
+    prop_name = "IpAddress";
+    prop_desc = "IP address of the motion controller";
+    prop_def  = "";
+    vect_data.clear();
+    if (prop_def.length()>0)
+    {
+        Tango::DbDatum  data(prop_name);
+        data << vect_data ;
+        dev_def_prop.push_back(data);
+        add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
+    }
+    else
+        add_wiz_dev_prop(prop_name, prop_desc);
+    prop_name = "Simulate";
+    prop_desc = "Use simulation mode";
+    prop_def  = "0";
+    vect_data.clear();
+    vect_data.push_back("0");
+    if (prop_def.length()>0)
+    {
+        Tango::DbDatum  data(prop_name);
+        data << vect_data ;
+        dev_def_prop.push_back(data);
+        add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
+    }
+    else
+        add_wiz_dev_prop(prop_name, prop_desc);
+    prop_name = "Username";
+    prop_desc = "Username used to connect to Automation1 controller";
+    prop_def  = "";
+    vect_data.clear();
+    if (prop_def.length()>0)
+    {
+        Tango::DbDatum  data(prop_name);
+        data << vect_data ;
+        dev_def_prop.push_back(data);
+        add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
+    }
+    else
+        add_wiz_dev_prop(prop_name, prop_desc);
+    prop_name = "Password";
+    prop_desc = "Password used to connect to Automation1 controller";
+    prop_def  = "";
+    vect_data.clear();
+    if (prop_def.length()>0)
+    {
+        Tango::DbDatum  data(prop_name);
+        data << vect_data ;
+        dev_def_prop.push_back(data);
+        add_wiz_dev_prop(prop_name, prop_desc,  prop_def);
+    }
+    else
+        add_wiz_dev_prop(prop_name, prop_desc);
 }
 
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::write_class_property()
- *	Description: Set class description fields as property in database
+ *  Method     : A1ControllerClass::write_class_property()
+ *  Description: Set class description fields as property in database
  */
 //--------------------------------------------------------
 void A1ControllerClass::write_class_property()
 {
-	//	First time, check if database used
-	if (Tango::Util::_UseDb == false)
-		return;
+    //  First time, check if database used
+    if (Tango::Util::_UseDb == false)
+        return;
 
-	Tango::DbData	data;
-	std::string	classname = get_name();
-	std::string	header;
+    Tango::DbData   data;
+    std::string classname = get_name();
+    std::string header;
 
-	//	Put title
-	Tango::DbDatum	title("ProjectTitle");
-	std::string	str_title("");
-	title << str_title;
-	data.push_back(title);
+    //  Put title
+    Tango::DbDatum  title("ProjectTitle");
+    std::string str_title("");
+    title << str_title;
+    data.push_back(title);
 
-	//	Put Description
-	Tango::DbDatum	description("Description");
-	std::vector<std::string>	str_desc;
-	str_desc.push_back("Controller class for the Aerotech Automation 1 device server");
-	description << str_desc;
-	data.push_back(description);
+    //  Put Description
+    Tango::DbDatum  description("Description");
+    std::vector<std::string>    str_desc;
+    str_desc.push_back("Controller class for the Aerotech Automation 1 device server");
+    description << str_desc;
+    data.push_back(description);
 
-	//  Put inheritance
-	Tango::DbDatum	inher_datum("InheritedFrom");
-	std::vector<std::string> inheritance;
-	inheritance.push_back("TANGO_BASE_CLASS");
-	inher_datum << inheritance;
-	data.push_back(inher_datum);
+    //  Put inheritance
+    Tango::DbDatum  inher_datum("InheritedFrom");
+    std::vector<std::string> inheritance;
+    inheritance.push_back("TANGO_BASE_CLASS");
+    inher_datum << inheritance;
+    data.push_back(inher_datum);
 
-	//	Call database and and values
-	get_db_class()->put_property(data);
+    //  Call database and and values
+    get_db_class()->put_property(data);
 }
 
 //===================================================================
-//	Factory methods
+//  Factory methods
 //===================================================================
 
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::device_factory()
- *	Description: Create the device object(s)
+ *  Method     : A1ControllerClass::device_factory()
+ *  Description: Create the device object(s)
  *                and store them in the device list
  */
 //--------------------------------------------------------
 void A1ControllerClass::device_factory(const Tango::DevVarStringArray *devlist_ptr)
 {
-	/*----- PROTECTED REGION ID(A1ControllerClass::device_factory_before) ENABLED START -----*/
-	
-	//	Add your own code
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::device_factory_before
+    /*----- PROTECTED REGION ID(A1ControllerClass::device_factory_before) ENABLED START -----*/
+    
+    //  Add your own code
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::device_factory_before
 
-	//	Create devices and add it into the device list
-	for (unsigned long i=0 ; i<devlist_ptr->length() ; i++)
-	{
-		TANGO_LOG_DEBUG << "Device name : " << (*devlist_ptr)[i].in() << std::endl;
-		device_list.push_back(new A1Controller(this, (*devlist_ptr)[i]));
-	}
+    //  Create devices and add it into the device list
+    for (unsigned long i=0 ; i<devlist_ptr->length() ; i++)
+    {
+        TANGO_LOG_DEBUG << "Device name : " << (*devlist_ptr)[i].in() << std::endl;
+        device_list.push_back(new A1Controller(this, (*devlist_ptr)[i]));
+    }
 
-	//	Manage dynamic attributes if any
-	erase_dynamic_attributes(devlist_ptr, get_class_attr()->get_attr_list());
+    //  Manage dynamic attributes if any
+    erase_dynamic_attributes(devlist_ptr, get_class_attr()->get_attr_list());
 
-	//	Export devices to the outside world
-	for (unsigned long i=1 ; i<=devlist_ptr->length() ; i++)
-	{
-		//	Add dynamic attributes if any
-		A1Controller *dev = static_cast<A1Controller *>(device_list[device_list.size()-i]);
-		dev->add_dynamic_attributes();
+    //  Export devices to the outside world
+    for (unsigned long i=1 ; i<=devlist_ptr->length() ; i++)
+    {
+        //  Add dynamic attributes if any
+        A1Controller *dev = static_cast<A1Controller *>(device_list[device_list.size()-i]);
+        dev->add_dynamic_attributes();
 
-		//	Check before if database used.
-		if ((Tango::Util::_UseDb == true) && (Tango::Util::_FileDb == false))
-			export_device(dev);
-		else
-			export_device(dev, dev->get_name().c_str());
-	}
+        //  Check before if database used.
+        if ((Tango::Util::_UseDb == true) && (Tango::Util::_FileDb == false))
+            export_device(dev);
+        else
+            export_device(dev, dev->get_name().c_str());
+    }
 
-	/*----- PROTECTED REGION ID(A1ControllerClass::device_factory_after) ENABLED START -----*/
-	
-	//	Add your own code
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::device_factory_after
+    /*----- PROTECTED REGION ID(A1ControllerClass::device_factory_after) ENABLED START -----*/
+    
+    //  Add your own code
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::device_factory_after
 }
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::attribute_factory()
- *	Description: Create the attribute object(s)
+ *  Method     : A1ControllerClass::attribute_factory()
+ *  Description: Create the attribute object(s)
  *                and store them in the attribute list
  */
 //--------------------------------------------------------
 void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
 {
-	/*----- PROTECTED REGION ID(A1ControllerClass::attribute_factory_before) ENABLED START -----*/
-	
-	//	Add your own code
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::attribute_factory_before
-	//	Attribute : ControllerRunning
-	ControllerRunningAttrib	*controllerrunning = new ControllerRunningAttrib();
-	Tango::UserDefaultAttrProp	controllerrunning_prop;
-	controllerrunning_prop.set_description("True if the controller has been started otherwise false.");
-	controllerrunning_prop.set_label("Controller Running");
-	//	unit	not set for ControllerRunning
-	//	standard_unit	not set for ControllerRunning
-	//	display_unit	not set for ControllerRunning
-	//	format	not set for ControllerRunning
-	//	max_value	not set for ControllerRunning
-	//	min_value	not set for ControllerRunning
-	//	max_alarm	not set for ControllerRunning
-	//	min_alarm	not set for ControllerRunning
-	//	max_warning	not set for ControllerRunning
-	//	min_warning	not set for ControllerRunning
-	//	delta_t	not set for ControllerRunning
-	//	delta_val	not set for ControllerRunning
-	controllerrunning->set_default_properties(controllerrunning_prop);
-	//	Not Polled
-	controllerrunning->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(controllerrunning);
+    /*----- PROTECTED REGION ID(A1ControllerClass::attribute_factory_before) ENABLED START -----*/
+    
+    //  Add your own code
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::attribute_factory_before
+    //  Attribute : ControllerRunning
+    ControllerRunningAttrib *controllerrunning = new ControllerRunningAttrib();
+    Tango::UserDefaultAttrProp  controllerrunning_prop;
+    controllerrunning_prop.set_description("True if the controller has been started otherwise false.");
+    controllerrunning_prop.set_label("Controller Running");
+    //  unit    not set for ControllerRunning
+    //  standard_unit   not set for ControllerRunning
+    //  display_unit    not set for ControllerRunning
+    //  format  not set for ControllerRunning
+    //  max_value   not set for ControllerRunning
+    //  min_value   not set for ControllerRunning
+    //  max_alarm   not set for ControllerRunning
+    //  min_alarm   not set for ControllerRunning
+    //  max_warning not set for ControllerRunning
+    //  min_warning not set for ControllerRunning
+    //  delta_t not set for ControllerRunning
+    //  delta_val   not set for ControllerRunning
+    controllerrunning->set_default_properties(controllerrunning_prop);
+    //  Not Polled
+    controllerrunning->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(controllerrunning);
 
-	//	Attribute : AxisCount
-	AxisCountAttrib	*axiscount = new AxisCountAttrib();
-	Tango::UserDefaultAttrProp	axiscount_prop;
-	axiscount_prop.set_description("The maximum number of axis slots available on this controller, not the number of drives connected.");
-	axiscount_prop.set_label("Available Axis Count");
-	//	unit	not set for AxisCount
-	//	standard_unit	not set for AxisCount
-	//	display_unit	not set for AxisCount
-	//	format	not set for AxisCount
-	//	max_value	not set for AxisCount
-	//	min_value	not set for AxisCount
-	//	max_alarm	not set for AxisCount
-	//	min_alarm	not set for AxisCount
-	//	max_warning	not set for AxisCount
-	//	min_warning	not set for AxisCount
-	//	delta_t	not set for AxisCount
-	//	delta_val	not set for AxisCount
-	axiscount->set_default_properties(axiscount_prop);
-	//	Not Polled
-	axiscount->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(axiscount);
+    //  Attribute : AxisCount
+    AxisCountAttrib *axiscount = new AxisCountAttrib();
+    Tango::UserDefaultAttrProp  axiscount_prop;
+    axiscount_prop.set_description("The maximum number of axis slots available on this controller, not the number of drives connected.");
+    axiscount_prop.set_label("Available Axis Count");
+    //  unit    not set for AxisCount
+    //  standard_unit   not set for AxisCount
+    //  display_unit    not set for AxisCount
+    //  format  not set for AxisCount
+    //  max_value   not set for AxisCount
+    //  min_value   not set for AxisCount
+    //  max_alarm   not set for AxisCount
+    //  min_alarm   not set for AxisCount
+    //  max_warning not set for AxisCount
+    //  min_warning not set for AxisCount
+    //  delta_t not set for AxisCount
+    //  delta_val   not set for AxisCount
+    axiscount->set_default_properties(axiscount_prop);
+    //  Not Polled
+    axiscount->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(axiscount);
 
-	//	Attribute : TaskCount
-	TaskCountAttrib	*taskcount = new TaskCountAttrib();
-	Tango::UserDefaultAttrProp	taskcount_prop;
-	taskcount_prop.set_description("The maximum number of task slots available on this controller.");
-	taskcount_prop.set_label("Task Count");
-	//	unit	not set for TaskCount
-	//	standard_unit	not set for TaskCount
-	//	display_unit	not set for TaskCount
-	//	format	not set for TaskCount
-	//	max_value	not set for TaskCount
-	//	min_value	not set for TaskCount
-	//	max_alarm	not set for TaskCount
-	//	min_alarm	not set for TaskCount
-	//	max_warning	not set for TaskCount
-	//	min_warning	not set for TaskCount
-	//	delta_t	not set for TaskCount
-	//	delta_val	not set for TaskCount
-	taskcount->set_default_properties(taskcount_prop);
-	//	Not Polled
-	taskcount->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(taskcount);
+    //  Attribute : TaskCount
+    TaskCountAttrib *taskcount = new TaskCountAttrib();
+    Tango::UserDefaultAttrProp  taskcount_prop;
+    taskcount_prop.set_description("The maximum number of task slots available on this controller.");
+    taskcount_prop.set_label("Task Count");
+    //  unit    not set for TaskCount
+    //  standard_unit   not set for TaskCount
+    //  display_unit    not set for TaskCount
+    //  format  not set for TaskCount
+    //  max_value   not set for TaskCount
+    //  min_value   not set for TaskCount
+    //  max_alarm   not set for TaskCount
+    //  min_alarm   not set for TaskCount
+    //  max_warning not set for TaskCount
+    //  min_warning not set for TaskCount
+    //  delta_t not set for TaskCount
+    //  delta_val   not set for TaskCount
+    taskcount->set_default_properties(taskcount_prop);
+    //  Not Polled
+    taskcount->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(taskcount);
 
-	//	Attribute : APIVersion
-	APIVersionAttrib	*apiversion = new APIVersionAttrib();
-	Tango::UserDefaultAttrProp	apiversion_prop;
-	apiversion_prop.set_description("The version of the C API in use.");
-	apiversion_prop.set_label("API Version");
-	//	unit	not set for APIVersion
-	//	standard_unit	not set for APIVersion
-	//	display_unit	not set for APIVersion
-	//	format	not set for APIVersion
-	//	max_value	not set for APIVersion
-	//	min_value	not set for APIVersion
-	//	max_alarm	not set for APIVersion
-	//	min_alarm	not set for APIVersion
-	//	max_warning	not set for APIVersion
-	//	min_warning	not set for APIVersion
-	//	delta_t	not set for APIVersion
-	//	delta_val	not set for APIVersion
-	apiversion->set_default_properties(apiversion_prop);
-	//	Not Polled
-	apiversion->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(apiversion);
+    //  Attribute : APIVersion
+    APIVersionAttrib    *apiversion = new APIVersionAttrib();
+    Tango::UserDefaultAttrProp  apiversion_prop;
+    apiversion_prop.set_description("The version of the C API in use.");
+    apiversion_prop.set_label("API Version");
+    //  unit    not set for APIVersion
+    //  standard_unit   not set for APIVersion
+    //  display_unit    not set for APIVersion
+    //  format  not set for APIVersion
+    //  max_value   not set for APIVersion
+    //  min_value   not set for APIVersion
+    //  max_alarm   not set for APIVersion
+    //  min_alarm   not set for APIVersion
+    //  max_warning not set for APIVersion
+    //  min_warning not set for APIVersion
+    //  delta_t not set for APIVersion
+    //  delta_val   not set for APIVersion
+    apiversion->set_default_properties(apiversion_prop);
+    //  Not Polled
+    apiversion->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(apiversion);
 
-	//	Attribute : AeroScriptFilePath
-	AeroScriptFilePathAttrib	*aeroscriptfilepath = new AeroScriptFilePathAttrib();
-	Tango::UserDefaultAttrProp	aeroscriptfilepath_prop;
-	aeroscriptfilepath_prop.set_description("Attempts to load the file path entered into the write attribute as an AeroScript on the\ncontroller. The read attribute shows the currently loaded file path. Full file paths must be\nused.");
-	aeroscriptfilepath_prop.set_label("AeroScript File");
-	//	unit	not set for AeroScriptFilePath
-	//	standard_unit	not set for AeroScriptFilePath
-	//	display_unit	not set for AeroScriptFilePath
-	//	format	not set for AeroScriptFilePath
-	//	max_value	not set for AeroScriptFilePath
-	//	min_value	not set for AeroScriptFilePath
-	//	max_alarm	not set for AeroScriptFilePath
-	//	min_alarm	not set for AeroScriptFilePath
-	//	max_warning	not set for AeroScriptFilePath
-	//	min_warning	not set for AeroScriptFilePath
-	//	delta_t	not set for AeroScriptFilePath
-	//	delta_val	not set for AeroScriptFilePath
-	aeroscriptfilepath->set_default_properties(aeroscriptfilepath_prop);
-	//	Not Polled
-	aeroscriptfilepath->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(aeroscriptfilepath);
+    //  Attribute : AeroScriptFilePath
+    AeroScriptFilePathAttrib    *aeroscriptfilepath = new AeroScriptFilePathAttrib();
+    Tango::UserDefaultAttrProp  aeroscriptfilepath_prop;
+    aeroscriptfilepath_prop.set_description("Attempts to load the file path entered into the write attribute as an AeroScript on the\ncontroller. The read attribute shows the currently loaded file path. Full file paths must be\nused.");
+    aeroscriptfilepath_prop.set_label("AeroScript File");
+    //  unit    not set for AeroScriptFilePath
+    //  standard_unit   not set for AeroScriptFilePath
+    //  display_unit    not set for AeroScriptFilePath
+    //  format  not set for AeroScriptFilePath
+    //  max_value   not set for AeroScriptFilePath
+    //  min_value   not set for AeroScriptFilePath
+    //  max_alarm   not set for AeroScriptFilePath
+    //  min_alarm   not set for AeroScriptFilePath
+    //  max_warning not set for AeroScriptFilePath
+    //  min_warning not set for AeroScriptFilePath
+    //  delta_t not set for AeroScriptFilePath
+    //  delta_val   not set for AeroScriptFilePath
+    aeroscriptfilepath->set_default_properties(aeroscriptfilepath_prop);
+    //  Not Polled
+    aeroscriptfilepath->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(aeroscriptfilepath);
 
-	//	Attribute : Automation1ProgramStopTimeout
-	Automation1ProgramStopTimeoutAttrib	*automation1programstoptimeout = new Automation1ProgramStopTimeoutAttrib();
-	Tango::UserDefaultAttrProp	automation1programstoptimeout_prop;
-	automation1programstoptimeout_prop.set_description("Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer\nthan the timeout, the controller returns an error.");
-	automation1programstoptimeout_prop.set_label("Program stop/pause timeout");
-	automation1programstoptimeout_prop.set_unit("ms");
-	//	standard_unit	not set for Automation1ProgramStopTimeout
-	//	display_unit	not set for Automation1ProgramStopTimeout
-	//	format	not set for Automation1ProgramStopTimeout
-	//	max_value	not set for Automation1ProgramStopTimeout
-	//	min_value	not set for Automation1ProgramStopTimeout
-	//	max_alarm	not set for Automation1ProgramStopTimeout
-	//	min_alarm	not set for Automation1ProgramStopTimeout
-	//	max_warning	not set for Automation1ProgramStopTimeout
-	//	min_warning	not set for Automation1ProgramStopTimeout
-	//	delta_t	not set for Automation1ProgramStopTimeout
-	//	delta_val	not set for Automation1ProgramStopTimeout
-	automation1programstoptimeout->set_default_properties(automation1programstoptimeout_prop);
-	//	Not Polled
-	automation1programstoptimeout->set_disp_level(Tango::EXPERT);
-	//	Not Memorized
-	att_list.push_back(automation1programstoptimeout);
+    //  Attribute : Automation1ProgramStopTimeout
+    Automation1ProgramStopTimeoutAttrib *automation1programstoptimeout = new Automation1ProgramStopTimeoutAttrib();
+    Tango::UserDefaultAttrProp  automation1programstoptimeout_prop;
+    automation1programstoptimeout_prop.set_description("Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer\nthan the timeout, the controller returns an error.");
+    automation1programstoptimeout_prop.set_label("Program stop/pause timeout");
+    automation1programstoptimeout_prop.set_unit("ms");
+    //  standard_unit   not set for Automation1ProgramStopTimeout
+    //  display_unit    not set for Automation1ProgramStopTimeout
+    //  format  not set for Automation1ProgramStopTimeout
+    //  max_value   not set for Automation1ProgramStopTimeout
+    //  min_value   not set for Automation1ProgramStopTimeout
+    //  max_alarm   not set for Automation1ProgramStopTimeout
+    //  min_alarm   not set for Automation1ProgramStopTimeout
+    //  max_warning not set for Automation1ProgramStopTimeout
+    //  min_warning not set for Automation1ProgramStopTimeout
+    //  delta_t not set for Automation1ProgramStopTimeout
+    //  delta_val   not set for Automation1ProgramStopTimeout
+    automation1programstoptimeout->set_default_properties(automation1programstoptimeout_prop);
+    //  Not Polled
+    automation1programstoptimeout->set_disp_level(Tango::EXPERT);
+    //  Not Memorized
+    att_list.push_back(automation1programstoptimeout);
 
-	//	Attribute : Automation1TaskID
-	Automation1TaskIDAttrib	*automation1taskid = new Automation1TaskIDAttrib();
-	Tango::UserDefaultAttrProp	automation1taskid_prop;
-	automation1taskid_prop.set_description("Automation1 task index number. Automation1 commands are run under this task.");
-	automation1taskid_prop.set_label("Automation1 task ID");
-	//	unit	not set for Automation1TaskID
-	//	standard_unit	not set for Automation1TaskID
-	//	display_unit	not set for Automation1TaskID
-	//	format	not set for Automation1TaskID
-	automation1taskid_prop.set_max_value("32");
-	automation1taskid_prop.set_min_value("1");
-	//	max_alarm	not set for Automation1TaskID
-	//	min_alarm	not set for Automation1TaskID
-	//	max_warning	not set for Automation1TaskID
-	//	min_warning	not set for Automation1TaskID
-	//	delta_t	not set for Automation1TaskID
-	//	delta_val	not set for Automation1TaskID
-	automation1taskid->set_default_properties(automation1taskid_prop);
-	//	Not Polled
-	automation1taskid->set_disp_level(Tango::EXPERT);
-	//	Not Memorized
-	att_list.push_back(automation1taskid);
+    //  Attribute : Automation1TaskID
+    Automation1TaskIDAttrib *automation1taskid = new Automation1TaskIDAttrib();
+    Tango::UserDefaultAttrProp  automation1taskid_prop;
+    automation1taskid_prop.set_description("Automation1 task index number. Automation1 commands are run under this task.");
+    automation1taskid_prop.set_label("Automation1 task ID");
+    //  unit    not set for Automation1TaskID
+    //  standard_unit   not set for Automation1TaskID
+    //  display_unit    not set for Automation1TaskID
+    //  format  not set for Automation1TaskID
+    automation1taskid_prop.set_max_value("32");
+    automation1taskid_prop.set_min_value("1");
+    //  max_alarm   not set for Automation1TaskID
+    //  min_alarm   not set for Automation1TaskID
+    //  max_warning not set for Automation1TaskID
+    //  min_warning not set for Automation1TaskID
+    //  delta_t not set for Automation1TaskID
+    //  delta_val   not set for Automation1TaskID
+    automation1taskid->set_default_properties(automation1taskid_prop);
+    //  Not Polled
+    automation1taskid->set_disp_level(Tango::EXPERT);
+    //  Not Memorized
+    att_list.push_back(automation1taskid);
 
-	//	Attribute : Automation1TaskStatus
-	Automation1TaskStatusAttrib	*automation1taskstatus = new Automation1TaskStatusAttrib();
-	Tango::UserDefaultAttrProp	automation1taskstatus_prop;
-	automation1taskstatus_prop.set_description("Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)");
-	automation1taskstatus_prop.set_label("Automation1 Task Status");
-	//	unit	not set for Automation1TaskStatus
-	//	standard_unit	not set for Automation1TaskStatus
-	//	display_unit	not set for Automation1TaskStatus
-	//	format	not set for Automation1TaskStatus
-	//	max_value	not set for Automation1TaskStatus
-	//	min_value	not set for Automation1TaskStatus
-	//	max_alarm	not set for Automation1TaskStatus
-	//	min_alarm	not set for Automation1TaskStatus
-	//	max_warning	not set for Automation1TaskStatus
-	//	min_warning	not set for Automation1TaskStatus
-	//	delta_t	not set for Automation1TaskStatus
-	//	delta_val	not set for Automation1TaskStatus
-	{
-		std::vector<std::string> labels;
-		labels.push_back("Unavailable");
-		labels.push_back("Inactive");
-		labels.push_back("Idle");
-		labels.push_back("Program Ready");
-		labels.push_back("Program Running");
-		labels.push_back("Program Feedhold");
-		labels.push_back("Program Paused");
-		labels.push_back("Program Complete");
-		labels.push_back("Error");
-		labels.push_back("Queue Running");
-		labels.push_back("Queue Paused");
-		automation1taskstatus_prop.set_enum_labels(labels);
-	}
-	automation1taskstatus->set_default_properties(automation1taskstatus_prop);
-	//	Not Polled
-	automation1taskstatus->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(automation1taskstatus);
+    //  Attribute : Automation1TaskStatus
+    Automation1TaskStatusAttrib *automation1taskstatus = new Automation1TaskStatusAttrib();
+    Tango::UserDefaultAttrProp  automation1taskstatus_prop;
+    automation1taskstatus_prop.set_description("Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)");
+    automation1taskstatus_prop.set_label("Automation1 Task Status");
+    //  unit    not set for Automation1TaskStatus
+    //  standard_unit   not set for Automation1TaskStatus
+    //  display_unit    not set for Automation1TaskStatus
+    //  format  not set for Automation1TaskStatus
+    //  max_value   not set for Automation1TaskStatus
+    //  min_value   not set for Automation1TaskStatus
+    //  max_alarm   not set for Automation1TaskStatus
+    //  min_alarm   not set for Automation1TaskStatus
+    //  max_warning not set for Automation1TaskStatus
+    //  min_warning not set for Automation1TaskStatus
+    //  delta_t not set for Automation1TaskStatus
+    //  delta_val   not set for Automation1TaskStatus
+    {
+        std::vector<std::string> labels;
+        labels.push_back("Unavailable");
+        labels.push_back("Inactive");
+        labels.push_back("Idle");
+        labels.push_back("Program Ready");
+        labels.push_back("Program Running");
+        labels.push_back("Program Feedhold");
+        labels.push_back("Program Paused");
+        labels.push_back("Program Complete");
+        labels.push_back("Error");
+        labels.push_back("Queue Running");
+        labels.push_back("Queue Paused");
+        automation1taskstatus_prop.set_enum_labels(labels);
+    }
+    automation1taskstatus->set_default_properties(automation1taskstatus_prop);
+    //  Not Polled
+    automation1taskstatus->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(automation1taskstatus);
 
-	//	Attribute : AxisHealth
-	AxisHealthAttrib	*axishealth = new AxisHealthAttrib();
-	Tango::UserDefaultAttrProp	axishealth_prop;
-	axishealth_prop.set_description("Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).");
-	axishealth_prop.set_label("Axis");
-	//	unit	not set for AxisHealth
-	//	standard_unit	not set for AxisHealth
-	//	display_unit	not set for AxisHealth
-	//	format	not set for AxisHealth
-	//	max_value	not set for AxisHealth
-	//	min_value	not set for AxisHealth
-	//	max_alarm	not set for AxisHealth
-	//	min_alarm	not set for AxisHealth
-	//	max_warning	not set for AxisHealth
-	//	min_warning	not set for AxisHealth
-	//	delta_t	not set for AxisHealth
-	//	delta_val	not set for AxisHealth
-	axishealth->set_default_properties(axishealth_prop);
-	//	Not Polled
-	axishealth->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(axishealth);
+    //  Attribute : AxisHealth
+    AxisHealthAttrib    *axishealth = new AxisHealthAttrib();
+    Tango::UserDefaultAttrProp  axishealth_prop;
+    axishealth_prop.set_description("Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).");
+    axishealth_prop.set_label("Axis");
+    //  unit    not set for AxisHealth
+    //  standard_unit   not set for AxisHealth
+    //  display_unit    not set for AxisHealth
+    //  format  not set for AxisHealth
+    //  max_value   not set for AxisHealth
+    //  min_value   not set for AxisHealth
+    //  max_alarm   not set for AxisHealth
+    //  min_alarm   not set for AxisHealth
+    //  max_warning not set for AxisHealth
+    //  min_warning not set for AxisHealth
+    //  delta_t not set for AxisHealth
+    //  delta_val   not set for AxisHealth
+    axishealth->set_default_properties(axishealth_prop);
+    //  Not Polled
+    axishealth->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(axishealth);
 
-	//	Attribute : TaskStatus0
-	TaskStatus0Attrib	*taskstatus0 = new TaskStatus0Attrib();
-	Tango::UserDefaultAttrProp	taskstatus0_prop;
-	//	description	not set for TaskStatus0
-	//	label	not set for TaskStatus0
-	//	unit	not set for TaskStatus0
-	//	standard_unit	not set for TaskStatus0
-	//	display_unit	not set for TaskStatus0
-	//	format	not set for TaskStatus0
-	//	max_value	not set for TaskStatus0
-	//	min_value	not set for TaskStatus0
-	//	max_alarm	not set for TaskStatus0
-	//	min_alarm	not set for TaskStatus0
-	//	max_warning	not set for TaskStatus0
-	//	min_warning	not set for TaskStatus0
-	//	delta_t	not set for TaskStatus0
-	//	delta_val	not set for TaskStatus0
-	taskstatus0->set_default_properties(taskstatus0_prop);
-	//	Not Polled
-	taskstatus0->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(taskstatus0);
+    //  Attribute : TaskStatus0
+    TaskStatus0Attrib   *taskstatus0 = new TaskStatus0Attrib();
+    Tango::UserDefaultAttrProp  taskstatus0_prop;
+    //  description not set for TaskStatus0
+    //  label   not set for TaskStatus0
+    //  unit    not set for TaskStatus0
+    //  standard_unit   not set for TaskStatus0
+    //  display_unit    not set for TaskStatus0
+    //  format  not set for TaskStatus0
+    //  max_value   not set for TaskStatus0
+    //  min_value   not set for TaskStatus0
+    //  max_alarm   not set for TaskStatus0
+    //  min_alarm   not set for TaskStatus0
+    //  max_warning not set for TaskStatus0
+    //  min_warning not set for TaskStatus0
+    //  delta_t not set for TaskStatus0
+    //  delta_val   not set for TaskStatus0
+    taskstatus0->set_default_properties(taskstatus0_prop);
+    //  Not Polled
+    taskstatus0->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(taskstatus0);
 
-	//	Attribute : TaskStatus1
-	TaskStatus1Attrib	*taskstatus1 = new TaskStatus1Attrib();
-	Tango::UserDefaultAttrProp	taskstatus1_prop;
-	//	description	not set for TaskStatus1
-	//	label	not set for TaskStatus1
-	//	unit	not set for TaskStatus1
-	//	standard_unit	not set for TaskStatus1
-	//	display_unit	not set for TaskStatus1
-	//	format	not set for TaskStatus1
-	//	max_value	not set for TaskStatus1
-	//	min_value	not set for TaskStatus1
-	//	max_alarm	not set for TaskStatus1
-	//	min_alarm	not set for TaskStatus1
-	//	max_warning	not set for TaskStatus1
-	//	min_warning	not set for TaskStatus1
-	//	delta_t	not set for TaskStatus1
-	//	delta_val	not set for TaskStatus1
-	taskstatus1->set_default_properties(taskstatus1_prop);
-	//	Not Polled
-	taskstatus1->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(taskstatus1);
+    //  Attribute : TaskStatus1
+    TaskStatus1Attrib   *taskstatus1 = new TaskStatus1Attrib();
+    Tango::UserDefaultAttrProp  taskstatus1_prop;
+    //  description not set for TaskStatus1
+    //  label   not set for TaskStatus1
+    //  unit    not set for TaskStatus1
+    //  standard_unit   not set for TaskStatus1
+    //  display_unit    not set for TaskStatus1
+    //  format  not set for TaskStatus1
+    //  max_value   not set for TaskStatus1
+    //  min_value   not set for TaskStatus1
+    //  max_alarm   not set for TaskStatus1
+    //  min_alarm   not set for TaskStatus1
+    //  max_warning not set for TaskStatus1
+    //  min_warning not set for TaskStatus1
+    //  delta_t not set for TaskStatus1
+    //  delta_val   not set for TaskStatus1
+    taskstatus1->set_default_properties(taskstatus1_prop);
+    //  Not Polled
+    taskstatus1->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(taskstatus1);
 
-	//	Attribute : TaskStatus2
-	TaskStatus2Attrib	*taskstatus2 = new TaskStatus2Attrib();
-	Tango::UserDefaultAttrProp	taskstatus2_prop;
-	//	description	not set for TaskStatus2
-	//	label	not set for TaskStatus2
-	//	unit	not set for TaskStatus2
-	//	standard_unit	not set for TaskStatus2
-	//	display_unit	not set for TaskStatus2
-	//	format	not set for TaskStatus2
-	//	max_value	not set for TaskStatus2
-	//	min_value	not set for TaskStatus2
-	//	max_alarm	not set for TaskStatus2
-	//	min_alarm	not set for TaskStatus2
-	//	max_warning	not set for TaskStatus2
-	//	min_warning	not set for TaskStatus2
-	//	delta_t	not set for TaskStatus2
-	//	delta_val	not set for TaskStatus2
-	taskstatus2->set_default_properties(taskstatus2_prop);
-	//	Not Polled
-	taskstatus2->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(taskstatus2);
+    //  Attribute : TaskStatus2
+    TaskStatus2Attrib   *taskstatus2 = new TaskStatus2Attrib();
+    Tango::UserDefaultAttrProp  taskstatus2_prop;
+    //  description not set for TaskStatus2
+    //  label   not set for TaskStatus2
+    //  unit    not set for TaskStatus2
+    //  standard_unit   not set for TaskStatus2
+    //  display_unit    not set for TaskStatus2
+    //  format  not set for TaskStatus2
+    //  max_value   not set for TaskStatus2
+    //  min_value   not set for TaskStatus2
+    //  max_alarm   not set for TaskStatus2
+    //  min_alarm   not set for TaskStatus2
+    //  max_warning not set for TaskStatus2
+    //  min_warning not set for TaskStatus2
+    //  delta_t not set for TaskStatus2
+    //  delta_val   not set for TaskStatus2
+    taskstatus2->set_default_properties(taskstatus2_prop);
+    //  Not Polled
+    taskstatus2->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(taskstatus2);
 
-	//	Attribute : AeroScriptFiles
-	AeroScriptFilesAttrib	*aeroscriptfiles = new AeroScriptFilesAttrib();
-	Tango::UserDefaultAttrProp	aeroscriptfiles_prop;
-	aeroscriptfiles_prop.set_description("A list of the files present on the Automation1 controller.");
-	aeroscriptfiles_prop.set_label("Controller Files");
-	//	unit	not set for AeroScriptFiles
-	//	standard_unit	not set for AeroScriptFiles
-	//	display_unit	not set for AeroScriptFiles
-	//	format	not set for AeroScriptFiles
-	//	max_value	not set for AeroScriptFiles
-	//	min_value	not set for AeroScriptFiles
-	//	max_alarm	not set for AeroScriptFiles
-	//	min_alarm	not set for AeroScriptFiles
-	//	max_warning	not set for AeroScriptFiles
-	//	min_warning	not set for AeroScriptFiles
-	//	delta_t	not set for AeroScriptFiles
-	//	delta_val	not set for AeroScriptFiles
-	aeroscriptfiles->set_default_properties(aeroscriptfiles_prop);
-	//	Not Polled
-	aeroscriptfiles->set_disp_level(Tango::OPERATOR);
-	//	Not Memorized
-	att_list.push_back(aeroscriptfiles);
+    //  Attribute : AeroScriptFiles
+    AeroScriptFilesAttrib   *aeroscriptfiles = new AeroScriptFilesAttrib();
+    Tango::UserDefaultAttrProp  aeroscriptfiles_prop;
+    aeroscriptfiles_prop.set_description("A list of the files present on the Automation1 controller.");
+    aeroscriptfiles_prop.set_label("Controller Files");
+    //  unit    not set for AeroScriptFiles
+    //  standard_unit   not set for AeroScriptFiles
+    //  display_unit    not set for AeroScriptFiles
+    //  format  not set for AeroScriptFiles
+    //  max_value   not set for AeroScriptFiles
+    //  min_value   not set for AeroScriptFiles
+    //  max_alarm   not set for AeroScriptFiles
+    //  min_alarm   not set for AeroScriptFiles
+    //  max_warning not set for AeroScriptFiles
+    //  min_warning not set for AeroScriptFiles
+    //  delta_t not set for AeroScriptFiles
+    //  delta_val   not set for AeroScriptFiles
+    aeroscriptfiles->set_default_properties(aeroscriptfiles_prop);
+    //  Not Polled
+    aeroscriptfiles->set_disp_level(Tango::OPERATOR);
+    //  Not Memorized
+    att_list.push_back(aeroscriptfiles);
 
 
-	//	Create a list of static attributes
-	create_static_attribute_list(get_class_attr()->get_attr_list());
-	/*----- PROTECTED REGION ID(A1ControllerClass::attribute_factory_after) ENABLED START -----*/
-	
-	//	Add your own code
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::attribute_factory_after
+    //  Create a list of static attributes
+    create_static_attribute_list(get_class_attr()->get_attr_list());
+    /*----- PROTECTED REGION ID(A1ControllerClass::attribute_factory_after) ENABLED START -----*/
+    
+    //  Add your own code
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::attribute_factory_after
 }
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::pipe_factory()
- *	Description: Create the pipe object(s)
+ *  Method     : A1ControllerClass::pipe_factory()
+ *  Description: Create the pipe object(s)
  *                and store them in the pipe list
  */
 //--------------------------------------------------------
 void A1ControllerClass::pipe_factory()
 {
-	/*----- PROTECTED REGION ID(A1ControllerClass::pipe_factory_before) ENABLED START -----*/
-	
-	//	Add your own code
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::pipe_factory_before
-	/*----- PROTECTED REGION ID(A1ControllerClass::pipe_factory_after) ENABLED START -----*/
-	
-	//	Add your own code
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::pipe_factory_after
+    /*----- PROTECTED REGION ID(A1ControllerClass::pipe_factory_before) ENABLED START -----*/
+    
+    //  Add your own code
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::pipe_factory_before
+    /*----- PROTECTED REGION ID(A1ControllerClass::pipe_factory_after) ENABLED START -----*/
+    
+    //  Add your own code
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::pipe_factory_after
 }
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::command_factory()
- *	Description: Create the command object(s)
+ *  Method     : A1ControllerClass::command_factory()
+ *  Description: Create the command object(s)
  *                and store them in the command list
  */
 //--------------------------------------------------------
 void A1ControllerClass::command_factory()
 {
-	/*----- PROTECTED REGION ID(A1ControllerClass::command_factory_before) ENABLED START -----*/
-	
-	//	Add your own code
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::command_factory_before
+    /*----- PROTECTED REGION ID(A1ControllerClass::command_factory_before) ENABLED START -----*/
+    
+    //  Add your own code
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::command_factory_before
 
 
-	//	Command Reset
-	ResetClass	*pResetCmd =
-		new ResetClass("Reset",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pResetCmd);
+    //  Command Reset
+    ResetClass  *pResetCmd =
+        new ResetClass("Reset",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pResetCmd);
 
-	//	Command Start
-	StartClass	*pStartCmd =
-		new StartClass("Start",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pStartCmd);
+    //  Command Start
+    StartClass  *pStartCmd =
+        new StartClass("Start",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pStartCmd);
 
-	//	Command Stop
-	StopClass	*pStopCmd =
-		new StopClass("Stop",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pStopCmd);
+    //  Command Stop
+    StopClass   *pStopCmd =
+        new StopClass("Stop",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pStopCmd);
 
-	//	Command Enable
-	EnableClass	*pEnableCmd =
-		new EnableClass("Enable",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pEnableCmd);
+    //  Command Enable
+    EnableClass *pEnableCmd =
+        new EnableClass("Enable",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pEnableCmd);
 
-	//	Command Disable
-	DisableClass	*pDisableCmd =
-		new DisableClass("Disable",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pDisableCmd);
+    //  Command Disable
+    DisableClass    *pDisableCmd =
+        new DisableClass("Disable",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pDisableCmd);
 
-	//	Command ClearErrors
-	ClearErrorsClass	*pClearErrorsCmd =
-		new ClearErrorsClass("ClearErrors",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pClearErrorsCmd);
+    //  Command ClearErrors
+    ClearErrorsClass    *pClearErrorsCmd =
+        new ClearErrorsClass("ClearErrors",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pClearErrorsCmd);
 
-	//	Command AeroScriptProgramRun
-	AeroScriptProgramRunClass	*pAeroScriptProgramRunCmd =
-		new AeroScriptProgramRunClass("AeroScriptProgramRun",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pAeroScriptProgramRunCmd);
+    //  Command AeroScriptProgramRun
+    AeroScriptProgramRunClass   *pAeroScriptProgramRunCmd =
+        new AeroScriptProgramRunClass("AeroScriptProgramRun",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pAeroScriptProgramRunCmd);
 
-	//	Command AeroScriptProgramLoad
-	AeroScriptProgramLoadClass	*pAeroScriptProgramLoadCmd =
-		new AeroScriptProgramLoadClass("AeroScriptProgramLoad",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pAeroScriptProgramLoadCmd);
+    //  Command AeroScriptProgramLoad
+    AeroScriptProgramLoadClass  *pAeroScriptProgramLoadCmd =
+        new AeroScriptProgramLoadClass("AeroScriptProgramLoad",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pAeroScriptProgramLoadCmd);
 
-	//	Command AeroScriptProgramStart
-	AeroScriptProgramStartClass	*pAeroScriptProgramStartCmd =
-		new AeroScriptProgramStartClass("AeroScriptProgramStart",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pAeroScriptProgramStartCmd);
+    //  Command AeroScriptProgramStart
+    AeroScriptProgramStartClass *pAeroScriptProgramStartCmd =
+        new AeroScriptProgramStartClass("AeroScriptProgramStart",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pAeroScriptProgramStartCmd);
 
-	//	Command AeroScriptProgramStop
-	AeroScriptProgramStopClass	*pAeroScriptProgramStopCmd =
-		new AeroScriptProgramStopClass("AeroScriptProgramStop",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pAeroScriptProgramStopCmd);
+    //  Command AeroScriptProgramStop
+    AeroScriptProgramStopClass  *pAeroScriptProgramStopCmd =
+        new AeroScriptProgramStopClass("AeroScriptProgramStop",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pAeroScriptProgramStopCmd);
 
-	//	Command AeroScriptProgramPause
-	AeroScriptProgramPauseClass	*pAeroScriptProgramPauseCmd =
-		new AeroScriptProgramPauseClass("AeroScriptProgramPause",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pAeroScriptProgramPauseCmd);
+    //  Command AeroScriptProgramPause
+    AeroScriptProgramPauseClass *pAeroScriptProgramPauseCmd =
+        new AeroScriptProgramPauseClass("AeroScriptProgramPause",
+            Tango::DEV_VOID, Tango::DEV_VOID,
+            "",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pAeroScriptProgramPauseCmd);
 
-	//	Command CommandExecute
-	CommandExecuteClass	*pCommandExecuteCmd =
-		new CommandExecuteClass("CommandExecute",
-			Tango::DEV_STRING, Tango::DEV_VOID,
-			"input",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pCommandExecuteCmd);
+    //  Command CommandExecute
+    CommandExecuteClass *pCommandExecuteCmd =
+        new CommandExecuteClass("CommandExecute",
+            Tango::DEV_STRING, Tango::DEV_VOID,
+            "input",
+            "",
+            Tango::OPERATOR);
+    command_list.push_back(pCommandExecuteCmd);
 
-	//	Command CommandExecuteReturnDouble
-	CommandExecuteReturnDoubleClass	*pCommandExecuteReturnDoubleCmd =
-		new CommandExecuteReturnDoubleClass("CommandExecuteReturnDouble",
-			Tango::DEV_STRING, Tango::DEV_DOUBLE,
-			"",
-			"",
-			Tango::EXPERT);
-	command_list.push_back(pCommandExecuteReturnDoubleCmd);
+    //  Command CommandExecuteReturnDouble
+    CommandExecuteReturnDoubleClass *pCommandExecuteReturnDoubleCmd =
+        new CommandExecuteReturnDoubleClass("CommandExecuteReturnDouble",
+            Tango::DEV_STRING, Tango::DEV_DOUBLE,
+            "",
+            "",
+            Tango::EXPERT);
+    command_list.push_back(pCommandExecuteReturnDoubleCmd);
 
-	//	Command CommandExecuteReturnInt
-	CommandExecuteReturnIntClass	*pCommandExecuteReturnIntCmd =
-		new CommandExecuteReturnIntClass("CommandExecuteReturnInt",
-			Tango::DEV_STRING, Tango::DEV_LONG,
-			"",
-			"",
-			Tango::EXPERT);
-	command_list.push_back(pCommandExecuteReturnIntCmd);
+    //  Command CommandExecuteReturnInt
+    CommandExecuteReturnIntClass    *pCommandExecuteReturnIntCmd =
+        new CommandExecuteReturnIntClass("CommandExecuteReturnInt",
+            Tango::DEV_STRING, Tango::DEV_LONG,
+            "",
+            "",
+            Tango::EXPERT);
+    command_list.push_back(pCommandExecuteReturnIntCmd);
 
-	//	Command CommandExecuteReturnString
-	CommandExecuteReturnStringClass	*pCommandExecuteReturnStringCmd =
-		new CommandExecuteReturnStringClass("CommandExecuteReturnString",
-			Tango::DEV_STRING, Tango::DEV_STRING,
-			"",
-			"",
-			Tango::EXPERT);
-	command_list.push_back(pCommandExecuteReturnStringCmd);
+    //  Command CommandExecuteReturnString
+    CommandExecuteReturnStringClass *pCommandExecuteReturnStringCmd =
+        new CommandExecuteReturnStringClass("CommandExecuteReturnString",
+            Tango::DEV_STRING, Tango::DEV_STRING,
+            "",
+            "",
+            Tango::EXPERT);
+    command_list.push_back(pCommandExecuteReturnStringCmd);
 
-	/*----- PROTECTED REGION ID(A1ControllerClass::command_factory_after) ENABLED START -----*/
-	
-	//	Add your own code
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::command_factory_after
+    /*----- PROTECTED REGION ID(A1ControllerClass::command_factory_after) ENABLED START -----*/
+    
+    //  Add your own code
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::command_factory_after
 }
 
 //===================================================================
-//	Dynamic attributes related methods
+//  Dynamic attributes related methods
 //===================================================================
 
 //--------------------------------------------------------
 /**
- * method : 		A1ControllerClass::create_static_attribute_list
- * description : 	Create the a list of static attributes
+ * method :         A1ControllerClass::create_static_attribute_list
+ * description :    Create the a list of static attributes
  *
- * @param	att_list	the created attribute list
+ * @param   att_list    the created attribute list
  */
 //--------------------------------------------------------
 void A1ControllerClass::create_static_attribute_list(std::vector<Tango::Attr *> &att_list)
 {
-	for (unsigned long i=0 ; i<att_list.size() ; i++)
-	{
-		std::string att_name(att_list[i]->get_name());
-		std::transform(att_name.begin(), att_name.end(), att_name.begin(), ::tolower);
-		defaultAttList.push_back(att_name);
-	}
+    for (unsigned long i=0 ; i<att_list.size() ; i++)
+    {
+        std::string att_name(att_list[i]->get_name());
+        std::transform(att_name.begin(), att_name.end(), att_name.begin(), ::tolower);
+        defaultAttList.push_back(att_name);
+    }
 
-	TANGO_LOG_INFO << defaultAttList.size() << " attributes in default list" << std::endl;
+    TANGO_LOG_INFO << defaultAttList.size() << " attributes in default list" << std::endl;
 
-	/*----- PROTECTED REGION ID(A1ControllerClass::create_static_att_list) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::create_static_att_list
+    /*----- PROTECTED REGION ID(A1ControllerClass::create_static_att_list) ENABLED START -----*/
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::create_static_att_list
 }
 
 
 //--------------------------------------------------------
 /**
- * method : 		A1ControllerClass::erase_dynamic_attributes
- * description : 	delete the dynamic attributes if any.
+ * method :         A1ControllerClass::erase_dynamic_attributes
+ * description :    delete the dynamic attributes if any.
  *
- * @param	devlist_ptr	the device list pointer
- * @param	list of all attributes
+ * @param   devlist_ptr the device list pointer
+ * @param   list of all attributes
  */
 //--------------------------------------------------------
 void A1ControllerClass::erase_dynamic_attributes(const Tango::DevVarStringArray *devlist_ptr, std::vector<Tango::Attr *> &att_list)
 {
-	Tango::Util *tg = Tango::Util::instance();
+    Tango::Util *tg = Tango::Util::instance();
 
-	for (unsigned long i=0 ; i<devlist_ptr->length() ; i++)
-	{
-		Tango::DeviceImpl *dev_impl = tg->get_device_by_name(((std::string)(*devlist_ptr)[i]).c_str());
-		A1Controller *dev = static_cast<A1Controller *> (dev_impl);
+    for (unsigned long i=0 ; i<devlist_ptr->length() ; i++)
+    {
+        Tango::DeviceImpl *dev_impl = tg->get_device_by_name(((std::string)(*devlist_ptr)[i]).c_str());
+        A1Controller *dev = static_cast<A1Controller *> (dev_impl);
 
-		std::vector<Tango::Attribute *> &dev_att_list = dev->get_device_attr()->get_attribute_list();
-		std::vector<Tango::Attribute *>::iterator ite_att;
-		for (ite_att=dev_att_list.begin() ; ite_att != dev_att_list.end() ; ++ite_att)
-		{
-			std::string att_name((*ite_att)->get_name_lower());
-			if ((att_name == "state") || (att_name == "status"))
-				continue;
-			std::vector<std::string>::iterator ite_str = find(defaultAttList.begin(), defaultAttList.end(), att_name);
-			if (ite_str == defaultAttList.end())
-			{
-				TANGO_LOG_INFO << att_name << " is a UNWANTED dynamic attribute for device " << (*devlist_ptr)[i] << std::endl;
-				Tango::Attribute &att = dev->get_device_attr()->get_attr_by_name(att_name.c_str());
-				dev->remove_attribute(att_list[att.get_attr_idx()], true, false);
-				--ite_att;
-			}
-		}
-	}
-	/*----- PROTECTED REGION ID(A1ControllerClass::erase_dynamic_attributes) ENABLED START -----*/
-	
-	/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::erase_dynamic_attributes
+        std::vector<Tango::Attribute *> &dev_att_list = dev->get_device_attr()->get_attribute_list();
+        std::vector<Tango::Attribute *>::iterator ite_att;
+        for (ite_att=dev_att_list.begin() ; ite_att != dev_att_list.end() ; ++ite_att)
+        {
+            std::string att_name((*ite_att)->get_name_lower());
+            if ((att_name == "state") || (att_name == "status"))
+                continue;
+            std::vector<std::string>::iterator ite_str = find(defaultAttList.begin(), defaultAttList.end(), att_name);
+            if (ite_str == defaultAttList.end())
+            {
+                TANGO_LOG_INFO << att_name << " is a UNWANTED dynamic attribute for device " << (*devlist_ptr)[i] << std::endl;
+                Tango::Attribute &att = dev->get_device_attr()->get_attr_by_name(att_name.c_str());
+                dev->remove_attribute(att_list[att.get_attr_idx()], true, false);
+                --ite_att;
+            }
+        }
+    }
+    /*----- PROTECTED REGION ID(A1ControllerClass::erase_dynamic_attributes) ENABLED START -----*/
+    
+    /*----- PROTECTED REGION END -----*/    //  A1ControllerClass::erase_dynamic_attributes
 }
 
 //--------------------------------------------------------
 /**
- *	Method     : A1ControllerClass::get_attr_object_by_name()
- *	Description: returns Tango::Attr * object found by name
+ *  Method     : A1ControllerClass::get_attr_object_by_name()
+ *  Description: returns Tango::Attr * object found by name
  */
 //--------------------------------------------------------
 Tango::Attr *A1ControllerClass::get_attr_object_by_name(std::vector<Tango::Attr *> &att_list, std::string attname)
 {
-	std::vector<Tango::Attr *>::iterator it;
-	for (it=att_list.begin() ; it<att_list.end() ; ++it)
-		if ((*it)->get_name()==attname)
-			return (*it);
-	//	Attr does not exist
-	return NULL;
+    std::vector<Tango::Attr *>::iterator it;
+    for (it=att_list.begin() ; it<att_list.end() ; ++it)
+        if ((*it)->get_name()==attname)
+            return (*it);
+    //  Attr does not exist
+    return NULL;
 }
 
 
 /*----- PROTECTED REGION ID(A1ControllerClass::Additional Methods) ENABLED START -----*/
 
-/*----- PROTECTED REGION END -----*/	//	A1ControllerClass::Additional Methods
-} //	namespace
+/*----- PROTECTED REGION END -----*/    //  A1ControllerClass::Additional Methods
+} //    namespace

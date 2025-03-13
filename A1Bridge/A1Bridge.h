@@ -32,35 +32,35 @@ class PeriodicClock
 
 typedef struct A1AxisAttributes
 {
-    Tango::DevDouble	                    attr_PositionFeedback_read;
-	Tango::DevDouble	                    attr_VelocityFeedback_read;
-	Tango::DevDouble	                    attr_AccelerationFeedback_read;
-	Tango::DevBoolean	                    attr_InPosition_read;
-	Tango::DevBoolean	                    attr_Enabled_read;
-	Tango::DevBoolean	                    attr_Homed_read;
-	Tango::DevBoolean	                    attr_Error_read;
-	Tango::DevString	                    attr_FirmwareVersion_read;
-	Tango::DevDouble	                    attr_PositionError_read;
-	Tango::DevDouble	                    attr_CurrentFeedback_read;
-	Tango::DevString	                    attr_MotorType_read;
-    A1Axis_ns::MoveTypeEnum 	            attr_MoveType_read;
-	Tango::DevDouble	                    attr_LastMoveDuration_read;
-	Tango::DevDouble	                    attr_VelocityError_read;
-	Tango::DevDouble	                    attr_AccelerationTarget_read;
-	Tango::DevDouble	                    attr_AccelerationError_read;
-	Tango::DevDouble	                    attr_CurrentTarget_read;
-	Tango::DevDouble	                    attr_CurrentError_read;
-	Tango::DevDouble	                    attr_ServoUpdateRate_read;;
-    A1Axis_ns::RampTypeEnum	                attr_RampType_read;
-    A1Axis_ns::RampModeEnum	                attr_RampMode_read;
-	Tango::DevDouble	                    attr_RampValue_read;
-        Tango::DevBoolean	                    attr_VirtualAxis_read;
+    Tango::DevDouble                        attr_PositionFeedback_read;
+    Tango::DevDouble                        attr_VelocityFeedback_read;
+    Tango::DevDouble                        attr_AccelerationFeedback_read;
+    Tango::DevBoolean                       attr_InPosition_read;
+    Tango::DevBoolean                       attr_Enabled_read;
+    Tango::DevBoolean                       attr_Homed_read;
+    Tango::DevBoolean                       attr_Error_read;
+    Tango::DevString                        attr_FirmwareVersion_read;
+    Tango::DevDouble                        attr_PositionError_read;
+    Tango::DevDouble                        attr_CurrentFeedback_read;
+    Tango::DevString                        attr_MotorType_read;
+    A1Axis_ns::MoveTypeEnum                 attr_MoveType_read;
+    Tango::DevDouble                        attr_LastMoveDuration_read;
+    Tango::DevDouble                        attr_VelocityError_read;
+    Tango::DevDouble                        attr_AccelerationTarget_read;
+    Tango::DevDouble                        attr_AccelerationError_read;
+    Tango::DevDouble                        attr_CurrentTarget_read;
+    Tango::DevDouble                        attr_CurrentError_read;
+    Tango::DevDouble                        attr_ServoUpdateRate_read;;
+    A1Axis_ns::RampTypeEnum                 attr_RampType_read;
+    A1Axis_ns::RampModeEnum                 attr_RampMode_read;
+    Tango::DevDouble                        attr_RampValue_read;
+        Tango::DevBoolean                       attr_VirtualAxis_read;
     Tango::DevDouble                        axisStatus; 
-	Tango::DevBoolean	                    attr_AxisStatus_read[32];
+    Tango::DevBoolean                       attr_AxisStatus_read[32];
     Tango::DevDouble                        axisFault; 
-	Tango::DevBoolean	                    attr_AxisFault_read[32];
+    Tango::DevBoolean                       attr_AxisFault_read[32];
     Tango::DevDouble                        driveStatus; 
-	Tango::DevBoolean	                    attr_DriveStatus_read[32];
+    Tango::DevBoolean                       attr_DriveStatus_read[32];
 } A1AxisAttributes; 
 
 
@@ -103,23 +103,23 @@ class A1Bridge
 
   public: 
     // Attributes
-	Tango::DevBoolean	attr_ControllerRunning_read;
-	Tango::DevUShort	attr_AxisCount_read;
-	Tango::DevUShort	attr_TaskCount_read;
-	Tango::DevString	attr_APIVersion_read;
-	Tango::DevString	attr_AeroScriptFilePath_read;
+    Tango::DevBoolean   attr_ControllerRunning_read;
+    Tango::DevUShort    attr_AxisCount_read;
+    Tango::DevUShort    attr_TaskCount_read;
+    Tango::DevString    attr_APIVersion_read;
+    Tango::DevString    attr_AeroScriptFilePath_read;
     unsigned short      attr_Automation1ProgramStopTimeout_read; 
     unsigned short      attr_Automation1TaskID_read; 
     
     double              attr_axisHealth;
-	Tango::DevBoolean	attr_AxisHealth_read[MAX_AXES];
+    Tango::DevBoolean   attr_AxisHealth_read[MAX_AXES];
     double              attr_taskStatus0;
-	Tango::DevBoolean	attr_TaskStatus0_read[TASK0_STATUSES];
+    Tango::DevBoolean   attr_TaskStatus0_read[TASK0_STATUSES];
     double              attr_taskStatus1;
-	Tango::DevBoolean	attr_TaskStatus1_read[TASK1_STATUSES];
+    Tango::DevBoolean   attr_TaskStatus1_read[TASK1_STATUSES];
     double              attr_taskStatus2;
-	Tango::DevBoolean	attr_TaskStatus2_read[TASK2_STATUSES];
-	Tango::DevString	attr_AeroScriptFiles_read[MAX_AEROSCRIPTS];
+    Tango::DevBoolean   attr_TaskStatus2_read[TASK2_STATUSES];
+    Tango::DevString    attr_AeroScriptFiles_read[MAX_AEROSCRIPTS];
     A1Controller_ns::Automation1TaskStatusEnum attr_Automation1TaskStatus_read;
 
     A1AxisAttributes attr_axes[MAX_AXES]; 
