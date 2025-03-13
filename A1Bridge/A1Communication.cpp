@@ -515,6 +515,8 @@ void A1Communication::readCommon()
         attr_axes[axis].attr_AxisStatus_read[AX_HOMING]                          = statusBits & Automation1AxisStatus::Automation1AxisStatus_Homing;
         attr_axes[axis].attr_AxisStatus_read[AX_ENABLING]                        = statusBits & Automation1AxisStatus::Automation1AxisStatus_Enabling;
         attr_axes[axis].attr_AxisStatus_read[AX_JOG_GENERATING]                  = statusBits & Automation1AxisStatus::Automation1AxisStatus_JogGenerating;
+        attr_axes[axis].attr_AxisStatus_read[AX_JOGGING]                         = statusBits & Automation1AxisStatus::Automation1AxisStatus_Jogging;
+        attr_axes[axis].attr_AxisStatus_read[AX_DRIVE_PENDING]                   = statusBits & Automation1AxisStatus::Automation1AxisStatus_DrivePending;
         attr_axes[axis].attr_AxisStatus_read[AX_DRIVE_ABORT_PENDING]             = statusBits & Automation1AxisStatus::Automation1AxisStatus_DriveAbortPending;
         attr_axes[axis].attr_AxisStatus_read[AX_TRAJECTORY_FILTERING]            = statusBits & Automation1AxisStatus::Automation1AxisStatus_TrajectoryFiltering;
         attr_axes[axis].attr_AxisStatus_read[AX_IFOV_ENABLED]                    = statusBits & Automation1AxisStatus::Automation1AxisStatus_IfovEnabled;
@@ -840,35 +842,35 @@ void A1Communication::controller_CommandExecute(const std::string& aeroScriptTex
 
 void A1Communication::axis_WriteRamp(unsigned axis, A1Axis_ns::RampTypeEnum type, A1Axis_ns::RampModeEnum mode, double value)
 {
-	Automation1RampType typeA1;
-	Automation1RampMode modeA1;
+    Automation1RampType typeA1;
+    Automation1RampMode modeA1;
 
     switch (type)
-	{
-		case A1Axis_ns::RampTypeEnum::_LINEAR:
-			typeA1 = Automation1RampType_Linear;
-		    break;
-		case A1Axis_ns::RampTypeEnum::_S_CURVE:
-			typeA1 = Automation1RampType_SCurve;
-		    break;
-		case A1Axis_ns::RampTypeEnum::_SINE:
-			typeA1 = Automation1RampType_Sine;
-		    break;
-	}
+    {
+        case A1Axis_ns::RampTypeEnum::_LINEAR:
+            typeA1 = Automation1RampType_Linear;
+            break;
+        case A1Axis_ns::RampTypeEnum::_S_CURVE:
+            typeA1 = Automation1RampType_SCurve;
+            break;
+        case A1Axis_ns::RampTypeEnum::_SINE:
+            typeA1 = Automation1RampType_Sine;
+            break;
+    }
 
-	switch (mode)
-	{
-		case A1Axis_ns::RampModeEnum::_RATE:
-			modeA1 = Automation1RampMode_Rate;
-		    break;
-		case A1Axis_ns::RampModeEnum::_TIME:
-			modeA1 = Automation1RampMode_Time;
-		    break;
-	}
+    switch (mode)
+    {
+        case A1Axis_ns::RampModeEnum::_RATE:
+            modeA1 = Automation1RampMode_Rate;
+            break;
+        case A1Axis_ns::RampModeEnum::_TIME:
+            modeA1 = Automation1RampMode_Time;
+            break;
+    }
     
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-	A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampType,  *m_controller, attr_Automation1TaskID_read, axis, typeA1, 0.5, typeA1, 0.5);
-	A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampValue, *m_controller, attr_Automation1TaskID_read, axis, modeA1, value, modeA1, value);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampType,  *m_controller, attr_Automation1TaskID_read, axis, typeA1, 0.5, typeA1, 0.5);
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_SetupAxisRampValue, *m_controller, attr_Automation1TaskID_read, axis, modeA1, value, modeA1, value);
 
 }
 
@@ -900,16 +902,16 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
     switch (moveType)
     {
         case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveAbsolute, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveAbsolute, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_INCREMENTALMOVE:
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveIncremental, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveIncremental, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, velocity);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, velocity);
             break;
         case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
-			A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
+            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown move type", __func__);
@@ -1084,6 +1086,35 @@ void A1Communication::axis_SetA1ConfigString(int32_t axis,int parameterID, std::
     A1_GENERIC_CALL_AND_THROW(Automation1_Configuration_SetConfiguredParameters, *m_controller, configuredParameters);
     A1_GENERIC_CALL_AND_THROW(Automation1_ConfiguredParameters_Destroy, configuredParameters);
 }
+
+double A1Communication::controller_CommandExecuteDouble(const std::string& aeroScriptText)
+{
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    double returnDouble;
+    std::string command = (aeroScriptText.substr(0,8)=="$rreturn") ? aeroScriptText : "$rreturn[0] = "+aeroScriptText;
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_ExecuteAndReturnAeroScriptReal, *m_controller, attr_Automation1TaskID_read, command.c_str(), &returnDouble);
+    return returnDouble;
+}
+
+int A1Communication::controller_CommandExecuteInt(const std::string& aeroScriptText)
+{
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    long int returnInteger;
+    std::string command = (aeroScriptText.substr(0,8)=="$ireturn") ? aeroScriptText : "$ireturn[0] = "+aeroScriptText;
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_ExecuteAndReturnAeroScriptInteger, *m_controller, attr_Automation1TaskID_read, command.c_str(), &returnInteger);
+    return (int)returnInteger;
+}
+
+std::string A1Communication::controller_CommandExecuteString(const std::string& aeroScriptText)
+{
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+    char returnString[256];
+    std::string command = (aeroScriptText.substr(0,8)=="$sreturn") ? aeroScriptText : "$sreturn[0] = "+aeroScriptText;
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_ExecuteAndReturnAeroScriptString, *m_controller, attr_Automation1TaskID_read, command.c_str(), returnString, 256);
+    return std::string(returnString);
+}
+
+
 
 
 } // A1Bridge_ns

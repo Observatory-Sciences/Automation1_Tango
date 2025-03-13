@@ -201,6 +201,9 @@ class A1Communication: public A1Bridge
     virtual void axis_SetA1ConfigValue(int32_t axis,int parameterID,double value);
     virtual void axis_SetA1ParameterString(int32_t axis,int parameterID,std::string value);
     virtual void axis_SetA1ConfigString(int32_t axis,int parameterID,std::string value);
+    virtual double controller_CommandExecuteDouble(const std::string& aeroScriptText);
+    virtual int controller_CommandExecuteInt(const std::string& aeroScriptText);
+    virtual std::string controller_CommandExecuteString(const std::string& aeroScriptText);
 
   private:
     std::string getFirmwareVersionString(unsigned axis);
