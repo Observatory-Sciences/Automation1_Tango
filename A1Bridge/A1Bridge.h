@@ -74,9 +74,6 @@ class A1Bridge
     std::string m_username; 
     std::string m_password; 
     std::string m_ip; 
-    std::chrono::milliseconds m_pollInterval_ms;
-    PeriodicClock m_lastPoll; 
-    PeriodicClock m_lastAxisPoll[MAX_AXES]; 
 
     // Methods
     A1Bridge(); 
@@ -113,11 +110,11 @@ class A1Bridge
     
     double              attr_axisHealth;
     Tango::DevBoolean   attr_AxisHealth_read[MAX_AXES];
-    double              attr_taskStatus0;
+    double              attr_taskStatus0[MAX_TASKS];
     Tango::DevBoolean   attr_TaskStatus0_read[TASK0_STATUSES];
-    double              attr_taskStatus1;
+    double              attr_taskStatus1[MAX_TASKS];
     Tango::DevBoolean   attr_TaskStatus1_read[TASK1_STATUSES];
-    double              attr_taskStatus2;
+    double              attr_taskStatus2[MAX_TASKS];
     Tango::DevBoolean   attr_TaskStatus2_read[TASK2_STATUSES];
     Tango::DevString    attr_AeroScriptFiles_read[MAX_AEROSCRIPTS];
     A1Controller_ns::Automation1TaskStatusEnum attr_Automation1TaskStatus_read;
@@ -130,7 +127,8 @@ class A1Bridge
     void connect(const std::string& username, const std::string& password, const std::string& ip); 
     void disconnect(); 
     void reconnect(); 
-    std::unique_lock<std::recursive_mutex> checkConnection(); 
+    void checkConnection();
+    std::unique_lock<std::recursive_mutex> checkConnectionWithLock(); 
 
     void initialiseController(); 
     void initialiseAxis(unsigned axis); 
@@ -141,9 +139,13 @@ class A1Bridge
     void readController();
     void readAxis(unsigned axis);
     
-    template<class T = int> void setPollingInterval_ms(T interval) 
+    virtual void setPollingInterval(std::chrono::milliseconds interval)
+            {NotImplemented(__func__);};
+
+    template<class T = int>
+    void setPollingInterval_ms(T interval)
     {
-        m_pollInterval_ms = std::chrono::milliseconds(interval);
+        setPollingInterval(std::chrono::milliseconds(interval));
     };
     
     template<class T = unsigned short> void setAutomation1ProgramTimeout_ms(T interval) 

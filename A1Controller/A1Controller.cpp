@@ -156,7 +156,7 @@ void A1Controller::delete_device()
 
     try
     {
-        A1Bridge_ns::getInstance()->deleteController(); 
+    //    A1Bridge_ns::getInstance()->deleteController(); 
         std::cout << "Deleted controller..." << std::endl; 
     }
     catch (Tango::DevFailed &e)
@@ -251,13 +251,15 @@ void A1Controller::init_device()
     
     // Only attempt to initialise the controller if there is already a bridge
     // instance and we are connected
-    if(A1Bridge_ns::checkInstance() && A1Bridge_ns::getInstance()->isConnected())
+    if(A1Bridge_ns::checkInstance() && A1Bridge_ns::getInstance()->isConnected()) {
         A1Bridge_ns::getInstance()->initialiseController();
+    } else {
 
     A1Bridge_ns::startInstance(simulate);
-    A1Bridge_ns::getInstance()->setPollingInterval_ms(100);
+    A1Bridge_ns::getInstance()->setPollingInterval_ms(controllerPollingInterval_ms);
     A1Bridge_ns::getInstance()->setAutomation1ProgramTimeout_ms(100);
     A1Bridge_ns::getInstance()->setTaskID(1);
+    }
 
     try
     {
@@ -435,7 +437,7 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     
     std::lock_guard<std::recursive_mutex> hw_lock(m_readLock); 
 
-    auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    auto guard = A1Bridge_ns::getInstance()->checkConnectionWithLock();
 
     try
     {
@@ -864,7 +866,7 @@ void A1Controller::reset()
     DEBUG_STREAM << "A1Controller::Reset()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::reset) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_Reset(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::reset
@@ -881,7 +883,7 @@ void A1Controller::start()
     DEBUG_STREAM << "A1Controller::Start()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::start) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_Start(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::start
@@ -898,7 +900,7 @@ void A1Controller::stop()
     DEBUG_STREAM << "A1Controller::Stop()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::stop) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_Stop(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::stop
@@ -915,7 +917,7 @@ void A1Controller::enable()
     DEBUG_STREAM << "A1Controller::Enable()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::enable) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_Enable(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::enable
@@ -932,7 +934,7 @@ void A1Controller::disable()
     DEBUG_STREAM << "A1Controller::Disable()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::disable) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_Disable(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::disable
@@ -949,7 +951,7 @@ void A1Controller::clear_errors()
     DEBUG_STREAM << "A1Controller::ClearErrors()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::clear_errors) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_ClearErrors(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::clear_errors
@@ -969,7 +971,7 @@ void A1Controller::aero_script_program_run()
     DEBUG_STREAM << "A1Controller::AeroScriptProgramRun()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::aero_script_program_run) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramRun(attr_AeroScriptFilePath_write); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_run
@@ -989,7 +991,7 @@ void A1Controller::aero_script_program_load()
     DEBUG_STREAM << "A1Controller::AeroScriptProgramLoad()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::aero_script_program_load) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramLoad(attr_AeroScriptFilePath_write); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_load
@@ -1008,7 +1010,7 @@ void A1Controller::aero_script_program_start()
     DEBUG_STREAM << "A1Controller::AeroScriptProgramStart()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::aero_script_program_start) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramStart(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_start
@@ -1027,7 +1029,7 @@ void A1Controller::aero_script_program_stop()
     DEBUG_STREAM << "A1Controller::AeroScriptProgramStop()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::aero_script_program_stop) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramStop(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_stop
@@ -1046,7 +1048,7 @@ void A1Controller::aero_script_program_pause()
     DEBUG_STREAM << "A1Controller::AeroScriptProgramPause()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::aero_script_program_pause) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramPause(); 
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_pause
@@ -1064,7 +1066,7 @@ void A1Controller::command_execute(Tango::DevString argin)
     DEBUG_STREAM << "A1Controller::CommandExecute()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::command_execute) ENABLED START -----*/
     
-    auto guard = A1Bridge_ns::getInstance()->checkConnection(); 
+    A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_CommandExecute(argin);
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::command_execute
@@ -1085,7 +1087,7 @@ Tango::DevDouble A1Controller::command_execute_return_double(Tango::DevString ar
     /*----- PROTECTED REGION ID(A1Controller::command_execute_return_double) ENABLED START -----*/
     /* clang-format on */
 
-    auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    A1Bridge_ns::getInstance()->checkConnection();
     argout = A1Bridge_ns::getInstance()->controller_CommandExecuteDouble(argin);
 
     /* clang-format off */
@@ -1108,7 +1110,7 @@ Tango::DevLong A1Controller::command_execute_return_int(Tango::DevString argin)
     /*----- PROTECTED REGION ID(A1Controller::command_execute_return_int) ENABLED START -----*/
     /* clang-format on */
 
-    auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    A1Bridge_ns::getInstance()->checkConnection();
     argout = A1Bridge_ns::getInstance()->controller_CommandExecuteInt(argin);
 
     /* clang-format off */
@@ -1131,7 +1133,7 @@ Tango::DevString A1Controller::command_execute_return_string(Tango::DevString ar
     /*----- PROTECTED REGION ID(A1Controller::command_execute_return_string) ENABLED START -----*/
     /* clang-format on */
 
-    auto guard = A1Bridge_ns::getInstance()->checkConnection();
+    A1Bridge_ns::getInstance()->checkConnection();
     std::string result = A1Bridge_ns::getInstance()->controller_CommandExecuteString(argin);
     argout = Tango::string_dup(result);
 
@@ -1166,7 +1168,7 @@ void A1Controller::pollThread()
         {
             std::vector<long> attr_list; 
             read_attr_hardware(attr_list); 
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::milliseconds(pollThreadInterval_ms));
         }
         catch (Tango::DevFailed &e)
         {

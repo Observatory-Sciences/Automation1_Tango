@@ -128,37 +128,39 @@
 
 //TaskStatus2
 #define TSK2_SCALING_ACTIVE             0
-#define TSK2_OFFSET_FIXTURE_ACTIVE      1
-#define TSK2_PROFILE_ACTIVE             2
-#define TSK2_MOTION_MODE_RAPID          3
-#define TSK2_MOTION_MODE_LINEAR         4
-#define TSK2_MOTION_PVT                 5
-#define TSK2_MOTION_CONTINUOUS_ACTIVE   6
-#define TSK2_CUTTER_OFFSETS_ACTIVE_POS  7
-#define TSK2_CUTTER_RADIUS_ACTIVE_LEFT  8
-#define TSK2_CUTTER_RADIUS_ACTIVE_RIGHT 9
-#define TSK2_CUTTER_OFFSETS_ACTIVE_NEG  10
-#define TSK2_NORMALCY_ACTIVE_LEFT       11
-#define TSK2_NORMALCY_ACTIVE_RIGHT      12
-#define TSK2_NORMALCY_ALIGNMENT         13
-#define TSK2_MOTION_MODE_CW             14
-#define TSK2_MOTION_MODE_CCW            15
-#define TSK2_LIMIT_FEEDRATE_ACTIVE      16
-#define TSK2_LIMIT_MFO_ACTIVE           17
-#define TSK2_COORD1_PLANE1              18
-#define TSK2_COORD1_PLANE2              19
-#define TSK2_COORD1_PLANE3              20
-#define TSK2_COORD2_PLANE1              21
-#define TSK2_COORD2_PLANE2              22
-#define TSK2_COORD2_PLANE3              23
+#define TSK2_PROFILE_ACTIVE             1
+#define TSK2_MOTION_MODE_RAPID          2
+#define TSK2_MOTION_MODE_LINEAR         3
+#define TSK2_MOTION_PVT                 4
+#define TSK2_MOTION_CONTINUOUS_ACTIVE   5
+#define TSK2_CUTTER_OFFSETS_ACTIVE_POS  6
+#define TSK2_CUTTER_RADIUS_ACTIVE_LEFT  7
+#define TSK2_CUTTER_RADIUS_ACTIVE_RIGHT 8
+#define TSK2_CUTTER_OFFSETS_ACTIVE_NEG  9
+#define TSK2_NORMALCY_ACTIVE_LEFT       10
+#define TSK2_NORMALCY_ACTIVE_RIGHT      11
+#define TSK2_NORMALCY_ALIGNMENT         12
+#define TSK2_MOTION_MODE_CW             13
+#define TSK2_MOTION_MODE_CCW            14
+#define TSK2_LIMIT_FEEDRATE_ACTIVE      15
+#define TSK2_LIMIT_MFO_ACTIVE           16
+#define TSK2_COORD1_PLANE1              17
+#define TSK2_COORD1_PLANE2              18
+#define TSK2_COORD1_PLANE3              19
+#define TSK2_COORD2_PLANE1              20
+#define TSK2_COORD2_PLANE2              21
+#define TSK2_COORD2_PLANE3              22
 
 //constants
 #define ERR_MSG_SZ                      2048
 #define AXIS_NAME_SZ                    256
 #define DEFAULT_TIMEOUT_MS              300
+#define SHORTEST_POLLING_INTERVAL_MS    50
+
 
 #define MAX_AXES 32
+#define MAX_TASKS 32
 #define MAX_AEROSCRIPTS 1024
 #define TASK0_STATUSES 16
 #define TASK1_STATUSES 17
-#define TASK2_STATUSES 24
+#define TASK2_STATUSES 23

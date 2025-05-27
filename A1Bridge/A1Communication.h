@@ -91,23 +91,35 @@ class A1PollManager
     // Simplifies grouping of status items. 
   private:
     A1PollConfig m_config; 
-    unsigned     m_refCount; 
     std::vector<Automation1StatusIndexItem<Automation1AxisStatusItem>> m_axisStatusItems; 
     std::vector<Automation1StatusIndexItem<Automation1TaskStatusItem>> m_taskStatusItems; 
     std::vector<Automation1StatusItem<Automation1SystemStatusItem>>    m_systemStatusItems; 
+
+    PeriodicClock pollingClock;
+    std::chrono::milliseconds minimumPollingInterval_ms{100};
+
   public:
-    A1PollManager() : m_refCount(0) {};
+    A1PollManager() {};
     ~A1PollManager() = default;
     void push(double* destination, unsigned axis, Automation1AxisStatusItem item); 
     void push(double* destination, unsigned task, Automation1TaskStatusItem item); 
     void push(double* destination, Automation1SystemStatusItem item); 
-    void poll(Automation1Controller* controller);
+    bool poll(Automation1Controller* controller);
     // All classes need the common polling, so we can't delete common poll manager until no one else is using it. 
     // We use a ref count for this. 
     void incrementRefCount(); 
     void decrementRefCount(); 
     void clear(); 
     size_t size();
+
+    void setPollInterval(std::chrono::milliseconds interval)
+    {
+        if(interval.count()<SHORTEST_POLLING_INTERVAL_MS) {
+            minimumPollingInterval_ms = std::chrono::milliseconds(SHORTEST_POLLING_INTERVAL_MS);
+        } else {
+            minimumPollingInterval_ms = interval;
+        }
+    }
 };
 
 
@@ -125,22 +137,13 @@ class A1Communication: public A1Bridge
     // Automation1 API uses a pointer to controller instance, but we want RAII
     Automation1Controller   m_controller_instance;
     Automation1Controller   *m_controller = &m_controller_instance; 
-    
-    // We have three sets of polled data to configure: 
-    // - common data 
-    //      e.g. the controller needs error status of each axis to determine its own 
-    //      error state - we only want to poll this once, not once per device
-    // - controller-only data
-    // - axis-only data (per axis)
-    A1PollManager           m_pollManagerCommon; 
-    A1PollManager           m_pollManagerController; 
-    A1PollManager           m_pollManagerAxis[MAX_AXES];
-
-    // Clock to rate-limit polling of common data
-    PeriodicClock           m_lastCommonPoll; 
+   
+    // Poll manager to get hardware status 
+    A1PollManager           pollManager; 
     
     // Mutex to wrap communication with hardware
     std::recursive_mutex    m_connectionLock;
+    std::recursive_mutex    m_dataLock;
 
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
@@ -163,8 +166,8 @@ class A1Communication: public A1Bridge
     virtual void deleteController_impl(); 
     virtual void deleteAxis_impl(unsigned axis); 
 
-    void initialiseCommonPolling();
-    void readCommon(); 
+    void initialisePolling();
+    bool readCommon(); 
 
   public: 
     A1Communication();
@@ -205,6 +208,10 @@ class A1Communication: public A1Bridge
     virtual int controller_CommandExecuteInt(const std::string& aeroScriptText);
     virtual std::string controller_CommandExecuteString(const std::string& aeroScriptText);
 
+    void setPollingInterval(std::chrono::milliseconds interval)
+    {
+        pollManager.setPollInterval(interval);
+    };
   private:
     std::string getFirmwareVersionString(unsigned axis);
     std::string getMotorTypeString(unsigned axis);
