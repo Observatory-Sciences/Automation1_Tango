@@ -176,15 +176,6 @@ void A1Axis::delete_device()
     Tango::string_free(*attr_FirmwareVersion_read);
     Tango::string_free(*attr_MotorType_read);
 
-    try
-    {
-        //A1Bridge_ns::getInstance()->deleteAxis(axis);
-        std::cout << "Delete axis..." << std::endl; 
-    }
-    catch (Tango::DevFailed &e)
-    {
-        // do nothing - nothing to delete
-    }
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::delete_device
 	delete[] attr_PositionFeedback_read;
@@ -306,14 +297,6 @@ void A1Axis::init_device()
 	{
 		attr_DriveStatus_read[i] = false;
 	}
-
-	// The A1Bridge instance pointer does not exist on startup, but no need to call initialise on axes
-	// at startup as this is handled in A1Communication. So, check whether or not the instance pointer
-	// exists and we are connected before attempting to initialise. Note order of checks in AND is 
-	// important here - getInstance() throws an exception if the pointer is NULL and this only works as
-	// a single AND statment due to lazy evaluation. Swapping the operands will cause an exception.
-	//if(A1Bridge_ns::checkInstance() && A1Bridge_ns::getInstance()->isConnected())
-	//	A1Bridge_ns::getInstance()->initialiseAxis(axis);
 
     m_stopPollFlag = false;
     m_pollThread = std::thread(&A1Axis::pollThread, this);

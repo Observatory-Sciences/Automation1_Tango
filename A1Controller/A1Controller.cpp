@@ -154,15 +154,6 @@ void A1Controller::delete_device()
         delete[] attr_AeroScriptFiles_read[file];
     }
 
-    try
-    {
-    //    A1Bridge_ns::getInstance()->deleteController(); 
-        std::cout << "Deleted controller..." << std::endl; 
-    }
-    catch (Tango::DevFailed &e)
-    {
-        // nothing to delete
-    }
 
     /*----- PROTECTED REGION END -----*/    //  A1Controller::delete_device
     delete[] attr_ControllerRunning_read;
