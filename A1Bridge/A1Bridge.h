@@ -30,6 +30,8 @@ class PeriodicClock
 };
 
 
+// NB: The RampType and RampMode are returned from the controller as doubles
+//  and will need to be cast to the appropriate enums when read by the axes
 typedef struct A1AxisAttributes
 {
     Tango::DevDouble                        attr_PositionFeedback_read;
@@ -50,9 +52,11 @@ typedef struct A1AxisAttributes
     Tango::DevDouble                        attr_AccelerationError_read;
     Tango::DevDouble                        attr_CurrentTarget_read;
     Tango::DevDouble                        attr_CurrentError_read;
-    Tango::DevDouble                        attr_ServoUpdateRate_read;;
-    A1Axis_ns::RampTypeEnum                 attr_RampType_read;
-    A1Axis_ns::RampModeEnum                 attr_RampMode_read;
+    Tango::DevDouble                        attr_ServoUpdateRate_read;
+    Tango::DevDouble                        attr_RampType_read;
+    Tango::DevDouble                        attr_RampMode_read;
+    Tango::DevDouble                        attr_RampValueTime_read;
+    Tango::DevDouble                        attr_RampValueRate_read;
     Tango::DevDouble                        attr_RampValue_read;
         Tango::DevBoolean                       attr_VirtualAxis_read;
     Tango::DevDouble                        axisStatus; 
