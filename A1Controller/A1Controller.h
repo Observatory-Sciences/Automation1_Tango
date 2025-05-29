@@ -487,6 +487,8 @@ public:
 
   private:
     void pollThread();
+    const int pollThreadInterval_ms = 1000;
+    const int controllerPollingInterval_ms = 100;
 
 /*----- PROTECTED REGION END -----*/    //  A1Controller::Additional Method prototypes
 };

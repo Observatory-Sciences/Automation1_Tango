@@ -36,7 +36,6 @@ A1Bridge::A1Bridge() :
     m_connected(false),
     m_simulation(false),
     m_verbose(false),
-    m_pollInterval_ms(std::chrono::milliseconds(-1)),
     attr_Automation1ProgramStopTimeout_read(100),
     attr_Automation1TaskID_read(1) 
 {
@@ -146,23 +145,17 @@ void A1Bridge::reconnect()
 }
 
 
-std::unique_lock<std::recursive_mutex> A1Bridge::checkConnection()
+void A1Bridge::checkConnection()
 {
-    auto guard = holdConnection_impl();
-    bool connected = this->isConnected();
-    if (connected)
-    {
-        this->checkConnection_impl();
-    }
-    else
-    {
-        std::cout << "Attempting reconnect..." << std::endl;
-        this->reconnect();
-    }
-
-    return guard;
+    this->checkConnection_impl();
 }
 
+
+std::unique_lock<std::recursive_mutex> A1Bridge::checkConnectionWithLock() {
+    auto guard = this->holdConnection_impl();
+    this->checkConnection_impl();
+    return guard;
+}
 
 void A1Bridge::initialiseController()
 {
@@ -190,19 +183,13 @@ void A1Bridge::deleteAxis(unsigned axis)
 
 void A1Bridge::readController()
 {
-    if (m_lastPoll.checkAndUpdate(m_pollInterval_ms))
-    {
-        this->readController_impl(); 
-    }
+    this->readController_impl(); 
 }
 
 
 void A1Bridge::readAxis(unsigned axis)
 {
-    if (m_lastAxisPoll[axis].checkAndUpdate(m_pollInterval_ms))
-    {
-        this->readAxis_impl(axis); 
-    }
+    this->readAxis_impl(axis); 
 }
 
 

@@ -2,15 +2,14 @@
     "TaskStatus2" : {
         "BooleanLabels" : [
             "Scaling Active",
-            "Offset Fixture Active",
             "Profile Active",
             "Motion Mode Rapid",
             "Motion Mode Linear",
             "Motion PVT",
             "Motion Continuous Active",
             "Cutter Offsets Active (Positive)",
-            "Cutter Offsets Active (Left)",
-            "Cutter Offsets Active (Right)",
+            "Cutter Radius Active (Left)",
+            "Cutter Radius Active (Right)",
             "Cutter Offsets Active (Negative)",
             "Normalcy Active (Left)",
             "Normalcy Active (Right)",

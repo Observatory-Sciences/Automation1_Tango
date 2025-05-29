@@ -639,7 +639,11 @@ public:
 /*----- PROTECTED REGION ID(A1Axis::Additional Method prototypes) ENABLED START -----*/
 
   private:
-    void pollThread(); 
+    void pollThread();
+    const int pollThreadInterval_ms = 1000; 
+    void addUnits();
+    const int addUnitDelay_seconds = 3;
+    std::chrono::time_point<std::chrono::steady_clock> lastHWAccess;
 
 /*----- PROTECTED REGION END -----*/	//	A1Axis::Additional Method prototypes
 };

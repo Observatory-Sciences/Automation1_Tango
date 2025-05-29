@@ -108,16 +108,24 @@ void A1PollManager::push(double* destination, Automation1SystemStatusItem item)
 }
 
 
-void A1PollManager::poll(Automation1Controller* controller)
+bool A1PollManager::poll(Automation1Controller* controller)
 {
     // Poll all items that have been added to the list of items to be polled by this manager
+    // Returns false if the controller was not polled, true otherwise
+
+    // Nothing to do if the manager is empty
+    if(this->size()==0) return false;
+
+    // We wait a minimum interval between updates to avoid choking the hardware
+    if(!pollingClock.checkAndUpdate(minimumPollingInterval_ms)) return false;
 
     size_t length = this->size(); 
 
     double results[length]; 
 
+    // First connect to the controller to populate the results array...
     A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetResults, *controller, m_config.get(), results, length); 
-    
+    // ...then unpack results to each polled item
     for (auto item : m_axisStatusItems)
     {
         A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetAxisResult, m_config.get(), results, length, 
@@ -135,6 +143,7 @@ void A1PollManager::poll(Automation1Controller* controller)
         A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetSystemResult, m_config.get(), results, length, 
                                 item.item, 0, item.destination);
     }
+    return true;
 }
 
 
@@ -143,24 +152,6 @@ size_t A1PollManager::size()
     return m_axisStatusItems.size() + 
            m_taskStatusItems.size() + 
            m_systemStatusItems.size();
-}
-
-
-void A1PollManager::incrementRefCount()
-{
-    m_refCount++; 
-}
-
-
-void A1PollManager::decrementRefCount()
-{
-    // Note we only clear(), not delete. The instance must live as long as the A1Bridge 
-    // parent class, but the polling configuration may have to be setup more than once. 
-    m_refCount--; 
-    if (m_refCount == 0)
-    {
-        clear(); 
-    }
 }
 
 
@@ -205,44 +196,55 @@ A1Communication::~A1Communication()
 }
 
 
-void A1Communication::initialiseCommonPolling()
+void A1Communication::initialisePolling()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    // Add all relevant items to the common polling manager
+    std::lock_guard<std::recursive_mutex> lock(m_dataLock); 
 
-    // If already done, return early 
-    // This is only called after mutex lock so no problem with threads. 
-    if (m_pollManagerCommon.size() > 0)
+    // If the size is greater than zero we've already done this...
+    if (pollManager.size()>0)
     {
         return; 
     }
 
+    // First add status bits; used by controller and axes
     for (unsigned axis = 0; axis < attr_AxisCount_read; axis++)
     {
-        m_pollManagerCommon.push(&attr_axes[axis].axisStatus,                     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus);
-        m_pollManagerCommon.push(&attr_axes[axis].axisFault,                      axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisFault);
-        m_pollManagerCommon.push(&attr_axes[axis].driveStatus,                    axis, Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus);
+        pollManager.push(&attr_axes[axis].axisStatus,                     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisStatus);
+        pollManager.push(&attr_axes[axis].axisFault,                      axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AxisFault);
+        pollManager.push(&attr_axes[axis].driveStatus,                    axis, Automation1AxisStatusItem::Automation1AxisStatusItem_DriveStatus);
+    }
+
+    // Next add task statuses; used by controller
+    for (unsigned task = 0; task < attr_TaskCount_read; task++)
+    {
+        pollManager.push(&attr_taskStatus0[task],                           task, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0);
+        pollManager.push(&attr_taskStatus1[task],                           task, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1);
+        pollManager.push(&attr_taskStatus2[task],                           task, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2);
+    }
+
+
+    // Finally add axes items
+    for (unsigned axis = 0; axis < attr_AxisCount_read; axis++)
+    {
+        pollManager.push(&attr_axes[axis].attr_PositionFeedback_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback);
+        pollManager.push(&attr_axes[axis].attr_PositionError_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError);
+        pollManager.push(&attr_axes[axis].attr_VelocityFeedback_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback);
+        pollManager.push(&attr_axes[axis].attr_VelocityError_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError);
+        pollManager.push(&attr_axes[axis].attr_AccelerationFeedback_read, axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback);
+        pollManager.push(&attr_axes[axis].attr_AccelerationError_read,    axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError);
+        pollManager.push(&attr_axes[axis].attr_AccelerationTarget_read,   axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand);
+        pollManager.push(&attr_axes[axis].attr_CurrentFeedback_read,      axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback);
+        pollManager.push(&attr_axes[axis].attr_CurrentError_read,         axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError);
+        pollManager.push(&attr_axes[axis].attr_CurrentTarget_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand);
+        pollManager.push(&attr_axes[axis].attr_LastMoveDuration_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_TotalMoveTime);
     }
 }
 
 
 void A1Communication::initialiseController_impl()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-
-    // Add all relevant items to the controller polling manager
-    if (m_pollManagerController.size() > 0)
-    {
-        return; 
-    }
-
-    // Controller requires common polling. 
-    initialiseCommonPolling();
-    m_pollManagerCommon.incrementRefCount(); 
-
-    m_pollManagerController.push(&attr_taskStatus0,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus0); 
-    m_pollManagerController.push(&attr_taskStatus1,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus1); 
-    m_pollManagerController.push(&attr_taskStatus2,                           attr_Automation1TaskID_read, Automation1TaskStatusItem::Automation1TaskStatusItem_TaskStatus2); 
+    std::lock_guard<std::recursive_mutex> lock(m_dataLock);
+    initialisePolling();
 
     int32_t api[3];
     Automation1_GetApiVersion(&api[0], &api[1], &api[2]);
@@ -260,28 +262,8 @@ void A1Communication::initialiseController_impl()
 
 void A1Communication::initialiseAxis_impl(unsigned axis)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    // Add all relevant items to the axis polling manager
-    if (m_pollManagerAxis[axis].size() > 0)
-    {
-        return; 
-    }
-
-    // Axis requires common polling. 
-    initialiseCommonPolling(); 
-    m_pollManagerCommon.incrementRefCount(); 
-
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_PositionFeedback_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionFeedback);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_PositionError_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_PositionError);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_VelocityFeedback_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityFeedback);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_VelocityError_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_VelocityError);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_AccelerationFeedback_read, axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationFeedback);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_AccelerationError_read,    axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationError);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_AccelerationTarget_read,   axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationCommand);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_CurrentFeedback_read,      axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentFeedback);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_CurrentError_read,         axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_CurrentTarget_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand);
-    m_pollManagerAxis[axis].push(&attr_axes[axis].attr_LastMoveDuration_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_TotalMoveTime);
+    std::lock_guard<std::recursive_mutex> lock(m_dataLock); 
+    initialisePolling();
 
     attr_axes[axis].attr_FirmwareVersion_read = Tango::string_dup(getFirmwareVersionString(axis).c_str()); 
     attr_axes[axis].attr_MotorType_read = Tango::string_dup(getMotorTypeString(axis).c_str());
@@ -290,7 +272,7 @@ void A1Communication::initialiseAxis_impl(unsigned axis)
 
 void A1Communication::deleteController_impl()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    std::lock_guard<std::recursive_mutex> lock(m_dataLock); 
     // Delete the controller if it is no longer required
     // (but keep the A1Communication instance alive)
     delete[] attr_APIVersion_read;
@@ -300,16 +282,13 @@ void A1Communication::deleteController_impl()
     {
         delete[] attr_AeroScriptFiles_read[i];
     }
-
     Tango::string_free(attr_AeroScriptFilePath_read);
-    m_pollManagerController.clear(); 
-    m_pollManagerCommon.decrementRefCount(); 
 }
 
 
 void A1Communication::deleteAxis_impl(unsigned axis)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    std::lock_guard<std::recursive_mutex> lock(m_dataLock); 
     // Delete the axis if it is no longer required
     // (but keep the A1Communication instance alive)
     if(attr_axes[axis].attr_FirmwareVersion_read != nullptr)
@@ -323,9 +302,6 @@ void A1Communication::deleteAxis_impl(unsigned axis)
         Tango::string_free(attr_axes[axis].attr_MotorType_read);
         attr_axes[axis].attr_MotorType_read = nullptr; 
     }
-
-    m_pollManagerAxis[axis].clear(); 
-    m_pollManagerCommon.decrementRefCount(); 
 }
 
 
@@ -421,43 +397,45 @@ void A1Communication::checkConnection_impl()
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     if (!isConnected())
     {
+        std::cout << "Attempting reconnect..." << std::endl;
         reconnect();
     }
 }
 
 std::unique_lock<std::recursive_mutex> A1Communication::holdConnection_impl()
 {
-    return std::unique_lock<std::recursive_mutex>(m_connectionLock);
+    return std::unique_lock<std::recursive_mutex>(m_dataLock);
 }
 
 
 void A1Communication::onConnectController()
 {
+    {
     std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    initialiseController(); 
 
     // Get number of axis and task slots.
     attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
-    attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller); 
+    attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller);
+    }
+
+    initialiseController(); 
 }
 
 
 void A1Communication::onConnectAxis(unsigned axis)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     initialiseAxis(axis);  
 }
 
 void A1Communication::disconnect_impl()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-
-    m_pollManagerCommon.clear(); 
-    m_pollManagerController.clear(); 
-    for (unsigned axis = 0; axis < MAX_AXES; axis++)
     {
-        m_pollManagerAxis[axis].clear(); 
+    std::lock_guard<std::recursive_mutex> lock(m_dataLock);
+
+    pollManager.clear();
     }
+
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
 
     if (m_connected)
     {
@@ -479,20 +457,18 @@ void A1Communication::reconnect_impl()
     this->connect(m_username, m_password, m_ip);
 }
 
-void A1Communication::readCommon()
+
+bool A1Communication::readCommon()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    if (!m_lastCommonPoll.checkAndUpdate(m_pollInterval_ms))
-    {
-        return; 
-    }
+    // Read the hardware and populate status bits used by controller and axes
+    std::lock_guard<std::recursive_mutex> lock(m_dataLock); 
 
     try
     {
-        attr_AxisCount_read = Automation1_Controller_AvailableAxisCount(*m_controller);
-        attr_TaskCount_read = Automation1_Controller_AvailableTaskCount(*m_controller);
+        // Only hold the connectionLock during the poll
+        std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
 
-        m_pollManagerCommon.poll(m_controller); 
+        if(!pollManager.poll(m_controller)) return false;
     }
     catch (Tango::DevFailed &e)
     {
@@ -604,88 +580,82 @@ void A1Communication::readCommon()
         attr_axes[axis].attr_Error_read = (int(attr_axes[axis].axisFault) & 0xffffff) != 0;
         attr_AxisHealth_read[axis]      = !attr_axes[axis].attr_Error_read; // Healthy if no error
     }
+    return true;
 }
 
 
 void A1Communication::readController_impl()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    readCommon(); 
 
-    try
-    {
-        m_pollManagerController.poll(m_controller);
-    }
-    catch (Tango::DevFailed &e)
-    {
-        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
-        {
-            std::cout << "Communication error in readController()" << std::endl;
-            this->disconnect();
-        }
-        throw(e);
-    }
-    
-    attr_TaskStatus0_read[TSK0_PROGRAM_ASSOCIATED]             = (int(attr_taskStatus0) >> TSK0_PROGRAM_ASSOCIATED) & 1U; //ProgramAssociated
-    attr_TaskStatus0_read[TSK0_IMMEDIATE_EXECUTING]            = (int(attr_taskStatus0) >> TSK0_IMMEDIATE_EXECUTING) & 1U; //ImmediateExecuting
-    attr_TaskStatus0_read[TSK0_RETURN_MOTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_RETURN_MOTION_EXECUTING) & 1U; //ReturnMotionExecuting
-    attr_TaskStatus0_read[TSK0_PROGRAM_RESET]                  = (int(attr_taskStatus0) >> TSK0_PROGRAM_RESET) & 1U; //ProgramReset
-    attr_TaskStatus0_read[TSK0_PENDING_AXES_STOP]              = (int(attr_taskStatus0) >> TSK0_PENDING_AXES_STOP) & 1U; //PendingAxesStop
-    attr_TaskStatus0_read[TSK0_FEEDHOLD_ACTIVE]                = (int(attr_taskStatus0) >> TSK0_FEEDHOLD_ACTIVE) & 1U; //FeedholdActive
-    attr_TaskStatus0_read[TSK0_CALLBACK_HOLD_ACTIVE]           = (int(attr_taskStatus0) >> TSK0_CALLBACK_HOLD_ACTIVE) & 1U; //CallbackHoldActive
-    attr_TaskStatus0_read[TSK0_CALLBACK_RESPONDING]            = (int(attr_taskStatus0) >> TSK0_CALLBACK_RESPONDING) & 1U; //CallbackResponding
-    attr_TaskStatus0_read[TSK0_SPINDLE_ACTIVE]                 = (int(attr_taskStatus0) >> TSK0_SPINDLE_ACTIVE) & 1U; //SpindleActive
-    attr_TaskStatus0_read[TSK0_RETRACE]                        = (int(attr_taskStatus0) >> TSK0_RETRACE) & 1U; //Retrace
-    attr_TaskStatus0_read[TSK0_INTERRUPT_MOTION_ACTIVE]        = (int(attr_taskStatus0) >> TSK0_INTERRUPT_MOTION_ACTIVE) & 1U; //InterruptMotionActive
-    attr_TaskStatus0_read[TSK0_JOYSTICK_ACTIVE]                = (int(attr_taskStatus0) >> TSK0_JOYSTICK_ACTIVE) & 1U; //JoystickActive
-    attr_TaskStatus0_read[TSK0_CORNER_ROUNDING]                = (int(attr_taskStatus0) >> TSK0_CORNER_ROUNDING) & 1U; //CornerRounding
-    attr_TaskStatus0_read[TSK0_JOYSTICK_LOW_SPEED_ACTIVE]      = (int(attr_taskStatus0) >> TSK0_JOYSTICK_LOW_SPEED_ACTIVE) & 1U; //JoystickLowSpeedActive
-    attr_TaskStatus0_read[TSK0_SYNC_FUNCTION_EXECUTING]        = (int(attr_taskStatus0) >> TSK0_SYNC_FUNCTION_EXECUTING) & 1U; //SyncFunctionExecuting
-    attr_TaskStatus0_read[TSK0_TASK_CONTROL_RESTRICTED]        = (int(attr_taskStatus0) >> TSK0_TASK_CONTROL_RESTRICTED) & 1U; //TaskControlRestricted
+    // The call to readCommon() will trigger a hardware polling if necessary; otherwise no update is needed.
+    if(!readCommon()) return; 
 
-    attr_TaskStatus1_read[TSK1_ASYNC_SMC_MOTION_ABORT_PENDING] = (int(attr_taskStatus1) >> TSK1_ASYNC_SMC_MOTION_ABORT_PENDING) & 1U; //AsyncSmcMotionAbortPending
-    attr_TaskStatus1_read[TSK1_RETRACE_REQUESTED]              = (int(attr_taskStatus1) >> TSK1_RETRACE_REQUESTED) & 1U; //RetraceRequested
-    attr_TaskStatus1_read[TSK1_MSO_CHANGE]                     = (int(attr_taskStatus1) >> TSK1_MSO_CHANGE) & 1U; //MsoChange
-    attr_TaskStatus1_read[TSK1_SPINDLE_FEEDHOLD]               = (int(attr_taskStatus1) >> TSK1_SPINDLE_FEEDHOLD) & 1U; //SpindleFeedhold
-    attr_TaskStatus1_read[TSK1_FEEDHOLD_AXES_STOPPED]          = (int(attr_taskStatus1) >> TSK1_FEEDHOLD_AXES_STOPPED) & 1U; //FeedholdAxesStopped
-    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_ENABLING]         = (int(attr_taskStatus1) >> TSK1_CUTTER_RADIUS_ENABLING) & 1U; //CutterRadiusEnabling
-    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_DISABLING]        = (int(attr_taskStatus1) >> TSK1_CUTTER_RADIUS_DISABLING) & 1U; //CutterRadiusDisabling
-    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_POS]    = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_ENABLING_POS) & 1U; //CutterOffsetsEnablingPos
-    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_NEG]    = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_ENABLING_NEG) & 1U; //CutterOffsetsEnablingNeg
-    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_DISABLING]       = (int(attr_taskStatus1) >> TSK1_CUTTER_OFFSETS_DISABLING) & 1U; //CutterOffsetsDisabling
-    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_PENDING]       = (int(attr_taskStatus1) >> TSK1_ON_ERROR_HANDLER_PENDING) & 1U; //OnErrorHandlerPending
-    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_EXECUTING]     = (int(attr_taskStatus1) >> TSK1_ON_ERROR_HANDLER_EXECUTING) & 1U; //OnErrorHandlerExecuting
-    attr_TaskStatus1_read[TSK1_PROGRAM_STOP_PENDING]           = (int(attr_taskStatus1) >> TSK1_PROGRAM_STOP_PENDING) & 1U; //ProgramStopPending
-    attr_TaskStatus1_read[TSK1_SYNC_FUNCTION_PENDING]          = (int(attr_taskStatus1) >> TSK1_SYNC_FUNCTION_PENDING) & 1U; //SyncFunctionPending
-    attr_TaskStatus1_read[TSK1_NO_MFO_FLOOR]                   = (int(attr_taskStatus1) >> TSK1_NO_MFO_FLOOR) & 1U; //NoMfoFloor
-    attr_TaskStatus1_read[TSK1_INTERRUPTED]                    = (int(attr_taskStatus1) >> TSK1_INTERRUPTED) & 1U; //Interrupted
-    attr_TaskStatus1_read[TSK1_IFOV_BUFFER_HOLD]               = (int(attr_taskStatus1) >> TSK1_IFOV_BUFFER_HOLD) & 1U; //IfovBufferHold
+    std::lock_guard<std::recursive_mutex> lock(m_dataLock);
 
-    attr_TaskStatus2_read[TSK2_SCALING_ACTIVE]                 = (int(attr_taskStatus2) >> TSK2_SCALING_ACTIVE) & 1U; //ScalingActive
-    attr_TaskStatus2_read[TSK2_OFFSET_FIXTURE_ACTIVE]          = (int(attr_taskStatus2) >> TSK2_OFFSET_FIXTURE_ACTIVE) & 1U; //OffsetFixtureActive
-    attr_TaskStatus2_read[TSK2_PROFILE_ACTIVE]                 = (int(attr_taskStatus2) >> TSK2_PROFILE_ACTIVE) & 1U; //ProfileActive
-    attr_TaskStatus2_read[TSK2_MOTION_MODE_RAPID]              = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_RAPID) & 1U; //MotionModeRapid
-    attr_TaskStatus2_read[TSK2_MOTION_MODE_LINEAR]             = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_LINEAR) & 1U; //MotionModeLinear
-    attr_TaskStatus2_read[TSK2_MOTION_PVT]                     = (int(attr_taskStatus2) >> TSK2_MOTION_PVT) & 1U; //MotionPvt
-    attr_TaskStatus2_read[TSK2_MOTION_CONTINUOUS_ACTIVE]       = (int(attr_taskStatus2) >> TSK2_MOTION_CONTINUOUS_ACTIVE) & 1U; //MotionContinuousActive
-    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_POS]      = (int(attr_taskStatus2) >> TSK2_CUTTER_OFFSETS_ACTIVE_POS) & 1U; //CutterOffsetsActivePos
-    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_LEFT]      = (int(attr_taskStatus2) >> TSK2_CUTTER_RADIUS_ACTIVE_LEFT) & 1U; //CutterOffsetsActiveLeft
-    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_RIGHT]     = (int(attr_taskStatus2) >> TSK2_CUTTER_RADIUS_ACTIVE_RIGHT) & 1U; //CutterOffsetsActiveRight
-    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_NEG]      = (int(attr_taskStatus2) >> TSK2_CUTTER_OFFSETS_ACTIVE_NEG) & 1U; //CutterOffsetsActiveNeg
-    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_LEFT]           = (int(attr_taskStatus2) >> TSK2_NORMALCY_ACTIVE_LEFT) & 1U; //NormalcyActiveLeft
-    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_RIGHT]          = (int(attr_taskStatus2) >> TSK2_NORMALCY_ACTIVE_RIGHT) & 1U; //NormalcyActiveRight
-    attr_TaskStatus2_read[TSK2_NORMALCY_ALIGNMENT]             = (int(attr_taskStatus2) >> TSK2_NORMALCY_ALIGNMENT) & 1U; //NormalcyAlignment
-    attr_TaskStatus2_read[TSK2_MOTION_MODE_CW]                 = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_CW) & 1U; //MotionModeCw
-    attr_TaskStatus2_read[TSK2_MOTION_MODE_CCW]                = (int(attr_taskStatus2) >> TSK2_MOTION_MODE_CCW) & 1U; //MotionModeCcw
-    attr_TaskStatus2_read[TSK2_LIMIT_FEEDRATE_ACTIVE]          = (int(attr_taskStatus2) >> TSK2_LIMIT_FEEDRATE_ACTIVE) & 1U; //LimitFeedrateActive
-    attr_TaskStatus2_read[TSK2_LIMIT_MFO_ACTIVE]               = (int(attr_taskStatus2) >> TSK2_LIMIT_MFO_ACTIVE) & 1U; //LimitMfoActive
-    attr_TaskStatus2_read[TSK2_COORD1_PLANE1]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE1) & 1U; //Coord1Plane1
-    attr_TaskStatus2_read[TSK2_COORD1_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE2) & 1U; //Coord1Plane2
-    attr_TaskStatus2_read[TSK2_COORD1_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD1_PLANE3) & 1U; //Coord1Plane3
-    attr_TaskStatus2_read[TSK2_COORD2_PLANE1]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE1) & 1U; //Coord2Plane1
-    attr_TaskStatus2_read[TSK2_COORD2_PLANE2]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE2) & 1U; //Coord2Plane2
-    attr_TaskStatus2_read[TSK2_COORD2_PLANE3]                  = (int(attr_taskStatus2) >> TSK2_COORD2_PLANE3) & 1U; //Coord2Plane3
+    int statusBits0 = (int)attr_taskStatus0[attr_Automation1TaskID_read];    
+    attr_TaskStatus0_read[TSK0_PROGRAM_ASSOCIATED]             = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_ProgramAssociated;
+    attr_TaskStatus0_read[TSK0_IMMEDIATE_EXECUTING]            = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_ImmediateExecuting;
+    attr_TaskStatus0_read[TSK0_RETURN_MOTION_EXECUTING]        = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_ReturnMotionExecuting;
+    attr_TaskStatus0_read[TSK0_PROGRAM_RESET]                  = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_ProgramReset;
+    attr_TaskStatus0_read[TSK0_PENDING_AXES_STOP]              = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_PendingAxesStop;
+    attr_TaskStatus0_read[TSK0_FEEDHOLD_ACTIVE]                = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_FeedholdActive;
+    attr_TaskStatus0_read[TSK0_CALLBACK_HOLD_ACTIVE]           = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_CallbackHoldActive;
+    attr_TaskStatus0_read[TSK0_CALLBACK_RESPONDING]            = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_CallbackResponding;
+    attr_TaskStatus0_read[TSK0_SPINDLE_ACTIVE]                 = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_SpindleActive;
+    attr_TaskStatus0_read[TSK0_RETRACE]                        = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_Retrace;
+    attr_TaskStatus0_read[TSK0_INTERRUPT_MOTION_ACTIVE]        = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_InterruptMotionActive;
+    attr_TaskStatus0_read[TSK0_JOYSTICK_ACTIVE]                = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_JoystickActive;
+    attr_TaskStatus0_read[TSK0_CORNER_ROUNDING]                = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_CornerRounding;
+    attr_TaskStatus0_read[TSK0_JOYSTICK_LOW_SPEED_ACTIVE]      = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_JoystickLowSpeedActive;
+    attr_TaskStatus0_read[TSK0_SYNC_FUNCTION_EXECUTING]        = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_SynchronizedFunctionExecuting;
+    attr_TaskStatus0_read[TSK0_TASK_CONTROL_RESTRICTED]        = statusBits0 & Automation1TaskStatus0::Automation1TaskStatus0_TaskControlRestricted;
 
+    int statusBits1 = (int)attr_taskStatus1[attr_Automation1TaskID_read];
+    attr_TaskStatus1_read[TSK1_ASYNC_SMC_MOTION_ABORT_PENDING] = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_AsyncSmcMotionAbortPending;
+    attr_TaskStatus1_read[TSK1_RETRACE_REQUESTED]              = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_RetraceRequested;
+    attr_TaskStatus1_read[TSK1_MSO_CHANGE]                     = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_MsoChange;
+    attr_TaskStatus1_read[TSK1_SPINDLE_FEEDHOLD]               = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_SpindleFeedhold;
+    attr_TaskStatus1_read[TSK1_FEEDHOLD_AXES_STOPPED]          = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_FeedholdAxesStopped;
+    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_ENABLING]         = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_CutterRadiusEnabling;
+    attr_TaskStatus1_read[TSK1_CUTTER_RADIUS_DISABLING]        = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_CutterRadiusDisabling;
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_POS]    = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_CutterOffsetsEnablingPositive;
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_ENABLING_NEG]    = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_CutterOffsetsEnablingNegative;
+    attr_TaskStatus1_read[TSK1_CUTTER_OFFSETS_DISABLING]       = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_CutterOffsetsDisabling;
+    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_PENDING]       = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_OnErrorHandlerPending;
+    attr_TaskStatus1_read[TSK1_ON_ERROR_HANDLER_EXECUTING]     = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_OnErrorHandlerExecuting;
+    attr_TaskStatus1_read[TSK1_PROGRAM_STOP_PENDING]           = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_ProgramStopPending;
+    attr_TaskStatus1_read[TSK1_SYNC_FUNCTION_PENDING]          = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_SynchronizedFunctionPending;
+    attr_TaskStatus1_read[TSK1_NO_MFO_FLOOR]                   = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_NoMfoFloor;
+    attr_TaskStatus1_read[TSK1_INTERRUPTED]                    = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_Interrupted;
+    attr_TaskStatus1_read[TSK1_IFOV_BUFFER_HOLD]               = statusBits1 & Automation1TaskStatus1::Automation1TaskStatus1_IfovBufferHold;
+
+    int statusBits2 = (int)attr_taskStatus2[attr_Automation1TaskID_read];
+    attr_TaskStatus2_read[TSK2_SCALING_ACTIVE]                 = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_ScalingActive;
+    attr_TaskStatus2_read[TSK2_PROFILE_ACTIVE]                 = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_ProfileActive;
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_RAPID]              = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_MotionModeRapid;
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_LINEAR]             = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_MotionModeLinear;
+    attr_TaskStatus2_read[TSK2_MOTION_PVT]                     = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_MotionPvt;
+    attr_TaskStatus2_read[TSK2_MOTION_CONTINUOUS_ACTIVE]       = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_MotionContinuousActive;
+    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_POS]      = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_CutterOffsetsActivePos;
+    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_LEFT]      = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_CutterRadiusActiveLeft;
+    attr_TaskStatus2_read[TSK2_CUTTER_RADIUS_ACTIVE_RIGHT]     = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_CutterRadiusActiveRight;
+    attr_TaskStatus2_read[TSK2_CUTTER_OFFSETS_ACTIVE_NEG]      = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_CutterOffsetsActiveNeg;
+    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_LEFT]           = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_NormalcyActiveLeft;
+    attr_TaskStatus2_read[TSK2_NORMALCY_ACTIVE_RIGHT]          = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_NormalcyActiveRight;
+    attr_TaskStatus2_read[TSK2_NORMALCY_ALIGNMENT]             = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_NormalcyAlignment;
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_CW]                 = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_MotionModeCw;
+    attr_TaskStatus2_read[TSK2_MOTION_MODE_CCW]                = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_MotionModeCcw;
+    attr_TaskStatus2_read[TSK2_LIMIT_FEEDRATE_ACTIVE]          = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_LimitFeedrateActive;
+    attr_TaskStatus2_read[TSK2_LIMIT_MFO_ACTIVE]               = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_LimitMfoActive;
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE1]                  = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_Coord1Plane1;
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE2]                  = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_Coord1Plane2;
+    attr_TaskStatus2_read[TSK2_COORD1_PLANE3]                  = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_Coord1Plane3;
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE1]                  = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_Coord2Plane1;
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE2]                  = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_Coord2Plane2;
+    attr_TaskStatus2_read[TSK2_COORD2_PLANE3]                  = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_Coord2Plane3;
+
+
+    // The A1 API calls made here (Automation1_Files_GetAllFiles, Automation1_Task_GetStatus) are threadsafe, so no lock is needed
     int32_t fileCount, filenameLength; 
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, NULL, &fileCount, &filenameLength); 
 
@@ -731,22 +701,7 @@ void A1Communication::readController_impl()
 
 void A1Communication::readAxis_impl(unsigned axis)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
     readCommon(); 
-
-    try
-    {
-        m_pollManagerAxis[axis].poll(m_controller); 
-    }
-    catch (Tango::DevFailed &e)
-    {
-        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
-        {
-            std::cout << "Communication error in readAxis()" << std::endl;
-            this->disconnect();
-        }
-        throw(e);
-    }
 }
 
 
@@ -984,6 +939,7 @@ void A1Communication::axis_AcknowledgeFaults(int32_t axis)
 
 std::string A1Communication::getFirmwareVersionString(unsigned axis)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
     double firmware[4]; 
     std::stringstream firmwareS; 
     A1_GENERIC_CALL_AND_THROW(Automation1_Command_DriveGetItem, *m_controller, attr_Automation1TaskID_read, axis, Automation1DriveItem_FirmwareVersionMajor, 0, &firmware[0]);
@@ -1032,26 +988,22 @@ std::string A1Communication::getMotorTypeString(unsigned axis)
 }
 
 std::string A1Communication::axis_GetA1ParameterString(int32_t axis,int parameterID) {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
     char parameter[255];
     A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_GetAxisStringValue, *m_controller, axis, (Automation1AxisParameterId)parameterID, parameter, 255);
     return std::string{parameter};
 }
 
 double A1Communication::axis_GetA1ParameterValue(int32_t axis,int parameterID) {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
     double value;
     A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_GetAxisValue, *m_controller, axis, (Automation1AxisParameterId)parameterID, &value);
     return value;
 }
 
 void A1Communication::axis_SetA1ParameterValue(int32_t axis,int parameterID, double value) {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
     A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_SetAxisValue, *m_controller, axis, (Automation1AxisParameterId)parameterID, value);
 }
 
 void A1Communication::axis_SetA1ParameterString(int32_t axis,int parameterID, std::string value) {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
     A1_GENERIC_CALL_AND_THROW(Automation1_Parameter_SetAxisStringValue, *m_controller, axis, (Automation1AxisParameterId)parameterID, value.c_str());
 }
 
