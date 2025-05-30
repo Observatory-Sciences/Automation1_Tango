@@ -464,8 +464,6 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 
     Tango::string_free(*attr_MotorType_read);
     *attr_MotorType_read            = Tango::string_dup(A1Bridge_ns::getInstance()->attr_axes[axis].attr_MotorType_read); 
-
-    // TODO: Read ramp values? 
     *attr_RampType_read = (RampTypeEnum)A1Bridge_ns::getInstance()->attr_axes[axis].attr_RampType_read;
     *attr_RampMode_read = (RampModeEnum)A1Bridge_ns::getInstance()->attr_axes[axis].attr_RampMode_read;
     if(*attr_RampMode_read==_RATE) {
