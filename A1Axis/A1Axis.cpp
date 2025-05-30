@@ -458,14 +458,19 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
     *attr_Error_read                = A1Bridge_ns::getInstance()->attr_axes[axis].attr_Error_read;
     *attr_LastMoveDuration_read     = A1Bridge_ns::getInstance()->attr_axes[axis].attr_LastMoveDuration_read;
 	*attr_VirtualAxis_read			= A1Bridge_ns::getInstance()->attr_axes[axis].attr_VirtualAxis_read;
-    
+
     Tango::string_free(*attr_FirmwareVersion_read);
     *attr_FirmwareVersion_read      = Tango::string_dup(A1Bridge_ns::getInstance()->attr_axes[axis].attr_FirmwareVersion_read); 
 
     Tango::string_free(*attr_MotorType_read);
     *attr_MotorType_read            = Tango::string_dup(A1Bridge_ns::getInstance()->attr_axes[axis].attr_MotorType_read); 
-
-    // TODO: Read ramp values? 
+    *attr_RampType_read = (RampTypeEnum)A1Bridge_ns::getInstance()->attr_axes[axis].attr_RampType_read;
+    *attr_RampMode_read = (RampModeEnum)A1Bridge_ns::getInstance()->attr_axes[axis].attr_RampMode_read;
+    if(*attr_RampMode_read==_RATE) {
+        *attr_RampValue_read = A1Bridge_ns::getInstance()->attr_axes[axis].attr_RampValueRate_read;
+    } else {
+        *attr_RampValue_read = A1Bridge_ns::getInstance()->attr_axes[axis].attr_RampValueTime_read;
+    }
 
     if (*attr_Error_read)
     {
@@ -944,7 +949,8 @@ void A1Axis::write_RampType(Tango::WAttribute &attr)
 	/*----- PROTECTED REGION ID(A1Axis::write_RampType) ENABLED START -----*/
 	attr_RampType_write = w_val; 
     *attr_RampType_read = w_val; 
-
+    A1Bridge_ns::getInstance()->checkConnection();
+    A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, *attr_RampType_read, *attr_RampMode_read, *attr_RampValue_read);
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampType
 }
@@ -984,7 +990,8 @@ void A1Axis::write_RampMode(Tango::WAttribute &attr)
 	/*----- PROTECTED REGION ID(A1Axis::write_RampMode) ENABLED START -----*/
 	attr_RampMode_write = w_val; 
     *attr_RampMode_read = w_val; 
-	
+    A1Bridge_ns::getInstance()->checkConnection();
+    A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, *attr_RampType_read, *attr_RampMode_read, *attr_RampValue_read);	
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampMode
 }
@@ -1023,8 +1030,9 @@ void A1Axis::write_RampValue(Tango::WAttribute &attr)
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_RampValue) ENABLED START -----*/
 	attr_RampValue_write = w_val; 
-    *attr_RampValue_read = w_val; 
-	
+    *attr_RampValue_read = w_val;
+    A1Bridge_ns::getInstance()->checkConnection();
+    A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, *attr_RampType_read, *attr_RampMode_read, *attr_RampValue_read);	
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::write_RampValue
 }
@@ -1147,7 +1155,6 @@ void A1Axis::home()
 	/*----- PROTECTED REGION ID(A1Axis::home) ENABLED START -----*/
 
 	A1Bridge_ns::getInstance()->checkConnection();
-    A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
     A1Bridge_ns::getInstance()->axis_Home(this->axis); 
 
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::home
@@ -1165,7 +1172,6 @@ void A1Axis::home_async()
 	/*----- PROTECTED REGION ID(A1Axis::home_async) ENABLED START -----*/
 	
     A1Bridge_ns::getInstance()->checkConnection();
-    A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
     A1Bridge_ns::getInstance()->axis_HomeAsync(this->axis); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::home_async
@@ -1183,8 +1189,7 @@ void A1Axis::move()
 	/*----- PROTECTED REGION ID(A1Axis::move) ENABLED START -----*/
 	
     A1Bridge_ns::getInstance()->checkConnection();
-    A1Bridge_ns::getInstance()->axis_WriteRamp(this->axis, attr_RampType_write, attr_RampMode_write, attr_RampValue_write);
-	A1Bridge_ns::getInstance()->axis_Move(this->axis, attr_MoveType_write, attr_PositionTarget_write, attr_VelocityTarget_write); 
+    A1Bridge_ns::getInstance()->axis_Move(this->axis, attr_MoveType_write, attr_PositionTarget_write, attr_VelocityTarget_write); 
 	
 	/*----- PROTECTED REGION END -----*/	//	A1Axis::move
 }

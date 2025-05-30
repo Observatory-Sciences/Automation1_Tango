@@ -237,6 +237,10 @@ void A1Communication::initialisePolling()
         pollManager.push(&attr_axes[axis].attr_CurrentError_read,         axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentError);
         pollManager.push(&attr_axes[axis].attr_CurrentTarget_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_CurrentCommand);
         pollManager.push(&attr_axes[axis].attr_LastMoveDuration_read,     axis, Automation1AxisStatusItem::Automation1AxisStatusItem_TotalMoveTime);
+        pollManager.push(&attr_axes[axis].attr_RampValueRate_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationRate);
+        pollManager.push(&attr_axes[axis].attr_RampValueTime_read,        axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationTime);
+        pollManager.push(&attr_axes[axis].attr_RampMode_read,             axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationMode);
+        pollManager.push(&attr_axes[axis].attr_RampType_read,             axis, Automation1AxisStatusItem::Automation1AxisStatusItem_AccelerationType);
     }
 }
 

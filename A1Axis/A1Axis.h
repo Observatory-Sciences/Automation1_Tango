@@ -104,7 +104,7 @@ private:
     std::atomic<bool>      m_stopPollFlag; 
     std::thread            m_pollThread; 
     std::recursive_mutex   m_readLock;
-    
+
     MoveTypeEnum	            attr_MoveType_write;
 	Tango::DevDouble	        attr_PositionTarget_write;
 	Tango::DevDouble	        attr_VelocityTarget_write;
