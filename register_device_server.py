@@ -12,7 +12,7 @@ command line.
 import argparse
 import json
 from pprint import pprint
-import fandango as fn
+import PyTango
 from sys import version_info
 
 def get_args():
@@ -36,6 +36,15 @@ def get_args():
 
     return parser.parse_args()
 
+def add_new_device(DB,device_server,className,main_device):
+    dev_info = PyTango.DbDevInfo()
+    dev_info.name = main_device
+    dev_info._class = className
+    dev_info.server = device_server
+
+    DB.add_device(dev_info)
+
+
 # All locals and arguments required, so disabling warnings
 # pylint: disable=too-many-arguments,too-many-locals
 def create_devices(server_name, device_name, ip_address, username, password, simulation, num_axes):
@@ -51,21 +60,23 @@ def create_devices(server_name, device_name, ip_address, username, password, sim
     device_server = "Automation1/{}".format(server_name)
     main_device = format_device_name("controller")
 
-    fn.tango.add_new_device(device_server, "A1Controller", main_device)
-    fn.tango.put_device_property(main_device, "IpAddress", ip_address)
-    fn.tango.put_device_property(main_device, "Username", username)
-    fn.tango.put_device_property(main_device, "Password", password)
-    fn.tango.put_device_property(main_device, "Simulate", simulation)
+    DB = PyTango.Database()
+
+    add_new_device(DB, device_server, "A1Controller", main_device)
+
+    properties = {"IpAddress":ip_address, "Username":username,
+                  "Password":password, "Simulate":simulation}
+    DB.put_device_property(main_device,properties)
 
     axis_labels = ['Axis {}'.format(x) for x in range(32)]
     axis_labels_dict = {"AxisHealth" : {'BooleanLabels' : axis_labels}}
-    fn.get_database(main_device).put_device_attribute_property(main_device, axis_labels_dict)
+
+    DB.put_device_attribute_property(main_device, axis_labels_dict)
 
     for i in range(3):
         with open("TaskStatus{}Labels.json".format(i), 'r') as json_file:
             task_status_dict = byteify(json.load(json_file))
-            fn.get_database(main_device)\
-                .put_device_attribute_property(main_device, task_status_dict)
+            DB.put_device_attribute_property(main_device, task_status_dict)
 
     # Axes
 
@@ -85,14 +96,13 @@ def create_devices(server_name, device_name, ip_address, username, password, sim
 
     for i in range(num_axes):
         axis_device = format_device_name("axis{}".format(i))
-        fn.tango.add_new_device(device_server, "A1Axis", axis_device)
-        fn.tango.put_device_property(axis_device, "Axis", "{}".format(i))
-        fn.tango.put_device_property(axis_device, "MainDeviceName", main_device)
+        add_new_device(DB,device_server, "A1Axis", axis_device)
+        properties = {"Axis":"{}".format(i), "MainDeviceName":main_device}
+        DB.put_device_property(axis_device,properties)
 
-        fn.get_database(axis_device).put_device_attribute_property(axis_device, axis_status_labels)
-        fn.get_database(axis_device).put_device_attribute_property(axis_device, axis_fault_labels)
-        fn.get_database(axis_device)\
-            .put_device_attribute_property(axis_device, drive_status_labels)
+        DB.put_device_attribute_property(axis_device, axis_status_labels)
+        DB.put_device_attribute_property(axis_device, axis_fault_labels)
+        DB.put_device_attribute_property(axis_device, drive_status_labels)
 
 
 def byteify(inpt):
