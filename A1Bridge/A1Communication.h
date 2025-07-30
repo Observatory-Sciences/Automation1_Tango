@@ -104,7 +104,7 @@ class A1PollManager
     void push(double* destination, unsigned axis, Automation1AxisStatusItem item); 
     void push(double* destination, unsigned task, Automation1TaskStatusItem item); 
     void push(double* destination, Automation1SystemStatusItem item); 
-    bool poll(Automation1Controller* controller);
+    bool poll(Automation1Controller* controller, bool* runningStatus);
     // All classes need the common polling, so we can't delete common poll manager until no one else is using it. 
     // We use a ref count for this. 
     void incrementRefCount(); 
@@ -161,7 +161,7 @@ class A1Communication: public A1Bridge
     virtual void initialiseAxis_impl(unsigned axis); 
 
     virtual void readController_impl(); 
-    virtual void readAxis_impl(unsigned axis); 
+    virtual bool readAxis_impl(unsigned axis); 
     
     virtual void deleteController_impl(); 
     virtual void deleteAxis_impl(unsigned axis); 

@@ -47,7 +47,7 @@ class A1Simulation: public A1Bridge
     virtual void disconnect_impl(); 
     virtual void initialiseController_impl();
     virtual void initialiseAxis_impl(unsigned axis);
-    virtual void readAxis_impl(unsigned axis);
+    virtual bool readAxis_impl(unsigned axis);
 
   public:
     A1Simulation(); 

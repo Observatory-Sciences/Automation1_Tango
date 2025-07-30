@@ -187,9 +187,9 @@ void A1Bridge::readController()
 }
 
 
-void A1Bridge::readAxis(unsigned axis)
+bool A1Bridge::readAxis(unsigned axis)
 {
-    this->readAxis_impl(axis); 
+    return this->readAxis_impl(axis); 
 }
 
 

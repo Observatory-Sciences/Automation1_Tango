@@ -100,7 +100,7 @@ class A1Bridge
 
     // read data from axis or controller
     virtual void readController_impl() {NotImplemented(__func__);}; 
-    virtual void readAxis_impl(unsigned axis) {NotImplemented(__func__);}; 
+    virtual bool readAxis_impl(unsigned axis) {NotImplemented(__func__); return false; }; 
 
   public: 
     // Attributes
@@ -141,7 +141,7 @@ class A1Bridge
     void deleteAxis(unsigned axis); 
 
     void readController();
-    void readAxis(unsigned axis);
+    bool readAxis(unsigned axis);
     
     virtual void setPollingInterval(std::chrono::milliseconds interval)
             {NotImplemented(__func__);};

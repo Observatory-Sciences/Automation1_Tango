@@ -59,7 +59,7 @@ void A1Simulation::initialiseAxis_impl(unsigned axis)
 {    
 }
 
-void A1Simulation::readAxis_impl(unsigned axis)
+bool A1Simulation::readAxis_impl(unsigned axis)
 {
     //unsigned vectorLength = attr_axisContainer[axis].size();
     //double axisResults[vectorLength];
@@ -169,6 +169,7 @@ void A1Simulation::readAxis_impl(unsigned axis)
     // attr_axes[axis].attr_AxisFault_read[25]   = (int(attr_axes[axis].axisFault) >> 25 ) & 1U;
     // attr_axes[axis].attr_AxisFault_read[26]   = (int(attr_axes[axis].axisFault) >> 26 ) & 1U;
     // attr_axes[axis].attr_AxisFault_read[27]   = (int(attr_axes[axis].axisFault) >> 27 ) & 1U;
+    return true;
 }
 
 void A1Simulation::axis_HomeAsync(int32_t axis) 

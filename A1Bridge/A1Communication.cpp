@@ -108,7 +108,7 @@ void A1PollManager::push(double* destination, Automation1SystemStatusItem item)
 }
 
 
-bool A1PollManager::poll(Automation1Controller* controller)
+bool A1PollManager::poll(Automation1Controller* controller,bool* controllerRunningStatus)
 {
     // Poll all items that have been added to the list of items to be polled by this manager
     // Returns false if the controller was not polled, true otherwise
@@ -118,7 +118,10 @@ bool A1PollManager::poll(Automation1Controller* controller)
 
     // We wait a minimum interval between updates to avoid choking the hardware
     if(!pollingClock.checkAndUpdate(minimumPollingInterval_ms)) return false;
-
+    Automation1_Controller_IsRunning(*controller, controllerRunningStatus);
+    if(!*controllerRunningStatus) {
+        return false;
+    }
     size_t length = this->size(); 
 
     double results[length]; 
@@ -143,6 +146,7 @@ bool A1PollManager::poll(Automation1Controller* controller)
         A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetSystemResult, m_config.get(), results, length, 
                                 item.item, 0, item.destination);
     }
+
     return true;
 }
 
@@ -471,8 +475,7 @@ bool A1Communication::readCommon()
     {
         // Only hold the connectionLock during the poll
         std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
-
-        if(!pollManager.poll(m_controller)) return false;
+        if(!pollManager.poll(m_controller, &attr_ControllerRunning_read)) return false;
     }
     catch (Tango::DevFailed &e)
     {
@@ -703,9 +706,10 @@ void A1Communication::readController_impl()
 }
 
 
-void A1Communication::readAxis_impl(unsigned axis)
+bool A1Communication::readAxis_impl(unsigned axis)
 {
-    readCommon(); 
+    readCommon();
+    return attr_ControllerRunning_read;
 }
 
 

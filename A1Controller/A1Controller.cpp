@@ -486,7 +486,12 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
         }
     }
 
-    if (fault)
+    if(!*attr_ControllerRunning_read)
+    {
+        set_state(Tango::OFF);
+        set_status("Controller is STOPPED.");
+    }
+    else if (fault)
     {
         set_state(Tango::FAULT); 
         set_status("At least one axis has a fault"); 
