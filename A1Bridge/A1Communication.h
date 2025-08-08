@@ -6,6 +6,7 @@
 #include <variant>
 #include <map>
 #include <tango.h> 
+#include <atomic>
 
 #include "A1Bridge.h"
 #include "A1Defines.h"
@@ -20,7 +21,6 @@ void throwWithLastA1Error_origin(const std::string& reason, const std::string& o
 
 // Macro that includes __func__ as location of error
 #define throwWithLastA1Error(reason) throwWithLastA1Error_origin(reason, __func__)
-
 
 // Macro to call an A1 function and report last A1 error if call returns an error code
 #define A1_GENERIC_CALL_AND_THROW(A1F, ...) \
@@ -37,9 +37,9 @@ void throwWithLastA1Error_origin(const std::string& reason, const std::string& o
     } 
 
 
-// Macro to call an A1 function - if error code indicates communication problem, 
-// disconnect and then report last A1 error 
+// Macro to call an A1 function - if error code indicates communication problem, disconnect 
 #define A1_TRY_CALL_AND_DISCONNECT(A1F, ...) \
+    NONBLOCKING_STARTING_CHECK(A1F) \
     try \
     { \
         A1_GENERIC_CALL_AND_THROW(A1F, __VA_ARGS__); \
@@ -54,6 +54,41 @@ void throwWithLastA1Error_origin(const std::string& reason, const std::string& o
         throw(e); \
     } 
 
+// Macro that is a sibling to A1_TRY_CALL_AND_DISCONNECT but also sets starting flag appropriately
+#define A1_TRY_START(A1F, ...) \
+    startingFlag = true; \
+    try \
+    { \
+        A1_GENERIC_CALL_AND_THROW(A1F, __VA_ARGS__); \
+        startingFlag = false; \
+    } \
+    catch (Tango::DevFailed &e) \
+    { \
+        startingFlag = false; \
+        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError())) \
+        { \
+            std::cout << "Call to "#A1F" failed with error: " << e.errors.get_buffer()->desc << std::endl; \
+            this->disconnect(); \
+        } \
+        throw(e); \
+    } \
+    catch (...) \
+    { \
+        startingFlag = false; \
+        throw; \
+    }
+
+// A1 does not throw exceptions when (re)starting; these macros mimic the exceptions thrown when the controller is stopped
+#define NONBLOCKING_STARTING_CHECK(A1F) \
+    if (startingFlag) \
+    { \
+        THROW_STARTING_ERROR(A1F); \
+    }
+
+#define THROW_STARTING_ERROR(A1F) \
+    Tango::Except::throw_exception("DRIVER_FAILURE", \
+                                    "ERROR: "#A1F" failed: This operation cannot be performed because the controller is starting.", \
+                                    __func__);
 
 class A1PollConfig
 {
@@ -144,6 +179,8 @@ class A1Communication: public A1Bridge
     // Mutex to wrap communication with hardware
     std::recursive_mutex    m_connectionLock;
     std::recursive_mutex    m_dataLock;
+    std::recursive_mutex    m_runningLock;
+    std::atomic<bool>       startingFlag{false};
 
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
@@ -161,10 +198,13 @@ class A1Communication: public A1Bridge
     virtual void initialiseAxis_impl(unsigned axis); 
 
     virtual void readController_impl(); 
-    virtual bool readAxis_impl(unsigned axis); 
+    virtual void readAxis_impl(unsigned axis); 
     
     virtual void deleteController_impl(); 
     virtual void deleteAxis_impl(unsigned axis); 
+
+    bool isControllerStarting();
+    virtual bool isControllerRunning();
 
     void initialisePolling();
     bool readCommon(); 

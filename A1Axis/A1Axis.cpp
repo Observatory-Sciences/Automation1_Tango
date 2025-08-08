@@ -428,12 +428,12 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 
     try
     {
-        if(!A1Bridge_ns::getInstance()->readAxis(axis))
-        {
+        if(!A1Bridge_ns::getInstance()->isControllerRunning()) {
             set_state(Tango::ALARM);
             set_status("Controller is not running.");
             return;
-        } 
+        }
+        A1Bridge_ns::getInstance()->readAxis(axis);
     } 
     catch (Tango::DevFailed &e)
     {

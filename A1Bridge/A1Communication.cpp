@@ -118,6 +118,8 @@ bool A1PollManager::poll(Automation1Controller* controller,bool* controllerRunni
 
     // We wait a minimum interval between updates to avoid choking the hardware
     if(!pollingClock.checkAndUpdate(minimumPollingInterval_ms)) return false;
+
+    // Do not do updates if controller is not running
     Automation1_Controller_IsRunning(*controller, controllerRunningStatus);
     if(!*controllerRunningStatus) {
         return false;
@@ -368,7 +370,7 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
 
 void A1Communication::checkControllerRunning()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    std::lock_guard<std::recursive_mutex> lock(m_runningLock); 
 
     if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
     {
@@ -384,19 +386,7 @@ void A1Communication::checkControllerRunning()
 
     if (!attr_ControllerRunning_read)
     {
-        std::cout << "Controller is not running; starting..." << std::endl;
-        if (!Automation1_Controller_Start(*m_controller))
-        {
-            throwWithLastA1Error("Failed to start controller");
-        }
-        if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
-        {
-            throwWithLastA1Error("Failed to determine if controller is running after start request");
-        }
-        if (!attr_ControllerRunning_read)
-        {
-            throwWithLastA1Error("Controller not running after start request");
-        }
+        controller_Start();
     }
 }
 
@@ -706,30 +696,45 @@ void A1Communication::readController_impl()
 }
 
 
-bool A1Communication::readAxis_impl(unsigned axis)
+void A1Communication::readAxis_impl(unsigned axis)
 {
     readCommon();
-    return attr_ControllerRunning_read;
 }
 
 
+bool A1Communication::isControllerRunning()
+{
+    return (A1Bridge::isControllerRunning() && !startingFlag);
+}
+
+bool A1Communication::isControllerStarting()
+{
+    return startingFlag;
+} 
+
 void A1Communication::controller_Reset() 
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Controller_Reset, *m_controller); 
+    NONBLOCKING_STARTING_CHECK(Automation1_Controller_Reset);
+    std::lock_guard<std::recursive_mutex> lock(m_runningLock);
+    A1_TRY_START(Automation1_Controller_Reset, *m_controller); 
 } 
 
 
 void A1Communication::controller_Start() 
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Controller_Start, *m_controller);
+    if (startingFlag)
+    {
+        return;
+    }
+    std::lock_guard<std::recursive_mutex> lock(m_runningLock);
+    A1_TRY_START(Automation1_Controller_Start, *m_controller);
 } 
 
 
 void A1Communication::controller_Stop() 
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    NONBLOCKING_STARTING_CHECK(Automation1_Controller_Stop);
+    std::lock_guard<std::recursive_mutex> lock(m_runningLock); 
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Controller_Stop, *m_controller);
 } 
 
