@@ -1223,6 +1223,8 @@ void A1Controller::doStart()
     catch (...)
     {
         std::lock_guard guard(exceptionLock);
+        set_state(Tango::UNKNOWN);
+        set_status("An unexpected error occurred during the controller startup.");
         longRunningException = std::current_exception();
         longRunningFlag = false;
     }
@@ -1239,6 +1241,8 @@ void A1Controller::doReset()
     catch (...)
     {
         std::lock_guard guard(exceptionLock);
+        set_state(Tango::UNKNOWN);
+        set_status("An unexpected error occurred during the controller startup.");
         longRunningException = std::current_exception();
         longRunningFlag = false;
     }
@@ -1249,8 +1253,6 @@ void A1Controller::checkThreadException()
     std::lock_guard guard(exceptionLock);
     if (longRunningException)
     {
-        set_state(Tango::UNKNOWN);
-        set_status("An unexpected error occurred during the controller startup.");
         std::rethrow_exception(std::move(longRunningException));
     }
 }

@@ -195,14 +195,16 @@ class A1Bridge
             {NotImplemented(__func__);}; 
     virtual void controller_CommandExecute(const std::string& aeroScriptText)
             {NotImplemented(__func__);}; 
+    virtual void blocking_CommandExecute(const std::string& aeroScriptText)
+            {NotImplemented(__func__);};
     virtual void axis_Abort(int32_t axis) 
             {NotImplemented(__func__);}; 
     virtual void axis_HomeAsync(int32_t axis) 
             {NotImplemented(__func__);};
-    virtual void axis_Home(int32_t axis) 
-            {NotImplemented(__func__);}; 
     virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) 
-            {NotImplemented(__func__);}; 
+            {NotImplemented(__func__);};
+    virtual void blocking_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity)
+            {NotImplemented(__func__);};
     virtual void axis_Enable(int32_t axis) 
             {NotImplemented(__func__);}; 
     virtual void axis_Disable(int32_t axis) 
