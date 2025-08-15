@@ -1502,20 +1502,5 @@ void A1Axis::addUnits()
         unitSuffix += "/s";
     }
 }
-// //--------------------------------------------------------
-// /**
-//  *	Command Home related method
-//  *	Description: Homes this axis sychronously.
-//  *
-//  */
-// //--------------------------------------------------------
-// void A1Axis::home()
-// {
-// 	DEBUG_STREAM << "A1Axis::Home()  - " << device_name << std::endl;
-// 	A1Bridge_ns::getInstance()->checkConnection();
-//     A1Bridge_ns::getInstance()->axis_Home(this->axis); 
-// }
 
-
-/*----- PROTECTED REGION END -----*/	//	A1Axis::namespace_ending
 } //	namespace
