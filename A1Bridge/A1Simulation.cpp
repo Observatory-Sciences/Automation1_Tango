@@ -192,26 +192,6 @@ void A1Simulation::axis_HomeAsync(int32_t axis)
     m_axes[axis].m_homed = true;
 } 
 
-void A1Simulation::axis_Home(int32_t axis) 
-{
-    // Check the axis number is within index limits
-    if (axis < 0 || axis > MAX_AXES)
-    {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Home failed - axis out of range", 
-                                       "A1Simulation::axis_Home");
-    }
-    // Check the axis is enabled
-    if (!m_axes[axis].m_enabled)
-    {
-        Tango::Except::throw_exception("Tango_DEVICE_ERROR",
-                                       "Automation1_Command_Home failed - axis not enabled", 
-                                       "A1Simulation::axis_Home");
-    }
-
-    // Set the homed flag for the particular axis
-    m_axes[axis].m_homed = true;
-} 
 
 void A1Simulation::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity)
 {

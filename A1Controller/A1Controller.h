@@ -37,6 +37,7 @@
 
 #include <thread>
 #include <atomic>
+#include <queue>
 
 #include <A1Defines.h>
 #include <A1Bridge.h>
@@ -108,6 +109,10 @@ private:
     std::atomic<bool>      m_stopPollFlag;
     std::thread            m_pollThread;
     std::recursive_mutex   m_readLock; 
+    std::thread            longRunningThread;
+    std::atomic<bool>      longRunningFlag;
+    std::exception_ptr     longRunningException;
+    std::mutex             exceptionLock;
 
 /*----- PROTECTED REGION END -----*/    //  A1Controller::Data Members
 
@@ -489,6 +494,9 @@ public:
     void pollThread();
     const int pollThreadInterval_ms = 1000;
     const int controllerPollingInterval_ms = 100;
+    void doStart();
+    void doReset();
+    void checkThreadException();
 
 /*----- PROTECTED REGION END -----*/    //  A1Controller::Additional Method prototypes
 };

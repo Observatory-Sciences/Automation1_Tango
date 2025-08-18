@@ -6,6 +6,8 @@
 #include <variant>
 #include <map>
 #include <tango.h> 
+#include <atomic>
+#include <thread>
 
 #include "A1Bridge.h"
 #include "A1Defines.h"
@@ -20,7 +22,6 @@ void throwWithLastA1Error_origin(const std::string& reason, const std::string& o
 
 // Macro that includes __func__ as location of error
 #define throwWithLastA1Error(reason) throwWithLastA1Error_origin(reason, __func__)
-
 
 // Macro to call an A1 function and report last A1 error if call returns an error code
 #define A1_GENERIC_CALL_AND_THROW(A1F, ...) \
@@ -37,9 +38,9 @@ void throwWithLastA1Error_origin(const std::string& reason, const std::string& o
     } 
 
 
-// Macro to call an A1 function - if error code indicates communication problem, 
-// disconnect and then report last A1 error 
+// Macro to call an A1 function - if error code indicates communication problem, disconnect 
 #define A1_TRY_CALL_AND_DISCONNECT(A1F, ...) \
+    NONBLOCKING_STARTING_CHECK(A1F) \
     try \
     { \
         A1_GENERIC_CALL_AND_THROW(A1F, __VA_ARGS__); \
@@ -54,6 +55,62 @@ void throwWithLastA1Error_origin(const std::string& reason, const std::string& o
         throw(e); \
     } 
 
+
+// Macro that is a sibling to A1_TRY_CALL_AND_DISCONNECT but also sets starting flag appropriately
+#define A1_TRY_START(A1F, ...) \
+    startingFlag = true; \
+    try \
+    { \
+        A1_GENERIC_CALL_AND_THROW(A1F, __VA_ARGS__); \
+        startingFlag = false; \
+    } \
+    catch (Tango::DevFailed &e) \
+    { \
+        startingFlag = false; \
+        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError())) \
+        { \
+            std::cout << "Call to "#A1F" failed with error: " << e.errors.get_buffer()->desc << std::endl; \
+            this->disconnect(); \
+        } \
+        throw(e); \
+    } \
+    catch (...) \
+    { \
+        startingFlag = false; \
+        throw; \
+    }
+
+// A1 does not throw exceptions when (re)starting; these macros mimic the exceptions thrown when the controller is stopped
+#define NONBLOCKING_STARTING_CHECK(A1F) \
+    if (startingFlag) \
+    { \
+        THROW_STARTING_ERROR(A1F); \
+    }
+
+#define THROW_STARTING_ERROR(A1F) \
+    Tango::Except::throw_exception("DRIVER_FAILURE", \
+                                    "ERROR: "#A1F" failed: This operation cannot be performed because the controller is starting.", \
+                                    __func__);
+
+#define A1_TRY_LONG_RUNNING_COMMAND(CMD, ...) \
+    { \
+    unsigned int TASKID{attr_Automation1TaskID_read}; \
+    if(longRunningActive[TASKID]) \
+    { \
+        Tango::Except::throw_exception("DRIVER_FAILURE", "ERROR: "#CMD" failed: This operation cannot be performed because another long-running command is active for task "+std::to_string(TASKID)+".", __func__); \
+    } \
+    longRunningActive[TASKID] = true; \
+    if(longRunningThread[TASKID].joinable()) longRunningThread[TASKID].join(); \
+    longRunningThread[TASKID] = std::thread(&A1Communication::CMD,__VA_ARGS__); \
+    std::this_thread::sleep_for(std::chrono::milliseconds(100)); \
+    { \
+        std::lock_guard<std::mutex> lock(longRunningExceptionLock[TASKID]); \
+        if(longRunningException[TASKID]) \
+        { \
+            std::rethrow_exception(std::move(longRunningException[TASKID])); \
+        } \
+    } \
+    }
 
 class A1PollConfig
 {
@@ -83,7 +140,6 @@ template<typename T> struct Automation1StatusItem
     T        item;  
 };
 
-
 class A1PollManager
 {
     // This is a class that is initialised with a set of A1 status items which it then polls all in one go. 
@@ -104,7 +160,7 @@ class A1PollManager
     void push(double* destination, unsigned axis, Automation1AxisStatusItem item); 
     void push(double* destination, unsigned task, Automation1TaskStatusItem item); 
     void push(double* destination, Automation1SystemStatusItem item); 
-    bool poll(Automation1Controller* controller);
+    bool poll(Automation1Controller* controller, bool* runningStatus);
     // All classes need the common polling, so we can't delete common poll manager until no one else is using it. 
     // We use a ref count for this. 
     void incrementRefCount(); 
@@ -123,7 +179,6 @@ class A1PollManager
 };
 
 
-// TODO: implement task ID 
 // TODO: check usage MAX_AXES vs. attr_AxisCount_read (max vs. current)
 // TODO: specify a timeout for program pause and stop
 class A1Communication: public A1Bridge
@@ -144,6 +199,14 @@ class A1Communication: public A1Bridge
     // Mutex to wrap communication with hardware
     std::recursive_mutex    m_connectionLock;
     std::recursive_mutex    m_dataLock;
+    std::recursive_mutex    m_runningLock;
+    std::atomic<bool>       startingFlag{false};
+
+    // Long-running command infrastructure
+    std::mutex              longRunningExceptionLock[MAX_TASKS];
+    std::exception_ptr      longRunningException[MAX_TASKS];
+    std::thread             longRunningThread[MAX_TASKS];
+    std::atomic<bool>       longRunningActive[MAX_TASKS];
 
     virtual void connect_impl(const std::string& username, const std::string& password, const std::string& ip); 
     virtual void disconnect_impl(); 
@@ -166,6 +229,9 @@ class A1Communication: public A1Bridge
     virtual void deleteController_impl(); 
     virtual void deleteAxis_impl(unsigned axis); 
 
+    bool isControllerStarting();
+    virtual bool isControllerRunning();
+
     void initialisePolling();
     bool readCommon(); 
 
@@ -186,7 +252,6 @@ class A1Communication: public A1Bridge
     virtual void controller_CommandExecute(const std::string& aeroScriptText);
     virtual void axis_Abort(int32_t axis);
     virtual void axis_HomeAsync(int32_t axis);
-    virtual void axis_Home(int32_t axis);
     virtual void axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity); 
     virtual void axis_Enable(int32_t axis);
     virtual void axis_Disable(int32_t axis);
@@ -207,6 +272,10 @@ class A1Communication: public A1Bridge
     virtual double controller_CommandExecuteDouble(const std::string& aeroScriptText);
     virtual int controller_CommandExecuteInt(const std::string& aeroScriptText);
     virtual std::string controller_CommandExecuteString(const std::string& aeroScriptText);
+
+    virtual void blocking_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity, unsigned int taskID);
+    virtual void blocking_CommandExecute(const std::string& aeroScriptText, unsigned int taskID);
+
 
     void setPollingInterval(std::chrono::milliseconds interval)
     {

@@ -148,6 +148,7 @@ void A1Controller::delete_device()
     std::cout << "Waiting for Controller polling thread to exit..." << std::endl; 
     m_stopPollFlag = true;
     m_pollThread.join();
+    if(longRunningThread.joinable()) longRunningThread.join();
 
     for (unsigned file = 0; file < MAX_AEROSCRIPTS; file++)
     {
@@ -409,7 +410,7 @@ void A1Controller::always_executed_hook()
                     (const char *)"A1Controller::always_executed_hook()");
     }
     /*----- PROTECTED REGION ID(A1Controller::always_executed_hook) ENABLED START -----*/
-    
+
 
 
     /*----- PROTECTED REGION END -----*/    //  A1Controller::always_executed_hook
@@ -426,6 +427,8 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
     
+    if(A1Bridge_ns::getInstance()->isControllerStarting()) return;
+
     std::lock_guard<std::recursive_mutex> hw_lock(m_readLock); 
 
     auto guard = A1Bridge_ns::getInstance()->checkConnectionWithLock();
@@ -486,7 +489,12 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
         }
     }
 
-    if (fault)
+    if(!*attr_ControllerRunning_read)
+    {
+        set_state(Tango::OFF);
+        set_status("Controller is STOPPED.");
+    }
+    else if (fault)
     {
         set_state(Tango::FAULT); 
         set_status("At least one axis has a fault"); 
@@ -857,8 +865,26 @@ void A1Controller::reset()
     DEBUG_STREAM << "A1Controller::Reset()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::reset) ENABLED START -----*/
     
-    A1Bridge_ns::getInstance()->checkConnection(); 
-    A1Bridge_ns::getInstance()->controller_Reset(); 
+    if(longRunningFlag)
+    {
+        Tango::Except::throw_exception((const char*)"DEVICE BUSY","The device is already processing a long-running command.","A1Controller::start");
+    }
+    A1Bridge_ns::getInstance()->checkConnection();
+    longRunningFlag = true;
+    set_status("Controller is resetting");
+    set_state(Tango::INIT);
+    if(longRunningThread.joinable())
+    {
+        longRunningThread.join();
+    }
+    // If any exception has happened it's too late to be useful.
+    {
+        std::lock_guard lock(exceptionLock);
+        longRunningException = nullptr;
+    }
+    longRunningThread = std::thread(&A1Controller::doReset,this);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    checkThreadException();
     
     /*----- PROTECTED REGION END -----*/    //  A1Controller::reset
 }
@@ -874,9 +900,27 @@ void A1Controller::start()
     DEBUG_STREAM << "A1Controller::Start()  - " << device_name << std::endl;
     /*----- PROTECTED REGION ID(A1Controller::start) ENABLED START -----*/
     
-    A1Bridge_ns::getInstance()->checkConnection(); 
-    A1Bridge_ns::getInstance()->controller_Start(); 
-    
+    if(longRunningFlag)
+    {
+        Tango::Except::throw_exception((const char*)"DEVICE BUSY","The device is already processing a long-running command.","A1Controller::start");
+    }
+    A1Bridge_ns::getInstance()->checkConnection();
+    longRunningFlag = true;
+    set_status("Controller is starting");
+    set_state(Tango::INIT);
+    if(longRunningThread.joinable())
+    {
+        longRunningThread.join();
+    }
+    // If any exception has happened it's too late to be useful.
+    {
+        std::lock_guard lock(exceptionLock);
+        longRunningException = nullptr;
+    }
+    longRunningThread = std::thread(&A1Controller::doStart,this);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    checkThreadException();
+
     /*----- PROTECTED REGION END -----*/    //  A1Controller::start
 }
 //--------------------------------------------------------
@@ -1168,6 +1212,50 @@ void A1Controller::pollThread()
     }
 }
 
+void A1Controller::doStart()
+{
+    try
+    {
+        A1Bridge_ns::getInstance()->controller_Start();
+        set_state(Tango::STANDBY);
+        longRunningFlag = false;
+    }
+    catch (...)
+    {
+        std::lock_guard guard(exceptionLock);
+        set_state(Tango::UNKNOWN);
+        set_status("An unexpected error occurred during the controller startup.");
+        longRunningException = std::current_exception();
+        longRunningFlag = false;
+    }
+}
+
+void A1Controller::doReset()
+{   
+    try
+    {
+        A1Bridge_ns::getInstance()->controller_Reset();
+        set_state(Tango::STANDBY);
+        longRunningFlag = false;
+    }
+    catch (...)
+    {
+        std::lock_guard guard(exceptionLock);
+        set_state(Tango::UNKNOWN);
+        set_status("An unexpected error occurred during the controller startup.");
+        longRunningException = std::current_exception();
+        longRunningFlag = false;
+    }
+}
+
+void A1Controller::checkThreadException()
+{
+    std::lock_guard guard(exceptionLock);
+    if (longRunningException)
+    {
+        std::rethrow_exception(std::move(longRunningException));
+    }
+}
 
 /*----- PROTECTED REGION END -----*/    //  A1Controller::namespace_ending
 } //    namespace

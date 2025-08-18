@@ -496,29 +496,6 @@ public:
 	{return (static_cast<A1Axis *>(dev))->is_Home_allowed(any);}
 };
 
-//	Command HomeAsync class definition
-class HomeAsyncClass : public Tango::Command
-{
-public:
-	HomeAsyncClass(const char   *cmd_name,
-	               Tango::CmdArgType in,
-				   Tango::CmdArgType out,
-				   const char        *in_desc,
-				   const char        *out_desc,
-				   Tango::DispLevel  level)
-	:Command(cmd_name,in,out,in_desc,out_desc, level)	{}
-
-	HomeAsyncClass(const char   *cmd_name,
-	               Tango::CmdArgType in,
-				   Tango::CmdArgType out)
-	:Command(cmd_name,in,out)	{}
-	~HomeAsyncClass() {}
-
-	virtual CORBA::Any *execute (Tango::DeviceImpl *dev, const CORBA::Any &any);
-	virtual bool is_allowed (Tango::DeviceImpl *dev, const CORBA::Any &any)
-	{return (static_cast<A1Axis *>(dev))->is_HomeAsync_allowed(any);}
-};
-
 //	Command Move class definition
 class MoveClass : public Tango::Command
 {

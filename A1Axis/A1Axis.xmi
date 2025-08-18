@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <pogoDsl:PogoSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pogoDsl="http://tango.org/pogo/PogoDsl">
   <classes name="A1Axis" pogoRevision="9.9">
-    <description description="Axis class for the Aerotech Automation 1 device server" title="" sourcePath="/home/mwa/auto1/Automation1_Tango/A1Axis" language="Cpp" filestogenerate="XMI   file,Code files,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="true" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
+    <description description="Axis class for the Aerotech Automation 1 device server" title="" sourcePath="/home/tango_a1/auto1/Automation1_Tango/A1Axis" language="Cpp" filestogenerate="XMI   file,Code files,Protected Regions" license="GPL" copyright="" hasMandatoryProperty="true" hasConcreteProperty="true" hasAbstractCommand="false" hasAbstractAttribute="false">
       <inheritances classname="Device_Impl" sourcePath=""/>
       <identification contact="at observatorysciences.co.uk - jsy" author="jsy" emailDomain="observatorysciences.co.uk" classFamily="Motion" siteSpecific="" platform="Unix Like" bus="Ethernet" manufacturer="Aerotech" reference=""/>
     </description>
@@ -36,16 +36,7 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
-    <commands name="Home" description="Homes this axis sychronously." execMethod="home" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
-      <argin description="">
-        <type xsi:type="pogoDsl:VoidType"/>
-      </argin>
-      <argout description="">
-        <type xsi:type="pogoDsl:VoidType"/>
-      </argout>
-      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
-    </commands>
-    <commands name="HomeAsync" description="Homes this axis asychronously." execMethod="home_async" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+    <commands name="Home" description="Homes this axis asychronously." execMethod="home" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
       </argin>
@@ -440,6 +431,6 @@
     <states name="UNKNOWN" description="No connection detected. Controller in unknown state.">
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </states>
-    <preferences docHome="./doc_html" makefileHome="/home/mwa/miniconda3/envs/automation1/share/pogo/preferences"/>
+    <preferences docHome="./doc_html" makefileHome="$(TANGO_HOME)"/>
   </classes>
 </pogoDsl:PogoSystem>

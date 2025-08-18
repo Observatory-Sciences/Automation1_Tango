@@ -192,5 +192,9 @@ void A1Bridge::readAxis(unsigned axis)
     this->readAxis_impl(axis); 
 }
 
+bool A1Bridge::isControllerRunning()
+{
+    return attr_ControllerRunning_read;
+}
 
 } // namespace A1Bridge_ns

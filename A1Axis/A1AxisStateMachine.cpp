@@ -554,22 +554,6 @@ bool A1Axis::is_Home_allowed(TANGO_UNUSED(const CORBA::Any &any))
 
 //--------------------------------------------------------
 /**
- *	Method     : A1Axis::is_HomeAsync_allowed()
- *	Description: Execution allowed for HomeAsync attribute
- */
-//--------------------------------------------------------
-bool A1Axis::is_HomeAsync_allowed(TANGO_UNUSED(const CORBA::Any &any))
-{
-	//	Not any excluded states for HomeAsync command.
-	/*----- PROTECTED REGION ID(A1Axis::HomeAsyncStateAllowed) ENABLED START -----*/
-	/* clang-format on */
-	/* clang-format off */
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::HomeAsyncStateAllowed
-	return true;
-}
-
-//--------------------------------------------------------
-/**
  *	Method     : A1Axis::is_Move_allowed()
  *	Description: Execution allowed for Move attribute
  */

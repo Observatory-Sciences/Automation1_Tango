@@ -55,7 +55,6 @@
 //  Status                |  Inherited (no method)
 //  Abort                 |  abort
 //  Home                  |  home
-//  HomeAsync             |  home_async
 //  Move                  |  move
 //  Enable                |  enable
 //  Disable               |  disable
@@ -428,7 +427,12 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 
     try
     {
-        A1Bridge_ns::getInstance()->readAxis(axis); 
+        if(!A1Bridge_ns::getInstance()->isControllerRunning()) {
+            set_state(Tango::ALARM);
+            set_status("Controller is not running.");
+            return;
+        }
+        A1Bridge_ns::getInstance()->readAxis(axis);
     } 
     catch (Tango::DevFailed &e)
     {
@@ -477,7 +481,7 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
         set_state(Tango::FAULT); 
         set_status("Axis has a fault");
     }
-    else if (attr_AxisStatus_read[AX_JOGGING] || attr_AxisStatus_read[AX_HOMING])
+    else if (attr_AxisStatus_read[AX_JOGGING] || attr_AxisStatus_read[AX_HOMING] || attr_AxisStatus_read[AX_PROFILING])
     {
         set_state(Tango::MOVING); 
         set_status("Axis is jogging");
@@ -1145,7 +1149,7 @@ void A1Axis::abort()
 //--------------------------------------------------------
 /**
  *	Command Home related method
- *	Description: Homes this axis sychronously.
+ *	Description: Homes this axis asychronously.
  *
  */
 //--------------------------------------------------------
@@ -1153,28 +1157,11 @@ void A1Axis::home()
 {
 	DEBUG_STREAM << "A1Axis::Home()  - " << device_name << std::endl;
 	/*----- PROTECTED REGION ID(A1Axis::home) ENABLED START -----*/
-
-	A1Bridge_ns::getInstance()->checkConnection();
-    A1Bridge_ns::getInstance()->axis_Home(this->axis); 
-
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::home
-}
-//--------------------------------------------------------
-/**
- *	Command HomeAsync related method
- *	Description: Homes this axis asychronously.
- *
- */
-//--------------------------------------------------------
-void A1Axis::home_async()
-{
-	DEBUG_STREAM << "A1Axis::HomeAsync()  - " << device_name << std::endl;
-	/*----- PROTECTED REGION ID(A1Axis::home_async) ENABLED START -----*/
 	
     A1Bridge_ns::getInstance()->checkConnection();
     A1Bridge_ns::getInstance()->axis_HomeAsync(this->axis); 
 	
-	/*----- PROTECTED REGION END -----*/	//	A1Axis::home_async
+	/*----- PROTECTED REGION END -----*/	//	A1Axis::home
 }
 //--------------------------------------------------------
 /**
@@ -1516,5 +1503,4 @@ void A1Axis::addUnits()
     }
 }
 
-/*----- PROTECTED REGION END -----*/	//	A1Axis::namespace_ending
 } //	namespace

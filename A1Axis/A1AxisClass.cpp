@@ -192,24 +192,6 @@ CORBA::Any *HomeClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const COR
 
 //--------------------------------------------------------
 /**
- * method : 		HomeAsyncClass::execute()
- * description : 	method to trigger the execution of the command.
- *
- * @param	device	The device on which the command must be executed
- * @param	in_any	The command input data
- *
- *	returns The command output data (packed in the Any object)
- */
-//--------------------------------------------------------
-CORBA::Any *HomeAsyncClass::execute(Tango::DeviceImpl *device, TANGO_UNUSED(const CORBA::Any &in_any))
-{
-	TANGO_LOG_INFO << "HomeAsyncClass::execute(): arrived" << std::endl;
-	((static_cast<A1Axis *>(device))->home_async());
-	return new CORBA::Any();
-}
-
-//--------------------------------------------------------
-/**
  * method : 		MoveClass::execute()
  * description : 	method to trigger the execution of the command.
  *
@@ -1400,15 +1382,6 @@ void A1AxisClass::command_factory()
 			"",
 			Tango::OPERATOR);
 	command_list.push_back(pHomeCmd);
-
-	//	Command HomeAsync
-	HomeAsyncClass	*pHomeAsyncCmd =
-		new HomeAsyncClass("HomeAsync",
-			Tango::DEV_VOID, Tango::DEV_VOID,
-			"",
-			"",
-			Tango::OPERATOR);
-	command_list.push_back(pHomeAsyncCmd);
 
 	//	Command Move
 	MoveClass	*pMoveCmd =

@@ -108,7 +108,7 @@ void A1PollManager::push(double* destination, Automation1SystemStatusItem item)
 }
 
 
-bool A1PollManager::poll(Automation1Controller* controller)
+bool A1PollManager::poll(Automation1Controller* controller,bool* controllerRunningStatus)
 {
     // Poll all items that have been added to the list of items to be polled by this manager
     // Returns false if the controller was not polled, true otherwise
@@ -119,6 +119,11 @@ bool A1PollManager::poll(Automation1Controller* controller)
     // We wait a minimum interval between updates to avoid choking the hardware
     if(!pollingClock.checkAndUpdate(minimumPollingInterval_ms)) return false;
 
+    // Do not do updates if controller is not running
+    Automation1_Controller_IsRunning(*controller, controllerRunningStatus);
+    if(!*controllerRunningStatus) {
+        return false;
+    }
     size_t length = this->size(); 
 
     double results[length]; 
@@ -143,6 +148,7 @@ bool A1PollManager::poll(Automation1Controller* controller)
         A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetSystemResult, m_config.get(), results, length, 
                                 item.item, 0, item.destination);
     }
+
     return true;
 }
 
@@ -192,6 +198,10 @@ A1Communication::~A1Communication()
             delete[] attr_axes[i].attr_MotorType_read;
             attr_axes[i].attr_MotorType_read = nullptr;
         }
+    }
+    for(int i = 0; i< MAX_TASKS; ++i)
+    {
+        if(longRunningThread[i].joinable()) longRunningThread[i].join();
     }
 }
 
@@ -364,7 +374,7 @@ void A1Communication::connect_impl(const std::string& username, const std::strin
 
 void A1Communication::checkControllerRunning()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    std::lock_guard<std::recursive_mutex> lock(m_runningLock); 
 
     if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
     {
@@ -380,19 +390,7 @@ void A1Communication::checkControllerRunning()
 
     if (!attr_ControllerRunning_read)
     {
-        std::cout << "Controller is not running; starting..." << std::endl;
-        if (!Automation1_Controller_Start(*m_controller))
-        {
-            throwWithLastA1Error("Failed to start controller");
-        }
-        if (!Automation1_Controller_IsRunning(*m_controller, &attr_ControllerRunning_read))
-        {
-            throwWithLastA1Error("Failed to determine if controller is running after start request");
-        }
-        if (!attr_ControllerRunning_read)
-        {
-            throwWithLastA1Error("Controller not running after start request");
-        }
+        controller_Start();
     }
 }
 
@@ -471,8 +469,7 @@ bool A1Communication::readCommon()
     {
         // Only hold the connectionLock during the poll
         std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
-
-        if(!pollManager.poll(m_controller)) return false;
+        if(!pollManager.poll(m_controller, &attr_ControllerRunning_read)) return false;
     }
     catch (Tango::DevFailed &e)
     {
@@ -705,27 +702,43 @@ void A1Communication::readController_impl()
 
 void A1Communication::readAxis_impl(unsigned axis)
 {
-    readCommon(); 
+    readCommon();
 }
 
 
+bool A1Communication::isControllerRunning()
+{
+    return (A1Bridge::isControllerRunning() && !startingFlag);
+}
+
+bool A1Communication::isControllerStarting()
+{
+    return startingFlag;
+} 
+
 void A1Communication::controller_Reset() 
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Controller_Reset, *m_controller); 
+    NONBLOCKING_STARTING_CHECK(Automation1_Controller_Reset);
+    std::lock_guard<std::recursive_mutex> lock(m_runningLock);
+    A1_TRY_START(Automation1_Controller_Reset, *m_controller); 
 } 
 
 
 void A1Communication::controller_Start() 
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Controller_Start, *m_controller);
+    if (startingFlag)
+    {
+        return;
+    }
+    std::lock_guard<std::recursive_mutex> lock(m_runningLock);
+    A1_TRY_START(Automation1_Controller_Start, *m_controller);
 } 
 
 
 void A1Communication::controller_Stop() 
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    NONBLOCKING_STARTING_CHECK(Automation1_Controller_Stop);
+    std::lock_guard<std::recursive_mutex> lock(m_runningLock); 
     A1_TRY_CALL_AND_DISCONNECT(Automation1_Controller_Stop, *m_controller);
 } 
 
@@ -794,8 +807,24 @@ void A1Communication::controller_AeroScriptProgramPause()
 
 void A1Communication::controller_CommandExecute(const std::string& aeroScriptText)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Execute, *m_controller, attr_Automation1TaskID_read, aeroScriptText.c_str());
+    A1_TRY_LONG_RUNNING_COMMAND(blocking_CommandExecute, this, aeroScriptText, attr_Automation1TaskID_read);
+}
+
+
+void A1Communication::blocking_CommandExecute(const std::string& aeroScriptText, unsigned int taskID)
+{
+    longRunningException[taskID] = nullptr;
+    try
+    {
+        A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Execute, *m_controller, taskID, aeroScriptText.c_str());
+        longRunningActive[taskID] = false;
+    }
+    catch (...)
+    {
+        std::lock_guard<std::mutex> lock(longRunningExceptionLock[taskID]);
+        longRunningException[taskID] = std::current_exception();
+        longRunningActive[taskID] = false;
+    }
 }
 
 
@@ -848,16 +877,9 @@ void A1Communication::axis_HomeAsync(int32_t axis)
 }
 
 
-void A1Communication::axis_Home(int32_t axis) 
-{
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_Home, *m_controller, attr_Automation1TaskID_read, &axis, 1);
-} 
-
-
 void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity) 
 {
-    std::lock_guard<std::recursive_mutex> lock(m_connectionLock); 
+    std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
     switch (moveType)
     {
         case A1Axis_ns::_MoveTypeEnum::_ABSOLUTEMOVE:
@@ -867,15 +889,40 @@ void A1Communication::axis_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType,
             A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveIncremental, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
             break;
         case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
-            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, velocity);
-            break;
         case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
-            A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, attr_Automation1TaskID_read, &axis, 1, &position, 1, &velocity, 1);
+            A1_TRY_LONG_RUNNING_COMMAND(blocking_Move, this, axis, moveType, position, velocity, attr_Automation1TaskID_read);
             break;
         default: 
             Tango::Except::throw_exception("DRIVER_FAILURE", "Unknown move type", __func__);
     }
 } 
+
+
+void A1Communication::blocking_Move(int32_t axis, A1Axis_ns::_MoveTypeEnum moveType, Tango::DevDouble position, Tango::DevDouble velocity, unsigned int taskID)
+{
+    longRunningException[taskID] = nullptr;
+    try
+    {
+        switch (moveType)
+        {
+            case A1Axis_ns::_MoveTypeEnum::_LINEARMOVE:
+                A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveLinear, *m_controller, taskID, &axis, 1, &position, 1, velocity);
+                break;
+            case A1Axis_ns::_MoveTypeEnum::_RAPIDMOVE:
+                A1_TRY_CALL_AND_DISCONNECT(Automation1_Command_MoveRapid, *m_controller, taskID, &axis, 1, &position, 1, &velocity, 1);
+                break;
+            default:
+                break;
+        }
+        longRunningActive[taskID] = false;
+    }
+    catch (...)
+    {
+        std::lock_guard<std::mutex> lock(longRunningExceptionLock[taskID]);
+        longRunningException[taskID] = std::current_exception();
+        longRunningActive[taskID] = false;
+    }
+}
 
 
 void A1Communication::axis_Enable(int32_t axis) 

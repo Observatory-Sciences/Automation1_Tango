@@ -502,18 +502,11 @@ public:
 	virtual bool is_Abort_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Home related method
-	 *	Description: Homes this axis sychronously.
+	 *	Description: Homes this axis asychronously.
 	 *
 	 */
 	virtual void home();
 	virtual bool is_Home_allowed(const CORBA::Any &any);
-	/**
-	 *	Command HomeAsync related method
-	 *	Description: Homes this axis asychronously.
-	 *
-	 */
-	virtual void home_async();
-	virtual bool is_HomeAsync_allowed(const CORBA::Any &any);
 	/**
 	 *	Command Move related method
 	 *	Description: Executes the specific move command specified by the MoveType attribute.
