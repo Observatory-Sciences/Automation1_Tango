@@ -44,18 +44,19 @@
 #define AX_F_MAX_VELOCITY           10
 #define AX_F_E_STOP_FAULT           11
 #define AX_F_VELOCITY_ERROR         12
-#define AX_F_EXTERNAL_FAULT         13
-#define AX_F_MOTOR_TEMP             14
-#define AX_F_AMPLIFIER_TEMP         15
-#define AX_F_ENCODER_FAULT          16
-#define AX_F_MISALIGNMENT_FAULT     17
-#define AX_F_FBK_SCALING_FAULT      18
-#define AX_F_MRK_SEARCH_FAULT       19
-#define AX_F_SAFE_ZONE_FAULT        20
-#define AX_F_IN_POS_TIMEOUT         21
-#define AX_F_VOLTAGE_CLAMP          22
-#define AX_F_MOTOR_SUPPLY           23
-#define AX_F_INTERNAL               24
+#define AX_F_COMMUTATION            13
+#define AX_F_EXTERNAL_FAULT         14
+#define AX_F_MOTOR_TEMP             15
+#define AX_F_AMPLIFIER_TEMP         16
+#define AX_F_ENCODER_FAULT          17
+#define AX_F_MISALIGNMENT_FAULT     18
+#define AX_F_FBK_SCALING_FAULT      19
+#define AX_F_MRK_SEARCH_FAULT       20
+#define AX_F_SAFE_ZONE_FAULT        21
+#define AX_F_IN_POS_TIMEOUT         22
+#define AX_F_VOLTAGE_CLAMP          23
+#define AX_F_MOTOR_SUPPLY           24
+#define AX_F_INTERNAL               25
 
 //Drive Status
 #define DRV_ENABLED                 0

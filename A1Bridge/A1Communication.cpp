@@ -565,6 +565,7 @@ bool A1Communication::readCommon()
         attr_axes[axis].attr_AxisFault_read[AX_F_MAX_VELOCITY]       = statusBits & Automation1AxisFault::Automation1AxisFault_MaxVelocityCommandFault;
         attr_axes[axis].attr_AxisFault_read[AX_F_E_STOP_FAULT]       = statusBits & Automation1AxisFault::Automation1AxisFault_EmergencyStopFault;
         attr_axes[axis].attr_AxisFault_read[AX_F_VELOCITY_ERROR]     = statusBits & Automation1AxisFault::Automation1AxisFault_VelocityErrorFault;
+        attr_axes[axis].attr_AxisFault_read[AX_F_COMMUTATION]        = statusBits & Automation1AxisFault::Automation1AxisFault_CommutationFault;
         attr_axes[axis].attr_AxisFault_read[AX_F_EXTERNAL_FAULT]     = statusBits & Automation1AxisFault::Automation1AxisFault_ExternalFault;
         attr_axes[axis].attr_AxisFault_read[AX_F_MOTOR_TEMP]         = statusBits & Automation1AxisFault::Automation1AxisFault_MotorTemperatureFault;
         attr_axes[axis].attr_AxisFault_read[AX_F_AMPLIFIER_TEMP]     = statusBits & Automation1AxisFault::Automation1AxisFault_AmplifierTemperatureFault;
