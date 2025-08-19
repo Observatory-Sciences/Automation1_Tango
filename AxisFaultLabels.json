@@ -14,6 +14,7 @@
             "Max. Velocity",
             "E-Stop Fault",
             "Velocity Error",
+            "Commutation Fault",
             "External Fault",
             "Motor Temperature",
             "Amplifier Temperature",
