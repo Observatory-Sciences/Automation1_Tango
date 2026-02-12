@@ -11,7 +11,7 @@
 
 #include <mutex>
 #include <thread>
-
+#include <cmath>
 
 
 namespace A1Bridge_ns {

@@ -1,5 +1,5 @@
 #include "A1SimulatedAxis.h"
-
+#include <cmath>
 
 namespace A1Bridge_ns {
 
