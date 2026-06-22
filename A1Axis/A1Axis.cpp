@@ -481,11 +481,16 @@ void A1Axis::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
         set_state(Tango::FAULT); 
         set_status("Axis has a fault");
     }
-    else if (attr_AxisStatus_read[AX_JOGGING] || attr_AxisStatus_read[AX_HOMING] || attr_AxisStatus_read[AX_PROFILING])
+    else if (attr_AxisStatus_read[AX_MOTION_CLAMPED])
+    {
+        set_state(Tango::ALARM);
+        set_status("Axis is clamped.");
+    }
+    else if (attr_AxisStatus_read[AX_JOGGING] || attr_AxisStatus_read[AX_HOMING] || attr_AxisStatus_read[AX_PROFILING] || !attr_AxisStatus_read[AX_MOTION_DONE])
     {
         set_state(Tango::MOVING); 
-        set_status("Axis is jogging");
-    }    
+        set_status("Axis is moving");
+    }
     else if (*attr_Enabled_read) 
     {
 		set_state(Tango::ON);
