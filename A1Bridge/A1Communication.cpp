@@ -128,6 +128,13 @@ bool A1PollManager::poll(Automation1Controller* controller,bool* controllerRunni
 
     double results[length]; 
 
+    // Start thread-safe (on the controller) polling methods
+    std::vector<std::thread> threads;
+    for(auto& func : pollingMethods)
+    {
+        threads.emplace_back(func);
+    }
+
     // First connect to the controller to populate the results array...
     A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetResults, *controller, m_config.get(), results, length); 
     // ...then unpack results to each polled item
@@ -149,6 +156,10 @@ bool A1PollManager::poll(Automation1Controller* controller,bool* controllerRunni
                                 item.item, 0, item.destination);
     }
 
+    for(auto& thread : threads)
+    {
+        thread.join();
+    }
     return true;
 }
 
@@ -215,6 +226,8 @@ void A1Communication::initialisePolling()
     {
         return; 
     }
+    pollManager.registerPollingMethod([this](){this->getFileList();});
+    pollManager.registerPollingMethod([this](){this->getTaskStatuses();});
 
     // First add status bits; used by controller and axes
     for (unsigned axis = 0; axis < attr_AxisCount_read; axis++)
@@ -589,9 +602,9 @@ bool A1Communication::readCommon()
 void A1Communication::readController_impl()
 {
 
-    // The call to readCommon() will trigger a hardware polling if necessary; otherwise no update is needed.
-    if(!readCommon()) return; 
+    readCommon();
 
+    // We still update all values in case the taskID has been updated
     std::lock_guard<std::recursive_mutex> lock(m_dataLock);
 
     int statusBits0 = (int)attr_taskStatus0[attr_Automation1TaskID_read];    
@@ -657,23 +670,11 @@ void A1Communication::readController_impl()
     attr_TaskStatus2_read[TSK2_COORD2_PLANE3]                  = statusBits2 & Automation1TaskStatus2::Automation1TaskStatus2_Coord2Plane3;
 
 
-    // The A1 API calls made here (Automation1_Files_GetAllFiles, Automation1_Task_GetStatus) are threadsafe, so no lock is needed
-    int32_t fileCount, filenameLength; 
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, NULL, &fileCount, &filenameLength); 
-
-    int32_t maxFiles = std::min(fileCount, MAX_AEROSCRIPTS);
-    fileCount = maxFiles; 
-    int32_t maxFilenameLength = std::min(fileCount, 50);
-
-    char files[maxFiles * maxFilenameLength];
-
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, files, &fileCount, &maxFilenameLength); 
-
     int32_t file = 0;
     for (; file < fileCount; file++)
     {
         delete[] attr_AeroScriptFiles_read[file];
-        attr_AeroScriptFiles_read[file] = Tango::string_dup(&files[file*maxFilenameLength]);
+        attr_AeroScriptFiles_read[file] = Tango::string_dup(&filesList[file*maxFileNameLength]);
     }
 
     for (; file < MAX_AEROSCRIPTS; file++)
@@ -681,9 +682,6 @@ void A1Communication::readController_impl()
         delete[] attr_AeroScriptFiles_read[file];
         attr_AeroScriptFiles_read[file] = Tango::string_dup("");
     }
-
-    Automation1TaskStatus taskStatuses[attr_Automation1TaskID_read + 1];
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_GetStatus, *m_controller, taskStatuses, attr_Automation1TaskID_read + 1);
 
     std::string sourceName(taskStatuses[attr_Automation1TaskID_read].AeroScriptSourceFileName);
     std::string compiledName(taskStatuses[attr_Automation1TaskID_read].CompiledAeroScriptFileName);
@@ -700,6 +698,15 @@ void A1Communication::readController_impl()
     attr_Automation1TaskStatus_read = (A1Controller_ns::Automation1TaskStatusEnum)taskStatuses[attr_Automation1TaskID_read].TaskState;
 }
 
+void A1Communication::getFileList() {
+    fileCount = MAX_AEROSCRIPTS;
+    maxFileNameLength = MAX_FILENAME_LENGTH;
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, filesList, &fileCount, &maxFileNameLength);
+}
+
+void A1Communication::getTaskStatuses() {
+    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_GetStatus, *m_controller, taskStatuses, MAX_TASKS);
+}
 
 void A1Communication::readAxis_impl(unsigned axis)
 {
