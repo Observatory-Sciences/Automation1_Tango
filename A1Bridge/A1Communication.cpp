@@ -283,6 +283,10 @@ void A1Communication::initialiseController_impl()
     }
     attr_APIVersion_read = Tango::string_dup(apiS.str().c_str());
 
+    char controllerName[120];
+    Automation1_Controller_Name(*m_controller, controllerName, 120);
+    attr_ControllerName_read = Tango::string_dup(controllerName);
+
     attr_AeroScriptFilePath_read = Tango::string_dup("");
 }
 
@@ -482,7 +486,9 @@ bool A1Communication::readCommon()
     {
         // Only hold the connectionLock during the poll
         std::lock_guard<std::recursive_mutex> lock(m_connectionLock);
+        auto now = std::chrono::steady_clock::now();
         if(!pollManager.poll(m_controller, &attr_ControllerRunning_read)) return false;
+        attr_ControllerPollDuration_read = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now()-now).count();
     }
     catch (Tango::DevFailed &e)
     {
