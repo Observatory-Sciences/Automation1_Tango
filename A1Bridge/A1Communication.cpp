@@ -136,29 +136,100 @@ bool A1PollManager::poll(Automation1Controller* controller,bool* controllerRunni
     }
 
     // First connect to the controller to populate the results array...
-    A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetResults, *controller, m_config.get(), results, length); 
+    if(!Automation1_Status_GetResults(*controller, m_config.get(), results, length))
+    {
+        for(auto& thread : threads)
+        {
+            if(thread.joinable())
+            {
+                thread.join();
+            }
+        }
+        if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
+        {
+            throwWithLastA1Error("Controller communication error");
+        }
+        else
+        {
+            throwWithLastA1Error("ERROR: Automation1_Status_GetResults failed");
+        }
+    }
     // ...then unpack results to each polled item
     for (auto item : m_axisStatusItems)
     {
-        A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetAxisResult, m_config.get(), results, length, 
-                                  item.index, item.item, 0, item.destination); 
+        if(!Automation1_Status_GetAxisResult(m_config.get(), results, length,
+                                  item.index, item.item, 0, item.destination))
+        {
+            for(auto& thread : threads)
+            {
+                if(thread.joinable())
+                {
+                    thread.join();
+                }
+            }
+            if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
+            {
+                throwWithLastA1Error("Controller communication error");
+            }
+            else
+            {
+                throwWithLastA1Error("ERROR: Automation1_Status_GetAxisResult failed");
+            }
+        }
     }
 
     for (auto item : m_taskStatusItems)
     {
-        A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetTaskResult, m_config.get(), results, length, 
-                                  item.index, item.item, 0, item.destination);
+        if(!Automation1_Status_GetTaskResult(m_config.get(), results, length, 
+                                  item.index, item.item, 0, item.destination))
+        {
+            for(auto& thread : threads)
+            {
+                if(thread.joinable())
+                {
+                    thread.join();
+                }
+            }
+            if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
+            {
+                throwWithLastA1Error("Controller communication error");
+            }
+            else
+            {
+                throwWithLastA1Error("ERROR: Automation1_Status_GetTaskResult failed");
+            }
+        }
     }
 
     for (auto item : m_systemStatusItems)
     {
-        A1_GENERIC_CALL_AND_THROW(Automation1_Status_GetSystemResult, m_config.get(), results, length, 
-                                item.item, 0, item.destination);
+        if(!Automation1_Status_GetSystemResult(m_config.get(), results, length, 
+                                item.item, 0, item.destination))
+        {
+            for(auto& thread : threads)
+            {
+                if(thread.joinable())
+                {
+                    thread.join();
+                }
+            }
+            if (Automation1_IsControllerCommunicationError(Automation1_GetLastError()))
+            {
+                throwWithLastA1Error("Controller communication error");
+            }
+            else
+            {
+                throwWithLastA1Error("ERROR: Automation1_Status_GetSystemResult failed");
+            }
+        }
     }
 
     for(auto& thread : threads)
     {
-        thread.join();
+        if(thread.joinable())
+        {
+            thread.join();
+        }
     }
     return true;
 }
@@ -707,11 +778,15 @@ void A1Communication::readController_impl()
 void A1Communication::getFileList() {
     fileCount = MAX_AEROSCRIPTS;
     maxFileNameLength = MAX_FILENAME_LENGTH;
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Files_GetAllFiles, *m_controller, filesList, &fileCount, &maxFileNameLength);
+    // We DO NOT throw because this is expected to run in a thread;
+    // if it fails we silently ignore.
+    Automation1_Files_GetAllFiles(*m_controller, filesList, &fileCount, &maxFileNameLength);
 }
 
 void A1Communication::getTaskStatuses() {
-    A1_TRY_CALL_AND_DISCONNECT(Automation1_Task_GetStatus, *m_controller, taskStatuses, MAX_TASKS);
+    // We DO NOT throw because this is expected to run in a thread;
+    // if it fails we silently ignore.
+    Automation1_Task_GetStatus(*m_controller, taskStatuses, MAX_TASKS);
 }
 
 void A1Communication::readAxis_impl(unsigned axis)
