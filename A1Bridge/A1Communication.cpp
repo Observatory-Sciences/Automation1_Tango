@@ -354,8 +354,8 @@ void A1Communication::initialiseController_impl()
     }
     attr_APIVersion_read = Tango::string_dup(apiS.str().c_str());
 
-    char controllerName[120];
-    Automation1_Controller_Name(*m_controller, controllerName, 120);
+    char controllerName[MAX_CONTROLLER_NAME_SZ];
+    Automation1_Controller_Name(*m_controller, controllerName, MAX_CONTROLLER_NAME_SZ);
     attr_ControllerName_read = Tango::string_dup(controllerName);
 
     attr_AeroScriptFilePath_read = Tango::string_dup("");
