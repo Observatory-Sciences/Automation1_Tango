@@ -7,23 +7,23 @@
 //               all class singleton for a device server. It is called
 //               at device server startup.
 //
-// project :     
+//
 //
 // This file is part of Tango device class.
-// 
+//
 // Tango is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // Tango is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with Tango.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 //
 //
 //=============================================================================
@@ -31,10 +31,45 @@
 //        (Program Obviously used to Generate tango Object)
 //=============================================================================
 
-#include <tango.h>
+#include "ClassFactory.h"
 #include <A1ControllerClass.h>
 #include <A1AxisClass.h>
 
+#if TANGO_VERSION >= TANGO_MAKE_VERSION(10, 3, 0)
+
+namespace Automation1_ns {
+
+class DServerImpl : public Tango::DServer
+{
+  public:
+    DServerImpl(Tango::DeviceClass *cl_ptr,
+                const std::string &name,
+                const std::string &desc,
+                Tango::DevState state,
+                const std::string &status) :
+        DServer(cl_ptr, name.c_str(), desc.c_str(), state, status.c_str())
+    {
+    }
+
+  private:
+      void class_factory() override
+      {
+	add_class(A1Controller_ns::A1ControllerClass::init("A1Controller"));
+	add_class(A1Axis_ns::A1AxisClass::init("A1Axis"));
+      }
+};
+
+Tango::DServer *constructor(Tango::DeviceClass *cl_ptr,
+                            const std::string &name,
+                            const std::string &desc,
+                            Tango::DevState state,
+                            const std::string &status)
+{
+    return new DServerImpl(cl_ptr, name, desc, state, status);
+}
+}
+
+#else
 /**
  *	Create Class singletons and store them in DServer object.
  */
@@ -44,3 +79,4 @@ void Tango::DServer::class_factory()
 	add_class(A1Controller_ns::A1ControllerClass::init("A1Controller"));
 	add_class(A1Axis_ns::A1AxisClass::init("A1Axis"));
 }
+#endif

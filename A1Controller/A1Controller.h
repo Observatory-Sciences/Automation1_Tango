@@ -64,7 +64,7 @@
 
 namespace A1Controller_ns
 {
-enum class _Automation1TaskStatusEnum : short {
+enum class Automation1TaskStatusEnum : short {
 	_UNAVAILABLE,
 	_INACTIVE,
 	_IDLE,
@@ -77,8 +77,6 @@ enum class _Automation1TaskStatusEnum : short {
 	_QUEUE_RUNNING,
 	_QUEUE_PAUSED,
 } ;
-typedef _Automation1TaskStatusEnum Automation1TaskStatusEnum;
-
 /*----- PROTECTED REGION ID(A1Controller::Additional Class Declarations) ENABLED START -----*/
 #else
 
@@ -138,7 +136,7 @@ public:
 	Tango::DevString	*attr_AeroScriptFilePath_read;
 	Tango::DevUShort	*attr_Automation1ProgramStopTimeout_read;
 	Tango::DevUShort	*attr_Automation1TaskID_read;
-	Automation1TaskStatusEnum	*attr_Automation1TaskStatus_read;
+	Automation1TaskStatusEnum        *attr_Automation1TaskStatus_read;
 	Tango::DevUShort	*attr_ControllerPollDuration_read;
 	Tango::DevString	*attr_ControllerName_read;
 	Tango::DevBoolean	*attr_AxisHealth_read;

@@ -61,14 +61,11 @@ namespace A1Axis_ns
 //===================================================================
 //	Initialize pointer for singleton pattern
 //===================================================================
-A1AxisClass *A1AxisClass::_instance = NULL;
+A1AxisClass *A1AxisClass::_instance = nullptr;
 
 //===================================================================
 //	Class constants
 //===================================================================
-constexpr long AxisStatusAttrib::X_DATA_SIZE;
-constexpr long AxisFaultAttrib::X_DATA_SIZE;
-constexpr long DriveStatusAttrib::X_DATA_SIZE;
 //--------------------------------------------------------
 /**
  * method : 		A1AxisClass::A1AxisClass(std::string &s)
@@ -102,7 +99,7 @@ A1AxisClass::~A1AxisClass()
 	
 	/*----- PROTECTED REGION END -----*/	//	A1AxisClass::destructor
 
-	_instance = NULL;
+	_instance = nullptr;
 }
 
 
@@ -117,7 +114,7 @@ A1AxisClass::~A1AxisClass()
 //--------------------------------------------------------
 A1AxisClass *A1AxisClass::init(const char *name)
 {
-	if (_instance == NULL)
+	if (_instance == nullptr)
 	{
 		try
 		{
@@ -141,7 +138,7 @@ A1AxisClass *A1AxisClass::init(const char *name)
 //--------------------------------------------------------
 A1AxisClass *A1AxisClass::instance()
 {
-	if (_instance == NULL)
+	if (_instance == nullptr)
 	{
 		std::cerr << "Class is not initialized !!" << std::endl;
 		exit(-1);
@@ -648,7 +645,7 @@ void A1AxisClass::device_factory(const Tango::DevVarStringArray *devlist_ptr)
  *                and store them in the attribute list
  */
 //--------------------------------------------------------
-void A1AxisClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
+void A1AxisClass::attribute_factory([[maybe_unused]] std::vector<Tango::Attr *> &att_list)
 {
 	/*----- PROTECTED REGION ID(A1AxisClass::attribute_factory_before) ENABLED START -----*/
 	
@@ -1607,7 +1604,7 @@ Tango::Attr *A1AxisClass::get_attr_object_by_name(std::vector<Tango::Attr *> &at
 		if ((*it)->get_name()==attname)
 			return (*it);
 	//	Attr does not exist
-	return NULL;
+	return nullptr;
 }
 
 

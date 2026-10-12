@@ -61,16 +61,11 @@ namespace A1Controller_ns
 //===================================================================
 //	Initialize pointer for singleton pattern
 //===================================================================
-A1ControllerClass *A1ControllerClass::_instance = NULL;
+A1ControllerClass *A1ControllerClass::_instance = nullptr;
 
 //===================================================================
 //	Class constants
 //===================================================================
-constexpr long AxisHealthAttrib::X_DATA_SIZE;
-constexpr long TaskStatus0Attrib::X_DATA_SIZE;
-constexpr long TaskStatus1Attrib::X_DATA_SIZE;
-constexpr long TaskStatus2Attrib::X_DATA_SIZE;
-constexpr long AeroScriptFilesAttrib::X_DATA_SIZE;
 //--------------------------------------------------------
 /**
  * method : 		A1ControllerClass::A1ControllerClass(std::string &s)
@@ -104,7 +99,7 @@ A1ControllerClass::~A1ControllerClass()
     
     /*----- PROTECTED REGION END -----*/	//	A1ControllerClass::destructor
 
-	_instance = NULL;
+	_instance = nullptr;
 }
 
 
@@ -119,7 +114,7 @@ A1ControllerClass::~A1ControllerClass()
 //--------------------------------------------------------
 A1ControllerClass *A1ControllerClass::init(const char *name)
 {
-	if (_instance == NULL)
+	if (_instance == nullptr)
 	{
 		try
 		{
@@ -143,7 +138,7 @@ A1ControllerClass *A1ControllerClass::init(const char *name)
 //--------------------------------------------------------
 A1ControllerClass *A1ControllerClass::instance()
 {
-	if (_instance == NULL)
+	if (_instance == nullptr)
 	{
 		std::cerr << "Class is not initialized !!" << std::endl;
 		exit(-1);
@@ -651,7 +646,7 @@ void A1ControllerClass::device_factory(const Tango::DevVarStringArray *devlist_p
  *                and store them in the attribute list
  */
 //--------------------------------------------------------
-void A1ControllerClass::attribute_factory(std::vector<Tango::Attr *> &att_list)
+void A1ControllerClass::attribute_factory([[maybe_unused]] std::vector<Tango::Attr *> &att_list)
 {
 	/*----- PROTECTED REGION ID(A1ControllerClass::attribute_factory_before) ENABLED START -----*/
     
@@ -1287,7 +1282,7 @@ Tango::Attr *A1ControllerClass::get_attr_object_by_name(std::vector<Tango::Attr 
 		if ((*it)->get_name()==attname)
 			return (*it);
 	//	Attr does not exist
-	return NULL;
+	return nullptr;
 }
 
 

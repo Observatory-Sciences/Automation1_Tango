@@ -204,11 +204,11 @@ void A1Controller::init_device()
 	attr_Automation1TaskStatus_read = new Automation1TaskStatusEnum[1];
 	attr_ControllerPollDuration_read = new Tango::DevUShort[1];
 	attr_ControllerName_read = new Tango::DevString[1];
-	attr_AxisHealth_read = new Tango::DevBoolean[32];
-	attr_TaskStatus0_read = new Tango::DevBoolean[16];
-	attr_TaskStatus1_read = new Tango::DevBoolean[17];
-	attr_TaskStatus2_read = new Tango::DevBoolean[24];
-	attr_AeroScriptFiles_read = new Tango::DevString[1024];
+	attr_AxisHealth_read = new Tango::DevBoolean[AxisHealthAttrib::X_DATA_SIZE];
+	attr_TaskStatus0_read = new Tango::DevBoolean[TaskStatus0Attrib::X_DATA_SIZE];
+	attr_TaskStatus1_read = new Tango::DevBoolean[TaskStatus1Attrib::X_DATA_SIZE];
+	attr_TaskStatus2_read = new Tango::DevBoolean[TaskStatus2Attrib::X_DATA_SIZE];
+	attr_AeroScriptFiles_read = new Tango::DevString[AeroScriptFilesAttrib::X_DATA_SIZE];
 	//	No longer if mandatory property not set.
 	if (mandatoryNotDefined)
 		return;
@@ -649,7 +649,7 @@ void A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	Tango::DevString	w_val;
+	        Tango::DevString w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Controller::write_AeroScriptFilePath) ENABLED START -----*/
 
@@ -692,7 +692,7 @@ void A1Controller::write_Automation1ProgramStopTimeout(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Controller::write_Automation1ProgramStopTimeout(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	Tango::DevUShort	w_val;
+	        Tango::DevUShort w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Controller::write_Automation1ProgramStopTimeout) ENABLED START -----*/
     A1Bridge_ns::getInstance()->setAutomation1ProgramTimeout_ms(w_val);
@@ -730,7 +730,7 @@ void A1Controller::write_Automation1TaskID(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Controller::write_Automation1TaskID(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	Tango::DevUShort	w_val;
+	        Tango::DevUShort w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Controller::write_Automation1TaskID) ENABLED START -----*/
     A1Bridge_ns::getInstance()->setTaskID(w_val);
