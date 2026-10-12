@@ -8,6 +8,7 @@
 #include <tango.h> 
 #include <atomic>
 #include <thread>
+#include <functional>
 
 #include "A1Bridge.h"
 #include "A1Defines.h"
