@@ -236,7 +236,7 @@ $(OBJDIR)/A1ControllerStateMachine.o:  $(A1CONTROLLER_HOME)/A1ControllerStateMac
 
 
 
-finalbuild:
+finalbuild:$(SVC_OBJS)
 		@echo "Creating executable $(OUTPUT_DIR)/$(PROJECT_NAME) ..."
 		$(CXX) -Wl,-rpath=$(A1LIB_HOME) $(SVC_OBJS) $(LDFLAGS) -o $(OUTPUT_DIR)/$(PROJECT_NAME)
 		$(POST_PROCESSING)
