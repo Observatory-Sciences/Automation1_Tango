@@ -246,9 +246,9 @@ void A1Axis::init_device()
 	attr_RampMode_read = new RampModeEnum[1];
 	attr_RampValue_read = new Tango::DevDouble[1];
 	attr_VirtualAxis_read = new Tango::DevBoolean[1];
-	attr_AxisStatus_read = new Tango::DevBoolean[32];
-	attr_AxisFault_read = new Tango::DevBoolean[32];
-	attr_DriveStatus_read = new Tango::DevBoolean[32];
+	attr_AxisStatus_read = new Tango::DevBoolean[AxisStatusAttrib::X_DATA_SIZE];
+	attr_AxisFault_read = new Tango::DevBoolean[AxisFaultAttrib::X_DATA_SIZE];
+	attr_DriveStatus_read = new Tango::DevBoolean[DriveStatusAttrib::X_DATA_SIZE];
 	//	No longer if mandatory property not set.
 	if (mandatoryNotDefined)
 		return;
@@ -551,7 +551,7 @@ void A1Axis::write_PositionTarget(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Axis::write_PositionTarget(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	Tango::DevDouble	w_val;
+	        Tango::DevDouble w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_PositionTarget) ENABLED START -----*/
 	attr_PositionTarget_write = w_val;
@@ -588,7 +588,7 @@ void A1Axis::write_VelocityTarget(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Axis::write_VelocityTarget(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	Tango::DevDouble	w_val;
+	        Tango::DevDouble w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_VelocityTarget) ENABLED START -----*/
 	attr_VelocityTarget_write = w_val;
@@ -787,7 +787,7 @@ void A1Axis::write_MoveType(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Axis::write_MoveType(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	MoveTypeEnum	w_val;
+	        MoveTypeEnum w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_MoveType) ENABLED START -----*/
     attr_MoveType_write = w_val; 
@@ -953,7 +953,7 @@ void A1Axis::write_RampType(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Axis::write_RampType(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	RampTypeEnum	w_val;
+	        RampTypeEnum w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_RampType) ENABLED START -----*/
 	attr_RampType_write = w_val; 
@@ -994,7 +994,7 @@ void A1Axis::write_RampMode(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Axis::write_RampMode(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	RampModeEnum	w_val;
+	        RampModeEnum w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_RampMode) ENABLED START -----*/
 	attr_RampMode_write = w_val; 
@@ -1035,7 +1035,7 @@ void A1Axis::write_RampValue(Tango::WAttribute &attr)
 {
 	DEBUG_STREAM << "A1Axis::write_RampValue(Tango::WAttribute &attr) entering... " << std::endl;
 	//	Retrieve write value
-	Tango::DevDouble	w_val;
+	        Tango::DevDouble w_val;
 	attr.get_write_value(w_val);
 	/*----- PROTECTED REGION ID(A1Axis::write_RampValue) ENABLED START -----*/
 	attr_RampValue_write = w_val; 
@@ -1508,4 +1508,5 @@ void A1Axis::addUnits()
     }
 }
 
+/*----- PROTECTED REGION END -----*/	//	A1Axis::namespace_ending
 } //	namespace

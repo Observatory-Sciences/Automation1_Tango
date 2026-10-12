@@ -63,27 +63,21 @@
 
 namespace A1Axis_ns
 {
-enum class _MoveTypeEnum : short {
+enum class MoveTypeEnum : short {
 	_ABSOLUTEMOVE,
 	_INCREMENTALMOVE,
 	_LINEARMOVE,
 	_RAPIDMOVE,
 } ;
-typedef _MoveTypeEnum MoveTypeEnum;
-
-enum class _RampTypeEnum : short {
+enum class RampTypeEnum : short {
 	_LINEAR,
 	_S_CURVE,
 	_SINE,
 } ;
-typedef _RampTypeEnum RampTypeEnum;
-
-enum class _RampModeEnum : short {
+enum class RampModeEnum : short {
 	_RATE,
 	_TIME,
 } ;
-typedef _RampModeEnum RampModeEnum;
-
 /*----- PROTECTED REGION ID(A1Axis::Additional Class Declarations) ENABLED START -----*/
 #else
 namespace A1Axis_ns
@@ -135,7 +129,7 @@ public:
 	Tango::DevDouble	*attr_PositionError_read;
 	Tango::DevDouble	*attr_CurrentFeedback_read;
 	Tango::DevString	*attr_MotorType_read;
-	MoveTypeEnum	*attr_MoveType_read;
+	MoveTypeEnum        *attr_MoveType_read;
 	Tango::DevDouble	*attr_LastMoveDuration_read;
 	Tango::DevDouble	*attr_VelocityError_read;
 	Tango::DevDouble	*attr_AccelerationTarget_read;
@@ -143,8 +137,8 @@ public:
 	Tango::DevDouble	*attr_CurrentTarget_read;
 	Tango::DevDouble	*attr_CurrentError_read;
 	Tango::DevDouble	*attr_ServoUpdateRate_read;
-	RampTypeEnum	*attr_RampType_read;
-	RampModeEnum	*attr_RampMode_read;
+	RampTypeEnum        *attr_RampType_read;
+	RampModeEnum        *attr_RampMode_read;
 	Tango::DevDouble	*attr_RampValue_read;
 	Tango::DevBoolean	*attr_VirtualAxis_read;
 	Tango::DevBoolean	*attr_AxisStatus_read;

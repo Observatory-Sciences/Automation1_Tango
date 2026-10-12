@@ -31,7 +31,7 @@
 
 #include <A1Controller.h>
 
-/*----- PROTECTED REGION END -----*/    //  A1Controller::A1ControllerStateMachine.cpp
+/*----- PROTECTED REGION END -----*/	//	A1Controller::A1ControllerStateMachine.cpp
 
 //================================================================
 //  States   |  Description
@@ -47,462 +47,496 @@
 namespace A1Controller_ns
 {
 //=================================================
-//      Attributes Allowed Methods
+//		Attributes Allowed Methods
 //=================================================
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_ControllerRunning_allowed()
- *  Description: Execution allowed for ControllerRunning attribute
+ *	Method     : A1Controller::is_ControllerRunning_allowed()
+ *	Description: Execution allowed for ControllerRunning attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_ControllerRunning_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for ControllerRunning attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::ControllerRunningStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for ControllerRunning attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::ControllerRunningStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::ControllerRunningStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::ControllerRunningStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AxisCount_allowed()
- *  Description: Execution allowed for AxisCount attribute
+ *	Method     : A1Controller::is_AxisCount_allowed()
+ *	Description: Execution allowed for AxisCount attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AxisCount_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for AxisCount attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::AxisCountStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for AxisCount attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::AxisCountStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AxisCountStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AxisCountStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_TaskCount_allowed()
- *  Description: Execution allowed for TaskCount attribute
+ *	Method     : A1Controller::is_TaskCount_allowed()
+ *	Description: Execution allowed for TaskCount attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_TaskCount_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for TaskCount attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::TaskCountStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for TaskCount attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::TaskCountStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::TaskCountStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::TaskCountStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_APIVersion_allowed()
- *  Description: Execution allowed for APIVersion attribute
+ *	Method     : A1Controller::is_APIVersion_allowed()
+ *	Description: Execution allowed for APIVersion attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_APIVersion_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for APIVersion attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::APIVersionStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for APIVersion attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::APIVersionStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::APIVersionStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::APIVersionStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AeroScriptFilePath_allowed()
- *  Description: Execution allowed for AeroScriptFilePath attribute
+ *	Method     : A1Controller::is_AeroScriptFilePath_allowed()
+ *	Description: Execution allowed for AeroScriptFilePath attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptFilePath_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
-    //  Not any excluded states for AeroScriptFilePath attribute in Write access.
-    /*----- PROTECTED REGION ID(A1Controller::AeroScriptFilePathStateAllowed_WRITE) ENABLED START -----*/
+	//	Not any excluded states for AeroScriptFilePath attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptFilePathStateAllowed_WRITE) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AeroScriptFilePathStateAllowed_WRITE
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptFilePathStateAllowed_WRITE
 
-    //  Not any excluded states for AeroScriptFilePath attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::AeroScriptFilePathStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for AeroScriptFilePath attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptFilePathStateAllowed_READ) ENABLED START -----*/
     /* clang-format on */
     /* clang-format off */
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AeroScriptFilePathStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptFilePathStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_Automation1ProgramStopTimeout_allowed()
- *  Description: Execution allowed for Automation1ProgramStopTimeout attribute
+ *	Method     : A1Controller::is_Automation1ProgramStopTimeout_allowed()
+ *	Description: Execution allowed for Automation1ProgramStopTimeout attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Automation1ProgramStopTimeout_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
-    //  Not any excluded states for Automation1ProgramStopTimeout attribute in Write access.
-    /*----- PROTECTED REGION ID(A1Controller::Automation1ProgramStopTimeoutStateAllowed_WRITE) ENABLED START -----*/
+	//	Not any excluded states for Automation1ProgramStopTimeout attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1ProgramStopTimeoutStateAllowed_WRITE) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::Automation1ProgramStopTimeoutStateAllowed_WRITE
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1ProgramStopTimeoutStateAllowed_WRITE
 
-    //  Not any excluded states for Automation1ProgramStopTimeout attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::Automation1ProgramStopTimeoutStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for Automation1ProgramStopTimeout attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1ProgramStopTimeoutStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::Automation1ProgramStopTimeoutStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1ProgramStopTimeoutStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_Automation1TaskID_allowed()
- *  Description: Execution allowed for Automation1TaskID attribute
+ *	Method     : A1Controller::is_Automation1TaskID_allowed()
+ *	Description: Execution allowed for Automation1TaskID attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Automation1TaskID_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
-    //  Not any excluded states for Automation1TaskID attribute in Write access.
-    /*----- PROTECTED REGION ID(A1Controller::Automation1TaskIDStateAllowed_WRITE) ENABLED START -----*/
+	//	Not any excluded states for Automation1TaskID attribute in Write access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1TaskIDStateAllowed_WRITE) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::Automation1TaskIDStateAllowed_WRITE
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1TaskIDStateAllowed_WRITE
 
-    //  Not any excluded states for Automation1TaskID attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::Automation1TaskIDStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for Automation1TaskID attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1TaskIDStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::Automation1TaskIDStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1TaskIDStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_Automation1TaskStatus_allowed()
- *  Description: Execution allowed for Automation1TaskStatus attribute
+ *	Method     : A1Controller::is_Automation1TaskStatus_allowed()
+ *	Description: Execution allowed for Automation1TaskStatus attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Automation1TaskStatus_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for Automation1TaskStatus attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::Automation1TaskStatusStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for Automation1TaskStatus attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::Automation1TaskStatusStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::Automation1TaskStatusStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::Automation1TaskStatusStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AxisHealth_allowed()
- *  Description: Execution allowed for AxisHealth attribute
+ *	Method     : A1Controller::is_ControllerPollDuration_allowed()
+ *	Description: Execution allowed for ControllerPollDuration attribute
+ */
+//--------------------------------------------------------
+bool A1Controller::is_ControllerPollDuration_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+
+	//	Not any excluded states for ControllerPollDuration attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::ControllerPollDurationStateAllowed_READ) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::ControllerPollDurationStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method     : A1Controller::is_ControllerName_allowed()
+ *	Description: Execution allowed for ControllerName attribute
+ */
+//--------------------------------------------------------
+bool A1Controller::is_ControllerName_allowed(TANGO_UNUSED(Tango::AttReqType type))
+{
+
+	//	Not any excluded states for ControllerName attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::ControllerNameStateAllowed_READ) ENABLED START -----*/
+	/* clang-format on */
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::ControllerNameStateAllowed_READ
+	return true;
+}
+
+//--------------------------------------------------------
+/**
+ *	Method     : A1Controller::is_AxisHealth_allowed()
+ *	Description: Execution allowed for AxisHealth attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AxisHealth_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for AxisHealth attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::AxisHealthStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for AxisHealth attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::AxisHealthStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AxisHealthStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AxisHealthStateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_TaskStatus0_allowed()
- *  Description: Execution allowed for TaskStatus0 attribute
+ *	Method     : A1Controller::is_TaskStatus0_allowed()
+ *	Description: Execution allowed for TaskStatus0 attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_TaskStatus0_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for TaskStatus0 attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::TaskStatus0StateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for TaskStatus0 attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::TaskStatus0StateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::TaskStatus0StateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::TaskStatus0StateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_TaskStatus1_allowed()
- *  Description: Execution allowed for TaskStatus1 attribute
+ *	Method     : A1Controller::is_TaskStatus1_allowed()
+ *	Description: Execution allowed for TaskStatus1 attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_TaskStatus1_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for TaskStatus1 attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::TaskStatus1StateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for TaskStatus1 attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::TaskStatus1StateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::TaskStatus1StateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::TaskStatus1StateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_TaskStatus2_allowed()
- *  Description: Execution allowed for TaskStatus2 attribute
+ *	Method     : A1Controller::is_TaskStatus2_allowed()
+ *	Description: Execution allowed for TaskStatus2 attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_TaskStatus2_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for TaskStatus2 attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::TaskStatus2StateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for TaskStatus2 attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::TaskStatus2StateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::TaskStatus2StateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::TaskStatus2StateAllowed_READ
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AeroScriptFiles_allowed()
- *  Description: Execution allowed for AeroScriptFiles attribute
+ *	Method     : A1Controller::is_AeroScriptFiles_allowed()
+ *	Description: Execution allowed for AeroScriptFiles attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptFiles_allowed(TANGO_UNUSED(Tango::AttReqType type))
 {
 
-    //  Not any excluded states for AeroScriptFiles attribute in read access.
-    /*----- PROTECTED REGION ID(A1Controller::AeroScriptFilesStateAllowed_READ) ENABLED START -----*/
+	//	Not any excluded states for AeroScriptFiles attribute in read access.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptFilesStateAllowed_READ) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AeroScriptFilesStateAllowed_READ
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptFilesStateAllowed_READ
+	return true;
 }
 
 
 //=================================================
-//      Commands Allowed Methods
+//		Commands Allowed Methods
 //=================================================
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_Reset_allowed()
- *  Description: Execution allowed for Reset attribute
+ *	Method     : A1Controller::is_Reset_allowed()
+ *	Description: Execution allowed for Reset attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Reset_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for Reset command.
-    /*----- PROTECTED REGION ID(A1Controller::ResetStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for Reset command.
+	/*----- PROTECTED REGION ID(A1Controller::ResetStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::ResetStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::ResetStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_Start_allowed()
- *  Description: Execution allowed for Start attribute
+ *	Method     : A1Controller::is_Start_allowed()
+ *	Description: Execution allowed for Start attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Start_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for Start command.
-    /*----- PROTECTED REGION ID(A1Controller::StartStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for Start command.
+	/*----- PROTECTED REGION ID(A1Controller::StartStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::StartStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::StartStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_Stop_allowed()
- *  Description: Execution allowed for Stop attribute
+ *	Method     : A1Controller::is_Stop_allowed()
+ *	Description: Execution allowed for Stop attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Stop_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for Stop command.
-    /*----- PROTECTED REGION ID(A1Controller::StopStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for Stop command.
+	/*----- PROTECTED REGION ID(A1Controller::StopStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::StopStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::StopStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_Enable_allowed()
- *  Description: Execution allowed for Enable attribute
+ *	Method     : A1Controller::is_Enable_allowed()
+ *	Description: Execution allowed for Enable attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Enable_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for Enable command.
-    /*----- PROTECTED REGION ID(A1Controller::EnableStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for Enable command.
+	/*----- PROTECTED REGION ID(A1Controller::EnableStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::EnableStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::EnableStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_Disable_allowed()
- *  Description: Execution allowed for Disable attribute
+ *	Method     : A1Controller::is_Disable_allowed()
+ *	Description: Execution allowed for Disable attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_Disable_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for Disable command.
-    /*----- PROTECTED REGION ID(A1Controller::DisableStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for Disable command.
+	/*----- PROTECTED REGION ID(A1Controller::DisableStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::DisableStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::DisableStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_ClearErrors_allowed()
- *  Description: Execution allowed for ClearErrors attribute
+ *	Method     : A1Controller::is_ClearErrors_allowed()
+ *	Description: Execution allowed for ClearErrors attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_ClearErrors_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for ClearErrors command.
-    /*----- PROTECTED REGION ID(A1Controller::ClearErrorsStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for ClearErrors command.
+	/*----- PROTECTED REGION ID(A1Controller::ClearErrorsStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::ClearErrorsStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::ClearErrorsStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AeroScriptProgramRun_allowed()
- *  Description: Execution allowed for AeroScriptProgramRun attribute
+ *	Method     : A1Controller::is_AeroScriptProgramRun_allowed()
+ *	Description: Execution allowed for AeroScriptProgramRun attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramRun_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for AeroScriptProgramRun command.
-    /*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramRunStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for AeroScriptProgramRun command.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramRunStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AeroScriptProgramRunStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptProgramRunStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AeroScriptProgramLoad_allowed()
- *  Description: Execution allowed for AeroScriptProgramLoad attribute
+ *	Method     : A1Controller::is_AeroScriptProgramLoad_allowed()
+ *	Description: Execution allowed for AeroScriptProgramLoad attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramLoad_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for AeroScriptProgramLoad command.
-    /*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramLoadStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for AeroScriptProgramLoad command.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramLoadStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AeroScriptProgramLoadStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptProgramLoadStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AeroScriptProgramStart_allowed()
- *  Description: Execution allowed for AeroScriptProgramStart attribute
+ *	Method     : A1Controller::is_AeroScriptProgramStart_allowed()
+ *	Description: Execution allowed for AeroScriptProgramStart attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramStart_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for AeroScriptProgramStart command.
-    /*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramStartStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for AeroScriptProgramStart command.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramStartStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AeroScriptProgramStartStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptProgramStartStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AeroScriptProgramStop_allowed()
- *  Description: Execution allowed for AeroScriptProgramStop attribute
+ *	Method     : A1Controller::is_AeroScriptProgramStop_allowed()
+ *	Description: Execution allowed for AeroScriptProgramStop attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramStop_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for AeroScriptProgramStop command.
-    /*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramStopStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for AeroScriptProgramStop command.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramStopStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AeroScriptProgramStopStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptProgramStopStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_AeroScriptProgramPause_allowed()
- *  Description: Execution allowed for AeroScriptProgramPause attribute
+ *	Method     : A1Controller::is_AeroScriptProgramPause_allowed()
+ *	Description: Execution allowed for AeroScriptProgramPause attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_AeroScriptProgramPause_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for AeroScriptProgramPause command.
-    /*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramPauseStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for AeroScriptProgramPause command.
+	/*----- PROTECTED REGION ID(A1Controller::AeroScriptProgramPauseStateAllowed) ENABLED START -----*/
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::AeroScriptProgramPauseStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::AeroScriptProgramPauseStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_CommandExecute_allowed()
- *  Description: Execution allowed for CommandExecute attribute
+ *	Method     : A1Controller::is_CommandExecute_allowed()
+ *	Description: Execution allowed for CommandExecute attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_CommandExecute_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for CommandExecute command.
-    /*----- PROTECTED REGION ID(A1Controller::CommandExecuteStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for CommandExecute command.
+	/*----- PROTECTED REGION ID(A1Controller::CommandExecuteStateAllowed) ENABLED START -----*/
     /* clang-format on */
     /* clang-format off */
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::CommandExecuteStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::CommandExecuteStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_CommandExecuteReturnDouble_allowed()
- *  Description: Execution allowed for CommandExecuteReturnDouble attribute
+ *	Method     : A1Controller::is_CommandExecuteReturnDouble_allowed()
+ *	Description: Execution allowed for CommandExecuteReturnDouble attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_CommandExecuteReturnDouble_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for CommandExecuteReturnDouble command.
-    /*----- PROTECTED REGION ID(A1Controller::CommandExecuteReturnDoubleStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for CommandExecuteReturnDouble command.
+	/*----- PROTECTED REGION ID(A1Controller::CommandExecuteReturnDoubleStateAllowed) ENABLED START -----*/
     /* clang-format on */
     /* clang-format off */
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::CommandExecuteReturnDoubleStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::CommandExecuteReturnDoubleStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_CommandExecuteReturnInt_allowed()
- *  Description: Execution allowed for CommandExecuteReturnInt attribute
+ *	Method     : A1Controller::is_CommandExecuteReturnInt_allowed()
+ *	Description: Execution allowed for CommandExecuteReturnInt attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_CommandExecuteReturnInt_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for CommandExecuteReturnInt command.
-    /*----- PROTECTED REGION ID(A1Controller::CommandExecuteReturnIntStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for CommandExecuteReturnInt command.
+	/*----- PROTECTED REGION ID(A1Controller::CommandExecuteReturnIntStateAllowed) ENABLED START -----*/
     /* clang-format on */
     /* clang-format off */
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::CommandExecuteReturnIntStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::CommandExecuteReturnIntStateAllowed
+	return true;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::is_CommandExecuteReturnString_allowed()
- *  Description: Execution allowed for CommandExecuteReturnString attribute
+ *	Method     : A1Controller::is_CommandExecuteReturnString_allowed()
+ *	Description: Execution allowed for CommandExecuteReturnString attribute
  */
 //--------------------------------------------------------
 bool A1Controller::is_CommandExecuteReturnString_allowed(TANGO_UNUSED(const CORBA::Any &any))
 {
-    //  Not any excluded states for CommandExecuteReturnString command.
-    /*----- PROTECTED REGION ID(A1Controller::CommandExecuteReturnStringStateAllowed) ENABLED START -----*/
+	//	Not any excluded states for CommandExecuteReturnString command.
+	/*----- PROTECTED REGION ID(A1Controller::CommandExecuteReturnStringStateAllowed) ENABLED START -----*/
     /* clang-format on */
     /* clang-format off */
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::CommandExecuteReturnStringStateAllowed
-    return true;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::CommandExecuteReturnStringStateAllowed
+	return true;
 }
 
 
@@ -510,6 +544,6 @@ bool A1Controller::is_CommandExecuteReturnString_allowed(TANGO_UNUSED(const CORB
 
 
 
-/*----- PROTECTED REGION END -----*/    //  A1Controller::A1ControllerStateAllowed.AdditionalMethods
+/*----- PROTECTED REGION END -----*/	//	A1Controller::A1ControllerStateAllowed.AdditionalMethods
 
-}   //  End of namespace
+}	//	End of namespace

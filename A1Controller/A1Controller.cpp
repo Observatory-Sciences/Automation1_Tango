@@ -37,7 +37,7 @@
 #include <A1Controller.h>
 #include <A1ControllerClass.h>
 
-/*----- PROTECTED REGION END -----*/    //  A1Controller.cpp
+/*----- PROTECTED REGION END -----*/	//	A1Controller.cpp
 
 /**
  *  A1Controller class description:
@@ -72,19 +72,21 @@
 //================================================================
 //  Attributes managed are:
 //================================================================
-//  ControllerRunning              |  Tango::DevBoolean Scalar
-//  AxisCount                      |  Tango::DevUShort  Scalar
-//  TaskCount                      |  Tango::DevUShort  Scalar
-//  APIVersion                     |  Tango::DevString  Scalar
-//  AeroScriptFilePath             |  Tango::DevString  Scalar
-//  Automation1ProgramStopTimeout  |  Tango::DevUShort  Scalar
-//  Automation1TaskID              |  Tango::DevUShort  Scalar
-//  Automation1TaskStatus          |  Tango::DevEnum    Scalar
-//  AxisHealth                     |  Tango::DevBoolean Spectrum  ( max = 32)
-//  TaskStatus0                    |  Tango::DevBoolean Spectrum  ( max = 16)
-//  TaskStatus1                    |  Tango::DevBoolean Spectrum  ( max = 17)
-//  TaskStatus2                    |  Tango::DevBoolean Spectrum  ( max = 24)
-//  AeroScriptFiles                |  Tango::DevString  Spectrum  ( max = 1024)
+//  ControllerRunning              |  Tango::DevBoolean	Scalar
+//  AxisCount                      |  Tango::DevUShort	Scalar
+//  TaskCount                      |  Tango::DevUShort	Scalar
+//  APIVersion                     |  Tango::DevString	Scalar
+//  AeroScriptFilePath             |  Tango::DevString	Scalar
+//  Automation1ProgramStopTimeout  |  Tango::DevUShort	Scalar
+//  Automation1TaskID              |  Tango::DevUShort	Scalar
+//  Automation1TaskStatus          |  Tango::DevEnum	Scalar
+//  ControllerPollDuration         |  Tango::DevUShort	Scalar
+//  ControllerName                 |  Tango::DevString	Scalar
+//  AxisHealth                     |  Tango::DevBoolean	Spectrum  ( max = 32)
+//  TaskStatus0                    |  Tango::DevBoolean	Spectrum  ( max = 16)
+//  TaskStatus1                    |  Tango::DevBoolean	Spectrum  ( max = 17)
+//  TaskStatus2                    |  Tango::DevBoolean	Spectrum  ( max = 24)
+//  AeroScriptFiles                |  Tango::DevString	Spectrum  ( max = 1024)
 //================================================================
 
 namespace A1Controller_ns
@@ -93,57 +95,57 @@ namespace A1Controller_ns
 
 //  static initializations
 
-/*----- PROTECTED REGION END -----*/    //  A1Controller::namespace_starting
+/*----- PROTECTED REGION END -----*/	//	A1Controller::namespace_starting
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::A1Controller()
- *  Description: Constructors for a Tango device
+ *	Method     : A1Controller::A1Controller()
+ *	Description: Constructors for a Tango device
  *                implementing the classA1Controller
  */
 //--------------------------------------------------------
 A1Controller::A1Controller(Tango::DeviceClass *cl, std::string &s)
  : TANGO_BASE_CLASS(cl, s.c_str())
 {
-    /*----- PROTECTED REGION ID(A1Controller::constructor_1) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1Controller::constructor_1) ENABLED START -----*/
     init_device();
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::constructor_1
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::constructor_1
 }
 //--------------------------------------------------------
 A1Controller::A1Controller(Tango::DeviceClass *cl, const char *s)
  : TANGO_BASE_CLASS(cl, s)
 {
-    /*----- PROTECTED REGION ID(A1Controller::constructor_2) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1Controller::constructor_2) ENABLED START -----*/
     init_device();
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::constructor_2
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::constructor_2
 }
 //--------------------------------------------------------
 A1Controller::A1Controller(Tango::DeviceClass *cl, const char *s, const char *d)
  : TANGO_BASE_CLASS(cl, s, d)
 {
-    /*----- PROTECTED REGION ID(A1Controller::constructor_3) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1Controller::constructor_3) ENABLED START -----*/
     init_device();
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::constructor_3
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::constructor_3
 }
 //--------------------------------------------------------
 A1Controller::~A1Controller()
 {
-    delete_device();
+	delete_device();
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::delete_device()
- *  Description: will be called at device destruction or at init command
+ *	Method     : A1Controller::delete_device()
+ *	Description: will be called at device destruction or at init command
  */
 //--------------------------------------------------------
 void A1Controller::delete_device()
 {
-    DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::delete_device() " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::delete_device) ENABLED START -----*/
 
     std::cout << "Waiting for Controller polling thread to exit..." << std::endl; 
     m_stopPollFlag = true;
@@ -156,58 +158,62 @@ void A1Controller::delete_device()
     }
 
 
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::delete_device
-    delete[] attr_ControllerRunning_read;
-    delete[] attr_AxisCount_read;
-    delete[] attr_TaskCount_read;
-    delete[] attr_APIVersion_read;
-    delete[] attr_AeroScriptFilePath_read;
-    delete[] attr_Automation1ProgramStopTimeout_read;
-    delete[] attr_Automation1TaskID_read;
-    delete[] attr_Automation1TaskStatus_read;
-    delete[] attr_AxisHealth_read;
-    delete[] attr_TaskStatus0_read;
-    delete[] attr_TaskStatus1_read;
-    delete[] attr_TaskStatus2_read;
-    delete[] attr_AeroScriptFiles_read;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::delete_device
+	delete[] attr_ControllerRunning_read;
+	delete[] attr_AxisCount_read;
+	delete[] attr_TaskCount_read;
+	delete[] attr_APIVersion_read;
+	delete[] attr_AeroScriptFilePath_read;
+	delete[] attr_Automation1ProgramStopTimeout_read;
+	delete[] attr_Automation1TaskID_read;
+	delete[] attr_Automation1TaskStatus_read;
+	delete[] attr_ControllerPollDuration_read;
+	delete[] attr_ControllerName_read;
+	delete[] attr_AxisHealth_read;
+	delete[] attr_TaskStatus0_read;
+	delete[] attr_TaskStatus1_read;
+	delete[] attr_TaskStatus2_read;
+	delete[] attr_AeroScriptFiles_read;
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::init_device()
- *  Description: will be called at device initialization.
+ *	Method     : A1Controller::init_device()
+ *	Description: will be called at device initialization.
  */
 //--------------------------------------------------------
 void A1Controller::init_device()
 {
-    DEBUG_STREAM << "A1Controller::init_device() create device " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::init_device_before) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::init_device() create device " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::init_device_before) ENABLED START -----*/
     
 
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::init_device_before
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device_before
 
 
-    //  Get the device properties from database
-    get_device_property();
+	//	Get the device properties from database
+	get_device_property();
 
-    attr_ControllerRunning_read = new Tango::DevBoolean[1];
-    attr_AxisCount_read = new Tango::DevUShort[1];
-    attr_TaskCount_read = new Tango::DevUShort[1];
-    attr_APIVersion_read = new Tango::DevString[1];
-    attr_AeroScriptFilePath_read = new Tango::DevString[1];
-    attr_Automation1ProgramStopTimeout_read = new Tango::DevUShort[1];
-    attr_Automation1TaskID_read = new Tango::DevUShort[1];
-    attr_Automation1TaskStatus_read = new Automation1TaskStatusEnum[1];
-    attr_AxisHealth_read = new Tango::DevBoolean[32];
-    attr_TaskStatus0_read = new Tango::DevBoolean[16];
-    attr_TaskStatus1_read = new Tango::DevBoolean[17];
-    attr_TaskStatus2_read = new Tango::DevBoolean[24];
-    attr_AeroScriptFiles_read = new Tango::DevString[1024];
-    //  No longer if mandatory property not set.
-    if (mandatoryNotDefined)
-        return;
+	attr_ControllerRunning_read = new Tango::DevBoolean[1];
+	attr_AxisCount_read = new Tango::DevUShort[1];
+	attr_TaskCount_read = new Tango::DevUShort[1];
+	attr_APIVersion_read = new Tango::DevString[1];
+	attr_AeroScriptFilePath_read = new Tango::DevString[1];
+	attr_Automation1ProgramStopTimeout_read = new Tango::DevUShort[1];
+	attr_Automation1TaskID_read = new Tango::DevUShort[1];
+	attr_Automation1TaskStatus_read = new Automation1TaskStatusEnum[1];
+	attr_ControllerPollDuration_read = new Tango::DevUShort[1];
+	attr_ControllerName_read = new Tango::DevString[1];
+	attr_AxisHealth_read = new Tango::DevBoolean[AxisHealthAttrib::X_DATA_SIZE];
+	attr_TaskStatus0_read = new Tango::DevBoolean[TaskStatus0Attrib::X_DATA_SIZE];
+	attr_TaskStatus1_read = new Tango::DevBoolean[TaskStatus1Attrib::X_DATA_SIZE];
+	attr_TaskStatus2_read = new Tango::DevBoolean[TaskStatus2Attrib::X_DATA_SIZE];
+	attr_AeroScriptFiles_read = new Tango::DevString[AeroScriptFilesAttrib::X_DATA_SIZE];
+	//	No longer if mandatory property not set.
+	if (mandatoryNotDefined)
+		return;
 
-    /*----- PROTECTED REGION ID(A1Controller::init_device) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1Controller::init_device) ENABLED START -----*/
 
 
     attr_ControllerRunning_read[0] = false;
@@ -269,163 +275,163 @@ void A1Controller::init_device()
     m_stopPollFlag = false;
     m_pollThread = std::thread(&A1Controller::pollThread, this);
 
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::init_device
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::init_device
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::get_device_property()
- *  Description: Read database to initialize property data members.
+ *	Method     : A1Controller::get_device_property()
+ *	Description: Read database to initialize property data members.
  */
 //--------------------------------------------------------
 void A1Controller::get_device_property()
 {
-    /*----- PROTECTED REGION ID(A1Controller::get_device_property_before) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1Controller::get_device_property_before) ENABLED START -----*/
     
     //  Initialize property data members
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::get_device_property_before
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::get_device_property_before
 
-    mandatoryNotDefined = false;
+	mandatoryNotDefined = false;
 
-    //  Read device properties from database.
-    Tango::DbData   dev_prop;
-    dev_prop.push_back(Tango::DbDatum("IpAddress"));
-    dev_prop.push_back(Tango::DbDatum("Simulate"));
-    dev_prop.push_back(Tango::DbDatum("Username"));
-    dev_prop.push_back(Tango::DbDatum("Password"));
+	//	Read device properties from database.
+	Tango::DbData	dev_prop;
+	dev_prop.push_back(Tango::DbDatum("IpAddress"));
+	dev_prop.push_back(Tango::DbDatum("Simulate"));
+	dev_prop.push_back(Tango::DbDatum("Username"));
+	dev_prop.push_back(Tango::DbDatum("Password"));
 
-    //  is there at least one property to be read ?
-    if (dev_prop.size()>0)
-    {
-        //  Call database and extract values
-        if (Tango::Util::instance()->_UseDb==true)
-            get_db_device()->get_property(dev_prop);
+	//	is there at least one property to be read ?
+	if (dev_prop.size()>0)
+	{
+		//	Call database and extract values
+		if (Tango::Util::instance()->_UseDb==true)
+			get_db_device()->get_property(dev_prop);
 
-        //  get instance on A1ControllerClass to get class property
-        Tango::DbDatum  def_prop, cl_prop;
-        A1ControllerClass   *ds_class =
-            (static_cast<A1ControllerClass *>(get_device_class()));
-        int i = -1;
+		//	get instance on A1ControllerClass to get class property
+		Tango::DbDatum	def_prop, cl_prop;
+		A1ControllerClass	*ds_class =
+			(static_cast<A1ControllerClass *>(get_device_class()));
+		int	i = -1;
 
-        //  Try to initialize IpAddress from class property
-        cl_prop = ds_class->get_class_property(dev_prop[++i].name);
-        if (cl_prop.is_empty()==false)  cl_prop  >>  ipAddress;
-        else {
-            //  Try to initialize IpAddress from default device value
-            def_prop = ds_class->get_default_device_property(dev_prop[i].name);
-            if (def_prop.is_empty()==false) def_prop  >>  ipAddress;
-        }
-        //  And try to extract IpAddress value from database
-        if (dev_prop[i].is_empty()==false)  dev_prop[i]  >>  ipAddress;
-        //  Property StartDsPath is mandatory, check if has been defined in database.
-        check_mandatory_property(cl_prop, dev_prop[i]);
+		//	Try to initialize IpAddress from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  ipAddress;
+		else {
+			//	Try to initialize IpAddress from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  ipAddress;
+		}
+		//	And try to extract IpAddress value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  ipAddress;
+		//	Property StartDsPath is mandatory, check if has been defined in database.
+		check_mandatory_property(cl_prop, dev_prop[i]);
 
-        //  Try to initialize Simulate from class property
-        cl_prop = ds_class->get_class_property(dev_prop[++i].name);
-        if (cl_prop.is_empty()==false)  cl_prop  >>  simulate;
-        else {
-            //  Try to initialize Simulate from default device value
-            def_prop = ds_class->get_default_device_property(dev_prop[i].name);
-            if (def_prop.is_empty()==false) def_prop  >>  simulate;
-        }
-        //  And try to extract Simulate value from database
-        if (dev_prop[i].is_empty()==false)  dev_prop[i]  >>  simulate;
+		//	Try to initialize Simulate from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  simulate;
+		else {
+			//	Try to initialize Simulate from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  simulate;
+		}
+		//	And try to extract Simulate value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  simulate;
 
-        //  Try to initialize Username from class property
-        cl_prop = ds_class->get_class_property(dev_prop[++i].name);
-        if (cl_prop.is_empty()==false)  cl_prop  >>  username;
-        else {
-            //  Try to initialize Username from default device value
-            def_prop = ds_class->get_default_device_property(dev_prop[i].name);
-            if (def_prop.is_empty()==false) def_prop  >>  username;
-        }
-        //  And try to extract Username value from database
-        if (dev_prop[i].is_empty()==false)  dev_prop[i]  >>  username;
-        //  Property StartDsPath is mandatory, check if has been defined in database.
-        check_mandatory_property(cl_prop, dev_prop[i]);
+		//	Try to initialize Username from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  username;
+		else {
+			//	Try to initialize Username from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  username;
+		}
+		//	And try to extract Username value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  username;
+		//	Property StartDsPath is mandatory, check if has been defined in database.
+		check_mandatory_property(cl_prop, dev_prop[i]);
 
-        //  Try to initialize Password from class property
-        cl_prop = ds_class->get_class_property(dev_prop[++i].name);
-        if (cl_prop.is_empty()==false)  cl_prop  >>  password;
-        else {
-            //  Try to initialize Password from default device value
-            def_prop = ds_class->get_default_device_property(dev_prop[i].name);
-            if (def_prop.is_empty()==false) def_prop  >>  password;
-        }
-        //  And try to extract Password value from database
-        if (dev_prop[i].is_empty()==false)  dev_prop[i]  >>  password;
-        //  Property StartDsPath is mandatory, check if has been defined in database.
-        check_mandatory_property(cl_prop, dev_prop[i]);
+		//	Try to initialize Password from class property
+		cl_prop = ds_class->get_class_property(dev_prop[++i].name);
+		if (cl_prop.is_empty()==false)	cl_prop  >>  password;
+		else {
+			//	Try to initialize Password from default device value
+			def_prop = ds_class->get_default_device_property(dev_prop[i].name);
+			if (def_prop.is_empty()==false)	def_prop  >>  password;
+		}
+		//	And try to extract Password value from database
+		if (dev_prop[i].is_empty()==false)	dev_prop[i]  >>  password;
+		//	Property StartDsPath is mandatory, check if has been defined in database.
+		check_mandatory_property(cl_prop, dev_prop[i]);
 
-    }
+	}
 
-    /*----- PROTECTED REGION ID(A1Controller::get_device_property_after) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1Controller::get_device_property_after) ENABLED START -----*/
     
     //  Check device property data members init
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::get_device_property_after
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::get_device_property_after
 }
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::check_mandatory_property()
- *  Description: For mandatory properties check if defined in database.
+ *	Method     : A1Controller::check_mandatory_property()
+ *	Description: For mandatory properties check if defined in database.
  */
 //--------------------------------------------------------
 void A1Controller::check_mandatory_property(Tango::DbDatum &class_prop, Tango::DbDatum &dev_prop)
 {
-    //  Check if all properties are empty
-    if (class_prop.is_empty() && dev_prop.is_empty())
-    {
-        TangoSys_OMemStream tms;
-        tms << std::endl <<"Property \'" << dev_prop.name;
-        if (Tango::Util::instance()->_UseDb==true)
-            tms << "\' is mandatory but not defined in database";
-        else
-            tms << "\' is mandatory but cannot be defined without database";
-        append_status(tms.str());
-        mandatoryNotDefined = true;
-        /*----- PROTECTED REGION ID(A1Controller::check_mandatory_property) ENABLED START -----*/
+	//	Check if all properties are empty
+	if (class_prop.is_empty() && dev_prop.is_empty())
+	{
+		TangoSys_OMemStream	tms;
+		tms << std::endl <<"Property \'" << dev_prop.name;
+		if (Tango::Util::instance()->_UseDb==true)
+			tms << "\' is mandatory but not defined in database";
+		else
+			tms << "\' is mandatory but cannot be defined without database";
+		append_status(tms.str());
+		mandatoryNotDefined = true;
+		/*----- PROTECTED REGION ID(A1Controller::check_mandatory_property) ENABLED START -----*/
         std::cerr << tms.str() << " for " << device_name << std::endl;
         
-        /*----- PROTECTED REGION END -----*/    //  A1Controller::check_mandatory_property
-    }
+        /*----- PROTECTED REGION END -----*/	//	A1Controller::check_mandatory_property
+	}
 }
 
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::always_executed_hook()
- *  Description: method always executed before any command is executed
+ *	Method     : A1Controller::always_executed_hook()
+ *	Description: method always executed before any command is executed
  */
 //--------------------------------------------------------
 void A1Controller::always_executed_hook()
 {
-    DEBUG_STREAM << "A1Controller::always_executed_hook()  " << device_name << std::endl;
-    if (mandatoryNotDefined)
-    {
-        Tango::Except::throw_exception(
-                    (const char *)"PROPERTY_NOT_SET",
-                    get_status().c_str(),
-                    (const char *)"A1Controller::always_executed_hook()");
-    }
-    /*----- PROTECTED REGION ID(A1Controller::always_executed_hook) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::always_executed_hook()  " << device_name << std::endl;
+	if (mandatoryNotDefined)
+	{
+		Tango::Except::throw_exception(
+					(const char *)"PROPERTY_NOT_SET",
+					get_status().c_str(),
+					(const char *)"A1Controller::always_executed_hook()");
+	}
+	/*----- PROTECTED REGION ID(A1Controller::always_executed_hook) ENABLED START -----*/
 
 
 
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::always_executed_hook
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::always_executed_hook
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::read_attr_hardware()
- *  Description: Hardware acquisition for attributes
+ *	Method     : A1Controller::read_attr_hardware()
+ *	Description: Hardware acquisition for attributes
  */
 //--------------------------------------------------------
 void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 {
-    DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_attr_hardware) ENABLED START -----*/
     
     if(A1Bridge_ns::getInstance()->isControllerStarting()) return;
 
@@ -449,10 +455,13 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     *attr_TaskCount_read         = A1Bridge_ns::getInstance()->attr_TaskCount_read;
     *attr_Automation1TaskID_read = A1Bridge_ns::getInstance()->attr_Automation1TaskID_read;
     *attr_Automation1ProgramStopTimeout_read = A1Bridge_ns::getInstance()->attr_Automation1ProgramStopTimeout_read; 
-    
+    *attr_ControllerPollDuration_read = A1Bridge_ns::getInstance()->attr_ControllerPollDuration_read;
 
     delete[] *attr_APIVersion_read;
     *attr_APIVersion_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_APIVersion_read); 
+
+    *attr_ControllerName_read = Tango::string_dup(A1Bridge_ns::getInstance()->attr_ControllerName_read);
+
 
     for (unsigned file = 0; file < MAX_AEROSCRIPTS; file++)
     {
@@ -516,354 +525,392 @@ void A1Controller::read_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list)
     }
 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_attr_hardware
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_attr_hardware
 }
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::write_attr_hardware()
- *  Description: Hardware writing for attributes
+ *	Method     : A1Controller::write_attr_hardware()
+ *	Description: Hardware writing for attributes
  */
 //--------------------------------------------------------
 void A1Controller::write_attr_hardware(TANGO_UNUSED(std::vector<long> &attr_list))
 {
-    DEBUG_STREAM << "A1Controller::write_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::write_attr_hardware) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::write_attr_hardware(std::vector<long> &attr_list) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::write_attr_hardware) ENABLED START -----*/
     
     //  Add your own code
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::write_attr_hardware
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::write_attr_hardware
 }
 
 //--------------------------------------------------------
 /**
- *  Read attribute ControllerRunning related method
- *  Description: True if the controller has been started otherwise false.
+ *	Read attribute ControllerRunning related method
+ *	Description: True if the controller has been started otherwise false.
  *
- *  Data type:  Tango::DevBoolean
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevBoolean
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::read_ControllerRunning(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_ControllerRunning(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_ControllerRunning) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_ControllerRunning(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_ControllerRunning) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_ControllerRunning_read);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_ControllerRunning
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_ControllerRunning
 }
 //--------------------------------------------------------
 /**
- *  Read attribute AxisCount related method
- *  Description: The maximum number of axis slots available on this controller, not the number of drives connected.
+ *	Read attribute AxisCount related method
+ *	Description: The maximum number of axis slots available on this controller, not the number of drives connected.
  *
- *  Data type:  Tango::DevUShort
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::read_AxisCount(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_AxisCount(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_AxisCount) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_AxisCount(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_AxisCount) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_AxisCount_read);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_AxisCount
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_AxisCount
 }
 //--------------------------------------------------------
 /**
- *  Read attribute TaskCount related method
- *  Description: The maximum number of task slots available on this controller.
+ *	Read attribute TaskCount related method
+ *	Description: The maximum number of task slots available on this controller.
  *
- *  Data type:  Tango::DevUShort
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::read_TaskCount(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_TaskCount(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_TaskCount) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_TaskCount(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_TaskCount) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_TaskCount_read);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_TaskCount
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_TaskCount
 }
 //--------------------------------------------------------
 /**
- *  Read attribute APIVersion related method
- *  Description: The version of the C API in use.
+ *	Read attribute APIVersion related method
+ *	Description: The version of the C API in use.
  *
- *  Data type:  Tango::DevString
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::read_APIVersion(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_APIVersion(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_APIVersion) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_APIVersion(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_APIVersion) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_APIVersion_read);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_APIVersion
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_APIVersion
 }
 //--------------------------------------------------------
 /**
- *  Read attribute AeroScriptFilePath related method
- *  Description: Attempts to load the file path entered into the write attribute as an AeroScript on the
+ *	Read attribute AeroScriptFilePath related method
+ *	Description: Attempts to load the file path entered into the write attribute as an AeroScript on the
  *               controller. The read attribute shows the currently loaded file path. Full file paths must be
  *               used.
  *
- *  Data type:  Tango::DevString
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_AeroScriptFilePath) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_AeroScriptFilePath(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptFilePath) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_AeroScriptFilePath_read);
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_AeroScriptFilePath
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptFilePath
 }
 //--------------------------------------------------------
 /**
- *  Write attribute AeroScriptFilePath related method
- *  Description: Attempts to load the file path entered into the write attribute as an AeroScript on the
+ *	Write attribute AeroScriptFilePath related method
+ *	Description: Attempts to load the file path entered into the write attribute as an AeroScript on the
  *               controller. The read attribute shows the currently loaded file path. Full file paths must be
  *               used.
  *
- *  Data type:  Tango::DevString
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr) entering... " << std::endl;
-    //  Retrieve write value
-    Tango::DevString    w_val;
-    attr.get_write_value(w_val);
-    /*----- PROTECTED REGION ID(A1Controller::write_AeroScriptFilePath) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::write_AeroScriptFilePath(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	        Tango::DevString w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Controller::write_AeroScriptFilePath) ENABLED START -----*/
 
     attr_AeroScriptFilePath_write = w_val; 
     DEBUG_STREAM << "write_AeroScriptFilePath() called";
     aero_script_program_load();
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::write_AeroScriptFilePath
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::write_AeroScriptFilePath
 }
 //--------------------------------------------------------
 /**
- *  Read attribute Automation1ProgramStopTimeout related method
- *  Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
+ *	Read attribute Automation1ProgramStopTimeout related method
+ *	Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
  *               than the timeout, the controller returns an error.
  *
- *  Data type:  Tango::DevUShort
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_Automation1ProgramStopTimeout) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_Automation1ProgramStopTimeout(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_Automation1ProgramStopTimeout) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_Automation1ProgramStopTimeout_read);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_Automation1ProgramStopTimeout
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_Automation1ProgramStopTimeout
 }
 //--------------------------------------------------------
 /**
- *  Write attribute Automation1ProgramStopTimeout related method
- *  Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
+ *	Write attribute Automation1ProgramStopTimeout related method
+ *	Description: Timeout for Automation1 program stop/pause calls in ms. If the stop/pause call takes longer
  *               than the timeout, the controller returns an error.
  *
- *  Data type:  Tango::DevUShort
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::write_Automation1ProgramStopTimeout(Tango::WAttribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::write_Automation1ProgramStopTimeout(Tango::WAttribute &attr) entering... " << std::endl;
-    //  Retrieve write value
-    Tango::DevUShort    w_val;
-    attr.get_write_value(w_val);
-    /*----- PROTECTED REGION ID(A1Controller::write_Automation1ProgramStopTimeout) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::write_Automation1ProgramStopTimeout(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	        Tango::DevUShort w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Controller::write_Automation1ProgramStopTimeout) ENABLED START -----*/
     A1Bridge_ns::getInstance()->setAutomation1ProgramTimeout_ms(w_val);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::write_Automation1ProgramStopTimeout
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::write_Automation1ProgramStopTimeout
 }
 //--------------------------------------------------------
 /**
- *  Read attribute Automation1TaskID related method
- *  Description: Automation1 task index number. Automation1 commands are run under this task.
+ *	Read attribute Automation1TaskID related method
+ *	Description: Automation1 task index number. Automation1 commands are run under this task.
  *
- *  Data type:  Tango::DevUShort
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::read_Automation1TaskID(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_Automation1TaskID(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_Automation1TaskID) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_Automation1TaskID(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_Automation1TaskID) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_Automation1TaskID_read);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_Automation1TaskID
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_Automation1TaskID
 }
 //--------------------------------------------------------
 /**
- *  Write attribute Automation1TaskID related method
- *  Description: Automation1 task index number. Automation1 commands are run under this task.
+ *	Write attribute Automation1TaskID related method
+ *	Description: Automation1 task index number. Automation1 commands are run under this task.
  *
- *  Data type:  Tango::DevUShort
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::write_Automation1TaskID(Tango::WAttribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::write_Automation1TaskID(Tango::WAttribute &attr) entering... " << std::endl;
-    //  Retrieve write value
-    Tango::DevUShort    w_val;
-    attr.get_write_value(w_val);
-    /*----- PROTECTED REGION ID(A1Controller::write_Automation1TaskID) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::write_Automation1TaskID(Tango::WAttribute &attr) entering... " << std::endl;
+	//	Retrieve write value
+	        Tango::DevUShort w_val;
+	attr.get_write_value(w_val);
+	/*----- PROTECTED REGION ID(A1Controller::write_Automation1TaskID) ENABLED START -----*/
     A1Bridge_ns::getInstance()->setTaskID(w_val);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::write_Automation1TaskID
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::write_Automation1TaskID
 }
 //--------------------------------------------------------
 /**
- *  Read attribute Automation1TaskStatus related method
- *  Description: Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
+ *	Read attribute Automation1TaskStatus related method
+ *	Description: Shows the status of the current task running on the Automation1 controller. The task ID used is the one set in the Automation1TaskID attribute (expert mode only, defaults to 1)
  *
- *  Data type:  Tango::DevEnum (Automation1TaskStatusEnum)
- *  Attr type:  Scalar
+ *	Data type:	Tango::DevEnum (Automation1TaskStatusEnum)
+ *	Attr type:	Scalar
  */
 //--------------------------------------------------------
 void A1Controller::read_Automation1TaskStatus(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_Automation1TaskStatus(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_Automation1TaskStatus) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_Automation1TaskStatus(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_Automation1TaskStatus) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_Automation1TaskStatus_read);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_Automation1TaskStatus
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_Automation1TaskStatus
 }
 //--------------------------------------------------------
 /**
- *  Read attribute AxisHealth related method
- *  Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
+ *	Read attribute ControllerPollDuration related method
+ *	Description: Elapsed time in milliseconds from start of controller polling to finish.
  *
- *  Data type:  Tango::DevBoolean
- *  Attr type:  Spectrum max = 32
+ *	Data type:	Tango::DevUShort
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::read_ControllerPollDuration(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::read_ControllerPollDuration(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_ControllerPollDuration) ENABLED START -----*/
+	/* clang-format on */
+	//	Set the attribute value
+	attr.set_value(attr_ControllerPollDuration_read);
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_ControllerPollDuration
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute ControllerName related method
+ *
+ *
+ *	Data type:	Tango::DevString
+ *	Attr type:	Scalar
+ */
+//--------------------------------------------------------
+void A1Controller::read_ControllerName(Tango::Attribute &attr)
+{
+	DEBUG_STREAM << "A1Controller::read_ControllerName(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_ControllerName) ENABLED START -----*/
+	/* clang-format on */
+	//	Set the attribute value
+	attr.set_value(attr_ControllerName_read);
+	/* clang-format off */
+	/*----- PROTECTED REGION END -----*/	//	A1Controller::read_ControllerName
+}
+//--------------------------------------------------------
+/**
+ *	Read attribute AxisHealth related method
+ *	Description: Displays a single status bit per axis indicating whether that axis is working correctly (false) or has a fault on it (true).
+ *
+ *	Data type:	Tango::DevBoolean
+ *	Attr type:	Spectrum max = 32
  */
 //--------------------------------------------------------
 void A1Controller::read_AxisHealth(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_AxisHealth(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_AxisHealth) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_AxisHealth(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_AxisHealth) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_AxisHealth_read, MAX_AXES);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_AxisHealth
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_AxisHealth
 }
 //--------------------------------------------------------
 /**
- *  Read attribute TaskStatus0 related method
+ *	Read attribute TaskStatus0 related method
  *
  *
- *  Data type:  Tango::DevBoolean
- *  Attr type:  Spectrum max = 16
+ *	Data type:	Tango::DevBoolean
+ *	Attr type:	Spectrum max = 16
  */
 //--------------------------------------------------------
 void A1Controller::read_TaskStatus0(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_TaskStatus0(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_TaskStatus0) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_TaskStatus0(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_TaskStatus0) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_TaskStatus0_read, TASK0_STATUSES);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_TaskStatus0
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_TaskStatus0
 }
 //--------------------------------------------------------
 /**
- *  Read attribute TaskStatus1 related method
+ *	Read attribute TaskStatus1 related method
  *
  *
- *  Data type:  Tango::DevBoolean
- *  Attr type:  Spectrum max = 17
+ *	Data type:	Tango::DevBoolean
+ *	Attr type:	Spectrum max = 17
  */
 //--------------------------------------------------------
 void A1Controller::read_TaskStatus1(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_TaskStatus1(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_TaskStatus1) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_TaskStatus1(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_TaskStatus1) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_TaskStatus1_read, TASK1_STATUSES);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_TaskStatus1
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_TaskStatus1
 }
 //--------------------------------------------------------
 /**
- *  Read attribute TaskStatus2 related method
+ *	Read attribute TaskStatus2 related method
  *
  *
- *  Data type:  Tango::DevBoolean
- *  Attr type:  Spectrum max = 24
+ *	Data type:	Tango::DevBoolean
+ *	Attr type:	Spectrum max = 24
  */
 //--------------------------------------------------------
 void A1Controller::read_TaskStatus2(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_TaskStatus2(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_TaskStatus2) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_TaskStatus2(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_TaskStatus2) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_TaskStatus2_read, TASK2_STATUSES);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_TaskStatus2
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_TaskStatus2
 }
 //--------------------------------------------------------
 /**
- *  Read attribute AeroScriptFiles related method
- *  Description: A list of the files present on the Automation1 controller.
+ *	Read attribute AeroScriptFiles related method
+ *	Description: A list of the files present on the Automation1 controller.
  *
- *  Data type:  Tango::DevString
- *  Attr type:  Spectrum max = 1024
+ *	Data type:	Tango::DevString
+ *	Attr type:	Spectrum max = 1024
  */
 //--------------------------------------------------------
 void A1Controller::read_AeroScriptFiles(Tango::Attribute &attr)
 {
-    DEBUG_STREAM << "A1Controller::read_AeroScriptFiles(Tango::Attribute &attr) entering... " << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::read_AeroScriptFiles) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::read_AeroScriptFiles(Tango::Attribute &attr) entering... " << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::read_AeroScriptFiles) ENABLED START -----*/
     //  Set the attribute value
     attr.set_value(attr_AeroScriptFiles_read, MAX_AEROSCRIPTS);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::read_AeroScriptFiles
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::read_AeroScriptFiles
 }
 
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::add_dynamic_attributes()
- *  Description: Create the dynamic attributes if any
+ *	Method     : A1Controller::add_dynamic_attributes()
+ *	Description: Create the dynamic attributes if any
  *                for specified device.
  */
 //--------------------------------------------------------
 void A1Controller::add_dynamic_attributes()
 {
-    /*----- PROTECTED REGION ID(A1Controller::add_dynamic_attributes) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1Controller::add_dynamic_attributes) ENABLED START -----*/
     
     //  Add your own code to create and add dynamic attributes if any
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::add_dynamic_attributes
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::add_dynamic_attributes
 }
 
 //--------------------------------------------------------
 /**
- *  Command Reset related method
- *  Description: Reboots the Automation1 motion controller.
+ *	Command Reset related method
+ *	Description: Reboots the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
 void A1Controller::reset()
 {
-    DEBUG_STREAM << "A1Controller::Reset()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::reset) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::Reset()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::reset) ENABLED START -----*/
     
     if(longRunningFlag)
     {
@@ -886,19 +933,19 @@ void A1Controller::reset()
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     checkThreadException();
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::reset
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::reset
 }
 //--------------------------------------------------------
 /**
- *  Command Start related method
- *  Description: Starts the Automation1 motion controller.
+ *	Command Start related method
+ *	Description: Starts the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
 void A1Controller::start()
 {
-    DEBUG_STREAM << "A1Controller::Start()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::start) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::Start()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::start) ENABLED START -----*/
     
     if(longRunningFlag)
     {
@@ -921,80 +968,80 @@ void A1Controller::start()
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     checkThreadException();
 
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::start
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::start
 }
 //--------------------------------------------------------
 /**
- *  Command Stop related method
- *  Description: Stops the Automation1 motion controller.
+ *	Command Stop related method
+ *	Description: Stops the Automation1 motion controller.
  *
  */
 //--------------------------------------------------------
 void A1Controller::stop()
 {
-    DEBUG_STREAM << "A1Controller::Stop()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::stop) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::Stop()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::stop) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_Stop(); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::stop
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::stop
 }
 //--------------------------------------------------------
 /**
- *  Command Enable related method
- *  Description: Enables all active axes connected to the controller.
+ *	Command Enable related method
+ *	Description: Enables all active axes connected to the controller.
  *
  */
 //--------------------------------------------------------
 void A1Controller::enable()
 {
-    DEBUG_STREAM << "A1Controller::Enable()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::enable) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::Enable()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::enable) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_Enable(); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::enable
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::enable
 }
 //--------------------------------------------------------
 /**
- *  Command Disable related method
- *  Description: Disables all active axes connected to the controller.
+ *	Command Disable related method
+ *	Description: Disables all active axes connected to the controller.
  *
  */
 //--------------------------------------------------------
 void A1Controller::disable()
 {
-    DEBUG_STREAM << "A1Controller::Disable()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::disable) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::Disable()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::disable) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_Disable(); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::disable
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::disable
 }
 //--------------------------------------------------------
 /**
- *  Command ClearErrors related method
- *  Description: Acknowledges all axis faults and clears all task errors.
+ *	Command ClearErrors related method
+ *	Description: Acknowledges all axis faults and clears all task errors.
  *
  */
 //--------------------------------------------------------
 void A1Controller::clear_errors()
 {
-    DEBUG_STREAM << "A1Controller::ClearErrors()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::clear_errors) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::ClearErrors()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::clear_errors) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_ClearErrors(); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::clear_errors
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::clear_errors
 }
 //--------------------------------------------------------
 /**
- *  Command AeroScriptProgramRun related method
- *  Description: Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.
+ *	Command AeroScriptProgramRun related method
+ *	Description: Runs the controller file specified by the AeroScriptFilePath as an AeroScript program. If the controller file is an AeroScript source file then the file will first be compiled.
  *               Running a program will automatically load the program and begin program execution. This function waits for the program to load and start but it does not wait for the program to complete.
  *               The AeroScript program must exist as a controller file on the Automation1 controller.
  *               AeroScript libraries cannot be run, the controller file must be an AeroScript program (either a source program file or a compiled program file).
@@ -1003,18 +1050,18 @@ void A1Controller::clear_errors()
 //--------------------------------------------------------
 void A1Controller::aero_script_program_run()
 {
-    DEBUG_STREAM << "A1Controller::AeroScriptProgramRun()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::aero_script_program_run) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::AeroScriptProgramRun()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_run) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramRun(attr_AeroScriptFilePath_write); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_run
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_run
 }
 //--------------------------------------------------------
 /**
- *  Command AeroScriptProgramLoad related method
- *  Description: Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.
+ *	Command AeroScriptProgramLoad related method
+ *	Description: Loads the specified controller file as an AeroScript program on this task. If the controller file is an AeroScript source file then the file will first be compiled.
  *               Loading does not start the program, you must call AeroScriptProgramStart to begin program execution.
  *               The AeroScript program must exist as a controller file on the Automation1 controller.
  *               AeroScript libraries cannot be loaded on a task, the controller file must be an AeroScript program (either a source program file or a compiled program file).
@@ -1023,18 +1070,18 @@ void A1Controller::aero_script_program_run()
 //--------------------------------------------------------
 void A1Controller::aero_script_program_load()
 {
-    DEBUG_STREAM << "A1Controller::AeroScriptProgramLoad()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::aero_script_program_load) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::AeroScriptProgramLoad()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_load) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramLoad(attr_AeroScriptFilePath_write); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_load
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_load
 }
 //--------------------------------------------------------
 /**
- *  Command AeroScriptProgramStart related method
- *  Description: Starts or resumes the currently loaded AeroScript program, beginning program execution.
+ *	Command AeroScriptProgramStart related method
+ *	Description: Starts or resumes the currently loaded AeroScript program, beginning program execution.
  *               A program must be loaded to be able to start or resume it. To load a program, call AeroScriptProgramLoad.
  *               This function waits for the loaded program to start but it does not wait for the program to complete.
  *
@@ -1042,18 +1089,18 @@ void A1Controller::aero_script_program_load()
 //--------------------------------------------------------
 void A1Controller::aero_script_program_start()
 {
-    DEBUG_STREAM << "A1Controller::AeroScriptProgramStart()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::aero_script_program_start) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::AeroScriptProgramStart()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_start) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramStart(); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_start
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_start
 }
 //--------------------------------------------------------
 /**
- *  Command AeroScriptProgramStop related method
- *  Description: Stops the currently running AeroScript program, terminating program execution.
+ *	Command AeroScriptProgramStop related method
+ *	Description: Stops the currently running AeroScript program, terminating program execution.
  *               This function will wait for the specified amount of time for the loaded program to stop. If the timeout is set to -1, this function will wait indefinitely.
  *               This function will also stop queue mode and buffered run mode. After a program is stopped it is unloaded.
  *
@@ -1061,18 +1108,18 @@ void A1Controller::aero_script_program_start()
 //--------------------------------------------------------
 void A1Controller::aero_script_program_stop()
 {
-    DEBUG_STREAM << "A1Controller::AeroScriptProgramStop()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::aero_script_program_stop) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::AeroScriptProgramStop()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_stop) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramStop(); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_stop
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_stop
 }
 //--------------------------------------------------------
 /**
- *  Command AeroScriptProgramPause related method
- *  Description: Pauses the currently running AeroScript program, suspending program execution.
+ *	Command AeroScriptProgramPause related method
+ *	Description: Pauses the currently running AeroScript program, suspending program execution.
  *               This function will wait for the specified amount of time for the loaded program to pause. If the timeout is set to -1, this function will wait indefinitely.
  *               To resume program execution, call AeroScriptProgramStart.
  *
@@ -1080,92 +1127,92 @@ void A1Controller::aero_script_program_stop()
 //--------------------------------------------------------
 void A1Controller::aero_script_program_pause()
 {
-    DEBUG_STREAM << "A1Controller::AeroScriptProgramPause()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::aero_script_program_pause) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::AeroScriptProgramPause()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::aero_script_program_pause) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_AeroScriptProgramPause(); 
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::aero_script_program_pause
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::aero_script_program_pause
 }
 //--------------------------------------------------------
 /**
- *  Command CommandExecute related method
- *  Description: Execute an arbitrary command on the Automation1 controller
+ *	Command CommandExecute related method
+ *	Description: Execute an arbitrary command on the Automation1 controller
  *
- *  @param argin input
+ *	@param argin input
  */
 //--------------------------------------------------------
 void A1Controller::command_execute(Tango::DevString argin)
 {
-    DEBUG_STREAM << "A1Controller::CommandExecute()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::command_execute) ENABLED START -----*/
+	DEBUG_STREAM << "A1Controller::CommandExecute()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::command_execute) ENABLED START -----*/
     
     A1Bridge_ns::getInstance()->checkConnection(); 
     A1Bridge_ns::getInstance()->controller_CommandExecute(argin);
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::command_execute
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::command_execute
 }
 //--------------------------------------------------------
 /**
- *  Command CommandExecuteReturnDouble related method
- *  Description: Execute an Aeroscript command that returns a floating point value
+ *	Command CommandExecuteReturnDouble related method
+ *	Description: Execute an Aeroscript command that returns a floating point value
  *
- *  @param argin
- *  @returns
+ *	@param argin
+ *	@returns
  */
 //--------------------------------------------------------
 Tango::DevDouble A1Controller::command_execute_return_double(Tango::DevString argin)
 {
-    Tango::DevDouble argout;
-    DEBUG_STREAM << "A1Controller::CommandExecuteReturnDouble()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::command_execute_return_double) ENABLED START -----*/
+	Tango::DevDouble argout;
+	DEBUG_STREAM << "A1Controller::CommandExecuteReturnDouble()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::command_execute_return_double) ENABLED START -----*/
     /* clang-format on */
 
     A1Bridge_ns::getInstance()->checkConnection();
     argout = A1Bridge_ns::getInstance()->controller_CommandExecuteDouble(argin);
 
     /* clang-format off */
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::command_execute_return_double
-    return argout;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::command_execute_return_double
+	return argout;
 }
 //--------------------------------------------------------
 /**
- *  Command CommandExecuteReturnInt related method
- *  Description: Execute an Aeroscript command that returns an integer value
+ *	Command CommandExecuteReturnInt related method
+ *	Description: Execute an Aeroscript command that returns an integer value
  *
- *  @param argin
- *  @returns
+ *	@param argin
+ *	@returns
  */
 //--------------------------------------------------------
 Tango::DevLong A1Controller::command_execute_return_int(Tango::DevString argin)
 {
-    Tango::DevLong argout;
-    DEBUG_STREAM << "A1Controller::CommandExecuteReturnInt()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::command_execute_return_int) ENABLED START -----*/
+	Tango::DevLong argout;
+	DEBUG_STREAM << "A1Controller::CommandExecuteReturnInt()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::command_execute_return_int) ENABLED START -----*/
     /* clang-format on */
 
     A1Bridge_ns::getInstance()->checkConnection();
     argout = A1Bridge_ns::getInstance()->controller_CommandExecuteInt(argin);
 
     /* clang-format off */
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::command_execute_return_int
-    return argout;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::command_execute_return_int
+	return argout;
 }
 //--------------------------------------------------------
 /**
- *  Command CommandExecuteReturnString related method
- *  Description: Execute an Aeroscript command that returns a string value
+ *	Command CommandExecuteReturnString related method
+ *	Description: Execute an Aeroscript command that returns a string value
  *
- *  @param argin
- *  @returns
+ *	@param argin
+ *	@returns
  */
 //--------------------------------------------------------
 Tango::DevString A1Controller::command_execute_return_string(Tango::DevString argin)
 {
-    Tango::DevString argout;
-    DEBUG_STREAM << "A1Controller::CommandExecuteReturnString()  - " << device_name << std::endl;
-    /*----- PROTECTED REGION ID(A1Controller::command_execute_return_string) ENABLED START -----*/
+	Tango::DevString argout;
+	DEBUG_STREAM << "A1Controller::CommandExecuteReturnString()  - " << device_name << std::endl;
+	/*----- PROTECTED REGION ID(A1Controller::command_execute_return_string) ENABLED START -----*/
     /* clang-format on */
 
     A1Bridge_ns::getInstance()->checkConnection();
@@ -1173,23 +1220,23 @@ Tango::DevString A1Controller::command_execute_return_string(Tango::DevString ar
     argout = Tango::string_dup(result);
 
     /* clang-format off */
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::command_execute_return_string
-    return argout;
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::command_execute_return_string
+	return argout;
 }
 //--------------------------------------------------------
 /**
- *  Method     : A1Controller::add_dynamic_commands()
- *  Description: Create the dynamic commands if any
+ *	Method     : A1Controller::add_dynamic_commands()
+ *	Description: Create the dynamic commands if any
  *                for specified device.
  */
 //--------------------------------------------------------
 void A1Controller::add_dynamic_commands()
 {
-    /*----- PROTECTED REGION ID(A1Controller::add_dynamic_commands) ENABLED START -----*/
+	/*----- PROTECTED REGION ID(A1Controller::add_dynamic_commands) ENABLED START -----*/
     
     //  Add your own code to create and add dynamic commands if any
     
-    /*----- PROTECTED REGION END -----*/    //  A1Controller::add_dynamic_commands
+    /*----- PROTECTED REGION END -----*/	//	A1Controller::add_dynamic_commands
 }
 
 /*----- PROTECTED REGION ID(A1Controller::namespace_ending) ENABLED START -----*/
@@ -1257,5 +1304,5 @@ void A1Controller::checkThreadException()
     }
 }
 
-/*----- PROTECTED REGION END -----*/    //  A1Controller::namespace_ending
-} //    namespace
+/*----- PROTECTED REGION END -----*/	//	A1Controller::namespace_ending
+} //	namespace

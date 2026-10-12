@@ -154,6 +154,7 @@ class A1PollManager
     PeriodicClock pollingClock;
     std::chrono::milliseconds minimumPollingInterval_ms{100};
 
+    std::vector<std::function<void()>> pollingMethods;
   public:
     A1PollManager() {};
     ~A1PollManager() = default;
@@ -167,6 +168,10 @@ class A1PollManager
     void decrementRefCount(); 
     void clear(); 
     size_t size();
+
+    void registerPollingMethod(std::function<void()> f) {
+        pollingMethods.emplace_back(f);
+    }
 
     void setPollInterval(std::chrono::milliseconds interval)
     {
@@ -281,11 +286,17 @@ class A1Communication: public A1Bridge
     {
         pollManager.setPollInterval(interval);
     };
+
+    void getFileList();
+    void getTaskStatuses();
   private:
     std::string getFirmwareVersionString(unsigned axis);
     std::string getMotorTypeString(unsigned axis);
 
+    char filesList[MAX_AEROSCRIPTS * MAX_FILENAME_LENGTH];
+    int32_t fileCount, maxFileNameLength;
 
+    Automation1TaskStatus taskStatuses[MAX_TASKS];
 
 };
 

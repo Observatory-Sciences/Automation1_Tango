@@ -104,6 +104,7 @@ class A1Bridge
 
   public: 
     // Attributes
+    Tango::DevString    attr_ControllerName_read;
     Tango::DevBoolean   attr_ControllerRunning_read;
     Tango::DevUShort    attr_AxisCount_read;
     Tango::DevUShort    attr_TaskCount_read;
@@ -111,7 +112,8 @@ class A1Bridge
     Tango::DevString    attr_AeroScriptFilePath_read;
     unsigned short      attr_Automation1ProgramStopTimeout_read; 
     unsigned short      attr_Automation1TaskID_read; 
-    
+    Tango::DevUShort    attr_ControllerPollDuration_read;
+
     double              attr_axisHealth;
     Tango::DevBoolean   attr_AxisHealth_read[MAX_AXES];
     double              attr_taskStatus0[MAX_TASKS];
