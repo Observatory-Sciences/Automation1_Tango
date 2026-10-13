@@ -38,6 +38,13 @@ be activated and the Tango database server can then be started using:
    PyDatabaseds 2
    ```
 
+Once Tango has been installed (either through the Tango Source Distribution or with `conda`) you will need to start the database:
+
+```
+sudo $TANGO_HOME/bin/tango start
+```
+where `TANGO_HOME` is the root path to where Tango is installed (typically this will be `/usr/local` or the conda environment prefix `$CONDA_PREFIX`)
+
 ### Version compatibility
 
 This Automation1 driver is compatible with:
@@ -68,7 +75,7 @@ git@github.com:Observatory-Sciences/Automation1_Tango.git
 and built by entering the created directory and invoking make:
 
 ```
-cd Automation1_Tango​
+cd Automation1_Tango
 make
 ```
 
@@ -121,6 +128,7 @@ invoke the driver executable with the device server instance name:
 ```
 bin/Automation1 Automation1Driver
 ```
+where: `Automation1Driver` is the name of the device server instance used in the previous section.
 
 The `Jive` application can be used to view properties of the Tango devices and to bring up
 `ATKPanel`s for each device. These `ATKPanel`s allow attributes to be set and commands to
